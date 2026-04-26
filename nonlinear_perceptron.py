@@ -50,7 +50,7 @@ def train_perceptron(df, learning_rate=0.01, epochs=5000, epsilon=1e-6, beta=1.0
         for mu in range(P):
             h_mu = np.dot(weights, X[mu])
             O_mu = np.tanh(beta * h_mu)
-            theta_prime = beta * (1.0 - np.tanh(beta * h_mu) ** 2)
+            theta_prime = beta * (1.0 - O_mu ** 2)
 
             error = z_norm[mu] - O_mu
             weights = weights + learning_rate * error * theta_prime * X[mu]
