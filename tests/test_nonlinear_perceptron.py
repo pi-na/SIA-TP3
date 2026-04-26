@@ -1,3 +1,5 @@
+import os
+
 import numpy as np
 import pandas as pd
 from nonlinear_perceptron import train_perceptron
@@ -45,9 +47,6 @@ def test_normalization_bounds_returned():
 
     assert z_min == y.min()
     assert z_max == y.max()
-
-
-import os
 
 
 def test_run_and_save_creates_output(tmp_path):
