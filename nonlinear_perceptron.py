@@ -64,3 +64,51 @@ def train_perceptron(df, learning_rate=0.01, epochs=5000, epsilon=1e-6, beta=1.0
             break
 
     return weights, mse_history, z_min, z_max
+
+
+def run_and_save(csv_path, learning_rate, epochs, epsilon, beta, output_dir):
+    """Train non-linear perceptron and save weights + plot to output_dir."""
+    df = pd.read_csv(csv_path)
+    weights, mse_history, z_min, z_max = train_perceptron(
+        df, learning_rate, epochs, epsilon, beta
+    )
+
+    os.makedirs(output_dir, exist_ok=True)
+
+    # Save weights + normalization bounds
+    wdf = pd.DataFrame({
+        "w0": [weights[0]],
+        "w1": [weights[1]],
+        "beta": [beta],
+        "mse": [mse_history[-1]],
+        "z_min": [z_min],
+        "z_max": [z_max],
+    })
+    wdf.to_csv(os.path.join(output_dir, "weights.csv"), index=False)
+
+    # Plot: dataset (original scale) + learned curve (denormalized)
+    x = df["x"].values
+    y = df["y"].values
+    x_line = np.linspace(x.min(), x.max(), 200)
+    h_line = weights[0] + weights[1] * x_line
+    o_norm = np.tanh(beta * h_line)
+    # Denormalize: z = (o_norm + 1) * (z_max - z_min) / 2 + z_min
+    y_line = (o_norm + 1.0) * (z_max - z_min) / 2.0 + z_min
+
+    plt.figure(figsize=(10, 6))
+    plt.scatter(x, y, label="Datos", alpha=0.7)
+    plt.plot(x_line, y_line, "r-", linewidth=2, label="Perceptrón no lineal (tanh)")
+    plt.xlabel("x")
+    plt.ylabel("y")
+    plt.title(
+        f"Perceptrón No Lineal (β={beta}) — MSE final: {mse_history[-1]:.6f} "
+        f"({len(mse_history)} épocas)"
+    )
+    plt.legend()
+    plt.grid(True, alpha=0.3)
+    plt.savefig(os.path.join(output_dir, "plot.png"), dpi=150, bbox_inches="tight")
+    plt.close()
+
+    print(f"Weights: w0={weights[0]:.4f}, w1={weights[1]:.4f}, beta={beta}")
+    print(f"MSE final: {mse_history[-1]:.6f} ({len(mse_history)} epochs)")
+    print(f"Output saved to {output_dir}")
