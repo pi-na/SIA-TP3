@@ -1,0 +1,99 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage[margin=1.5cm]{geometry}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{hyperref}
+\usepackage{parskip}
+
+\definecolor{accent}{HTML}{1f77b4}
+\definecolor{good}{HTML}{2ca02c}
+\definecolor{bad}{HTML}{d62728}
+\definecolor{lightgray}{HTML}{F2F2F2}
+
+\hypersetup{colorlinks=true, urlcolor=accent}
+
+\title{\vspace{-2.5em}\textbf{Simple Prediction --- Reglas duras de detecci\'on de fraude}}
+\author{SIA TP3 -- Ejercicio 1}
+\date{}
+
+\begin{document}
+\maketitle
+\vspace{-2em}
+
+\section*{Reglas aplicadas}
+
+Predice \texttt{simple\_prediction = 1} (fraude) si \textbf{cualquiera} de las
+siguientes condiciones se cumple, derivadas del an\'alisis exploratorio del
+\texttt{fraud\_dataset.csv}:
+
+\begin{center}
+\begin{tabular}{l c c}
+\toprule
+\textbf{Regla} & \textbf{Matches} & \textbf{TP / FP} \\
+\midrule
+\texttt{amount\_usd > 500}                  & 199 & 199 / 0 \\
+\texttt{quantity\_purchased $\geq$ 10}      & 524 & 524 / 0 \\
+\texttt{items\_viewed\_before\_purchase $\geq$ 15} & 490 & 490 / 0 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Cada regla individual tiene \textbf{precisi\'on perfecta} (FP = 0). Las matches
+se solapan parcialmente: las tres juntas marcan 695 filas \'unicas (no
+$199+524+490$).
+
+\paragraph{Regla descartada.} \texttt{session\_duration\_seconds > 500} captura
+\textbf{1 TP y 350 FP}: introducir\'ia 350 falsos positivos para ganar un solo
+fraude adicional, rompiendo la precisi\'on perfecta. Se descarta.
+
+\section*{Matriz de confusi\'on}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{c c | >{\columncolor{lightgray}}c >{\columncolor{lightgray}}c}
+ & & \multicolumn{2}{c}{\textbf{Predicci\'on}} \\
+ & & 1 (fraude) & 0 (no fraude) \\
+\hline
+\multirow{2}{*}{\textbf{Real}} & 1 (fraude)    & \textcolor{good}{\textbf{TP = 695}}  & \textcolor{bad}{\textbf{FN = 174}}  \\
+                                & 0 (no fraude) & \textcolor{bad}{\textbf{FP = 0}}     & \textcolor{good}{\textbf{TN = 6631}} \\
+\end{tabular}
+\end{center}
+
+\section*{M\'etricas globales}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{l r}
+\toprule
+\textbf{M\'etrica} & \textbf{Valor} \\
+\midrule
+Accuracy            & \textbf{0.9768} \quad (97.68\%) \\
+Precision           & \textbf{1.0000} \quad (100.00\%) \\
+Recall (sensitivity) & \textbf{0.7998} \quad (79.98\%) \\
+\midrule
+Total               & 7500 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section*{Lectura}
+
+\textbf{Precision = 100\%}: cuando las reglas marcan fraude, aciertan siempre
+--- apto para bloqueo autom\'atico. \textbf{Recall = 80\%}: pierde el 20\% del
+fraude (174 casos ``sutiles'' que respetan los tres umbrales y requieren combinar
+features continuas como \texttt{account\_age\_days},
+\texttt{session\_duration\_seconds}, \texttt{days\_since\_last\_purchase}).
+\textbf{Accuracy = 97.68\%} est\'a inflada por el desbalance (88.4\% no-fraude),
+de ah\'i la importancia de reportar precision y recall.
+
+\paragraph{L\'inea de base para el TinyModel.} Cualquier perceptr\'on entrenado
+debe \textbf{al menos igualar} estos n\'umeros. El valor agregado del modelo se
+mide en cu\'antos de los 174 fraudes ``sutiles'' logra recuperar.
+
+\end{document}
