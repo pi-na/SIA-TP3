@@ -3,3 +3,4 @@ __pycache__/
 output_*/
 *.pyc
 docs/superpowers/
+.DS_Store
