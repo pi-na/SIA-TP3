@@ -1,5 +1,7 @@
 # Análisis del sweep de learning rates — perceptrón lineal
 
+> **⚠ Disclaimer (post-hoc):** Las métricas de clasificación reportadas acá son con threshold fijo `0.5`. El threshold sweep posterior ([`threshold_sweep.md`](threshold_sweep.md)) muestra que con `threshold≈0.71` el mismo modelo `lr=0.0001` alcanza **F1=0.885** (vs 0.593 acá), prácticamente igualando al baseline determinístico. La sección "Por qué F1 es bajo" de este documento subestima al modelo. La parte sobre **MSE/convergencia/elección del LR sigue siendo válida**.
+
 Sweep de 3 modelos con `lr ∈ {0.001, 0.0001, 1e-5}`, todos con `epochs=7500`, `epsilon=1e-4`, `k_folds=5` estratificado, mismas 6 features informativas (z-score, fit-on-train-only). Configs en `configs/lr_001.json`, `lr_0001.json`, `lr_00001.json`.
 
 ## TL;DR
