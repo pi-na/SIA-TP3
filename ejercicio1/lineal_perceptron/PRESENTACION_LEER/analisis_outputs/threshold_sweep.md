@@ -21,10 +21,10 @@ El threshold es **un parámetro de evaluación, no de entrenamiento**: el modelo
 
 Para cada threshold, contamos los 4 cuadrantes de la matriz de confusión:
 
-|  | Realidad: fraude | Realidad: no-fraude |
-|---|---|---|
-| **Predicho: fraude** | TP (true positive) | FP (false positive) |
-| **Predicho: no-fraude** | FN (false negative) | TN (true negative) |
+|                               | Realidad: fraude    | Realidad: no-fraude |
+| ----------------------------- | ------------------- | ------------------- |
+| **Predicho: fraude**    | TP (true positive)  | FP (false positive) |
+| **Predicho: no-fraude** | FN (false negative) | TN (true negative)  |
 
 A partir de esos conteos:
 
@@ -48,12 +48,12 @@ Es la forma estándar de reducir "precision y recall" a un único número cuando
 
 Threshold y precision/recall están en **tensión directa**:
 
-| Threshold bajo | Threshold alto |
-|---|---|
-| El modelo predice **positivo a casi todo** | El modelo predice positivo **sólo cuando está muy confiado** |
-| Atrapa todos los fraudes (**recall ↑**) | Se pierde fraudes que no son obvios (**recall ↓**) |
-| Pero también marca muchas no-fraudes (**precision ↓**) | Cuando dice "fraude", casi siempre acierta (**precision ↑**) |
-| F1 bajo (porque precision pequeña) | F1 bajo (porque recall pequeño) |
+| Threshold bajo                                                 | Threshold alto                                                        |
+| -------------------------------------------------------------- | --------------------------------------------------------------------- |
+| El modelo predice**positivo a casi todo**                | El modelo predice positivo **sólo cuando está muy confiado** |
+| Atrapa todos los fraudes (**recall ↑**)                 | Se pierde fraudes que no son obvios (**recall ↓**)             |
+| Pero también marca muchas no-fraudes (**precision ↓**) | Cuando dice "fraude", casi siempre acierta (**precision ↑**)   |
+| F1 bajo (porque precision pequeña)                            | F1 bajo (porque recall pequeño)                                      |
 
 Como F1 castiga al menor de los dos, **F1 se maximiza en el punto donde precision y recall están balanceados**. En este modelo eso pasa cerca de `th=0.71`. Más bajo, sobran FPs (precision tira F1 abajo); más alto, faltan TPs (recall tira F1 abajo).
 
@@ -61,12 +61,12 @@ Como F1 castiga al menor de los dos, **F1 se maximiza en el punto donde precisio
 
 Mirando casos concretos del barrido:
 
-| Threshold | Precision | Recall | F1 | Lectura |
-|---:|---:|---:|---:|---|
-| 0.30 | 0.17 | 1.00 | 0.29 | Predice fraude a casi todo. Captura el 100% pero el 83% de las "alarmas" son FPs. |
-| 0.50 | 0.42 | 0.99 | 0.59 | Default. Todavía predice positivo demasiado seguido. |
-| 0.71 | **0.94** | **0.84** | **0.89** | **Sweet spot**: cuando dice fraude acierta 94 de cada 100, y captura 84 de cada 100 fraudes reales. |
-| 0.85 | 0.997 | 0.69 | 0.82 | Casi nunca se equivoca al gritar, pero se pierde 31% de los fraudes. |
+| Threshold |      Precision |         Recall |             F1 | Lectura                                                                                                   |
+| --------: | -------------: | -------------: | -------------: | --------------------------------------------------------------------------------------------------------- |
+|      0.30 |           0.17 |           1.00 |           0.29 | Predice fraude a casi todo. Captura el 100% pero el 83% de las "alarmas" son FPs.                         |
+|      0.50 |           0.42 |           0.99 |           0.59 | Default. Todavía predice positivo demasiado seguido.                                                     |
+|      0.71 | **0.94** | **0.84** | **0.89** | **Sweet spot**: cuando dice fraude acierta 94 de cada 100, y captura 84 de cada 100 fraudes reales. |
+|      0.85 |          0.997 |           0.69 |           0.82 | Casi nunca se equivoca al gritar, pero se pierde 31% de los fraudes.                                      |
 
 El modelo es **el mismo** en los 4 casos — los pesos no cambian. Lo único que cambia es la frontera de decisión sobre el output continuo.
 
@@ -76,11 +76,11 @@ El modelo es **el mismo** en los 4 casos — los pesos no cambian. Lo único que
 
 **El modelo lineal con threshold óptimo prácticamente iguala al baseline determinístico.**
 
-| Modelo | Precision | Recall | F1 | FPR |
-|---|---:|---:|---:|---:|
-| Lineal `th=0.5` (default) | 0.424 | 0.987 | 0.593 | 0.176 |
+| Modelo                                 |       Precision |          Recall |              F1 |             FPR |
+| -------------------------------------- | --------------: | --------------: | --------------: | --------------: |
+| Lineal `th=0.5` (default)            |           0.424 |           0.987 |           0.593 |           0.176 |
 | **Lineal `th=0.71` (best F1)** | **0.940** | **0.837** | **0.885** | **0.007** |
-| Baseline determinístico (3 reglas OR) | 1.000 | 0.800 | 0.889 | 0.000 |
+| Baseline determinístico (3 reglas OR) |           1.000 |           0.800 |           0.889 |           0.000 |
 
 **AUC ROC ≈ 0.972** — el modelo discrimina muy bien; lo único que estaba mal era el threshold por default. La conclusión del análisis anterior (`sweep_lr.md`) de que el lineal era "estructuralmente insuficiente" estaba equivocada en parte: la geometría del modelo es perfectamente capaz, era el threshold default `0.5` el que lo hacía ver mucho peor de lo que es.
 
@@ -92,23 +92,24 @@ El modelo es **el mismo** en los 4 casos — los pesos no cambian. Lo único que
 
 ## Operating points relevantes
 
-| Threshold | F1 | Precision | Recall | FPR | Comentario |
-|---:|---:|---:|---:|---:|---|
-| 0.30 | 0.294 | 0.172 | 1.000 | 0.631 | predice positivo a casi todo |
-| 0.50 | 0.593 | 0.424 | 0.987 | 0.176 | **default — pésima precision** |
-| 0.60 | 0.805 | 0.705 | 0.940 | 0.052 | salto importante en F1 |
-| 0.65 | 0.871 | 0.843 | 0.901 | 0.022 | balance razonable |
-| 0.67 | 0.877 | 0.874 | 0.879 | — | **precision ≈ recall** |
-| **0.71** | **0.885** | **0.940** | **0.837** | **0.007** | **F1 máximo** |
-| 0.75 | 0.874 | 0.972 | 0.794 | 0.003 | baja un poco F1, sube precision |
-| 0.82 | 0.833 | 0.994 | 0.718 | — | **precision ≥ 0.99**: matchea criterio del baseline determinístico |
-| 0.85 | 0.816 | 0.997 | 0.692 | 0.000 | precision casi perfecta, recall medio |
+|      Threshold |              F1 |       Precision |          Recall |             FPR | Comentario                                                                 |
+| -------------: | --------------: | --------------: | --------------: | --------------: | -------------------------------------------------------------------------- |
+|           0.30 |           0.294 |           0.172 |           1.000 |           0.631 | predice positivo a casi todo                                               |
+|           0.50 |           0.593 |           0.424 |           0.987 |           0.176 | **default — pésima precision**                                     |
+|           0.60 |           0.805 |           0.705 |           0.940 |           0.052 | salto importante en F1                                                     |
+|           0.65 |           0.871 |           0.843 |           0.901 |           0.022 | balance razonable                                                          |
+|           0.67 |           0.877 |           0.874 |           0.879 |              — | **precision ≈ recall**                                              |
+| **0.71** | **0.885** | **0.940** | **0.837** | **0.007** | **F1 máximo**                                                       |
+|           0.75 |           0.874 |           0.972 |           0.794 |           0.003 | baja un poco F1, sube precision                                            |
+|           0.82 |           0.833 |           0.994 |           0.718 |              — | **precision ≥ 0.99**: matchea criterio del baseline determinístico |
+|           0.85 |           0.816 |           0.997 |           0.692 |           0.000 | precision casi perfecta, recall medio                                      |
 
 ## Análisis
 
 ### Por qué el threshold default 0.5 era engañosamente malo
 
 El bias aprendido por el modelo (después de z-score) quedó en ~0.42 (mean entre folds). El target `big_model_fraud_probability` tiene mediana ~0.0 para no-fraude y ~0.95+ para fraude. Pero el output del perceptrón lineal con identidad **comprime el rango** porque tiene que ajustar simultáneamente:
+
 - mantenerse cerca de 0 para los ~88% no-fraude
 - alcanzar 1 para los ~12% fraude
 
@@ -144,9 +145,6 @@ Pero como **clasificador binario** (con threshold ajustado), el lineal **es comp
 ## Conclusiones y recomendación
 
 1. **Para el reporte del TP**, comparar siempre el lineal en `th_F1_max ≈ 0.71`, no en `th=0.5`. El `th=0.5` es solo el "modo regresión", no el modo "detección de fraude".
-
 2. **Pasamos al no-lineal con argumento sólido**: el lineal *clasifica* casi tan bien como el baseline duro, pero su *MSE de regresión* es alto y **no replica fielmente al BigModel** — eso es lo que el no-lineal con sigmoide debería mejorar. La pregunta interesante para el no-lineal pasa a ser: **¿logra MSE significativamente menor (mejor distillation) sin perder F1?**
-
 3. **El threshold óptimo del lineal es punto operativo claro para el TP.** En `th=0.71` el modelo tiene F1=0.885 con precision=0.94 y recall=0.84 — un trade-off útil para producción si la pérdida por FP fuera comparable a la de FN.
-
 4. **`sweep_lr.md` queda con un disclaimer**: la sección "Por qué F1 es bajo" subestima al modelo lineal porque medía con threshold fijo en 0.5. La limitación geométrica que mencionamos sigue válida pero **el F1=0.59 no era el "mejor F1 lineal posible"**; el mejor era 0.885.
