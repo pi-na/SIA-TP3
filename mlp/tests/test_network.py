@@ -1,0 +1,46 @@
+from __future__ import annotations
+
+import numpy as np
+import pytest
+
+from mlp.network import MLP
+from mlp.optimizers import SGD, Adam
+
+
+def test_init_validates_activations_length():
+    """activations debe tener len(layer_sizes) - 1."""
+    with pytest.raises(ValueError, match="activations"):
+        MLP(layer_sizes=[2, 3, 1], activations=["relu"], loss="mse",
+            optimizer=SGD(0.01))
+
+
+def test_init_validates_cross_entropy_requires_softmax():
+    with pytest.raises(ValueError, match="softmax"):
+        MLP(layer_sizes=[2, 3, 4], activations=["relu", "sigmoid"],
+            loss="cross_entropy", optimizer=Adam(0.001))
+
+
+def test_init_weight_shapes():
+    """weights[l] shape (n_l, n_{l-1}+1) por bias trick."""
+    mlp = MLP(layer_sizes=[3, 5, 2], activations=["relu", "softmax"],
+              loss="cross_entropy", optimizer=Adam(0.001), seed=42)
+    assert len(mlp.weights) == 2
+    assert mlp.weights[0].shape == (5, 4)  # 3 inputs + 1 bias
+    assert mlp.weights[1].shape == (2, 6)  # 5 hidden + 1 bias
+
+
+def test_init_auto_picks_initializer():
+    """initializer='auto' usa He para ReLU, Xavier para tanh/softmax/sigmoid."""
+    mlp = MLP(layer_sizes=[100, 50, 10], activations=["relu", "softmax"],
+              loss="cross_entropy", optimizer=Adam(0.001),
+              initializer="auto", seed=42)
+    # He init: std ≈ sqrt(2/100) = 0.141 para capa 0
+    layer0_std = mlp.weights[0][:, 1:].std()  # excluye bias column
+    assert 0.1 < layer0_std < 0.2
+
+
+def test_init_seed_reproducibility():
+    a = MLP([2, 3, 1], ["tanh", "tanh"], "mse", SGD(0.01), seed=42)
+    b = MLP([2, 3, 1], ["tanh", "tanh"], "mse", SGD(0.01), seed=42)
+    for wa, wb in zip(a.weights, b.weights):
+        assert np.allclose(wa, wb)

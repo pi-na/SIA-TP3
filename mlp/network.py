@@ -1,0 +1,57 @@
+"""Clase MLP: red multicapa con backprop + entrenamiento configurable."""
+from __future__ import annotations
+
+import json
+from pathlib import Path
+
+import numpy as np
+
+from mlp.activations import ACTIVATIONS
+from mlp.initializers import INITIALIZERS, auto_pick
+from mlp.losses import LOSSES
+from mlp.optimizers import Optimizer
+
+
+class MLP:
+    def __init__(
+        self,
+        layer_sizes: list[int],
+        activations: list[str],
+        loss: str,
+        optimizer: Optimizer,
+        initializer: str = "auto",
+        seed: int | None = None,
+        regularization: dict | None = None,
+    ):
+        # --- Validaciones ---
+        if len(activations) != len(layer_sizes) - 1:
+            raise ValueError(
+                f"activations debe tener {len(layer_sizes)-1} elementos "
+                f"(uno por transición), got {len(activations)}"
+            )
+        for act in activations:
+            if act not in ACTIVATIONS:
+                raise ValueError(f"activación desconocida: {act!r}. "
+                                 f"Disponibles: {sorted(ACTIVATIONS)}")
+        if loss not in LOSSES:
+            raise ValueError(f"loss desconocido: {loss!r}. "
+                             f"Disponibles: {sorted(LOSSES)}")
+        if loss == "cross_entropy" and activations[-1] != "softmax":
+            raise ValueError("loss='cross_entropy' requiere última activación='softmax'")
+        if loss == "bce" and activations[-1] != "sigmoid":
+            raise ValueError("loss='bce' requiere última activación='sigmoid'")
+
+        self.layer_sizes = layer_sizes
+        self.activations = activations
+        self.loss_name = loss
+        self.optimizer = optimizer
+        self.regularization = regularization or {}
+
+        # --- Inicialización de pesos ---
+        rng = np.random.default_rng(seed)
+        self.weights: list[np.ndarray] = []
+        for i in range(len(layer_sizes) - 1):
+            n_in, n_out = layer_sizes[i], layer_sizes[i + 1]
+            shape = (n_out, n_in + 1)  # +1 por bias
+            init_name = auto_pick(activations[i]) if initializer == "auto" else initializer
+            self.weights.append(INITIALIZERS[init_name](shape, rng))
