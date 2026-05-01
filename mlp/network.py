@@ -55,3 +55,24 @@ class MLP:
             shape = (n_out, n_in + 1)  # +1 por bias
             init_name = auto_pick(activations[i]) if initializer == "auto" else initializer
             self.weights.append(INITIALIZERS[init_name](shape, rng))
+
+    def _add_bias_column(self, X: np.ndarray) -> np.ndarray:
+        """Prepend column of ones for bias trick."""
+        return np.column_stack([np.ones(len(X)), X])
+
+    def forward(self, X: np.ndarray) -> tuple[np.ndarray, list]:
+        """Forward pass. Devuelve (output, cache).
+
+        cache: lista de tuplas (z_l, a_l) por capa, donde
+        z_l = pre-activación (W·a_{l-1}), a_l = activación(z_l).
+        El input X (con bias prependido) se guarda como a_0 implícito en weights[0].
+        """
+        cache = []
+        a = X
+        for i, W in enumerate(self.weights):
+            a_with_bias = self._add_bias_column(a)
+            z = a_with_bias @ W.T  # shape (batch, n_out)
+            act_fn, _ = ACTIVATIONS[self.activations[i]]
+            a = act_fn(z)
+            cache.append((z, a))
+        return a, cache

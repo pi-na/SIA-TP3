@@ -44,3 +44,26 @@ def test_init_seed_reproducibility():
     b = MLP([2, 3, 1], ["tanh", "tanh"], "mse", SGD(0.01), seed=42)
     for wa, wb in zip(a.weights, b.weights):
         assert np.allclose(wa, wb)
+
+
+def test_forward_output_shape():
+    mlp = MLP([3, 5, 2], ["relu", "softmax"], "cross_entropy",
+              Adam(0.001), seed=42)
+    X = np.random.default_rng(0).uniform(0, 1, size=(8, 3))
+    out, cache = mlp.forward(X)
+    assert out.shape == (8, 2)
+    # softmax sums to 1
+    assert np.allclose(out.sum(axis=1), 1.0)
+    # cache: una tupla (z, a) por capa
+    assert len(cache) == 2
+
+
+def test_forward_cache_pre_and_post_activation():
+    mlp = MLP([2, 3, 1], ["tanh", "sigmoid"], "bce", SGD(0.01), seed=42)
+    X = np.array([[0.5, -0.5]])
+    out, cache = mlp.forward(X)
+    z0, a0 = cache[0]
+    z1, a1 = cache[1]
+    # a0 = tanh(z0), a1 = sigmoid(z1) = out
+    assert np.allclose(a0, np.tanh(z0))
+    assert np.allclose(a1, out)
