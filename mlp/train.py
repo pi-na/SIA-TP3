@@ -281,7 +281,7 @@ def run_experiment(cfg: dict, csv_root: Path, output_dir: Path) -> Path:
 
     # Filas mean/std al final del summary
     summaries_df = pd.DataFrame(all_summaries)
-    numeric = summaries_df.select_dtypes(include=[np.number]).columns
+    numeric = [c for c in summaries_df.select_dtypes(include=[np.number]).columns if c != "fold"]
     mean_row = {"fold": "mean", **summaries_df[numeric].mean().to_dict()}
     std_row = {"fold": "std", **summaries_df[numeric].std(ddof=0).to_dict()}
     summaries_df = pd.concat(

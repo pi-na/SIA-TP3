@@ -63,3 +63,8 @@ def test_e2e_synthetic_csv(tmp_path: Path):
               if "mean" in summary["fold"].astype(str).values \
               else float(summary.iloc[0]["val_acc_final"])
     assert val_acc > 0.7, f"toy problem should hit >70% accuracy, got {val_acc}"
+
+    # Bug fix verification: mean/std rows have correct string labels
+    fold_values = summary["fold"].astype(str).tolist()
+    assert "mean" in fold_values, f"mean row label missing: {fold_values}"
+    assert "std" in fold_values, f"std row label missing: {fold_values}"
