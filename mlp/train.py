@@ -59,6 +59,23 @@ def _one_hot(y: np.ndarray, num_classes: int) -> np.ndarray:
     return np.eye(num_classes)[y.astype(int)]
 
 
+def _normalize_labels(
+    y_true: np.ndarray, y_pred: np.ndarray
+) -> tuple[np.ndarray, np.ndarray]:
+    """Remapea etiquetas a índices 0-indexed si contienen negativos (ej. bipolar {-1,+1}).
+
+    multiclass_metrics asume clases 0..n-1. Cuando los targets son bipolares {-1,+1},
+    se reindexan sorted(-1→0, +1→1) antes de calcular métricas.
+    """
+    unique_true = np.unique(y_true)
+    if unique_true.min() >= 0:
+        return y_true, y_pred
+    label_map = {int(v): i for i, v in enumerate(sorted(unique_true))}
+    remap_true = np.array([label_map[int(v)] for v in y_true], dtype=np.int64)
+    remap_pred = np.array([label_map.get(int(v), 0) for v in y_pred], dtype=np.int64)
+    return remap_true, remap_pred
+
+
 def run_fold(
     cfg: dict, X: np.ndarray, y: np.ndarray,
     train_idx: np.ndarray, val_idx: np.ndarray,
@@ -139,9 +156,12 @@ def run_fold(
 
     # Métricas finales sobre val
     val_pred = mlp.predict(X_val)
-    final = multiclass_metrics(y_val_raw, val_pred, num_classes)
     train_pred = mlp.predict(X_train)
     train_acc_final = float((train_pred == y_train_raw).mean())
+
+    # multiclass_metrics requiere etiquetas 0-indexed; normalizar si bipolares.
+    y_val_for_metrics, val_pred_for_metrics = _normalize_labels(y_val_raw, val_pred)
+    final = multiclass_metrics(y_val_for_metrics, val_pred_for_metrics, num_classes)
 
     summary = {
         "fold": fold_idx,
@@ -212,7 +232,8 @@ def _compute_fold_predictions(cfg, X, y, train_idx, val_idx, weights, fold_idx, 
             row["score_0"] = float(scores[i, 0])
         predictions.append(row)
 
-    cm = multiclass_metrics(y[val_idx], preds, n_classes)["confusion_matrix"]
+    y_norm, preds_norm = _normalize_labels(y[val_idx], preds)
+    cm = multiclass_metrics(y_norm, preds_norm, n_classes)["confusion_matrix"]
     cm_rows = []
     for t in range(n_classes):
         for p in range(n_classes):

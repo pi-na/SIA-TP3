@@ -61,8 +61,16 @@ def stratified_kfold(
 def train_val_split(
     y: np.ndarray, val_fraction: float, stratify: bool, seed: int
 ) -> tuple[np.ndarray, np.ndarray]:
-    """Single train/val split. Stratified si stratify=True."""
+    """Single train/val split. Stratified si stratify=True.
+
+    Caso especial: val_fraction == 0.0 ⇒ val_idx = train_idx (eval sobre train).
+    Útil para datasets minúsculos como XOR donde no hay holdout posible.
+    """
     rng = np.random.default_rng(seed)
+    if val_fraction == 0.0:
+        idx = np.arange(len(y))
+        rng.shuffle(idx)
+        return idx, idx.copy()
     if not stratify:
         idx = np.arange(len(y))
         rng.shuffle(idx)

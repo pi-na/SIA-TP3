@@ -190,12 +190,18 @@ class MLP:
         return out
 
     def predict(self, X: np.ndarray) -> np.ndarray:
-        """Devuelve índice de clase predicha (argmax)."""
+        """Devuelve clase predicha.
+
+        - softmax (multi-clase): argmax.
+        - sigmoid (binario [0,1]): threshold 0.5 → devuelve 0 ó 1.
+        - tanh u otra (binario bipolar [-1,+1]): signo → devuelve -1 ó +1.
+        """
         out, _ = self.forward(X)
         if out.shape[1] == 1:
-            # binario: threshold 0.5 si sigmoid, signo si tanh, etc.
-            return (out >= 0.5).astype(np.int64).flatten() if self.activations[-1] == "sigmoid" \
-                   else (out >= 0).astype(np.int64).flatten()
+            if self.activations[-1] == "sigmoid":
+                return (out >= 0.5).astype(np.int64).flatten()
+            # tanh / identity: umbral 0 → -1 o +1 (bipolar)
+            return np.where(out.flatten() >= 0, 1, -1).astype(np.int64)
         return out.argmax(axis=1).astype(np.int64)
 
     def save(self, path: Path) -> None:

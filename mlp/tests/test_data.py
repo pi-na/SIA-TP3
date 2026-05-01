@@ -85,3 +85,12 @@ def test_batch_iterator_shuffles_per_epoch():
     second = next(iter(it))[0][:, 0].astype(int).tolist()
     # Same epoch, different shuffles
     assert first != list(range(20))
+
+
+def test_train_val_split_zero_val_fraction():
+    """val_fraction=0.0 → val=train (caso XOR sin holdout)."""
+    y = np.array([0, 1, 0, 1])
+    train_idx, val_idx = train_val_split(y, val_fraction=0.0, stratify=False, seed=42)
+    assert len(train_idx) == 4
+    assert len(val_idx) == 4
+    assert set(train_idx.tolist()) == set(val_idx.tolist())
