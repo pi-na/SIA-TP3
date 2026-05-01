@@ -106,3 +106,53 @@ Genera 50 puntos exactos de `y = tanh(x)` (sin ruido), con `x ∈ [-5, 5]`.
 3. Calcular MSE en escala normalizada al final de cada época. Cortar si `MSE < ε`.
 
 Para graficar, denormalizar la salida: `y = (O + 1)·(z_max − z_min)/2 + z_min`.
+
+---
+
+## Perceptrón Escalón (AND)
+
+Validación con función lógica AND con entradas bipolares `{-1, +1}`. Implementación clásica de Rosenblatt (regla delta online).
+
+### Correr
+
+```bash
+../.venv/bin/python step_perceptron.py --csv step_dataset.csv --learning_rate 0.1 --epochs 100
+```
+
+| Flag | Default |
+|---|---|
+| `--csv` | `step_dataset.csv` |
+| `--learning_rate` | `0.1` |
+| `--epochs` | `100` |
+| `--seed` | `42` |
+
+Salida: pesos finales y errores por época. Converge en <20 épocas.
+
+### Tests
+
+```bash
+../.venv/bin/pytest tests/test_step_perceptron.py -v
+```
+
+---
+
+## Validación XOR del MLP (`[2, 2, 1]` y `[2, 3, 2, 1]`)
+
+Usamos el módulo genérico `mlp/` con configs específicos para XOR:
+
+```bash
+cd ..  # repo root
+python3 -m mlp.train --config ejercicio0/configs/xor_2_2_1.json \
+                      --csv-root . --output-dir ejercicio0/output --workers 1
+python3 -m mlp.train --config ejercicio0/configs/xor_2_3_2_1.json \
+                      --csv-root . --output-dir ejercicio0/output --workers 1
+```
+
+`[2,2,1]` es notoriamente sensible a inicialización; el TP recomienda calcularlo a mano. Si no converge, cambiar `random_seed` en el config.
+
+### Tests del MLP genérico
+
+```bash
+cd ..
+python3 -m pytest mlp/tests/test_xor.py -v
+```
