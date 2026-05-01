@@ -62,3 +62,21 @@ from digit_dataset_loader import load_dataset, plot_sample
 df = load_dataset("data and documentation/digits.csv")
 # df["image"] is a numpy array of shape (784,), df["label"] is the digit
 ```
+
+## Módulo `mlp/` (TP3 completion)
+
+Generic MLP module used by Ej0 (XOR validation), Ej2 (digits), Ej3 (≥98%):
+- Class `MLP` con forward/backward/fit/predict/predict_proba/save/load.
+- Optimizers: SGD, Momentum, Adam (`mlp/optimizers.py`).
+- Activations: sigmoid, tanh, relu, identity, softmax (`mlp/activations.py`).
+- Losses: MSE, BCE, cross-entropy con softmax shortcut (`mlp/losses.py`).
+- Init: uniform, He, Xavier; `auto` elige por activación (`mlp/initializers.py`).
+- Config-driven via JSON (`mlp/train.py`), output a `output/<model_name>_<ts>/` con 5 CSVs + npz.
+
+Workflow disciplinado: Fase 1 (k=1, exploratoria) → `base.json` → Fase 2 (k=5, one-at-a-time) → `final_eval.py` contra `digits_test.csv`.
+
+## Dataset format notes
+
+- `digits.csv` / `digits_test.csv` / `more_digits.csv`: columna `image` es string `"[0.1, 0.2, ...]"` con array flat de 784 floats. Columna `label` es int 0-9. `mlp/data.py:parse_features` parsea automáticamente.
+- `digits_test.csv` es "producción": NO se toca durante búsqueda de HP.
+- `more_digits.csv` se usa solo en Ej3 vía `extra_csv_paths` en el config (engine concatena CSVs antes de splitting).
