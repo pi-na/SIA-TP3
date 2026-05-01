@@ -40,6 +40,13 @@ class MLP:
             raise ValueError("loss='cross_entropy' requiere última activación='softmax'")
         if loss == "bce" and activations[-1] != "sigmoid":
             raise ValueError("loss='bce' requiere última activación='sigmoid'")
+        if activations[-1] == "softmax" and loss != "cross_entropy":
+            raise ValueError("activations[-1]='softmax' requires loss='cross_entropy'")
+        for i, act in enumerate(activations[:-1]):
+            if act == "softmax":
+                raise ValueError(
+                    f"'softmax' solo es válida como activación final, encontrada en capa {i}"
+                )
 
         self.layer_sizes = layer_sizes
         self.activations = activations

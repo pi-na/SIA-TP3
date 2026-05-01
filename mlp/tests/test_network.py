@@ -96,3 +96,57 @@ def test_backward_matches_numerical_grad():
         assert np.max(np.abs(grads_analytic[layer_idx] - numerical)) < 1e-4, (
             f"layer {layer_idx}: grad check failed"
         )
+
+
+def test_backward_grad_check_bce_sigmoid():
+    """Gradient check on BCE+sigmoid path."""
+    from mlp.tests._helpers import numerical_grad
+    rng = np.random.default_rng(7)
+    mlp = MLP([3, 4, 1], ["tanh", "sigmoid"], "bce",
+              SGD(0.01), seed=7)
+    X = rng.uniform(-1, 1, size=(5, 3))
+    y_true = (rng.uniform(0, 1, size=(5, 1)) > 0.5).astype(float)
+
+    pred, cache = mlp.forward(X)
+    grads_analytic = mlp.backward(X, y_true, cache)
+
+    for layer_idx, W_orig in enumerate(mlp.weights):
+        def loss_fn(W_test):
+            saved = mlp.weights[layer_idx].copy()
+            mlp.weights[layer_idx] = W_test
+            p, _ = mlp.forward(X)
+            from mlp.losses import bce
+            l = bce(y_true, p)
+            mlp.weights[layer_idx] = saved
+            return l
+        numerical = numerical_grad(loss_fn, W_orig.copy(), eps=1e-5)
+        assert np.max(np.abs(grads_analytic[layer_idx] - numerical)) < 1e-4, (
+            f"BCE+sigmoid layer {layer_idx}: grad check failed"
+        )
+
+
+def test_backward_grad_check_mse_identity():
+    """Gradient check on MSE+identity path (regression)."""
+    from mlp.tests._helpers import numerical_grad
+    rng = np.random.default_rng(13)
+    mlp = MLP([3, 4, 2], ["tanh", "identity"], "mse",
+              SGD(0.01), seed=13)
+    X = rng.uniform(-1, 1, size=(5, 3))
+    y_true = rng.uniform(-1, 1, size=(5, 2))
+
+    pred, cache = mlp.forward(X)
+    grads_analytic = mlp.backward(X, y_true, cache)
+
+    for layer_idx, W_orig in enumerate(mlp.weights):
+        def loss_fn(W_test):
+            saved = mlp.weights[layer_idx].copy()
+            mlp.weights[layer_idx] = W_test
+            p, _ = mlp.forward(X)
+            from mlp.losses import mse
+            l = mse(y_true, p)
+            mlp.weights[layer_idx] = saved
+            return l
+        numerical = numerical_grad(loss_fn, W_orig.copy(), eps=1e-5)
+        assert np.max(np.abs(grads_analytic[layer_idx] - numerical)) < 1e-4, (
+            f"MSE+identity layer {layer_idx}: grad check failed"
+        )
