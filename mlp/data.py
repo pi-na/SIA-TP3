@@ -33,3 +33,47 @@ def parse_features(df: pd.DataFrame, feature_cols: list[str]) -> np.ndarray:
                 "No mezcles arrays serializados con features escalares."
             )
     return df[feature_cols].to_numpy(dtype=np.float64)
+
+
+def stratified_kfold(
+    y: np.ndarray, k: int, seed: int
+) -> list[tuple[np.ndarray, np.ndarray]]:
+    """K-fold estratificado por clase. Devuelve [(train_idx, test_idx), ...]."""
+    if k < 2:
+        raise ValueError(f"stratified_kfold requiere k>=2, got {k}")
+    rng = np.random.default_rng(seed)
+    classes = np.unique(y)
+    chunks_per_class = []
+    for cls in classes:
+        idx = np.where(y == cls)[0].copy()
+        if len(idx) < k:
+            raise ValueError(f"Clase {cls} tiene {len(idx)} muestras < k={k}.")
+        rng.shuffle(idx)
+        chunks_per_class.append(np.array_split(idx, k))
+    folds = []
+    for i in range(k):
+        test_idx = np.concatenate([cc[i] for cc in chunks_per_class])
+        train_idx = np.concatenate([cc[j] for cc in chunks_per_class for j in range(k) if j != i])
+        folds.append((train_idx, test_idx))
+    return folds
+
+
+def train_val_split(
+    y: np.ndarray, val_fraction: float, stratify: bool, seed: int
+) -> tuple[np.ndarray, np.ndarray]:
+    """Single train/val split. Stratified si stratify=True."""
+    rng = np.random.default_rng(seed)
+    if not stratify:
+        idx = np.arange(len(y))
+        rng.shuffle(idx)
+        n_val = int(len(y) * val_fraction)
+        return idx[n_val:], idx[:n_val]
+    classes = np.unique(y)
+    train_chunks, val_chunks = [], []
+    for cls in classes:
+        idx = np.where(y == cls)[0].copy()
+        rng.shuffle(idx)
+        n_val = max(1, int(len(idx) * val_fraction))
+        val_chunks.append(idx[:n_val])
+        train_chunks.append(idx[n_val:])
+    return np.concatenate(train_chunks), np.concatenate(val_chunks)
