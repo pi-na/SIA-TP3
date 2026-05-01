@@ -121,3 +121,65 @@ class MLP:
                 delta = d_a_prev * act_grad_fn(z_prev, a_prev)
 
         return grads
+
+    def fit(
+        self,
+        X_train: np.ndarray, y_train: np.ndarray,
+        X_val: np.ndarray, y_val: np.ndarray,
+        epochs: int,
+        batch_size: int,
+        early_stopping_patience: int | None = None,
+        callback=None,
+    ) -> list[dict]:
+        """Loop de entrenamiento. Devuelve history (lista de dicts por época)."""
+        from mlp.data import BatchIterator
+        loss_fn, _ = LOSSES[self.loss_name]
+        history = []
+        best_val_loss = float("inf")
+        epochs_no_improvement = 0
+        best_weights = None
+
+        for epoch in range(epochs):
+            # Mini-batch SGD pass
+            it = BatchIterator(X_train, y_train, batch_size=batch_size,
+                               shuffle=True, seed=epoch)
+            for xb, yb in it:
+                _, cache = self.forward(xb)
+                grads = self.backward(xb, yb, cache)
+                # L2 regularization (Pack C, opcional)
+                l2 = self.regularization.get("l2", 0.0)
+                if l2 > 0:
+                    for i, W in enumerate(self.weights):
+                        reg_grad = np.zeros_like(W)
+                        reg_grad[:, 1:] = l2 * W[:, 1:]  # no penaliza bias
+                        grads[i] = grads[i] + reg_grad
+                self.optimizer.step(self.weights, grads)
+
+            # Eval over full train + val
+            train_pred, _ = self.forward(X_train)
+            val_pred, _ = self.forward(X_val)
+            train_loss = loss_fn(y_train, train_pred)
+            val_loss = loss_fn(y_val, val_pred)
+            ep_metrics = {
+                "epoch": epoch,
+                "train_loss": float(train_loss),
+                "val_loss": float(val_loss),
+            }
+            history.append(ep_metrics)
+            if callback is not None:
+                callback(epoch, ep_metrics)
+
+            # Early stopping
+            if early_stopping_patience is not None:
+                if val_loss < best_val_loss:
+                    best_val_loss = val_loss
+                    epochs_no_improvement = 0
+                    best_weights = [W.copy() for W in self.weights]
+                else:
+                    epochs_no_improvement += 1
+                    if epochs_no_improvement >= early_stopping_patience:
+                        if best_weights is not None:
+                            self.weights = best_weights
+                        break
+
+        return history
