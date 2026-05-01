@@ -1,6 +1,7 @@
 __pycache__/
 .venv/
 output_*/
+output/
 *.pyc
 docs/superpowers/
 .DS_Store
