@@ -1,0 +1,2 @@
+- [Specs and plans location](specs_and_plans_location.md) — `docs/superpowers/` está gitignored, no aparece en worktrees, leer via path absoluto
+- [TP3 completion plan status](tp3_completion_status.md) — Plan de validación + Ej2 + Ej3 aprobado, worktree `tp3-mlp` listo, sin tareas implementadas aún
