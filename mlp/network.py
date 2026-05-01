@@ -76,3 +76,41 @@ class MLP:
             a = act_fn(z)
             cache.append((z, a))
         return a, cache
+
+    def backward(
+        self, X: np.ndarray, y_true: np.ndarray, cache: list
+    ) -> list[np.ndarray]:
+        """Backprop. Devuelve gradientes por capa con mismo shape que weights."""
+        L = len(self.weights)
+        grads = [None] * L
+
+        # Output layer: usa truco de softmax+CE si aplica
+        z_last, a_last = cache[-1]
+        if self.loss_name == "cross_entropy" and self.activations[-1] == "softmax":
+            from mlp.losses import cross_entropy_grad_with_softmax
+            delta = cross_entropy_grad_with_softmax(y_true, a_last)  # (batch, n_out)
+        else:
+            _, loss_grad_fn = LOSSES[self.loss_name]
+            d_loss_d_a = loss_grad_fn(y_true, a_last)
+            _, act_grad_fn = ACTIVATIONS[self.activations[-1]]
+            delta = d_loss_d_a * act_grad_fn(z_last, a_last)
+
+        # Iterar capas de atrás hacia adelante
+        for l in range(L - 1, -1, -1):
+            # Activación previa con bias
+            if l == 0:
+                a_prev_with_bias = self._add_bias_column(X)
+            else:
+                _, a_prev = cache[l - 1]
+                a_prev_with_bias = self._add_bias_column(a_prev)
+            grads[l] = delta.T @ a_prev_with_bias  # (n_out, n_in+1)
+
+            if l > 0:
+                # Propagar delta a capa anterior
+                W_no_bias = self.weights[l][:, 1:]  # (n_out, n_in)
+                d_a_prev = delta @ W_no_bias  # (batch, n_in)
+                z_prev, a_prev = cache[l - 1]
+                _, act_grad_fn = ACTIVATIONS[self.activations[l - 1]]
+                delta = d_a_prev * act_grad_fn(z_prev, a_prev)
+
+        return grads

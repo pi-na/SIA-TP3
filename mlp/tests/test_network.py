@@ -67,3 +67,32 @@ def test_forward_cache_pre_and_post_activation():
     # a0 = tanh(z0), a1 = sigmoid(z1) = out
     assert np.allclose(a0, np.tanh(z0))
     assert np.allclose(a1, out)
+
+
+def test_backward_matches_numerical_grad():
+    """Gold standard test: analítico vs diferenciación numérica."""
+    from mlp.tests._helpers import numerical_grad
+    rng = np.random.default_rng(42)
+    mlp = MLP([3, 4, 2], ["tanh", "softmax"], "cross_entropy",
+              SGD(0.01), seed=42)
+    X = rng.uniform(-1, 1, size=(5, 3))
+    y_true = np.eye(2)[rng.integers(0, 2, size=5)]
+
+    # Analítico
+    pred, cache = mlp.forward(X)
+    grads_analytic = mlp.backward(X, y_true, cache)
+
+    # Numérico (sobre cada capa)
+    for layer_idx, W_orig in enumerate(mlp.weights):
+        def loss_fn(W_test):
+            saved = mlp.weights[layer_idx].copy()
+            mlp.weights[layer_idx] = W_test
+            p, _ = mlp.forward(X)
+            from mlp.losses import cross_entropy
+            l = cross_entropy(y_true, p)
+            mlp.weights[layer_idx] = saved
+            return l
+        numerical = numerical_grad(loss_fn, W_orig.copy(), eps=1e-5)
+        assert np.max(np.abs(grads_analytic[layer_idx] - numerical)) < 1e-4, (
+            f"layer {layer_idx}: grad check failed"
+        )
