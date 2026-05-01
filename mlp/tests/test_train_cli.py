@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import numpy as np
 import pytest
 
 from mlp.train import load_and_validate_config
@@ -60,3 +61,30 @@ def test_unknown_optimizer_rejected(tmp_path):
     p = write_config(tmp_path / "c.json", **{"training.optimizer": {"name": "xyz", "lr": 0.1}})
     with pytest.raises(ValueError, match="optimizer"):
         load_and_validate_config(p)
+
+
+def test_run_fold_returns_summary_and_history(tmp_path):
+    """Smoke test: corre 1 fold sobre datos sintéticos chicos."""
+    from mlp.train import run_fold
+    rng = np.random.default_rng(0)
+    n = 200
+    X = rng.uniform(-1, 1, size=(n, 5))
+    y = (X[:, 0] + X[:, 1] > 0).astype(np.int64)
+
+    cfg = json.loads(write_config(tmp_path / "c.json", **{
+        "architecture.layer_sizes": [5, 8, 2],
+        "architecture.activations": ["relu", "softmax"],
+        "training.epochs": 10,
+        "training.batch_size": 32,
+        "training.early_stopping_patience": None,
+        "dataset.num_classes": 2,
+    }).read_text())
+    train_idx = np.arange(160)
+    val_idx = np.arange(160, 200)
+    summary, history, weights = run_fold(
+        cfg, X, y, train_idx, val_idx, fold_idx=0, fold_seed=42,
+    )
+    assert "val_acc_final" in summary
+    assert "macro_f1" in summary
+    assert len(history) <= 10
+    assert isinstance(weights, list)
