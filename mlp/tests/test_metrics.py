@@ -5,6 +5,7 @@ import pytest
 
 from mlp.metrics import (
     accuracy, per_class_metrics, macro_average, weighted_average,
+    confusion_matrix, multiclass_metrics,
 )
 
 
@@ -40,3 +41,24 @@ def test_macro_vs_weighted():
     weighted = weighted_average(pcm["f1"], y_true, n_classes=2)
     # Class 0 dominates → weighted closer to f1[0], macro is mean
     assert macro != weighted
+
+
+def test_confusion_matrix_shape():
+    y_true = np.array([0, 1, 2, 0, 1, 2])
+    y_pred = np.array([0, 2, 1, 0, 1, 2])
+    cm = confusion_matrix(y_true, y_pred, n_classes=3)
+    assert cm.shape == (3, 3)
+    assert cm.sum() == len(y_true)
+    assert cm[0, 0] == 2
+    assert cm[1, 2] == 1
+    assert cm[2, 1] == 1
+
+
+def test_multiclass_metrics_returns_dict():
+    y_true = np.array([0, 1, 2, 0, 1, 2])
+    y_pred = np.array([0, 1, 2, 0, 1, 2])
+    m = multiclass_metrics(y_true, y_pred, n_classes=3)
+    assert m["accuracy"] == 1.0
+    assert m["macro_f1"] == 1.0
+    assert m["weighted_f1"] == 1.0
+    assert "precision" in m and len(m["precision"]) == 3
