@@ -167,6 +167,74 @@ def run_fold(
     return summary, history_compact, mlp.weights
 
 
+def _compute_fold_predictions(cfg, X, y, train_idx, val_idx, weights, fold_idx, fold_seed):
+    """Recomputa predicciones out-of-fold con los weights entrenados."""
+    norm = cfg["preprocessing"]["normalization"]
+    X_val = X[val_idx]
+    if norm == "zscore":
+        X_train_for_norm = X[train_idx]
+        means, stds = X_train_for_norm.mean(0), X_train_for_norm.std(0)
+        stds[stds == 0] = 1.0
+        X_val = (X_val - means) / stds
+    elif norm == "minmax":
+        X_train_for_norm = X[train_idx]
+        mins = X_train_for_norm.min(0)
+        rng_ = X_train_for_norm.max(0) - mins
+        rng_[rng_ == 0] = 1.0
+        X_val = (X_val - mins) / rng_
+
+    opt_cfg = dict(cfg["training"]["optimizer"])
+    opt_name = opt_cfg.pop("name")
+    tmp_mlp = MLP(
+        layer_sizes=cfg["architecture"]["layer_sizes"],
+        activations=cfg["architecture"]["activations"],
+        loss=cfg["training"]["loss"],
+        optimizer=build_optimizer(opt_name, **opt_cfg),
+        initializer=cfg["architecture"]["initializer"],
+        seed=fold_seed,
+        regularization=cfg["regularization"],
+    )
+    tmp_mlp.weights = weights
+    scores = tmp_mlp.predict_proba(X_val)
+    preds = tmp_mlp.predict(X_val)
+    n_classes = cfg["dataset"]["num_classes"]
+
+    predictions = []
+    for i, row_id in enumerate(val_idx):
+        row = {
+            "fold": fold_idx, "row_id": int(row_id),
+            "true_label": int(y[row_id]), "pred_label": int(preds[i]),
+        }
+        if scores.shape[1] == n_classes:
+            for c in range(n_classes):
+                row[f"score_{c}"] = float(scores[i, c])
+        else:
+            row["score_0"] = float(scores[i, 0])
+        predictions.append(row)
+
+    cm = multiclass_metrics(y[val_idx], preds, n_classes)["confusion_matrix"]
+    cm_rows = []
+    for t in range(n_classes):
+        for p in range(n_classes):
+            cm_rows.append({
+                "fold": fold_idx, "true_label": t,
+                "pred_label": p, "count": int(cm[t, p]),
+            })
+    return predictions, cm_rows
+
+
+def _fold_worker(args):
+    """Top-level worker for multiprocessing (must be picklable)."""
+    cfg, X, y, train_idx, val_idx, fold_idx, fold_seed = args
+    summary, history, weights = run_fold(
+        cfg, X, y, train_idx, val_idx, fold_idx, fold_seed,
+    )
+    predictions, cm_rows = _compute_fold_predictions(
+        cfg, X, y, train_idx, val_idx, weights, fold_idx, fold_seed,
+    )
+    return fold_idx, summary, history, weights, predictions, cm_rows
+
+
 def _build_folds(cfg: dict, y: np.ndarray) -> list[tuple[np.ndarray, np.ndarray]]:
     s = cfg["split"]
     if s["k_folds"] >= 2:
@@ -179,7 +247,7 @@ def _build_folds(cfg: dict, y: np.ndarray) -> list[tuple[np.ndarray, np.ndarray]
     return [(train, val)]
 
 
-def run_experiment(cfg: dict, csv_root: Path, output_dir: Path) -> Path:
+def run_experiment(cfg: dict, csv_root: Path, output_dir: Path, workers: int = 1) -> Path:
     """Corre todos los folds, escribe CSVs en output_dir/<model_name>_<ts>/."""
     # Cargar dataset principal + extras
     df = pd.read_csv(csv_root / cfg["dataset"]["csv_path"])
@@ -204,78 +272,29 @@ def run_experiment(cfg: dict, csv_root: Path, output_dir: Path) -> Path:
     all_summaries, all_histories, all_predictions, all_cm_rows = [], [], [], []
     weight_dict_for_save = {}
 
-    for fold_idx, (train_idx, val_idx) in enumerate(folds):
-        fold_seed = cfg["split"]["random_seed"] + fold_idx
-        print(f"  fold {fold_idx}: starting…")
-        summary, history, weights = run_fold(
-            cfg, X, y, train_idx, val_idx, fold_idx, fold_seed,
-        )
+    fold_args = [
+        (cfg, X, y, train_idx, val_idx, fold_idx,
+         cfg["split"]["random_seed"] + fold_idx)
+        for fold_idx, (train_idx, val_idx) in enumerate(folds)
+    ]
+    n_workers = max(1, min(workers, len(folds)))
+    if n_workers > 1:
+        import multiprocessing as mp
+        print(f"  (running {len(folds)} folds in parallel with {n_workers} workers)")
+        with mp.Pool(n_workers) as pool:
+            results = list(pool.imap_unordered(_fold_worker, fold_args))
+    else:
+        results = [_fold_worker(a) for a in fold_args]
+    results.sort(key=lambda r: r[0])
+
+    for fold_idx, summary, history, weights, predictions, cm_rows in results:
         all_summaries.append(summary)
         for h in history:
             all_histories.append({"fold": fold_idx, **h})
-
-        # Predicciones out-of-fold
-        # (recomputar sobre val_idx con los pesos finales)
-        from mlp.network import MLP as _MLP
-        # Reconstruir MLP simple para predict_proba (usa los weights finales)
-        # — alternativamente devolver el mlp desde run_fold. Lo hacemos así por simplicidad.
-        # Aquí asumimos que run_fold ya validó sobre val. Para predicciones detalladas:
-        # cargar X_val, normalizar, forward.
-        norm = cfg["preprocessing"]["normalization"]
-        X_val = X[val_idx]
-        if norm == "zscore":
-            X_train_for_norm = X[train_idx]
-            means, stds = X_train_for_norm.mean(0), X_train_for_norm.std(0)
-            stds[stds == 0] = 1.0
-            X_val = (X_val - means) / stds
-        elif norm == "minmax":
-            X_train_for_norm = X[train_idx]
-            mins = X_train_for_norm.min(0)
-            rng_ = X_train_for_norm.max(0) - mins
-            rng_[rng_ == 0] = 1.0
-            X_val = (X_val - mins) / rng_
-
-        opt_cfg = dict(cfg["training"]["optimizer"])
-        opt_name = opt_cfg.pop("name")
-        from mlp.optimizers import build_optimizer as _bo
-        tmp_mlp = _MLP(
-            layer_sizes=cfg["architecture"]["layer_sizes"],
-            activations=cfg["architecture"]["activations"],
-            loss=cfg["training"]["loss"],
-            optimizer=_bo(opt_name, **opt_cfg),
-            initializer=cfg["architecture"]["initializer"],
-            seed=fold_seed,
-            regularization=cfg["regularization"],
-        )
-        tmp_mlp.weights = weights  # inyectar pesos entrenados
-        scores = tmp_mlp.predict_proba(X_val)
-        preds = tmp_mlp.predict(X_val)
-        n_classes = cfg["dataset"]["num_classes"]
-        for i, row_id in enumerate(val_idx):
-            row = {
-                "fold": fold_idx, "row_id": int(row_id),
-                "true_label": int(y[row_id]), "pred_label": int(preds[i]),
-            }
-            if scores.shape[1] == n_classes:
-                for c in range(n_classes):
-                    row[f"score_{c}"] = float(scores[i, c])
-            else:
-                row["score_0"] = float(scores[i, 0])
-            all_predictions.append(row)
-
-        # Confusion matrix stacked
-        cm = multiclass_metrics(y[val_idx], preds, n_classes)["confusion_matrix"]
-        for t in range(n_classes):
-            for p in range(n_classes):
-                all_cm_rows.append({
-                    "fold": fold_idx, "true_label": t,
-                    "pred_label": p, "count": int(cm[t, p]),
-                })
-
-        # Save weights for this fold
+        all_predictions.extend(predictions)
+        all_cm_rows.extend(cm_rows)
         for layer_idx, W in enumerate(weights):
             weight_dict_for_save[f"fold{fold_idx}_W{layer_idx}"] = W
-
         print(f"  fold {fold_idx}: val_acc={summary['val_acc_final']:.4f} "
               f"macro_f1={summary['macro_f1']:.4f}")
 
@@ -317,6 +336,8 @@ def main():
     parser.add_argument("--output-dir", required=True, type=Path)
     parser.add_argument("--csv-root", default=Path("."), type=Path,
                         help="Root path for relative csv_path in config")
+    parser.add_argument("--workers", type=int, default=1,
+                        help="Procesos paralelos (default 1). >1 acelera K-fold.")
     args = parser.parse_args()
 
     cfg = load_and_validate_config(args.config)
@@ -326,7 +347,7 @@ def main():
     print(f"Optimizer: {cfg['training']['optimizer']}")
     print(f"K-folds: {cfg['split']['k_folds']}")
     print()
-    run_experiment(cfg, args.csv_root, args.output_dir)
+    run_experiment(cfg, args.csv_root, args.output_dir, workers=args.workers)
 
 
 if __name__ == "__main__":

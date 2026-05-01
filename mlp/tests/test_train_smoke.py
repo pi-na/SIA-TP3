@@ -27,7 +27,7 @@ def test_e2e_synthetic_csv(tmp_path: Path):
             "csv_path": "data.csv", "feature_col": ["f0", "f1", "f2", "f3"],
             "target_col": "label", "num_classes": 2, "extra_csv_paths": [],
         },
-        "split": {"k_folds": 1, "stratify": True,
+        "split": {"k_folds": 2, "stratify": True,
                   "val_fraction_if_k1": 0.2, "random_seed": 42},
         "preprocessing": {"normalization": "zscore", "one_hot_targets": True},
         "architecture": {
@@ -47,7 +47,7 @@ def test_e2e_synthetic_csv(tmp_path: Path):
 
     out_dir = tmp_path / "out"
     cfg_loaded = load_and_validate_config(cfg_path)
-    run_dir = run_experiment(cfg_loaded, csv_root=tmp_path, output_dir=out_dir)
+    run_dir = run_experiment(cfg_loaded, csv_root=tmp_path, output_dir=out_dir, workers=2)
 
     # CSVs deben existir
     assert (run_dir / "config.json").exists()
