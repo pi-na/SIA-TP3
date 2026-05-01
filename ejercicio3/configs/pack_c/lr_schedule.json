@@ -1,0 +1,56 @@
+{
+  "model_name": "pack_c_lr_schedule",
+  "dataset": {
+    "csv_path": "data and documentation/digits.csv",
+    "feature_col": "image",
+    "target_col": "label",
+    "num_classes": 10,
+    "extra_csv_paths": [
+      "data and documentation/more_digits.csv"
+    ]
+  },
+  "split": {
+    "k_folds": 5,
+    "stratify": true,
+    "val_fraction_if_k1": 0.2,
+    "random_seed": 42
+  },
+  "preprocessing": {
+    "normalization": "none",
+    "one_hot_targets": true
+  },
+  "architecture": {
+    "layer_sizes": [
+      784,
+      100,
+      50,
+      10
+    ],
+    "activations": [
+      "relu",
+      "relu",
+      "softmax"
+    ],
+    "initializer": "auto"
+  },
+  "training": {
+    "loss": "cross_entropy",
+    "optimizer": {
+      "name": "adam",
+      "lr": 0.001
+    },
+    "epochs": 50,
+    "batch_size": 16,
+    "early_stopping_patience": 10
+  },
+  "regularization": {
+    "l2": 0.0,
+    "dropout": 0.0,
+    "lr_schedule": {
+      "type": "step",
+      "decay": 0.5,
+      "every": 20
+    },
+    "augmentation": null
+  }
+}
