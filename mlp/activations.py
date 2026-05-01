@@ -38,7 +38,7 @@ def relu_grad(z: np.ndarray, a: np.ndarray) -> np.ndarray:
 
 
 def identity(z: np.ndarray) -> np.ndarray:
-    return z
+    return np.array(z, dtype=np.float64, copy=True)
 
 
 def identity_grad(z: np.ndarray, a: np.ndarray) -> np.ndarray:
@@ -46,7 +46,10 @@ def identity_grad(z: np.ndarray, a: np.ndarray) -> np.ndarray:
 
 
 def softmax(z: np.ndarray) -> np.ndarray:
-    """Softmax estable: resta max por fila antes de exp."""
+    """Softmax estable: resta max por fila antes de exp.
+
+    z must be 2-D of shape (batch, classes).
+    """
     z = np.asarray(z, dtype=np.float64)
     z_shifted = z - z.max(axis=1, keepdims=True)
     e = np.exp(z_shifted)

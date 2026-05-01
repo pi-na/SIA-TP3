@@ -52,3 +52,4 @@ def test_activations_dict_complete():
     for name, (fn, grad_fn) in ACTIVATIONS.items():
         if name != "softmax":
             assert callable(fn) and callable(grad_fn)
+    assert ACTIVATIONS["softmax"][1] is None, "softmax grad_fn must be None"
