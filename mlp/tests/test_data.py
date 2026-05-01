@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from mlp.data import parse_features, stratified_kfold, train_val_split
+from mlp.data import parse_features, stratified_kfold, train_val_split, BatchIterator
 
 
 def test_parse_features_numeric_columns():
@@ -64,3 +64,24 @@ def test_train_val_split_ratio():
     assert len(np.intersect1d(train_idx, val_idx)) == 0
     val_y = y[val_idx]
     assert (val_y == 1).sum() in {3, 4, 5}  # ~20% of 20 positives
+
+
+def test_batch_iterator_yields_full_dataset():
+    X = np.arange(100).reshape(-1, 1).astype(float)
+    y = np.arange(100).reshape(-1, 1).astype(float)
+    it = BatchIterator(X, y, batch_size=32, shuffle=False, seed=42)
+    seen_rows = []
+    for xb, yb in it:
+        assert xb.shape[0] == yb.shape[0]
+        seen_rows.extend(xb[:, 0].astype(int).tolist())
+    assert sorted(seen_rows) == list(range(100))
+
+
+def test_batch_iterator_shuffles_per_epoch():
+    X = np.arange(20).reshape(-1, 1).astype(float)
+    y = np.arange(20).reshape(-1, 1).astype(float)
+    it = BatchIterator(X, y, batch_size=20, shuffle=True, seed=42)
+    first = next(iter(it))[0][:, 0].astype(int).tolist()
+    second = next(iter(it))[0][:, 0].astype(int).tolist()
+    # Same epoch, different shuffles
+    assert first != list(range(20))

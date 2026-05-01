@@ -77,3 +77,28 @@ def train_val_split(
         val_chunks.append(idx[:n_val])
         train_chunks.append(idx[n_val:])
     return np.concatenate(train_chunks), np.concatenate(val_chunks)
+
+
+class BatchIterator:
+    """Itera sobre (X, y) en mini-batches. Reshufflea cada época."""
+
+    def __init__(self, X: np.ndarray, y: np.ndarray, batch_size: int,
+                 shuffle: bool = True, seed: int | None = None):
+        if len(X) != len(y):
+            raise ValueError(f"X y y de tamaños distintos: {len(X)} vs {len(y)}")
+        self.X = X
+        self.y = y
+        self.batch_size = batch_size
+        self.shuffle = shuffle
+        self.rng = np.random.default_rng(seed)
+
+    def __iter__(self) -> Iterator[tuple[np.ndarray, np.ndarray]]:
+        idx = np.arange(len(self.X))
+        if self.shuffle:
+            self.rng.shuffle(idx)
+        for start in range(0, len(idx), self.batch_size):
+            chunk = idx[start:start + self.batch_size]
+            yield self.X[chunk], self.y[chunk]
+
+    def __len__(self) -> int:
+        return (len(self.X) + self.batch_size - 1) // self.batch_size
