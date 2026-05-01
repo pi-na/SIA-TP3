@@ -183,3 +183,44 @@ class MLP:
                         break
 
         return history
+
+    def predict_proba(self, X: np.ndarray) -> np.ndarray:
+        """Devuelve probabilidades/scores (output crudo de la última capa)."""
+        out, _ = self.forward(X)
+        return out
+
+    def predict(self, X: np.ndarray) -> np.ndarray:
+        """Devuelve índice de clase predicha (argmax)."""
+        out, _ = self.forward(X)
+        if out.shape[1] == 1:
+            # binario: threshold 0.5 si sigmoid, signo si tanh, etc.
+            return (out >= 0.5).astype(np.int64).flatten() if self.activations[-1] == "sigmoid" \
+                   else (out >= 0).astype(np.int64).flatten()
+        return out.argmax(axis=1).astype(np.int64)
+
+    def save(self, path: Path) -> None:
+        """Guarda pesos + arquitectura en .npz."""
+        path = Path(path)
+        meta = {
+            "layer_sizes": self.layer_sizes,
+            "activations": self.activations,
+            "loss": self.loss_name,
+        }
+        weight_dict = {f"W{i}": W for i, W in enumerate(self.weights)}
+        np.savez_compressed(path, meta=json.dumps(meta), **weight_dict)
+
+    @classmethod
+    def load(cls, path: Path) -> "MLP":
+        """Carga modelo desde .npz. Optimizer se reinicia (no se persiste state)."""
+        path = Path(path)
+        data = np.load(path, allow_pickle=True)
+        meta = json.loads(str(data["meta"]))
+        from mlp.optimizers import SGD
+        instance = cls.__new__(cls)
+        instance.layer_sizes = meta["layer_sizes"]
+        instance.activations = meta["activations"]
+        instance.loss_name = meta["loss"]
+        instance.optimizer = SGD(lr=0.0)  # placeholder; user reasigna si reentrenará
+        instance.regularization = {}
+        instance.weights = [data[f"W{i}"] for i in range(len(meta["layer_sizes"]) - 1)]
+        return instance
