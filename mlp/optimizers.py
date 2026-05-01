@@ -21,8 +21,24 @@ class SGD(Optimizer):
             weights[i] = w - self.lr * g
 
 
-# Momentum y Adam se agregan en tasks 6 y 7
-OPTIMIZERS = {"sgd": SGD}
+class Momentum(Optimizer):
+    """SGD with momentum: v = β·v - lr·g; w += v."""
+
+    def __init__(self, lr: float, beta: float = 0.9):
+        self.lr = lr
+        self.beta = beta
+        self.velocity: list[np.ndarray] | None = None
+
+    def step(self, weights, grads):
+        if self.velocity is None:
+            self.velocity = [np.zeros_like(w) for w in weights]
+        for i, (w, g) in enumerate(zip(weights, grads)):
+            self.velocity[i] = self.beta * self.velocity[i] - self.lr * g
+            weights[i] = w + self.velocity[i]
+
+
+# Adam se agrega en task 7
+OPTIMIZERS = {"sgd": SGD, "momentum": Momentum}
 
 
 def build_optimizer(name: str, **kwargs) -> Optimizer:
