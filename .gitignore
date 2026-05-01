@@ -4,3 +4,4 @@ output_*/
 *.pyc
 docs/superpowers/
 .DS_Store
+.worktrees/
