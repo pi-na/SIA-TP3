@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-from mlp.optimizers import SGD, Momentum, OPTIMIZERS
+from mlp.optimizers import SGD, Momentum, Adam, OPTIMIZERS, build_optimizer
 
 
 def quadratic_loss_and_grad(w_list):
@@ -50,3 +50,29 @@ def test_momentum_lazy_init():
     opt.step(w, g)
     assert opt.velocity is not None
     assert len(opt.velocity) == 1
+
+
+def test_adam_converges(rng):
+    w = [rng.uniform(-1, 1, size=(5, 10))]
+    opt = Adam(lr=0.01)
+    initial, final = run_optim_steps(opt, w, n_steps=300)
+    assert final < initial * 0.05
+
+
+def test_adam_state_initialized():
+    opt = Adam(lr=0.001)
+    assert opt.m is None and opt.v is None and opt.t == 0
+    w = [np.ones((3, 4))]
+    g = [np.ones((3, 4)) * 0.1]
+    opt.step(w, g)
+    assert opt.m is not None and opt.v is not None
+    assert opt.t == 1
+
+
+def test_build_optimizer():
+    sgd = build_optimizer("sgd", lr=0.01)
+    assert isinstance(sgd, SGD)
+    adam = build_optimizer("adam", lr=0.001, beta1=0.9, beta2=0.999, eps=1e-8)
+    assert isinstance(adam, Adam)
+    with pytest.raises(ValueError):
+        build_optimizer("xyz", lr=0.1)
