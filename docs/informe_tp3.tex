@@ -173,7 +173,7 @@ Repositorio: \texttt{github.com/pi-na/SIA-TP3} · branch \texttt{tp3-mlp}.}
 \section*{Resumen ejecutivo}
 \addcontentsline{toc}{section}{Resumen ejecutivo}
 
-Este TP construye un \textbf{módulo MLP genérico} (\code{mlp/}, NumPy puro) y resuelve sobre él los Ejercicios 0, 2 y 3. La filosofía es separar el \textbf{engine} de los \textbf{experimentos}: cada experimento es un \code{config.json} \(\rightarrow\) una corrida \(\rightarrow\) una carpeta de outputs (CSVs + npz) \(\rightarrow\) plots para slides.
+Este TP construye un \textbf{módulo MLP genérico} (\code{mlp/}, NumPy puro) y resuelve sobre él los Ejercicios 0, 2 y 3. La filosofía es separar el \textbf{engine} de los \textbf{experimentos}: cada experimento es un \code{config.json} \(\rightarrow\) una corrida \(\rightarrow\) una carpeta de outputs (CSVs + npz) \(\rightarrow\) plots para slides. El \textbf{Ejercicio 1} (knowledge distillation para detección de fraude) lo implementó \textbf{Tomás} con su propio set de scripts antes de la unificación con el engine; se documenta acá por completitud (§\ref{sec:ej1}).
 
 \medskip
 La metodología en Ej2 fue \textbf{coarse-to-fine en dos fases}:
@@ -313,6 +313,71 @@ Configs \file{xor\_2\_2\_1.json} (mínima) y \file{xor\_2\_3\_2\_1.json} (con ca
                    "epochs": 2000, "batch_size": 4}
 }
 \end{lstlisting}
+
+% =============== EJ1 ===============
+\section{Ejercicio 1 — Detección de fraude (Knowledge Distillation)}\label{sec:ej1}
+
+\begin{tcolorbox}[enhanced, colback=bgbox, colframe=muted, boxrule=0pt, leftrule=4pt,
+  arc=2pt, outer arc=0pt, left=10pt, right=10pt, top=8pt, bottom=8pt]
+\textbf{Nota de autoría.} El Ejercicio 1 lo implementó \textbf{Tomás} antes de que se construyera el engine \code{mlp/}. Por eso vive como scripts independientes en \file{ejercicio1/lineal\_perceptron/} y \file{ejercicio1/nonlinear\_perceptron/}, con su propia pipeline (K-fold, normalización, threshold sweep). El resto del TP usa el engine unificado.
+\end{tcolorbox}
+
+\subsection{Setup}
+La consigna es \textbf{knowledge distillation}: un \emph{TinyModel} (perceptrón simple) replica la salida \texttt{big\_model\_fraud\_probability} (continua en \([0,1]\)) de un BigModel pre-entrenado.
+
+\begin{itemize}[leftmargin=1.4em, itemsep=2pt]
+  \item \textbf{Dataset}: \file{data\,and\,documentation/fraud\_dataset.csv}, 9 features.
+  \item \textbf{Target de entrenamiento}: \code{big\_model\_fraud\_probability} (no \code{flagged\_fraud}).
+  \item \textbf{Ground truth de evaluación}: \code{flagged\_fraud}, \emph{nunca} usada en training.
+  \item \textbf{Salida}: continua en \([0,1]\) \(\Rightarrow\) activación sigmoide.
+\end{itemize}
+
+\subsection{Comparación lineal vs no-lineal}
+
+Lineal (Adaline) vs no-lineal (sigmoide) con regla delta. Para el no-lineal, el factor \(O(1-O)\) modula el gradiente, achicándolo en zonas saturadas.
+
+\begin{center}
+\begin{tabular}{@{}lrr@{}}
+\toprule
+\textbf{Modelo} & \textbf{MSE test (mean \(\pm\) std)} & \textbf{Reducción vs lineal} \\
+\midrule
+Lineal     & \(0.0266 \pm 0.0008\) & --- \\
+\rowcolor{accent2!10}
+\textbf{No-Lineal} & \(\boldsymbol{0.0110 \pm 0.0004}\) & \(\boldsymbol{-59\%}\) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{insight}
+El lineal puede producir salidas fuera de \([0,1]\), lo que penaliza el MSE contra un target acotado. La sigmoide mapea naturalmente al rango del target.
+\end{insight}
+
+\subsection{Threshold sweep — el detalle operativo}
+
+Con \(\text{threshold} = 0.5\) (default) el no-lineal clasifica casi todo como fraude (\(\text{precision} = 0.33\), \(\text{recall} = 1.00\)). Esto no es un mal modelo: es un threshold inadecuado. Las salidas sigmoide concentran los scores de fraude por encima de \(0.85\).
+
+\begin{center}
+\small
+\begin{tabular}{@{}rcccc@{}}
+\toprule
+\textbf{th} & \textbf{Precision} & \textbf{Recall} & \textbf{F1} & \textbf{Accuracy} \\
+\midrule
+0.50 & 0.333 & 1.000 & 0.499 & 0.768 \\
+0.80 & 0.751 & 0.952 & 0.840 & 0.958 \\
+0.85 & 0.812 & 0.893 & 0.850 & 0.964 \\
+\rowcolor{accent2!10}
+\textbf{0.89} & \textbf{0.886} & \textbf{0.861} & \textbf{0.873} & \textbf{0.971} \\
+0.95 & 0.949 & 0.746 & 0.835 & 0.966 \\
+0.99 & 1.000 & 0.527 & 0.690 & 0.945 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{AUC-ROC del no-lineal: 0.9921} (lineal: 0.9720). El no-lineal tiene mejor capacidad de discriminación global aunque con threshold óptimo el F1 quede comparable al lineal (\(0.873\) vs \(0.885\)).
+
+\begin{takeaway}
+\textbf{Recomendación de umbral}: \textbf{\(0.89\)} si se prioriza F1, o \textbf{\(0.95\)} si la auditoría manual de falsos positivos es cara y se acepta perder recall. La elección depende del costo asimétrico de FN/FP del cliente.
+\end{takeaway}
 
 % =============== EJ2 ===============
 \section{Ejercicio 2 — Clasificación de dígitos}\label{sec:ej2}
@@ -561,6 +626,8 @@ Si tuviéramos otra iteración: \textbf{augmentation por rotación/traslación p
 Validación step perceptron AND (bipolar)             & \ok \\
 Validación lineal y no-lineal 1D                     & \ok \\
 Validación MLP XOR \([2,2,1]\) y \([2,3,2,1]\)       & \ok \\
+Ej1 — Knowledge distillation (lineal vs no-lineal)   & \ok\ (Tomás) \\
+Ej1 — Threshold sweep + recomendación de umbral      & \ok\ (Tomás) \\
 Ej2 — MLP from-scratch (NumPy)                       & \ok \\
 Ej2 — sweeps de LR / arquitectura / optimizador      & \ok \\
 Ej2 — final\_eval contra \code{digits\_test.csv}     & \ok \\
