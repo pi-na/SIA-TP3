@@ -157,7 +157,12 @@ class MLP:
             # Mini-batch SGD pass
             it = BatchIterator(X_train, y_train, batch_size=batch_size,
                                shuffle=True, seed=epoch)
+            aug = self.regularization.get("augmentation") or None
             for xb, yb in it:
+                if aug is not None and aug.get("type") == "gaussian_noise":
+                    sigma = float(aug.get("sigma", 0.0))
+                    if sigma > 0:
+                        xb = xb + np.random.normal(0.0, sigma, size=xb.shape)
                 _, cache = self.forward(xb, training=True)
                 grads = self.backward(xb, yb, cache)
                 # L2 regularization (Pack C, opcional)
@@ -182,6 +187,14 @@ class MLP:
             history.append(ep_metrics)
             if callback is not None:
                 callback(epoch, ep_metrics)
+
+            # LR schedule (Pack C, opcional). Step decay: lr *= decay cada `every` epochs.
+            sched = self.regularization.get("lr_schedule") or None
+            if sched is not None and sched.get("type") == "step":
+                every = int(sched.get("every", 0)) or 0
+                decay = float(sched.get("decay", 1.0))
+                if every > 0 and (epoch + 1) % every == 0 and hasattr(self.optimizer, "lr"):
+                    self.optimizer.lr = self.optimizer.lr * decay
 
             # Early stopping
             if early_stopping_patience is not None:
