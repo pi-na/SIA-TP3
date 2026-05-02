@@ -83,5 +83,34 @@ Ver `docs/superpowers/specs/2026-05-01-tp3-completion-design.md`.
 
 ## Resultados finales
 
-- **Modelo base ganador:** ver `configs/base.json`.
-- **Test accuracy (digits_test.csv):** ver `output_final/final_eval_base_ej2_<ts>/test_metrics.csv`.
+**Modelo base ganador** (`configs/base.json`):
+- Arquitectura: `[784, 100, 50, 10]` con `[relu, relu, softmax]`.
+- Optimizer: Adam (lr=0.001).
+- Batch size: 16.
+- Initializer: auto (he para relu, xavier para softmax).
+- Epochs: 50, early stopping patience: 10.
+
+**K-fold=5 sobre digits.csv:**
+| Métrica | mean ± std |
+|---|---|
+| val_acc | 0.9622 ± 0.0043 |
+| macro_f1 | 0.857 ± 0.006 |
+| best_epoch | 4.6 |
+
+**Validación de la elección — Sweeps Fase 2 (K=5):**
+
+| Dimensión | Ganador | Empate técnico con base | Comentario |
+|---|---|---|---|
+| LR | 0.001 | 0.0001 (96.22% vs 95.79%) | 0.0001 cerca pero converge en 31 ep vs 5; ≥0.01 overshoot/diverge |
+| Arch | wider [784,200,100,10] | base, deeper | wider 0.17pp mejor pero 3.6× más lento → base mantiene óptimo |
+| Optimizer | momentum (96.29%) | adam (96.22%) | empate; adam best_ep menor → keep adam |
+| Init | he/xavier/uniform | sí (todos ~96%) | empate total (std ≈0.3%) |
+
+**Final eval (digits_test.csv, evaluado UNA SOLA VEZ):**
+| Métrica | Valor |
+|---|---|
+| test_accuracy | **0.8630** |
+| test_macro_f1 | 0.8169 |
+| test_weighted_f1 | 0.8207 |
+
+⚠️ **Brecha train→test de ~10pp** (val 96.22% → test 86.30%). Sugiere distribution shift en `digits_test.csv` respecto al train. Esto motiva Ejercicio 3 (más datos vía `more_digits.csv` + posible regularización Pack C).
