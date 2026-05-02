@@ -67,58 +67,72 @@ class MLP:
         """Prepend column of ones for bias trick."""
         return np.column_stack([np.ones(len(X)), X])
 
-    def forward(self, X: np.ndarray) -> tuple[np.ndarray, list]:
+    def forward(self, X: np.ndarray, training: bool = False) -> tuple[np.ndarray, list]:
         """Forward pass. Devuelve (output, cache).
 
-        cache: lista de tuplas (z_l, a_l) por capa, donde
-        z_l = pre-activación (W·a_{l-1}), a_l = activación(z_l).
-        El input X (con bias prependido) se guarda como a_0 implícito en weights[0].
+        cache: lista de tuplas (z_l, a_l, mask_l) por capa, donde
+        z_l = pre-activación, a_l = activación(z_l) (sin dropout aplicado),
+        mask_l = inverted-dropout mask (None si no aplica).
+        En training, hidden layers (no la última) aplican inverted dropout si
+        regularization["dropout"] > 0. La salida de la capa l hacia l+1 es
+        a_l * mask_l (cuando mask_l no es None).
         """
         cache = []
         a = X
         for i, W in enumerate(self.weights):
             a_with_bias = self._add_bias_column(a)
-            z = a_with_bias @ W.T  # shape (batch, n_out)
+            z = a_with_bias @ W.T
             act_fn, _ = ACTIVATIONS[self.activations[i]]
-            a = act_fn(z)
-            cache.append((z, a))
+            a_pre = act_fn(z)
+            mask = None
+            a = a_pre
+            if training and i < len(self.weights) - 1:
+                p = self.regularization.get("dropout", 0.0) or 0.0
+                if p > 0:
+                    mask = (np.random.random(a_pre.shape) > p).astype(np.float64) / (1.0 - p)
+                    a = a_pre * mask
+            cache.append((z, a_pre, mask))
         return a, cache
 
     def backward(
         self, X: np.ndarray, y_true: np.ndarray, cache: list
     ) -> list[np.ndarray]:
-        """Backprop. Devuelve gradientes por capa con mismo shape que weights."""
+        """Backprop. Devuelve gradientes por capa con mismo shape que weights.
+
+        cache es lista de (z, a_pre, mask). Si mask is not None, la salida real
+        de esa capa hacia la siguiente fue a_pre * mask, así que el gradient
+        respecto a a_pre se multiplica por mask (chain rule).
+        """
         L = len(self.weights)
         grads = [None] * L
 
-        # Output layer: usa truco de softmax+CE si aplica
-        z_last, a_last = cache[-1]
+        z_last, a_last_pre, _ = cache[-1]
         if self.loss_name == "cross_entropy" and self.activations[-1] == "softmax":
             from mlp.losses import cross_entropy_grad_with_softmax
-            delta = cross_entropy_grad_with_softmax(y_true, a_last)  # (batch, n_out)
+            delta = cross_entropy_grad_with_softmax(y_true, a_last_pre)
         else:
             _, loss_grad_fn = LOSSES[self.loss_name]
-            d_loss_d_a = loss_grad_fn(y_true, a_last)
+            d_loss_d_a = loss_grad_fn(y_true, a_last_pre)
             _, act_grad_fn = ACTIVATIONS[self.activations[-1]]
-            delta = d_loss_d_a * act_grad_fn(z_last, a_last)
+            delta = d_loss_d_a * act_grad_fn(z_last, a_last_pre)
 
-        # Iterar capas de atrás hacia adelante
         for l in range(L - 1, -1, -1):
-            # Activación previa con bias
             if l == 0:
                 a_prev_with_bias = self._add_bias_column(X)
             else:
-                _, a_prev = cache[l - 1]
+                _, a_prev_pre, mask_prev = cache[l - 1]
+                a_prev = a_prev_pre * mask_prev if mask_prev is not None else a_prev_pre
                 a_prev_with_bias = self._add_bias_column(a_prev)
-            grads[l] = delta.T @ a_prev_with_bias  # (n_out, n_in+1)
+            grads[l] = delta.T @ a_prev_with_bias
 
             if l > 0:
-                # Propagar delta a capa anterior
-                W_no_bias = self.weights[l][:, 1:]  # (n_out, n_in)
-                d_a_prev = delta @ W_no_bias  # (batch, n_in)
-                z_prev, a_prev = cache[l - 1]
+                W_no_bias = self.weights[l][:, 1:]
+                d_a_prev = delta @ W_no_bias
+                z_prev, a_prev_pre, mask_prev = cache[l - 1]
+                if mask_prev is not None:
+                    d_a_prev = d_a_prev * mask_prev
                 _, act_grad_fn = ACTIVATIONS[self.activations[l - 1]]
-                delta = d_a_prev * act_grad_fn(z_prev, a_prev)
+                delta = d_a_prev * act_grad_fn(z_prev, a_prev_pre)
 
         return grads
 
@@ -144,7 +158,7 @@ class MLP:
             it = BatchIterator(X_train, y_train, batch_size=batch_size,
                                shuffle=True, seed=epoch)
             for xb, yb in it:
-                _, cache = self.forward(xb)
+                _, cache = self.forward(xb, training=True)
                 grads = self.backward(xb, yb, cache)
                 # L2 regularization (Pack C, opcional)
                 l2 = self.regularization.get("l2", 0.0)

@@ -62,8 +62,8 @@ def test_forward_cache_pre_and_post_activation():
     mlp = MLP([2, 3, 1], ["tanh", "sigmoid"], "bce", SGD(0.01), seed=42)
     X = np.array([[0.5, -0.5]])
     out, cache = mlp.forward(X)
-    z0, a0 = cache[0]
-    z1, a1 = cache[1]
+    z0, a0, _ = cache[0]
+    z1, a1, _ = cache[1]
     # a0 = tanh(z0), a1 = sigmoid(z1) = out
     assert np.allclose(a0, np.tanh(z0))
     assert np.allclose(a1, out)
