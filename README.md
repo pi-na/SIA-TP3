@@ -33,6 +33,16 @@ python3 -m pytest mlp/tests/ ejercicio0/tests/ -v
 
 Ver [`docs/guia_compañeros.md`](docs/guia_compañeros.md) para el end-to-end.
 
+## Resultados finales
+
+| Ejercicio | val K-fold=5 | test (digits_test.csv) | Comentario |
+|---|---:|---:|---|
+| Ej2 — base.json | 0.9622 | **0.8630** | distribution shift fuerte train→test |
+| Ej3 — base_extra_data | 0.9706 | 0.9636 | +10pp test solo por more_digits.csv |
+| Ej3 — l2_aug (ganador) | 0.9760 | **0.9688** | L2 + gaussian noise σ=0.05 |
+
+⚠️ Ej3 target 98% no alcanzado (mejor 96.88%). Análisis completo en [`ejercicio3/README.md`](ejercicio3/README.md).
+
 ## Spec y plan
 
 - Spec: `docs/superpowers/specs/2026-05-01-tp3-completion-design.md`
