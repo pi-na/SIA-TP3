@@ -1,5 +1,5 @@
 {
-  "model_name": "pack_c_lr_schedule",
+  "model_name": "pack_c_l2_aug_s010",
   "dataset": {
     "csv_path": "data and documentation/digits.csv",
     "feature_col": "image",
@@ -44,13 +44,12 @@
     "early_stopping_patience": 10
   },
   "regularization": {
-    "l2": 0.0,
+    "l2": 0.0001,
     "dropout": 0.0,
-    "lr_schedule": {
-      "type": "step",
-      "decay": 0.5,
-      "every": 10
-    },
-    "augmentation": null
+    "lr_schedule": null,
+    "augmentation": {
+      "type": "gaussian_noise",
+      "sigma": 0.1
+    }
   }
 }
