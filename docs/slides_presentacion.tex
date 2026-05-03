@@ -391,6 +391,32 @@ Búsqueda de hiperparámetros sólo sobre \code{digits.csv}.
 \end{warning}
 \end{frame}
 
+% ============= NUEVO. Mini-batch SGD =============
+\begin{frame}{Ej 2 — Cómo se entrena: mini-batch SGD}
+\textbf{Tres formas de aplicar updates en gradient descent:}\\[0.4em]
+
+\centering\small
+\begin{tabular}{@{}lcl@{}}
+\toprule
+\textbf{Modo} & \textbf{Update por} & \textbf{Trade-off} \\
+\midrule
+Online (SGD puro)    & 1 muestra      & Gradiente ruidoso, lento (sin vectorizar) \\
+\rowcolor{accent2!15}
+\textbf{Mini-batch}  & \textbf{B muestras} & \textbf{Estable + rápido (matmul de NumPy)} \\
+Full-batch           & todo el dataset & Estable pero costoso por update \\
+\bottomrule
+\end{tabular}\\[0.5em]
+
+\raggedright\small
+\textbf{Pseudo-código por epoch} (lo que hace Ej 2 y Ej 3): \pausa\
+\textbf{1.}~shuffle del train set $\to$ \textbf{2.}~partir en chunks de $B$ muestras $\to$ \textbf{3.}~para cada chunk: forward + backward + un único update.\\[0.5em]
+
+\normalsize
+\begin{insight}
+Ej 1 (perceptrón simple) usa \textbf{online estricto} siguiendo la regla del apunte: un update por muestra. \pausa\ Ej 2 y Ej 3 usan \textbf{mini-batch} con $B$ determinado por sweep (Fase 1.4).
+\end{insight}
+\end{frame}
+
 % ============= 14. Workflow =============
 \begin{frame}{Ej 2 — Workflow disciplinado: dos fases}
 \centering
