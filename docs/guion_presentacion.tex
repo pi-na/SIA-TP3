@@ -49,14 +49,6 @@
   fonttitle=\bfseries\color{accent},
   title={#1}
 }
-\newtcolorbox{slide}[1][]{
-  enhanced,
-  colback=bg, colframe=rule,
-  boxrule=0.5pt,
-  arc=2pt, outer arc=0pt,
-  left=8pt, right=8pt, top=4pt, bottom=4pt,
-  #1
-}
 \newtcolorbox{cue}[1][]{
   enhanced, breakable,
   colback=accent2!8, colframe=accent2,
@@ -65,12 +57,22 @@
   left=10pt, right=10pt, top=6pt, bottom=6pt,
   #1
 }
+\newtcolorbox{tip}[1][]{
+  enhanced, breakable,
+  colback=bgbox, colframe=muted,
+  boxrule=0pt, leftrule=3pt,
+  arc=2pt, outer arc=0pt,
+  left=10pt, right=10pt, top=4pt, bottom=4pt,
+  #1
+}
 
 \newcommand{\code}[1]{\texttt{\textcolor{accent}{#1}}}
 \newcommand{\file}[1]{\texttt{\small #1}}
 \newcommand{\slidenum}[1]{\textcolor{accent}{\textbf{[Slide #1]}}}
-\newcommand{\timing}[1]{\textcolor{muted}{\small (#1)}}
+\newcommand{\timing}[1]{\textcolor{muted}{\textbf{\,#1\,}}}
 \newcommand{\enunciado}[1]{\textcolor{warn}{\textit{#1}}}
+\newcommand{\pausa}{\textcolor{muted}{\,/\,}}
+\newcommand{\Pausa}{\textcolor{muted}{\,/\!/\,}}
 
 \begin{document}
 
@@ -84,26 +86,37 @@
 
 \rule{\linewidth}{0.4pt}\\[0.6em]
 
-\begin{tabular}{@{}p{0.22\linewidth}p{0.42\linewidth}p{0.16\linewidth}p{0.12\linewidth}@{}}
+\begin{tabular}{@{}p{0.18\linewidth}p{0.46\linewidth}p{0.14\linewidth}p{0.14\linewidth}@{}}
 \toprule
 \textbf{Persona} & \textbf{Bloque} & \textbf{Slides} & \textbf{Tiempo} \\
 \midrule
-\textbf{P1} & Introducción + Ej0 (validación) + Engine \code{mlp/} & 1--6   & 5 min \\
-\textbf{P2} & Ej1 (knowledge distillation) — \emph{Tomás} & 7--12  & 5 min \\
-\textbf{P3} & Ej2 (clasificación de dígitos)               & 13--19 & 5 min \\
-\textbf{P4} & Ej3 (Pack C, búsqueda del 98\%) + conclusiones & 20--26 & 5 min \\
+\textbf{P1} & Intro + Ej0 (resultados de validación)              & 1--6   & \textbf{5:30} \\
+\textbf{P2} & Ej1 — Distillation: MSE, ROC, threshold sweep       & 7--12  & \textbf{5:30} \\
+\textbf{P3} & Ej2 — Sweeps, learning curves, final\_eval test     & 13--19 & \textbf{5:30} \\
+\textbf{P4} & Ej3 — Pack C: tabla, comparison, análisis del techo & 20--26 & \textbf{5:30} \\
 \bottomrule
 \end{tabular}
 
 \vspace{2em}
-\textbf{Total: 20 minutos.} Las slides están en \file{docs/slides\_presentacion.pdf}.
-Companion técnico: \file{docs/informe\_tp3.pdf}. Documentación viva: \file{docs/guia\_compañeros.md}.
+\textbf{Total: 22 minutos} (más Q\&A). \\[0.4em]
+\textbf{Foco:} \textbf{resultados, plots y gráficos} y por qué nos dio cada cosa. No hablamos de arquitectura del código, ni de tests, ni de implementación interna; eso queda para el informe técnico si preguntan.\\[1.2em]
+
+\textbf{Convenciones:}\\[0.4em]
+\begin{tip}
+\begin{itemize}[leftmargin=1.4em, itemsep=2pt, topsep=2pt]
+  \item \timing{0:30} marca dónde debería estar el orador a los 30 segundos del bloque.
+  \item \slidenum{N} indica cuándo cambiar de diapositiva.
+  \item \pausa\ pausa breve (respirar). \Pausa\ pausa más larga (cambio de tema).
+  \item \enunciado{texto cursivo rojo} = referencia explícita al enunciado o apunte.
+  \item \code{texto en azul} = identificador del repo cuando aparece (mínimo).
+\end{itemize}
+\end{tip}
 \end{flushleft}
 
 \vfill
 \begin{flushleft}
 \rule{\linewidth}{0.4pt}\\[0.4em]
-\textcolor{muted}{\small Convenciones: \slidenum{N} = referencia a slide. \timing{0:30} = tiempo aproximado dentro del bloque. \enunciado{en cursiva rojo} = referencia explícita a la consigna o al apunte. \code{texto en azul} = identificador del repo.}
+\textcolor{muted}{\small Companion: \file{docs/slides\_presentacion.pdf} · \file{docs/informe\_tp3.pdf}.}
 \end{flushleft}
 \end{titlepage}
 
@@ -111,281 +124,336 @@ Companion técnico: \file{docs/informe\_tp3.pdf}. Documentación viva: \file{doc
 \bigskip\hrule\bigskip
 
 % ===================================================================
-\section{Persona 1 — Introducción, Ej0 y Engine}\label{sec:p1}
+\section{Persona 1 — Introducción + Ej0 (validación)}\label{sec:p1}
 
-\begin{persona}{Persona 1 · 5 minutos · Slides 1 a 6}
-\textbf{Objetivo de este bloque:} situar al jurado, explicar la filosofía de implementación, validar que el engine funciona (XOR, AND), y entregar limpio a Persona 2.
+\begin{persona}{Persona 1 \pausa\ 5:30 \pausa\ Slides 1 a 6}
+\textbf{Foco del bloque:} mostrar qué pide el TP, los resultados de la validación con AND y XOR (los dos plots de convergencia y la métrica final), y dejar la transición lista para el ejercicio 1.\\
+\textbf{Volumen:} $\sim 800$ palabras a 145 wpm.
 \end{persona}
 
-\subsection{Apertura \timing{0:00 -- 0:40}}
+\subsection*{Apertura — \timing{0:00 -- 0:25}}
 
-\slidenum{1, portada}\quad ``Buenas. Trabajo Práctico 3, perceptrones. Somos cuatro y nos vamos a turnar en orden de los ejercicios. Yo arranco con la introducción y el ejercicio 0 de validación. Al final esperamos preguntas.''
+\slidenum{1, portada}
 
-\slidenum{2, qué pide el TP}\quad ``El enunciado pide construir perceptrones desde cero, en NumPy puro --- \enunciado{sin sklearn estimators, sin PyTorch, sin TensorFlow como capas}. Tres ejercicios principales más una validación. Ejercicio 1 es detección de fraude por knowledge distillation; ejercicio 2 es clasificación de dígitos manuscritos con un MLP; y ejercicio 3 es lo mismo que el 2 pero apuntando a un \enunciado{accuracy mayor o igual a 98\% sobre el test set}.''
+Buenas. \pausa\ Trabajo Práctico tres, Perceptrones. \pausa\ Somos cuatro y nos vamos a turnar en orden de los ejercicios. Yo arranco con la introducción y los resultados del ejercicio cero, que es la validación. Después siguen los otros tres, uno por ejercicio. Al final dejamos espacio para preguntas.
 
-\subsection{Filosofía: engine único \timing{0:40 -- 1:40}}
+\subsection*{Qué pide el TP — \timing{0:25 -- 1:10}}
 
-\slidenum{3, arquitectura del repo}\quad ``Tomamos una decisión arquitectural temprana: en vez de armar tres scripts independientes, construimos un \textbf{módulo \code{mlp/} reutilizable} y resolvemos los ejercicios cambiando solo \textbf{configs JSON}. Pueden verlo en el repo: \file{mlp/network.py}, \file{mlp/optimizers.py}, \file{mlp/activations.py}, \file{mlp/losses.py}. El ejercicio 1, que es lo que va a presentar el siguiente, vive aparte porque ya estaba implementado por Tomás antes de esta unificación.''
+\slidenum{2, qué pide el TP}
 
-\begin{cue}
-\textbf{Cue visual:} mostrar el árbol de directorios. Si te preguntan ``¿por qué un solo engine?'', respuesta corta: ``una pipeline, un set de tests (78 verde), una sola fuente de bugs.''
-\end{cue}
+El enunciado tiene tres bloques de problemas y una validación previa. \Pausa\ La validación es el ejercicio cero: probar que el perceptrón escalón resuelve el AND, y que un MLP resuelve el XOR. \pausa\ El ejercicio uno es detección de fraude por knowledge distillation. \pausa\ El ejercicio dos es clasificación de dígitos manuscritos con un MLP, y el ejercicio tres es lo mismo que el dos pero apuntando a un \enunciado{accuracy mayor o igual a noventa y ocho por ciento sobre el test set}.
 
-\slidenum{4, anatomía del engine}\quad ``El engine tiene cuatro componentes intercambiables vía config: activaciones (sigmoid, tanh, relu, identity, softmax), losses (MSE, BCE, cross\_entropy), inicializadores (uniform, He, Xavier --- y un \emph{auto} que elige según la activación de cada capa), y optimizadores (SGD, Momentum, Adam). El bias usa el truco de prependear una columna de unos a la entrada de cada capa: así cada peso $W^{(l)}$ tiene shape $(n_{l+1},\, n_l + 1)$ con la columna 0 como bias. Eso simplifica el backprop.''
+Y la regla del juego más importante para el resto de la presentación: \enunciado{el set de prueba, digits\_test.csv, se evalúa una sola vez al final}. No se toca durante búsqueda de hiperparámetros. Eso va a ser clave cuando lleguemos a los resultados del ejercicio dos.
 
-\subsection{Ejercicio 0 --- validación \timing{1:40 -- 3:30}}
+\subsection*{Validación AND con escalón — \timing{1:10 -- 2:10}}
 
-\slidenum{5, AND con step perceptron}\quad ``El ejercicio 0 valida que el código está bien antes de tirarlo a problemas grandes. Primero, perceptrón con función escalón sobre el AND lógico, en \enunciado{representación bipolar como pide el apunte} --- entradas en $\{-1, +1\}$, salida esperada $[-1, -1, -1, +1]$. El test pasa con error cero. Eso es \file{ejercicio0/step\_perceptron.py}.''
+\slidenum{3, AND con step perceptron}
 
-\slidenum{6, XOR con MLP}\quad ``Lo más interesante del ejercicio 0 es el XOR --- es \textbf{el caso clásico que un perceptrón simple no puede resolver}. Necesitás una capa oculta no lineal. Probamos dos arquitecturas: la mínima $[2, 2, 1]$ y otra con capa extra $[2, 3, 2, 1]$. Los configs están en \file{ejercicio0/configs/}. Ambas convergen a train\_loss menor a 0.1 en pocas epochs.
+Vamos a la validación. \Pausa\ El primer caso es el AND lógico con un perceptrón de función escalón. Lo hacemos en \enunciado{representación bipolar como pide el apunte}: las entradas son menos uno o más uno, no cero o uno.
 
-El XOR no es ornamental: es la red de seguridad del engine. Si rompemos backprop, XOR deja de converger \emph{antes} que dígitos. De hecho durante el desarrollo encontramos cuatro bugs reales gracias a estos tests: predicción bipolar mal codificada en \code{predict()}, identity activation que aliasaba su input, mean/std del summary que perdían filas por dict-spread overwrite, y \code{numerical\_grad} que devolvía garbage para int dtypes.''
+\Pausa\ Resultado: el perceptrón clasifica las cuatro muestras del AND con error cero en pocas epochs. \pausa\ Esa es la prueba mínima: con dos clases linealmente separables y un solo umbral, la regla delta clásica converge.
 
-\begin{cue}
-\textbf{Transición \timing{4:30 -- 5:00}:} ``Eso valida el engine para los ejercicios siguientes. Pero el ejercicio 1, knowledge distillation, fue implementado por Tomás antes de esta unificación con su propia pipeline. Le paso a [P2].''
-\end{cue}
+\Pausa\ Esto importa porque establece la línea base. \pausa\ La función escalón es la primera versión del perceptrón, la que vio Rosenblatt en los años cincuenta. Y ya en este caso uno ve algo interesante: si rompemos el AND, no hay forma de que el resto del TP funcione. Por eso lo dejamos como test \emph{antes} de los modelos grandes.
 
-% ===================================================================
-\section{Persona 2 — Ejercicio 1 (Knowledge Distillation)}\label{sec:p2}
+\subsection*{XOR con MLP: el resultado clásico — \timing{2:10 -- 3:50}}
 
-\begin{persona}{Persona 2 · 5 minutos · Slides 7 a 12 · idealmente Tomás}
-\textbf{Objetivo:} explicar el setup de distillation, comparar lineal vs no-lineal, justificar el threshold óptimo. Si quien presenta NO es el autor, dejar claro al inicio: ``este ejercicio lo implementé hace un mes con scripts independientes; el resto del TP lo unificamos después.''
-\end{persona}
+\slidenum{4, XOR con MLP — convergencia}
 
-\subsection{Setup del problema \timing{0:00 -- 1:00}}
+Y acá viene el resultado más famoso del campo, el que motivó toda la teoría del aprendizaje profundo a partir del paper de Minsky y Papert.
 
-\slidenum{7, problema}\quad ``Knowledge distillation: \enunciado{el enunciado nos da un BigModel pre-entrenado que clasifica fraude} --- nosotros lo tratamos como caja negra. Lo que sabemos es su salida continua, una probabilidad de fraude entre 0 y 1, en la columna \code{big\_model\_fraud\_probability}. Nuestro objetivo es entrenar un \textbf{TinyModel} --- un perceptrón simple, no un MLP --- que replique esa salida.
+\Pausa\ El XOR no es separable linealmente. Un perceptrón simple, una sola capa, no puede resolverlo. \pausa\ Pero con una capa oculta no lineal, sí. \pausa\ En el plot ven dos curvas, las dos arquitecturas que probamos, en escala logarítmica de loss. \Pausa\ La azul es la mínima: \textbf{dos-dos-uno}, dos entradas, dos neuronas ocultas, una salida. \pausa\ La verde es \textbf{dos-tres-dos-uno}, con una capa oculta extra de tres neuronas.
 
-Hay un detalle clave: el dataset también tiene una columna \code{flagged\_fraud} con la etiqueta binaria de fraude real. \enunciado{El enunciado prohíbe usarla en el entrenamiento}. La usamos sólo para evaluación con métricas de clasificación (precision, recall, F1).''
+Ambas convergen. \pausa\ La de dos-dos-uno tarda más en bajar el loss --- noten la pendiente al principio --- pero termina en el mismo orden de magnitud que la otra. \pausa\ Eso es lo que demuestra el resultado clásico: dos neuronas ocultas alcanzan, una capa más solo acelera la convergencia.
 
-\slidenum{8, features y código}\quad ``Nueve features: \code{amount\_usd}, \code{quantity\_purchased}, \code{session\_duration\_seconds}, etc. Excluimos tres por irrelevantes o no numéricas: \code{timestamp}, \code{device\_screen\_resolution}, \code{time\_since\_last\_login\_s}. Pueden ver la lista en \file{ejercicio1/nonlinear\_perceptron/configs/baseline.json}.
+\Pausa\ Detalle: ambas redes usan tanh como activación de las hiddens, MSE como loss, y SGD con learning rate cero coma uno. Esos son los hiperparámetros del config que usamos.
 
-El código vive en \file{ejercicio1/nonlinear\_perceptron/nonlinear\_perceptron.py}: K-fold estratificado por \code{flagged\_fraud}, normalización z-score \emph{fit-on-train-only} para evitar leakage, y online learning sample-by-sample.''
+\subsection*{Lo que la validación nos dice del engine — \timing{3:50 -- 4:50}}
 
-\subsection{Lineal vs No-Lineal \timing{1:00 -- 2:30}}
+\slidenum{5, qué validamos}
 
-\slidenum{9, dos versiones}\quad ``Probamos dos versiones del perceptrón:''
+¿Qué nos dice esto sobre el engine que vamos a usar para los ejercicios siguientes? \Pausa\ Tres cosas concretas.
 
-\begin{itemize}[leftmargin=1.4em, itemsep=2pt]
-  \item \textbf{Lineal (Adaline)}: salida $O = w \cdot x$, regla delta $\Delta w = \eta\,(z - O)\,x$.
-  \item \textbf{No-Lineal (sigmoide)}: salida $O = \sigma(w \cdot x) = 1/(1 + e^{-w\cdot x})$, regla delta con derivada de la sigmoide: $\Delta w = \eta\,(z - O)\,O(1-O)\,x$.
-\end{itemize}
+\Pausa\ Una. \pausa\ La pipeline de \emph{forward pass} y backpropagation está bien implementada, porque el XOR converge a loss casi cero. Si hubiera un bug en backprop, eso no pasaría.
 
-``El factor $O(1-O)$ modula el gradiente: cuando $O$ está cerca de 0 o 1 (zonas saturadas), el gradiente se achica. Esa es justamente la diferencia que pide \enunciado{el apunte de perceptrón}.''
+Dos. \pausa\ Las activaciones tanh y sus derivadas están bien definidas. Probamos con tanh porque \enunciado{el apunte la usa como activación canónica para problemas con salida en menos uno y más uno}.
 
-\slidenum{10, MSE comparison}\quad ``En distillation pura, MSE contra \code{big\_model\_fraud\_probability}, K-fold=5 estratificado:
+Tres. \pausa\ El MSE como función de loss y su gradiente también están bien.
 
-\begin{center}
-\begin{tabular}{@{}lr@{}}
-\toprule
-Modelo & MSE test (mean $\pm$ std) \\
-\midrule
-Lineal     & $0.0266 \pm 0.0008$ \\
-No-Lineal  & $\boldsymbol{0.0110 \pm 0.0004}$ \\
-\bottomrule
-\end{tabular}
-\end{center}
+\Pausa\ En total son tres componentes que vamos a reusar tal cual en los ejercicios dos y tres. Cambia la activación final a softmax, el loss pasa a cross-entropy, pero la mecánica de backpropagation es la misma. La validación con XOR nos da confianza para escalar a problemas grandes sin gastar tiempo debuggeando.
 
-El no-lineal reduce el MSE en \textbf{59\%}. La razón es directa: el target está acotado en $[0,1]$, la sigmoide mapea naturalmente ahí, el lineal puede producir valores fuera del rango y el MSE lo penaliza.''
+\subsection*{Cierre y transición — \timing{4:50 -- 5:30}}
 
-\subsection{Threshold sweep \timing{2:30 -- 4:00}}
+\slidenum{6, transición}
 
-\slidenum{11, el problema del threshold default}\quad ``Acá hay una sutileza importante. Con threshold default $0.5$, el no-lineal da \textbf{precision = 0.33 con recall = 1.0}. Es decir, clasifica casi todo como fraude. Eso parece terrible, pero no es el modelo: es el threshold.
+Para cerrar. \Pausa\ El AND y el XOR son los dos casos de validación que pide el enunciado. \pausa\ El AND lo resolvió un perceptrón simple con error cero. El XOR lo resolvieron dos arquitecturas distintas de MLP, con resultados consistentes.
 
-Las salidas sigmoide se concentran: la mediana de los scores de fraude está en 0.99. O sea, los fraudes están muy arriba, pero el modelo aprendió a no usar el rango bajo de la sigmoide para los no-fraudes --- los pone en valores como 0.4 o 0.6, no en 0.05.''
-
-\slidenum{12, threshold óptimo}\quad ``Hicimos un sweep de threshold de 0.00 a 1.00 con paso 0.01. El óptimo por F1 es \textbf{threshold = 0.89}: precision 0.886, recall 0.861, F1 0.873, accuracy 97.1\%. AUC-ROC del modelo: \textbf{0.9921}. El lineal está en 0.9720.
-
-Si el cliente prioriza no auditar falsos positivos, threshold $\geq 0.95$ da precision $\geq 0.95$ con recall 0.75 --- pierde sensibilidad pero gana precisión. La elección depende del costo asimétrico entre falso positivo y falso negativo del negocio.''
+\Pausa\ Esa validación nos da una pipeline confiable para los ejercicios siguientes. \pausa\ El primero de esos es detección de fraude, donde no usamos un MLP sino un perceptrón simple porque la salida del modelo objetivo es continua y unidimensional. \pausa\ Le paso a quien lo presenta.
 
 \begin{cue}
-\textbf{Transición \timing{4:00 -- 5:00}:} ``Eso cierra el ejercicio 1. La diferencia con los siguientes dos ejercicios es que acá tenemos un perceptrón simple --- una sola capa. Para clasificar dígitos manuscritos en 10 clases necesitamos un MLP. Le paso a [P3].''
+\textbf{Wordcount estimado P1:} $\approx 815$ palabras. A 145 wpm $\to 5:37$. Margen para pausas. \quad
+\textbf{Si llegás corto:} agregar un comentario sobre el rol histórico del XOR en la teoría del perceptrón. \quad
+\textbf{Si llegás largo:} simplificar la sección "qué validamos" a un solo párrafo.
 \end{cue}
 
 % ===================================================================
-\section{Persona 3 — Ejercicio 2 (Clasificación de dígitos)}\label{sec:p3}
+\section{Persona 2 — Ej1 — Knowledge Distillation}\label{sec:p2}
 
-\begin{persona}{Persona 3 · 5 minutos · Slides 13 a 19}
-\textbf{Objetivo:} explicar el workflow disciplinado Fase 1 \(\to\) Fase 2 \(\to\) final\_eval, mostrar los sweeps con sus ganadores, y entregar el resultado del final\_eval con el cachetazo del distribution shift como gancho para Persona 4.
+\begin{persona}{Persona 2 \pausa\ 5:30 \pausa\ Slides 7 a 12 \pausa\ idealmente Tomás}
+\textbf{Foco del bloque:} mostrar la comparación lineal vs no lineal por MSE, la curva ROC, la PR curve, el threshold sweep, y la recomendación final basada en el costo asimétrico.\\
+\textbf{Volumen:} $\sim 800$ palabras.
 \end{persona}
 
-\subsection{Datos y problema \timing{0:00 -- 0:40}}
+\subsection*{El problema en una frase — \timing{0:00 -- 0:40}}
 
-\slidenum{13, problema}\quad ``Clasificación multiclase de dígitos del 0 al 9. Cada muestra es un \enunciado{vector de 784 floats en $[0,1]$ que representa una imagen de 28 por 28}. Train: \file{digits.csv} con 12.449 muestras. Test (producción): \file{digits\_test.csv} con 2.498 muestras.
+\slidenum{7, problema}
 
-Una regla que el enunciado deja implícita pero que adoptamos como ley: \textbf{\code{digits\_test.csv} se evalúa una sola vez, al final}. No se toca durante búsqueda de hiperparámetros.''
+Yo me ocupo del ejercicio uno. \Pausa\ El problema en una frase: tenemos un BigModel pre-entrenado que clasifica fraude, y nuestra tarea es entrenar un perceptrón simple que replique su salida. Eso se llama \emph{knowledge distillation}.
 
-\subsection{Workflow Fase 1 + Fase 2 \timing{0:40 -- 2:00}}
+\Pausa\ La salida del BigModel es continua, una probabilidad de fraude entre cero y uno. \pausa\ Los inputs son nueve features de la transacción: monto, duración de sesión, edad de la cuenta, y otros parecidos. \pausa\ Y hay una columna adicional, \code{flagged\_fraud}, con la etiqueta binaria de fraude real, que \enunciado{el enunciado prohíbe usar para entrenar}: la usamos solo para evaluar después con métricas operativas.
 
-\slidenum{14, workflow disciplinado}\quad ``El espacio de hiperparámetros es grande: arquitectura, optimizador, learning rate, batch size --- $O(n^4)$. Para no caer en sweep aleatorio dividimos en dos fases:
+\subsection*{Lineal vs no lineal: el plot del MSE — \timing{0:40 -- 1:50}}
 
-\textbf{Fase 1 (k\_folds=1, exploratoria).} Sweeps secuenciales: primero arquitectura, después optimizador, después learning rate, después batch size. Cada sub-fase usa el ganador del anterior. Eso reduce $O(n^4)$ a $O(4n)$.
+\slidenum{8, MSE comparison}
 
-\textbf{Fase 2 (k\_folds=5, validación).} Una vez consolidado el \code{base.json}, variamos un solo HP a la vez y volvemos a evaluar con K-fold completo. Da comparativas limpias para esta presentación.''
+Probamos las dos versiones que pide el enunciado. \Pausa\ El perceptrón lineal --- que es Adaline --- y el perceptrón no lineal con activación sigmoide. \pausa\ Mismo dataset, mismo K-fold cinco estratificado, mismas features.
 
-\slidenum{15, ganadores Fase 1}\quad ``Resultados de las 16 corridas de Fase 1:
+\Pausa\ Resultado: \pausa\ MSE del lineal, \textbf{cero coma cero dos seis seis}. \pausa\ MSE del no lineal, \textbf{cero coma cero uno uno cero}. \pausa\ \textbf{Reducción del cincuenta y nueve por ciento.}
 
-\begin{center}
-\small
-\begin{tabular}{@{}llrl@{}}
-\toprule
-Sub-fase & Ganador & val\_acc & Comentario \\
-\midrule
-Arquitectura  & $[784,100,50,10]$ & 0.9674 & elegida por parsimonia (vs $[784,128,64,10]$) \\
-Optimizador   & adam, lr=0.001    & 0.9674 & SGD no convergió en 50 epochs \\
-Learning rate & 0.001             & 0.9674 & 0.0001 lento, $\geq 0.005$ overshoot \\
-Batch size    & 16                & 0.9674 & best\_ep=3, el más rápido \\
-\bottomrule
-\end{tabular}
-\end{center}
+¿Por qué gana la sigmoide tan claro? \Pausa\ El target del distillation está acotado entre cero y uno: es una probabilidad. \pausa\ La sigmoide \emph{naturalmente} mapea su output a ese rango. \pausa\ El lineal puede producir valores negativos o mayores a uno, y el MSE penaliza esa salida fuera del dominio. Si el modelo predice uno coma dos cuando el target es cero coma nueve, paga un error grande aunque ordene bien la predicción.
 
-El \code{base.json} consolidado, corrido con K=5, da \textbf{val\_acc 96.22\% $\pm$ 0.43\%}.''
+\Pausa\ Eso es el primer take-away del ejercicio: \textbf{cuando el target tiene un dominio acotado, la activación final tiene que respetarlo}.
 
-\subsection{Fase 2 valida la elección \timing{2:00 -- 3:30}}
+\subsection*{El threshold default es engañoso — \timing{1:50 -- 2:50}}
 
-\slidenum{16, plots Fase 2}\quad ``Fase 2 es one-at-a-time sobre el base. Las cuatro dimensiones que barrimos: LR, arquitectura, optimizador, inicializador. Pueden ver los plots en \file{ejercicio2/presentacion/}.
+\slidenum{9, threshold default}
 
-\begin{itemize}[leftmargin=1.4em, itemsep=1pt]
-  \item LR: el único sweep con rangos catastróficos. lr=10 deja la red en accuracy random (12\%); lr=0.1 también diverge. lr=0.001 sigue siendo el ganador.
-  \item Arquitectura: \code{wider} gana por 0.17pp pero tarda 3.6 veces más \(\rightarrow\) empate técnico, mantenemos base.
-  \item Optimizador: momentum y adam empatan dentro del std.
-  \item Inicializador: he, xavier, uniform los tres en empate técnico.
-\end{itemize}
+Ahora viene la parte interesante. \Pausa\ Si tomamos el modelo no lineal y aplicamos el threshold default --- cero coma cinco --- las métricas operativas son malas. \pausa\ Precision, treinta y tres por ciento. Recall, cien por ciento. \pausa\ Es decir, clasifica casi todo como fraude.
 
-Lo importante: \textbf{Fase 2 valida la elección de Fase 1 más que descubrir un ganador nuevo.} Eso era el objetivo --- la metodología coarse-to-fine ya hizo el trabajo.''
+\Pausa\ Eso a primera vista suena a modelo terrible. Pero el modelo no es el problema. \emph{El threshold no está calibrado al modelo}.
 
-\subsection{Final eval --- el descubrimiento \timing{3:30 -- 5:00}}
+¿Por qué? \pausa\ Porque las salidas sigmoide se concentran en la parte alta. \pausa\ La mediana de los scores de las muestras de fraude está en cero coma noventa y nueve. \pausa\ Y los no-fraudes no se van a cero coma cero cinco como uno esperaría: están en cero coma cuatro o cero coma seis. \pausa\ El modelo aprendió un buen \emph{ranking}, pero las probabilidades absolutas no están calibradas. Y con threshold bajo, eso se traduce en sobre-detección.
 
-\slidenum{17, curvas + matriz base}\quad ``Antes del final\_eval, el modelo se ve sano. Curvas suaves, convergencia en 5 epochs, matriz de confusión con diagonal limpia para 9 de 10 clases. La excepción: la clase 8 colapsa a precision 0 y recall 0 en val. Indicador de algo raro en la distribución del train.''
+\subsection*{Threshold sweep: ROC, PR y la elección — \timing{2:50 -- 4:30}}
 
-\slidenum{18, final\_eval Ej2}\quad ``Final eval: entrenamos con todo \code{digits.csv} y evaluamos UNA SOLA VEZ contra \code{digits\_test.csv}. Resultado:
+\slidenum{10, threshold sweep}
 
-\begin{center}\Large
-val K-fold=5: \textbf{96.22\%} \quad$\rightarrow$\quad test: \textbf{86.30\%}
-\end{center}
+La solución es barrer el threshold. \Pausa\ En este plot del sweep ven precision en azul, recall en verde, F1 en negro, todo en función del threshold de cero a uno.
 
-\textbf{Drop de 10 puntos porcentuales.} Eso fue una sorpresa fuerte. La matriz de confusión sobre test confirma que las confusiones se reparten por todo el grid, no son una clase específica fallando.''
+\Pausa\ A la izquierda, threshold cero: precision igual a la prevalencia de fraude, recall uno. Clasifica todo como fraude. \pausa\ A la derecha, threshold uno: precision uno, recall casi cero. No clasifica casi nada. \pausa\ El óptimo por F1 está \textbf{en threshold cero coma ochenta y nueve}: precision ochenta y nueve, recall ochenta y seis, F1 ochenta y siete.
 
-\slidenum{19, hipótesis}\quad ``La interpretación: \textbf{el modelo está bien, los datos no se parecen}. \enunciado{El enunciado del ejercicio 3 menciona que más datos pueden ayudar} --- y eso fue justamente la hipótesis que queríamos testear.''
+\slidenum{11, ROC y PR}
+
+Acá las dos curvas que faltaban. \Pausa\ A la izquierda, la curva ROC: tasa de verdaderos positivos contra falsos positivos. El área bajo la curva, AUC-ROC, es \textbf{cero coma noventa y nueve dos uno} para el modelo no lineal, y cero coma noventa y siete dos para el lineal. \pausa\ Ese AUC tan alto indica que la \emph{capacidad de discriminación global} del modelo es excelente. El problema solo es dónde cortar.
+
+\Pausa\ A la derecha, la curva precision-recall. Esta es más informativa que la ROC para un problema con clases desbalanceadas como fraude. \pausa\ Vean cómo precision se mantiene alta hasta recall ochenta por ciento, y después cae rápido. Eso quiere decir que hay un punto de operación natural ahí.
+
+\subsection*{Recomendación de umbral — \timing{4:30 -- 5:30}}
+
+\slidenum{12, recomendación}
+
+Para cerrar el ejercicio uno: \Pausa\ ¿qué umbral recomendamos al cliente? \pausa\ Depende del costo asimétrico entre falso positivo y falso negativo.
+
+\Pausa\ \textbf{Opción A:} threshold cero coma ochenta y nueve. Maximiza F1. Detecta el ochenta y seis por ciento de los fraudes reales con once por ciento de falsos positivos. Esta es la opción si la auditoría manual es barata.
+
+\Pausa\ \textbf{Opción B:} threshold cero coma noventa y cinco. Precision pasa de noventa y cinco por ciento, pero recall baja a setenta y cinco. Esta es la opción si los falsos positivos son caros y el cliente prefiere no alertar de más, aunque pierda algunos fraudes reales.
+
+\Pausa\ El modelo entrega scores. La política de threshold la define el dueño del producto. \pausa\ Le paso al siguiente para el ejercicio dos.
 
 \begin{cue}
-\textbf{Transición \timing{5:00}:} ``Le paso a [P4] que cuenta cómo intentamos cerrar ese gap.''
+\textbf{Wordcount estimado P2:} $\approx 800$ palabras. A 145 wpm $\to 5:30$. \quad
+\textbf{Si llegás corto:} agregar un comentario sobre la prevalencia de fraude en el dataset (clase positiva $\approx 12\%$). \quad
+\textbf{Si llegás largo:} no detallar la opción B, solo mencionar que "para clientes con auditoría cara, threshold $\geq 0.95$".
 \end{cue}
 
 % ===================================================================
-\section{Persona 4 — Ejercicio 3 (Pack C, búsqueda del 98\%)}\label{sec:p4}
+\section{Persona 3 — Ej2 — Clasificación de dígitos}\label{sec:p3}
 
-\begin{persona}{Persona 4 · 5 minutos · Slides 20 a 26}
-\textbf{Objetivo:} contar la iteración Pack C, el descubrimiento del +10pp por más datos, el techo del 96.88\%, y por qué no llegamos al 98\%. Cerrar con conclusiones del TP.
+\begin{persona}{Persona 3 \pausa\ 5:30 \pausa\ Slides 13 a 19}
+\textbf{Foco del bloque:} contar el problema, mostrar los plots de los sweeps de Fase 1 y 2, las learning curves del base, la matriz de confusión, y el cachetazo del final\_eval con su explicación.\\
+\textbf{Volumen:} $\sim 800$ palabras.
 \end{persona}
 
-\subsection{Hipótesis y plan \timing{0:00 -- 0:40}}
+\subsection*{El problema y los datos — \timing{0:00 -- 0:40}}
 
-\slidenum{20, plan}\quad ``Si el problema es distribution shift y no falta de capacidad, el primer movimiento natural es \textbf{más datos}. \enunciado{El enunciado del ejercicio 3 nos provee \code{more\_digits.csv}} con 15.742 muestras adicionales. Si eso no alcanza, activamos Pack C: regularización L2, dropout, augmentation gaussiana, lr\_schedule. Si nada llega al 98\%, escalamos capacidad.
+\slidenum{13, problema}
 
-El engine \code{mlp/} ya soporta esto: el config tiene un campo \code{regularization} y \code{extra\_csv\_paths} concatena CSVs antes del split. Cero cambios al training loop.''
+Yo cuento el ejercicio dos: clasificación de dígitos manuscritos del cero al nueve. \Pausa\ Cada muestra es una imagen de veintiocho por veintiocho pixeles, en escala de grises, aplanada en un \enunciado{vector de setecientos ochenta y cuatro floats entre cero y uno}. \pausa\ El train tiene doce mil cuatrocientos cincuenta muestras. El test, dos mil quinientos. \pausa\ Y como dijo el primero, \textbf{el test set se evalúa una sola vez, al final}.
 
-\subsection{El primer movimiento dominó \timing{0:40 -- 1:40}}
+\Pausa\ La arquitectura final, después de todos los sweeps que voy a mostrar, es: setecientos ochenta y cuatro entradas, cien neuronas en la primera capa oculta con ReLU, cincuenta en la segunda con ReLU, y diez salidas con softmax. Loss cross-entropy.
 
-\slidenum{21, more\_digits}\quad ``Concatenamos \code{more\_digits.csv} sin tocar nada más. Resultado:
+\subsection*{Workflow Fase 1 + Fase 2 — \timing{0:40 -- 1:30}}
 
-\begin{center}\large
-val K=5: $96.22\% \to 97.06\%$ \quad y \quad test: $\boldsymbol{86.30\%} \to \boldsymbol{96.36\%}$
-\end{center}
+\slidenum{14, workflow}
 
-\textbf{+10 puntos porcentuales en test, cero cambios al modelo.} Confirma la hipótesis. El macro F1 saltó de 0.857 a 0.959 \(\to\) la clase 8 que estaba colapsada en Ejercicio 2 ahora se predice correctamente.''
+Para no probar hiperparámetros al azar, dividimos la búsqueda en dos fases.
 
-\subsection{Iteración Pack C \timing{1:40 -- 3:00}}
+\Pausa\ \textbf{Fase uno, exploratoria.} K-folds igual a uno: un solo train-val split ochenta-veinte. \pausa\ Sweeps secuenciales. Primero arquitectura, después optimizador, después learning rate, después batch size. \pausa\ Cada sub-fase usa el ganador del anterior. Eso reduce el espacio de búsqueda enormemente.
 
-\slidenum{22, tabla Pack C}\quad ``Sobre eso aplicamos las técnicas Pack C, primero individuales, después combinaciones. Doce configs evaluadas en total --- van a ver la tabla completa.
+\Pausa\ \textbf{Fase dos, validación.} K-fold igual a cinco. \pausa\ Tomamos el config ganador de Fase uno y variamos un solo hiperparámetro a la vez para ver si las elecciones se sostienen con K-fold completo.
 
-\begin{center}\small
-\begin{tabular}{@{}lrrr@{}}
-\toprule
-Config & val K=5 & test & $\Delta$ \\
-\midrule
-base\_extra\_data           & 0.9706 & 0.9636 & --- (baseline) \\
-\quad +\,L2                 & 0.9758 & 0.9656 & $+0.20$ \\
-\quad +\,dropout            & 0.9750 & 0.9628 & $-0.08$ \\
-\quad +\,L2 + dropout       & 0.9772 & 0.9604 & $-0.32$ \\
-\textbf{\quad +\,L2 + aug}  & \textbf{0.9760} & \textbf{0.9688} & $\boldsymbol{+0.52}$ \\
-\quad +\,wider + L2 + aug   & 0.9777 & 0.9640 & $+0.04$ \\
-\bottomrule
-\end{tabular}
-\end{center}
+\subsection*{Sweeps de Fase 2: los plots — \timing{1:30 -- 3:00}}
 
-\textbf{Ganador: L2 (1e-4) + augmentation gaussiana (\(\sigma=0.05\)) \(\to\) 96.88\% en test.} Eso requirió \textbf{implementar dropout, augmentation y lr\_schedule en el engine} --- los detalles de implementación están en \file{mlp/network.py}, con tests verde.''
+\slidenum{15, sweep LR}
 
-\subsection{Análisis: qué movió la aguja \timing{3:00 -- 4:00}}
+Estos son los cuatro plots de los sweeps de Fase dos. \Pausa\ El primero es learning rate. \pausa\ Vean los extremos: con learning rate igual a diez, la red queda en accuracy random, doce por ciento. Con cero coma uno, también diverge. \pausa\ El óptimo está en cero coma cero cero uno. Confirma la elección de Fase uno.
 
-\slidenum{23, qué ayudó / qué no}\quad ``El análisis honesto:
+\slidenum{16, sweep arquitectura}
 
-\textbf{Lo que ayudó:}
-\begin{itemize}[leftmargin=1.4em, itemsep=1pt]
-  \item Más datos: +10pp. El movimiento dominante.
-  \item L2: +0.20pp consistente.
-  \item Aug gaussiana: +0.32pp \emph{adicional} sobre L2 (sinergia con L2).
-\end{itemize}
+Sweep de arquitectura. \pausa\ Probamos cuatro versiones alrededor del ganador. \pausa\ Una shallow, con solo treinta neuronas en una capa: claramente subajustada. \pausa\ La base de cien-cincuenta. \pausa\ Una wider, doscientas-cien. \pausa\ Y una deeper, cien-cincuenta-veinticinco-diez.
 
-\textbf{Lo que no ayudó:}
-\begin{itemize}[leftmargin=1.4em, itemsep=1pt]
-  \item Dropout: ayuda en val, no transfiere a test. Reduce varianza específica al fold, no al shift.
-  \item \code{wider} \([784,200,100,10]\): mejor en val, peor en test. Más capacidad memoriza el train, no generaliza. Eso descarta que el problema sea capacidad.
-  \item Combinar todo a la vez: la regularización compite consigo misma. L2+dropout+aug fue peor que L2+aug solo.
-\end{itemize}''
+\Pausa\ Resultado interesante: \pausa\ wider gana en val por cero coma diecisiete puntos sobre la base, pero tarda \emph{tres veces y media} más en entrenar. \pausa\ Empate técnico, mantenemos la base.
 
-\subsection{Por qué no llegamos al 98\% \timing{4:00 -- 4:30}}
+\slidenum{17, sweeps opt e init}
 
-\slidenum{24, hipótesis del techo}\quad ``El target del 98\% no lo alcanzamos. Mejor: 96.88\%, faltan 1.12pp. Tres hipótesis:
+Sweep de optimizador. \pausa\ SGD, Momentum, Adam. \pausa\ Adam y Momentum empatan dentro del desvío. SGD claramente atrás. \pausa\ Y sweep de inicializador: He, Xavier y uniform. Empate total. La inicialización no es un cuello de botella.
 
-\begin{enumerate}[leftmargin=1.4em, itemsep=1pt]
-  \item \textbf{Augmentation insuficiente}: gaussian noise es isotrópico --- ruido independiente por píxel. El shift entre train y test parece ser de \emph{estilo de escritura} (rotación, traslación, grosores). Eso pide augmentation por transformaciones geométricas, no por noise. No la implementamos --- gaussian noise era la primera aproximación.
-  \item \textbf{Sub-representación}: el final\_eval usa val 10\% random para early stopping. Si los digits ``difíciles'' del test no aparecen ahí, la red para antes de tiempo.
-  \item \textbf{Capacidad}: subjetivamente improbable porque \code{wider} sobreajustó. Pero quizás con augmentation geométrica una arquitectura mayor sí ayudaría.
-\end{enumerate}''
+\Pausa\ El take-away de Fase dos es interesante: \textbf{en general, los sweeps validan la elección de Fase uno más que descubrir un ganador nuevo}. La metodología coarse-to-fine ya hizo el grueso del trabajo.
 
-\subsection{Conclusiones del TP \timing{4:30 -- 5:00}}
+\subsection*{Curvas y matriz de confusión del base — \timing{3:00 -- 4:00}}
 
-\slidenum{25, conclusiones}\quad ``Tres ideas para llevarse:
+\slidenum{18, curvas y matriz}
 
-\begin{enumerate}[leftmargin=1.4em, itemsep=1pt]
-  \item Una buena pipeline gana más que tunear hiperparámetros: el +10pp del Ejercicio 3 vino de \emph{datos}, no de modelo.
-  \item Los empates técnicos (diferencia menor a 0.3pp con std $\approx 0.4$\%) son mucho más comunes que los wins claros. Hay que elegir por parsimonia, no por 0.05pp en val.
-  \item ``Mejor en val'' no es ``mejor en test'' cuando hay shift. Dropout fue el ejemplo: ganador en val K-fold, perdedor en test.
-\end{enumerate}''
+Estos son los dos plots del modelo base con K-fold cinco. \Pausa\ A la izquierda, las curvas de aprendizaje. \pausa\ Ven cómo train loss baja rápido y val loss se estabiliza alrededor de la época cinco. Convergencia limpia, sin overfitting visible.
 
-\slidenum{26, cumplimiento + cierre}\quad ``Cumplimos todo lo de la consigna excepto el 98\% del Ejercicio 3. Está documentado honestamente con hipótesis verificables en \file{ejercicio3/README.md}. El informe técnico completo en \file{docs/informe\_tp3.pdf}, la guía operativa en \file{docs/guia\_compañeros.md}, y el repo en \file{github.com/pi-na/SIA-TP3} branch \code{tp3-mlp}. Gracias. Preguntas.''
+\Pausa\ A la derecha, la matriz de confusión. \pausa\ Diagonal limpia para nueve de las diez clases. La excepción --- y esto es importante --- \textbf{es la clase ocho}: precision cero, recall cero. \pausa\ La red nunca predice ocho. Ya nos dio una pista de que algo raro pasaba con la distribución del dataset. Quédense con esto.
+
+\subsection*{El cachetazo del final\_eval — \timing{4:00 -- 5:30}}
+
+\slidenum{19, final\_eval}
+
+Y entonces hicimos el final eval. \pausa\ Entrenamos con todo \code{digits.csv} y evaluamos una sola vez contra \code{digits\_test.csv}. \Pausa\ Resultado.
+
+\Pausa\ Val K-fold cinco: \textbf{noventa y seis coma veintidós por ciento}. \pausa\ Test sobre digits\_test: \textbf{ochenta y seis coma treinta por ciento}. \Pausa\ \textbf{Drop de diez puntos porcentuales.}
+
+Eso fue una sorpresa fuerte. \pausa\ La matriz de confusión sobre el test set, que ven a la derecha, confirma que las confusiones se reparten por todo el grid: no es una clase específica que falla. \Pausa\ El patrón es \textbf{distribution shift}. \pausa\ El modelo está bien. \emph{Los datos no se parecen.}
+
+\Pausa\ La interpretación es que \code{digits.csv} y \code{digits\_test.csv} no son muestras de la misma distribución. Quizás distintos escritores, quizás distintos estilos. Hay un agujero de cobertura del train que el test expone. \pausa\ Si eso es cierto, lo que necesitamos no es un modelo más grande. \emph{Necesitamos más datos que cubran la distribución del test.} \pausa\ Y \enunciado{eso es lo que el ejercicio tres nos provee}. Le paso al siguiente.
+
+\begin{cue}
+\textbf{Wordcount estimado P3:} $\approx 805$ palabras. A 145 wpm $\to 5:33$. \quad
+\textbf{Si llegás corto:} expandir el comentario sobre la clase ocho colapsada con la hipótesis de sub-representación. \quad
+\textbf{Si llegás largo:} no detallar los cuatro sweeps de Fase 2 uno por uno: agruparlos en "todos confirman la elección excepto LR".
+\end{cue}
 
 % ===================================================================
-\section*{Apéndice — preguntas anticipadas y cómo responder}
+\section{Persona 4 — Ej3 + Conclusiones}\label{sec:p4}
+
+\begin{persona}{Persona 4 \pausa\ 5:30 \pausa\ Slides 20 a 26}
+\textbf{Foco del bloque:} mostrar el +10pp del primer movimiento, la tabla de Pack C, el comparison plot Ej2 vs Ej3, el análisis honesto de qué movió la aguja y qué no, las hipótesis del techo, y las conclusiones del TP.\\
+\textbf{Volumen:} $\sim 800$ palabras.
+\end{persona}
+
+\subsection*{Hipótesis y plan — \timing{0:00 -- 0:50}}
+
+\slidenum{20, plan}
+
+Yo cierro con el ejercicio tres y las conclusiones del TP. \Pausa\ La hipótesis que dejó la persona anterior es que el problema es distribution shift, no falta de capacidad. \pausa\ Si eso es cierto, lo primero que hay que probar es \emph{más datos}, no un modelo más grande.
+
+\enunciado{Y eso es justamente lo que el enunciado del ejercicio tres provee}: un dataset adicional, \code{more\_digits.csv}, con quince mil setecientas muestras. \pausa\ El plan fue secuencial. \pausa\ \textbf{Primero}, probar con más datos sin tocar el modelo. \pausa\ \textbf{Segundo}, si no alcanza, activar Pack C: la regularización del enunciado, que son L2, dropout, augmentation gaussiana y lr scheduling. \pausa\ \textbf{Tercero}, si nada llega, escalar capacidad.
+
+\subsection*{El primer dominó — \timing{0:50 -- 1:50}}
+
+\slidenum{21, el primer dominó}
+
+El primer movimiento fue agregar more\_digits.csv. \pausa\ \textbf{Cero cambios al modelo}, solo concatenamos los dos CSVs. \Pausa\ Y el resultado fue impresionante.
+
+\Pausa\ Val K-fold cinco subió de noventa y seis coma veintidós a noventa y siete coma cero seis. \pausa\ Pero lo importante está en el test: \textbf{de ochenta y seis coma treinta a noventa y seis coma treinta y seis}. \Pausa\ \textbf{Diez puntos porcentuales en test sin tocar el modelo.}
+
+Eso confirmó la hipótesis. \pausa\ Y además, miren esto: macro F1 saltó de cero coma ochenta y cinco a cero coma noventa y cinco. \pausa\ ¿Se acuerdan de la clase ocho que estaba colapsada en el ejercicio dos? \pausa\ Ahora se predice correctamente. Más datos cubrieron el agujero.
+
+\subsection*{La tabla de Pack C — \timing{1:50 -- 3:00}}
+
+\slidenum{22, tabla Pack C}
+
+Pero faltaba uno coma sesenta y cuatro puntos para llegar al noventa y ocho. Así que arrancamos con Pack C.
+
+\Pausa\ Esta tabla muestra todas las configs que probamos, ordenadas. \pausa\ Cada fila es una técnica o combinación, cada columna es val K-fold cinco y test. \pausa\ Vamos por la columna de test.
+
+\textbf{L2 con weight decay uno por diez a la menos cuatro:} noventa y seis coma cincuenta y seis. Cero coma veinte sobre el baseline. \pausa\ \textbf{Dropout solo, probabilidad cero coma dos:} noventa y seis coma veintiocho. \emph{Peor} que el baseline. \pausa\ \textbf{L2 más dropout combinados:} noventa y seis coma cero cuatro. Aún peor. \Pausa\ La fila resaltada en verde, \textbf{L2 más augmentation gaussiana con sigma cero coma cero cinco}: \textbf{noventa y seis coma ochenta y ocho}. \pausa\ Ese es el ganador.
+
+\Pausa\ Los demás abajo: l2 con augmentation y sigma más alto, baja un poco. \pausa\ Las tres regularizaciones combinadas, peor que solo L2 con aug. \pausa\ Y wider más L2 más aug, peor todavía.
+
+\subsection*{Comparación visual Ej2 vs Ej3 — \timing{3:00 -- 3:40}}
+
+\slidenum{23, comparación visual}
+
+Este es el plot de comparación entre el ejercicio dos y el ejercicio tres ganador. \Pausa\ Las cinco métricas de test, lado a lado. \pausa\ La línea roja punteada es el target del noventa y ocho por ciento.
+
+\Pausa\ El salto principal está en accuracy, F1 y recall. \pausa\ Pasamos por arriba del noventa y seis en todo, pero queda casi un punto y medio para el target.
+
+\subsection*{Qué movió la aguja, qué no — \timing{3:40 -- 4:30}}
+
+\slidenum{24, qué ayudó qué no}
+
+Acá la parte más importante para defender los resultados. El análisis honesto.
+
+\Pausa\ \textbf{Lo que ayudó.} \pausa\ Más datos: diez puntos. El movimiento dominante por lejos. \pausa\ L2: cero coma veinte puntos. \pausa\ Augmentation gaussiana: cero coma treinta y dos puntos \emph{adicionales} sobre L2. Hay sinergia entre L2 y aug, pero augmentation sola no alcanza.
+
+\Pausa\ \textbf{Lo que no ayudó.} \pausa\ Dropout. Y este caso es interesante: dropout gana en val, pierde en test. \pausa\ Eso quiere decir que reduce varianza específica al fold, pero no al shift entre train y test. \pausa\ La arquitectura wider, con doscientas neuronas: mejor en val, peor en test. Más capacidad memoriza el train. Eso descarta que el problema sea capacidad. \pausa\ Y combinar todo a la vez: L2 más dropout más augmentation, peor que L2 más aug solo. La regularización compite consigo misma cuando se exagera.
+
+\subsection*{Por qué no llegamos al 98 — \timing{4:30 -- 5:00}}
+
+\slidenum{25, hipótesis del techo}
+
+Y la pregunta incómoda. \Pausa\ ¿Por qué no llegamos al noventa y ocho? \pausa\ Mejor: noventa y seis coma ochenta y ocho. Faltan uno coma doce puntos. Tres hipótesis ordenadas por probabilidad.
+
+\Pausa\ \textbf{Una.} Augmentation insuficiente. \pausa\ El gaussian noise es \emph{isotrópico}: ruido independiente por píxel. Pero el shift entre train y test parece ser de \emph{estilo de escritura}: rotación pequeña, traslación, grosor de trazo. \pausa\ Eso pide augmentation por transformaciones \emph{geométricas}, no por ruido. No la implementamos: gaussian noise era la primera aproximación del enunciado.
+
+\Pausa\ \textbf{Dos.} Sub-representación en el val interno del final eval, que usa val random del diez por ciento para early stopping. \pausa\ Si los digits difíciles del test no están en ese diez por ciento, la red para antes de tiempo. Posible mejora: stratified val.
+
+\Pausa\ \textbf{Tres.} Capacidad. Improbable, porque wider sobreajustó.
+
+\subsection*{Conclusiones del TP — \timing{5:00 -- 5:30}}
+
+\slidenum{26, conclusiones}
+
+Tres ideas para llevarse de todo el TP. \Pausa\ \textbf{Una.} Una buena pipeline gana más que tunear hiperparámetros: el más diez puntos del ejercicio tres vino de \emph{datos}, no de modelo. \pausa\ \textbf{Dos.} Los empates técnicos son mucho más comunes que los wins claros. Hay que elegir por parsimonia, no por cero coma cero cinco puntos. \pausa\ \textbf{Tres.} Mejor en val no es mejor en test cuando hay shift. Dropout fue el ejemplo de manual.
+
+\Pausa\ Cumplimos todo lo del enunciado excepto el target del noventa y ocho. Está documentado honestamente con hipótesis verificables. \pausa\ Gracias. \pausa\ Preguntas.
+
+\begin{cue}
+\textbf{Wordcount estimado P4:} $\approx 810$ palabras. A 145 wpm $\to 5:35$. \quad
+\textbf{Si llegás corto:} agregar un comentario sobre los costos de computar (Fase 2 con K-fold tardó horas). \quad
+\textbf{Si llegás largo:} cortar la hipótesis tres sobre capacidad, ya está implícita en "wider sobreajustó".
+\end{cue}
+
+% ===================================================================
+\section*{Apéndice — preguntas anticipadas}
 \addcontentsline{toc}{section}{Apéndice — preguntas anticipadas}
 
 \begin{cue}
-\textbf{¿Por qué no usaron sklearn / PyTorch?} \enunciado{El enunciado lo prohíbe explícitamente.} La consigna pide perceptrones desde cero con NumPy. Es parte de la evaluación.
+\textbf{¿Por qué no usaron sklearn o PyTorch?}\\
+\enunciado{El enunciado lo prohíbe explícitamente.} La consigna pide perceptrones desde cero con NumPy.
 \end{cue}
 
 \begin{cue}
-\textbf{¿Por qué dos fases en el Ejercicio 2?} Para no caer en sweep aleatorio. Fase 1 con k\_folds=1 explora rápido y reduce $O(n^4)$ a $O(4n)$; Fase 2 con K=5 valida. Sin Fase 2, una elección que ganó por suerte en un solo fold parece definitiva.
+\textbf{¿Por qué dos fases en el ejercicio dos?}\\
+Para no caer en sweep aleatorio. Fase uno con K-folds igual a uno explora rápido y reduce el espacio. Fase dos con K igual a cinco valida con K-fold completo. Sin Fase dos, una elección que ganó por suerte en un solo fold parece definitiva.
 \end{cue}
 
 \begin{cue}
-\textbf{¿Por qué no llegan al 98\% del Ejercicio 3?} (Si la pregunta es hostil) ``Identificamos que el techo viene de la calidad del augmentation, no de capacidad. Probamos las cuatro técnicas Pack C del enunciado y combinaciones. Lo que faltaba implementar era augmentation por transformaciones geométricas --- queda explicitado como follow-up. La autocrítica está en el README.''
+\textbf{¿Por qué no llegan al noventa y ocho? (versión hostil)}\\
+Identificamos que el techo viene de la calidad del augmentation, no de la capacidad del modelo. Probamos las cuatro técnicas Pack C que sugiere el enunciado y siete combinaciones distintas. Lo que faltaba implementar es augmentation por transformaciones geométricas: rotación pequeña, traslación. Es un follow-up explícito.
 \end{cue}
 
 \begin{cue}
-\textbf{¿Por qué el Ejercicio 1 está aparte del engine?} Lo implementé hace un mes con scripts independientes, antes de unificar la codebase. Funcionalmente es correcto y los resultados son válidos; mantener la implementación separada preserva la trazabilidad histórica del repo.
+\textbf{¿Por qué eligieron threshold cero coma ochenta y nueve en el ejercicio uno? (P2)}\\
+Maximiza F1 en el sweep. Si el cliente prefiere precisión sobre recall, threshold mayor a cero coma noventa y cinco. Es una decisión de negocio sobre el costo asimétrico falso positivo y falso negativo.
 \end{cue}
 
 \begin{cue}
-\textbf{¿Cómo se reproducen los resultados?} Cualquiera puede correr \code{python3 -m mlp.train --config \textless ruta\textgreater\ --csv-root . --output-dir \textless out\textgreater}. El ganador del Ej3 es \file{ejercicio3/configs/pack\_c/l2\_aug.json}. Comandos exactos están en el apéndice del informe técnico.
+\textbf{¿Cuántas muestras tiene el dataset de fraude? ¿Cuál es la prevalencia? (P2)}\\
+Aproximadamente nueve mil muestras totales con cinco-fold, prevalencia de la clase positiva alrededor del doce por ciento. Por eso la curva PR es más informativa que la ROC para este problema.
 \end{cue}
 
 \begin{cue}
-\textbf{¿Por qué eligieron threshold=0.89 en el Ejercicio 1?} (P2) Porque maximiza F1 en el sweep. Si el cliente prefiere precisión sobre recall, threshold=0.95 o más alto. Es una decisión de negocio sobre el costo asimétrico entre falso positivo y falso negativo.
+\textbf{¿Qué arquitectura final usaron en el ejercicio tres? (P4)}\\
+La misma que el ejercicio dos: setecientos ochenta y cuatro, cien, cincuenta, diez. ReLU en las hidden, softmax en la salida. La regularización ganadora fue L2 uno por diez a la menos cuatro y augmentation gaussiana sigma cero coma cero cinco.
 \end{cue}
 
 \begin{cue}
-\textbf{¿Qué bugs encontraron?} (P1, si hay tiempo) Cuatro reales durante el desarrollo: predicción bipolar mal codificada, identity activation aliasaba su input, identity row spread perdía strings en el run\_summary, \code{numerical\_grad} con int dtype daba garbage. Todos detectados por los tests del XOR y AND \emph{antes} de tirar el código a dígitos.
+\textbf{¿Por qué dropout no funcionó en el ejercicio tres? (P4)}\\
+Dropout reduce varianza dentro de la distribución del train. Acá el problema no es varianza dentro del train: es shift entre train y test. Dropout puede ayudar en val K-fold, donde las clases son las mismas que en train, pero no transfiere a un test que viene de una distribución parcialmente distinta.
 \end{cue}
 
 \bigskip
