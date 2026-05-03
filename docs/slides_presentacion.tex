@@ -193,11 +193,9 @@ $+1$ & $+1$ & $+1$ \\
 % ============= 4. XOR convergencia =============
 \begin{frame}{Ej 0 — XOR con MLP: convergencia de dos arquitecturas}
 \centering
-\includegraphics[width=0.78\linewidth]{../ejercicio0/presentacion/xor_convergencia.png}\\[0.4em]
-
-\begin{insight}
-\textbf{El XOR no es separable linealmente.} Necesita capa oculta no lineal. Las dos arquitecturas convergen: \(\boldsymbol{[2,2,1]}\) (mínima) y \(\boldsymbol{[2,3,2,1]}\) (con capa extra). \textbf{Eje y en escala logarítmica.}
-\end{insight}
+\includegraphics[width=0.68\linewidth]{../ejercicio0/presentacion/xor_convergencia.png}\\[0.3em]
+\small
+\textbf{El XOR no es separable linealmente.} Las dos arquitecturas con capa oculta no lineal convergen. Eje y en escala logarítmica.
 \end{frame}
 
 % ============= 5. XOR interpretación =============
@@ -323,13 +321,13 @@ Precision \(0.886\), recall \(0.861\), F1 \(0.873\), accuracy \(0.971\).
 \begin{columns}[T]
 \column{0.5\linewidth}
 \centering
-\includegraphics[width=\linewidth]{../ejercicio1/nonlinear_perceptron/analisis_outputs/roc_curve.png}\\
-\textcolor{muted}{\footnotesize \textbf{AUC-ROC = 0.9921}\\(lineal: 0.9720)}
+\includegraphics[width=0.9\linewidth]{../ejercicio1/nonlinear_perceptron/analisis_outputs/roc_curve.png}\\
+\textcolor{muted}{\footnotesize \textbf{AUC-ROC = 0.9921} (lineal: 0.9720)}
 
 \column{0.5\linewidth}
 \centering
-\includegraphics[width=\linewidth]{../ejercicio1/nonlinear_perceptron/analisis_outputs/pr_curve.png}\\
-\textcolor{muted}{\footnotesize PR curve más informativa que ROC para clases desbalanceadas (fraude $\approx 12\%$)}
+\includegraphics[width=0.9\linewidth]{../ejercicio1/nonlinear_perceptron/analisis_outputs/pr_curve.png}\\
+\textcolor{muted}{\footnotesize PR más informativa para fraude ($\approx 12\%$ prevalencia)}
 \end{columns}
 \vspace{0.4em}
 
@@ -356,11 +354,7 @@ Precision \(0.886\), recall \(0.861\), F1 \(0.873\), accuracy \(0.971\).
 \end{tabular}\\[1em]
 
 \begin{takeaway}
-\textbf{El modelo entrega scores. La política de threshold es decisión de negocio:}\\[0.2em]
-\begin{itemize}[leftmargin=1.4em]
-  \item Auditoría manual barata $\Rightarrow$ threshold $\approx 0.89$.
-  \item Falsos positivos costosos $\Rightarrow$ threshold $\geq 0.95$.
-\end{itemize}
+\textbf{El modelo entrega scores. La política de threshold es decisión de negocio:} auditoría manual barata $\Rightarrow$ threshold $\approx 0.89$; falsos positivos costosos $\Rightarrow$ threshold $\geq 0.95$.
 \end{takeaway}
 \end{frame}
 
@@ -485,33 +479,26 @@ $\Rightarrow$ La metodología coarse-to-fine de Fase 1 ya hizo el grueso del tra
 % ============= 18. Final eval cachetazo =============
 \begin{frame}{Ej 2 — Final eval: el cachetazo}
 \centering
-\vspace{0.5em}
-\Huge
-val K-fold=5: \textbf{96.22\%}\\[0.5em]
-\textcolor{muted}{$\downarrow$}\\[0.5em]
-test (digits\_test.csv): \textcolor{warn}{\textbf{86.30\%}}\\[1em]
-\Large \textbf{Drop de 10 puntos porcentuales.}\\[1em]
+\vspace{0.3em}
+\huge
+val K-fold=5: \textbf{96.22\%}\\[0.4em]
+\textcolor{muted}{$\downarrow$}\\[0.4em]
+test (digits\_test.csv): \textcolor{warn}{\textbf{86.30\%}}\\[0.8em]
+\Large \textbf{Drop de 10 puntos porcentuales.}\\[0.8em]
 
 \normalsize
 \begin{warning}
-\textbf{Interpretación: distribution shift, no underfitting.}\\
-La matriz de confusión sobre test (siguiente slide) confirma: las confusiones se reparten por todo el grid, no es una clase específica.\\
-\textbf{El modelo está bien — los datos no se parecen.}
+\textbf{Distribution shift, no underfitting.} El modelo está bien — los datos no se parecen.
 \end{warning}
 \end{frame}
 
 % ============= 19. Matriz final =============
 \begin{frame}{Ej 2 — Matriz de confusión sobre digits\_test.csv}
 \centering
-\includegraphics[width=0.55\linewidth]{../ejercicio2/presentacion/08_confusion_matrix_final.png}\\[0.4em]
+\includegraphics[width=0.38\linewidth]{../ejercicio2/presentacion/08_confusion_matrix_final.png}\\[0.2em]
 
 \begin{takeaway}
-\textbf{Patrón de distribution shift:} confusiones distribuidas, no concentradas en una clase.\\[0.3em]
-
-$\Rightarrow$ Si el problema es shift y no falta de capacidad, lo que necesitamos no es un modelo más grande. \\
-\textbf{Necesitamos más datos que cubran la distribución del test.}\\[0.3em]
-
-\textcolor{muted}{Y eso es justamente lo que el Ej 3 nos provee.}
+\textbf{Shift, no falta de capacidad:} confusiones distribuidas. $\Rightarrow$ \textbf{Más datos}, no más modelo. Eso es lo que el Ej 3 provee.
 \end{takeaway}
 \end{frame}
 
@@ -611,10 +598,10 @@ base\_extra\_data            & 0.9706 & 0.9636 & --- (referencia) \\
 
 \begin{warning}
 \textbf{Lo que no ayudó:}
-\begin{itemize}
-  \item \textbf{Dropout:} gana en val ($+0.44$pp), \emph{pierde} en test ($-0.08$pp). Reduce varianza al fold, no al shift.
-  \item \textbf{wider} \([784,200,100,10]\): mejor en val, peor en test. Más capacidad memoriza el train. \textbf{Descarta que falte capacidad.}
-  \item \textbf{Combinar todo}: L2+dropout+aug peor que L2+aug solo. La regularización compite consigo misma cuando se exagera.
+\begin{itemize}\setlength\itemsep{0.1em}
+  \item \textbf{Dropout:} gana en val, pierde en test. Reduce varianza al fold, no al shift.
+  \item \textbf{wider} \([784,200,100,10]\): mejor en val, peor en test. Descarta falta de capacidad.
+  \item \textbf{Combinar todo:} L2+dropout+aug peor que L2+aug solo.
 \end{itemize}
 \end{warning}
 \end{frame}
@@ -622,21 +609,19 @@ base\_extra\_data            & 0.9706 & 0.9636 & --- (referencia) \\
 % ============= 26. Por qué no llegamos al 98 =============
 \begin{frame}{Ej 3 — Por qué no llegamos al 98\%}
 \centering
-\Large \textcolor{warn}{\textbf{Mejor: 96.88\%. Faltan 1.12 pp.}}\\[1em]
+\Large \textcolor{warn}{\textbf{Mejor: 96.88\%. Faltan 1.12 pp.}}\\[0.6em]
 
 \normalsize\raggedright
 \textbf{Tres hipótesis ordenadas por probabilidad:}
-\begin{enumerate}
-  \item \textbf{Augmentation insuficiente.}\\
-        Gaussian noise es \emph{isotrópico} (independiente por píxel). El shift parece ser de \emph{estilo de escritura}: rotación pequeña, traslación, grosor de trazo. Pide augmentation \textbf{geométrica}, no por noise. No la implementamos en este TP.
-  \item \textbf{Sub-representación en val interno del final\_eval.}\\
-        Val 10\% random para early stopping. Si los digits ``difíciles'' del test no están ahí, la red para antes de tiempo.
+\begin{enumerate}\setlength\itemsep{0.2em}
+  \item \textbf{Augmentation insuficiente.} Gaussian noise es \emph{isotrópico} (por píxel). El shift parece ser de \emph{estilo de escritura}: rotación, traslación, grosor de trazo. Pide augmentation \textbf{geométrica}, no implementada acá.
+  \item \textbf{Sub-representación en val interno del final\_eval.} Val 10\% random para early stopping puede no incluir los digits difíciles del test.
   \item \textbf{Capacidad}: improbable, \code{wider} sobreajustó.
 \end{enumerate}
-\vspace{0.6em}
+\vspace{0.4em}
 
 \begin{takeaway}
-\textbf{Próximo paso}: augmentation por rotación/traslación pequeñas; reconsiderar arquitectura solo después.
+\textbf{Próximo paso}: augmentation por rotación/traslación pequeñas.
 \end{takeaway}
 \end{frame}
 
