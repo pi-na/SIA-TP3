@@ -673,6 +673,42 @@ base\_extra\_data            & 0.9706 & 0.9636 & --- (referencia) \\
 \end{takeaway}
 \end{frame}
 
+% ============= NUEVO 1/2. Alineación con la clase: lo que coincide =============
+\begin{frame}{Alineación con la clase — \textbf{lo que hicimos como la clase}}
+\centering\footnotesize
+\begin{tabular}{@{}p{0.48\linewidth}p{0.48\linewidth}@{}}
+\toprule
+\textbf{Concepto de la clase} & \textbf{Dónde está en el TP} \\
+\midrule
+Backprop con regla de la cadena, $\delta$ retropropagado por capa. & \code{MLP.backward}, loop atrás-adelante. \\
+Bias trick (columna de 1's). & \code{\_add\_bias\_column}. \\
+Forma matricial (sin loops por neurona). & Toda la pipeline son matmuls. \\
+Init pequeña: He por ReLU, Xavier por tanh/sigmoid. & \code{auto\_pick} en \code{initializers.py}. \\
+Sweep de LR en varios órdenes (incluye extremos). & Fase 2: $\{10^{-4}, 10^{-3}, 10^{-2}, 0.1, 10\}$. \\
+Comparación SGD / Momentum / Adam. & Fase 1.2 + Fase 2 opt sweep. \\
+Curvas error vs épocas, train + val. & \code{epoch\_history.csv} + plots. \\
+Online (Ej 1) y mini-batch (Ej 2 / 3). & \code{nonlinear\_perceptron.py} + \code{BatchIterator}. \\
+\bottomrule
+\end{tabular}\\[0.4em]
+
+\small\textbf{Las fórmulas del $\delta$} (apunte \S6.3 y \S6.5) aparecen literales en \code{network.py:backward}.
+\end{frame}
+
+% ============= NUEVO 2/2. Alineación: decisiones distintas =============
+\begin{frame}{Alineación con la clase — \textbf{decisiones distintas (y por qué)}}
+\centering\footnotesize
+\begin{tabular}{@{}p{0.40\linewidth}p{0.56\linewidth}@{}}
+\toprule
+\textbf{Lo que decidimos distinto} & \textbf{Justificación} \\
+\midrule
+\textbf{No barremos online / batch / mini-batch} como HP en Ej 2 y 3. & Mini-batch domina por costo (12k+ muestras y arquitectura $[784,100,50,10]$). Online ya está cubierto en Ej 1. Barrer la estrategia agregaba 3$\times$ cómputo sin insight nuevo. \\
+\textbf{No barremos funciones de activación} en Ej 2-3 (fijo: ReLU + softmax). & La clase misma descarta escalón (no derivable) y lineal (colapsa). Softmax es obligatorio en la salida para multiclase + cross-entropy. ReLU es el estándar moderno para hiddens. \\
+\textbf{Convergencia por early stopping en \texttt{val\_loss}}, no por $\varepsilon$ absoluto sobre el train. & \texttt{val\_loss} detecta overfitting; un threshold sobre el error de train no. (Ej 1 sí usa $\varepsilon$ porque su scope es distillation y vale otro criterio.) \\
+\textbf{Estructura del TP cambió.} & La clase describe Ej 1 = XOR, Ej 2 = paridad, Ej 3 = dígito + ruido. El enunciado actual (1Q 2026) tiene Ej 1 = fraude (knowledge distillation), Ej 3 = mismo problema con target $\geq 98\%$. No es decisión nuestra. \\
+\bottomrule
+\end{tabular}
+\end{frame}
+
 % ============= 27. Conclusiones =============
 \begin{frame}{Conclusiones del TP}
 \textbf{Tres ideas para llevarse:}\\[0.4em]
