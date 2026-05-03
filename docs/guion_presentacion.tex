@@ -1,0 +1,396 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-tabla]{babel}
+\usepackage{lmodern}
+\usepackage[a4paper,margin=2.2cm]{geometry}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\setlength{\headheight}{22pt}
+\usepackage[most]{tcolorbox}
+\usepackage{pifont}
+\usepackage[hidelinks,colorlinks=true,linkcolor=accent,urlcolor=accent]{hyperref}
+\usepackage{microtype}
+
+\definecolor{accent}{HTML}{1F6FEB}
+\definecolor{accent2}{HTML}{0A8754}
+\definecolor{warn}{HTML}{D1351A}
+\definecolor{bg}{HTML}{F6F8FA}
+\definecolor{bgbox}{HTML}{EDF2F7}
+\definecolor{rule}{HTML}{D0D7DE}
+\definecolor{ink}{HTML}{1F2328}
+\definecolor{muted}{HTML}{57606A}
+
+\color{ink}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{muted}\textsc{TP3 — Guion de presentación}}
+\fancyhead[R]{\small\color{muted}ITBA · 1Q 2026}
+\fancyfoot[C]{\small\color{muted}\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{rule}\leaders\hrule height \headrulewidth\hfill}}
+
+\titleformat{\section}
+  {\Large\bfseries\color{accent}}{\thesection.}{0.6em}{}
+\titleformat{\subsection}
+  {\large\bfseries\color{ink}}{\thesubsection}{0.6em}{}
+
+\newtcolorbox{persona}[1]{
+  enhanced, breakable,
+  colback=bgbox, colframe=accent,
+  boxrule=0pt, leftrule=4pt,
+  arc=2pt, outer arc=0pt,
+  left=10pt, right=10pt, top=8pt, bottom=8pt,
+  fonttitle=\bfseries\color{accent},
+  title={#1}
+}
+\newtcolorbox{slide}[1][]{
+  enhanced,
+  colback=bg, colframe=rule,
+  boxrule=0.5pt,
+  arc=2pt, outer arc=0pt,
+  left=8pt, right=8pt, top=4pt, bottom=4pt,
+  #1
+}
+\newtcolorbox{cue}[1][]{
+  enhanced, breakable,
+  colback=accent2!8, colframe=accent2,
+  boxrule=0pt, leftrule=4pt,
+  arc=2pt, outer arc=0pt,
+  left=10pt, right=10pt, top=6pt, bottom=6pt,
+  #1
+}
+
+\newcommand{\code}[1]{\texttt{\textcolor{accent}{#1}}}
+\newcommand{\file}[1]{\texttt{\small #1}}
+\newcommand{\slidenum}[1]{\textcolor{accent}{\textbf{[Slide #1]}}}
+\newcommand{\timing}[1]{\textcolor{muted}{\small (#1)}}
+\newcommand{\enunciado}[1]{\textcolor{warn}{\textit{#1}}}
+
+\begin{document}
+
+\begin{titlepage}
+\thispagestyle{empty}
+\vspace*{2cm}
+\begin{flushleft}
+{\fontsize{36}{42}\selectfont\bfseries\color{ink}Guión de presentación}\\[0.4em]
+{\fontsize{22}{26}\selectfont\bfseries\color{accent}TP3 — Perceptrones}\\[1em]
+{\large\color{muted}Sistemas de Inteligencia Artificial · ITBA · 1Q 2026}\\[2.5em]
+
+\rule{\linewidth}{0.4pt}\\[0.6em]
+
+\begin{tabular}{@{}p{0.22\linewidth}p{0.42\linewidth}p{0.16\linewidth}p{0.12\linewidth}@{}}
+\toprule
+\textbf{Persona} & \textbf{Bloque} & \textbf{Slides} & \textbf{Tiempo} \\
+\midrule
+\textbf{P1} & Introducción + Ej0 (validación) + Engine \code{mlp/} & 1--6   & 5 min \\
+\textbf{P2} & Ej1 (knowledge distillation) — \emph{Tomás} & 7--12  & 5 min \\
+\textbf{P3} & Ej2 (clasificación de dígitos)               & 13--19 & 5 min \\
+\textbf{P4} & Ej3 (Pack C, búsqueda del 98\%) + conclusiones & 20--26 & 5 min \\
+\bottomrule
+\end{tabular}
+
+\vspace{2em}
+\textbf{Total: 20 minutos.} Las slides están en \file{docs/slides\_presentacion.pdf}.
+Companion técnico: \file{docs/informe\_tp3.pdf}. Documentación viva: \file{docs/guia\_compañeros.md}.
+\end{flushleft}
+
+\vfill
+\begin{flushleft}
+\rule{\linewidth}{0.4pt}\\[0.4em]
+\textcolor{muted}{\small Convenciones: \slidenum{N} = referencia a slide. \timing{0:30} = tiempo aproximado dentro del bloque. \enunciado{en cursiva rojo} = referencia explícita a la consigna o al apunte. \code{texto en azul} = identificador del repo.}
+\end{flushleft}
+\end{titlepage}
+
+\tableofcontents
+\bigskip\hrule\bigskip
+
+% ===================================================================
+\section{Persona 1 — Introducción, Ej0 y Engine}\label{sec:p1}
+
+\begin{persona}{Persona 1 · 5 minutos · Slides 1 a 6}
+\textbf{Objetivo de este bloque:} situar al jurado, explicar la filosofía de implementación, validar que el engine funciona (XOR, AND), y entregar limpio a Persona 2.
+\end{persona}
+
+\subsection{Apertura \timing{0:00 -- 0:40}}
+
+\slidenum{1, portada}\quad ``Buenas. Trabajo Práctico 3, perceptrones. Somos cuatro y nos vamos a turnar en orden de los ejercicios. Yo arranco con la introducción y el ejercicio 0 de validación. Al final esperamos preguntas.''
+
+\slidenum{2, qué pide el TP}\quad ``El enunciado pide construir perceptrones desde cero, en NumPy puro --- \enunciado{sin sklearn estimators, sin PyTorch, sin TensorFlow como capas}. Tres ejercicios principales más una validación. Ejercicio 1 es detección de fraude por knowledge distillation; ejercicio 2 es clasificación de dígitos manuscritos con un MLP; y ejercicio 3 es lo mismo que el 2 pero apuntando a un \enunciado{accuracy mayor o igual a 98\% sobre el test set}.''
+
+\subsection{Filosofía: engine único \timing{0:40 -- 1:40}}
+
+\slidenum{3, arquitectura del repo}\quad ``Tomamos una decisión arquitectural temprana: en vez de armar tres scripts independientes, construimos un \textbf{módulo \code{mlp/} reutilizable} y resolvemos los ejercicios cambiando solo \textbf{configs JSON}. Pueden verlo en el repo: \file{mlp/network.py}, \file{mlp/optimizers.py}, \file{mlp/activations.py}, \file{mlp/losses.py}. El ejercicio 1, que es lo que va a presentar el siguiente, vive aparte porque ya estaba implementado por Tomás antes de esta unificación.''
+
+\begin{cue}
+\textbf{Cue visual:} mostrar el árbol de directorios. Si te preguntan ``¿por qué un solo engine?'', respuesta corta: ``una pipeline, un set de tests (78 verde), una sola fuente de bugs.''
+\end{cue}
+
+\slidenum{4, anatomía del engine}\quad ``El engine tiene cuatro componentes intercambiables vía config: activaciones (sigmoid, tanh, relu, identity, softmax), losses (MSE, BCE, cross\_entropy), inicializadores (uniform, He, Xavier --- y un \emph{auto} que elige según la activación de cada capa), y optimizadores (SGD, Momentum, Adam). El bias usa el truco de prependear una columna de unos a la entrada de cada capa: así cada peso $W^{(l)}$ tiene shape $(n_{l+1},\, n_l + 1)$ con la columna 0 como bias. Eso simplifica el backprop.''
+
+\subsection{Ejercicio 0 --- validación \timing{1:40 -- 3:30}}
+
+\slidenum{5, AND con step perceptron}\quad ``El ejercicio 0 valida que el código está bien antes de tirarlo a problemas grandes. Primero, perceptrón con función escalón sobre el AND lógico, en \enunciado{representación bipolar como pide el apunte} --- entradas en $\{-1, +1\}$, salida esperada $[-1, -1, -1, +1]$. El test pasa con error cero. Eso es \file{ejercicio0/step\_perceptron.py}.''
+
+\slidenum{6, XOR con MLP}\quad ``Lo más interesante del ejercicio 0 es el XOR --- es \textbf{el caso clásico que un perceptrón simple no puede resolver}. Necesitás una capa oculta no lineal. Probamos dos arquitecturas: la mínima $[2, 2, 1]$ y otra con capa extra $[2, 3, 2, 1]$. Los configs están en \file{ejercicio0/configs/}. Ambas convergen a train\_loss menor a 0.1 en pocas epochs.
+
+El XOR no es ornamental: es la red de seguridad del engine. Si rompemos backprop, XOR deja de converger \emph{antes} que dígitos. De hecho durante el desarrollo encontramos cuatro bugs reales gracias a estos tests: predicción bipolar mal codificada en \code{predict()}, identity activation que aliasaba su input, mean/std del summary que perdían filas por dict-spread overwrite, y \code{numerical\_grad} que devolvía garbage para int dtypes.''
+
+\begin{cue}
+\textbf{Transición \timing{4:30 -- 5:00}:} ``Eso valida el engine para los ejercicios siguientes. Pero el ejercicio 1, knowledge distillation, fue implementado por Tomás antes de esta unificación con su propia pipeline. Le paso a [P2].''
+\end{cue}
+
+% ===================================================================
+\section{Persona 2 — Ejercicio 1 (Knowledge Distillation)}\label{sec:p2}
+
+\begin{persona}{Persona 2 · 5 minutos · Slides 7 a 12 · idealmente Tomás}
+\textbf{Objetivo:} explicar el setup de distillation, comparar lineal vs no-lineal, justificar el threshold óptimo. Si quien presenta NO es el autor, dejar claro al inicio: ``este ejercicio lo implementé hace un mes con scripts independientes; el resto del TP lo unificamos después.''
+\end{persona}
+
+\subsection{Setup del problema \timing{0:00 -- 1:00}}
+
+\slidenum{7, problema}\quad ``Knowledge distillation: \enunciado{el enunciado nos da un BigModel pre-entrenado que clasifica fraude} --- nosotros lo tratamos como caja negra. Lo que sabemos es su salida continua, una probabilidad de fraude entre 0 y 1, en la columna \code{big\_model\_fraud\_probability}. Nuestro objetivo es entrenar un \textbf{TinyModel} --- un perceptrón simple, no un MLP --- que replique esa salida.
+
+Hay un detalle clave: el dataset también tiene una columna \code{flagged\_fraud} con la etiqueta binaria de fraude real. \enunciado{El enunciado prohíbe usarla en el entrenamiento}. La usamos sólo para evaluación con métricas de clasificación (precision, recall, F1).''
+
+\slidenum{8, features y código}\quad ``Nueve features: \code{amount\_usd}, \code{quantity\_purchased}, \code{session\_duration\_seconds}, etc. Excluimos tres por irrelevantes o no numéricas: \code{timestamp}, \code{device\_screen\_resolution}, \code{time\_since\_last\_login\_s}. Pueden ver la lista en \file{ejercicio1/nonlinear\_perceptron/configs/baseline.json}.
+
+El código vive en \file{ejercicio1/nonlinear\_perceptron/nonlinear\_perceptron.py}: K-fold estratificado por \code{flagged\_fraud}, normalización z-score \emph{fit-on-train-only} para evitar leakage, y online learning sample-by-sample.''
+
+\subsection{Lineal vs No-Lineal \timing{1:00 -- 2:30}}
+
+\slidenum{9, dos versiones}\quad ``Probamos dos versiones del perceptrón:''
+
+\begin{itemize}[leftmargin=1.4em, itemsep=2pt]
+  \item \textbf{Lineal (Adaline)}: salida $O = w \cdot x$, regla delta $\Delta w = \eta\,(z - O)\,x$.
+  \item \textbf{No-Lineal (sigmoide)}: salida $O = \sigma(w \cdot x) = 1/(1 + e^{-w\cdot x})$, regla delta con derivada de la sigmoide: $\Delta w = \eta\,(z - O)\,O(1-O)\,x$.
+\end{itemize}
+
+``El factor $O(1-O)$ modula el gradiente: cuando $O$ está cerca de 0 o 1 (zonas saturadas), el gradiente se achica. Esa es justamente la diferencia que pide \enunciado{el apunte de perceptrón}.''
+
+\slidenum{10, MSE comparison}\quad ``En distillation pura, MSE contra \code{big\_model\_fraud\_probability}, K-fold=5 estratificado:
+
+\begin{center}
+\begin{tabular}{@{}lr@{}}
+\toprule
+Modelo & MSE test (mean $\pm$ std) \\
+\midrule
+Lineal     & $0.0266 \pm 0.0008$ \\
+No-Lineal  & $\boldsymbol{0.0110 \pm 0.0004}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+El no-lineal reduce el MSE en \textbf{59\%}. La razón es directa: el target está acotado en $[0,1]$, la sigmoide mapea naturalmente ahí, el lineal puede producir valores fuera del rango y el MSE lo penaliza.''
+
+\subsection{Threshold sweep \timing{2:30 -- 4:00}}
+
+\slidenum{11, el problema del threshold default}\quad ``Acá hay una sutileza importante. Con threshold default $0.5$, el no-lineal da \textbf{precision = 0.33 con recall = 1.0}. Es decir, clasifica casi todo como fraude. Eso parece terrible, pero no es el modelo: es el threshold.
+
+Las salidas sigmoide se concentran: la mediana de los scores de fraude está en 0.99. O sea, los fraudes están muy arriba, pero el modelo aprendió a no usar el rango bajo de la sigmoide para los no-fraudes --- los pone en valores como 0.4 o 0.6, no en 0.05.''
+
+\slidenum{12, threshold óptimo}\quad ``Hicimos un sweep de threshold de 0.00 a 1.00 con paso 0.01. El óptimo por F1 es \textbf{threshold = 0.89}: precision 0.886, recall 0.861, F1 0.873, accuracy 97.1\%. AUC-ROC del modelo: \textbf{0.9921}. El lineal está en 0.9720.
+
+Si el cliente prioriza no auditar falsos positivos, threshold $\geq 0.95$ da precision $\geq 0.95$ con recall 0.75 --- pierde sensibilidad pero gana precisión. La elección depende del costo asimétrico entre falso positivo y falso negativo del negocio.''
+
+\begin{cue}
+\textbf{Transición \timing{4:00 -- 5:00}:} ``Eso cierra el ejercicio 1. La diferencia con los siguientes dos ejercicios es que acá tenemos un perceptrón simple --- una sola capa. Para clasificar dígitos manuscritos en 10 clases necesitamos un MLP. Le paso a [P3].''
+\end{cue}
+
+% ===================================================================
+\section{Persona 3 — Ejercicio 2 (Clasificación de dígitos)}\label{sec:p3}
+
+\begin{persona}{Persona 3 · 5 minutos · Slides 13 a 19}
+\textbf{Objetivo:} explicar el workflow disciplinado Fase 1 \(\to\) Fase 2 \(\to\) final\_eval, mostrar los sweeps con sus ganadores, y entregar el resultado del final\_eval con el cachetazo del distribution shift como gancho para Persona 4.
+\end{persona}
+
+\subsection{Datos y problema \timing{0:00 -- 0:40}}
+
+\slidenum{13, problema}\quad ``Clasificación multiclase de dígitos del 0 al 9. Cada muestra es un \enunciado{vector de 784 floats en $[0,1]$ que representa una imagen de 28 por 28}. Train: \file{digits.csv} con 12.449 muestras. Test (producción): \file{digits\_test.csv} con 2.498 muestras.
+
+Una regla que el enunciado deja implícita pero que adoptamos como ley: \textbf{\code{digits\_test.csv} se evalúa una sola vez, al final}. No se toca durante búsqueda de hiperparámetros.''
+
+\subsection{Workflow Fase 1 + Fase 2 \timing{0:40 -- 2:00}}
+
+\slidenum{14, workflow disciplinado}\quad ``El espacio de hiperparámetros es grande: arquitectura, optimizador, learning rate, batch size --- $O(n^4)$. Para no caer en sweep aleatorio dividimos en dos fases:
+
+\textbf{Fase 1 (k\_folds=1, exploratoria).} Sweeps secuenciales: primero arquitectura, después optimizador, después learning rate, después batch size. Cada sub-fase usa el ganador del anterior. Eso reduce $O(n^4)$ a $O(4n)$.
+
+\textbf{Fase 2 (k\_folds=5, validación).} Una vez consolidado el \code{base.json}, variamos un solo HP a la vez y volvemos a evaluar con K-fold completo. Da comparativas limpias para esta presentación.''
+
+\slidenum{15, ganadores Fase 1}\quad ``Resultados de las 16 corridas de Fase 1:
+
+\begin{center}
+\small
+\begin{tabular}{@{}llrl@{}}
+\toprule
+Sub-fase & Ganador & val\_acc & Comentario \\
+\midrule
+Arquitectura  & $[784,100,50,10]$ & 0.9674 & elegida por parsimonia (vs $[784,128,64,10]$) \\
+Optimizador   & adam, lr=0.001    & 0.9674 & SGD no convergió en 50 epochs \\
+Learning rate & 0.001             & 0.9674 & 0.0001 lento, $\geq 0.005$ overshoot \\
+Batch size    & 16                & 0.9674 & best\_ep=3, el más rápido \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+El \code{base.json} consolidado, corrido con K=5, da \textbf{val\_acc 96.22\% $\pm$ 0.43\%}.''
+
+\subsection{Fase 2 valida la elección \timing{2:00 -- 3:30}}
+
+\slidenum{16, plots Fase 2}\quad ``Fase 2 es one-at-a-time sobre el base. Las cuatro dimensiones que barrimos: LR, arquitectura, optimizador, inicializador. Pueden ver los plots en \file{ejercicio2/presentacion/}.
+
+\begin{itemize}[leftmargin=1.4em, itemsep=1pt]
+  \item LR: el único sweep con rangos catastróficos. lr=10 deja la red en accuracy random (12\%); lr=0.1 también diverge. lr=0.001 sigue siendo el ganador.
+  \item Arquitectura: \code{wider} gana por 0.17pp pero tarda 3.6 veces más \(\rightarrow\) empate técnico, mantenemos base.
+  \item Optimizador: momentum y adam empatan dentro del std.
+  \item Inicializador: he, xavier, uniform los tres en empate técnico.
+\end{itemize}
+
+Lo importante: \textbf{Fase 2 valida la elección de Fase 1 más que descubrir un ganador nuevo.} Eso era el objetivo --- la metodología coarse-to-fine ya hizo el trabajo.''
+
+\subsection{Final eval --- el descubrimiento \timing{3:30 -- 5:00}}
+
+\slidenum{17, curvas + matriz base}\quad ``Antes del final\_eval, el modelo se ve sano. Curvas suaves, convergencia en 5 epochs, matriz de confusión con diagonal limpia para 9 de 10 clases. La excepción: la clase 8 colapsa a precision 0 y recall 0 en val. Indicador de algo raro en la distribución del train.''
+
+\slidenum{18, final\_eval Ej2}\quad ``Final eval: entrenamos con todo \code{digits.csv} y evaluamos UNA SOLA VEZ contra \code{digits\_test.csv}. Resultado:
+
+\begin{center}\Large
+val K-fold=5: \textbf{96.22\%} \quad$\rightarrow$\quad test: \textbf{86.30\%}
+\end{center}
+
+\textbf{Drop de 10 puntos porcentuales.} Eso fue una sorpresa fuerte. La matriz de confusión sobre test confirma que las confusiones se reparten por todo el grid, no son una clase específica fallando.''
+
+\slidenum{19, hipótesis}\quad ``La interpretación: \textbf{el modelo está bien, los datos no se parecen}. \enunciado{El enunciado del ejercicio 3 menciona que más datos pueden ayudar} --- y eso fue justamente la hipótesis que queríamos testear.''
+
+\begin{cue}
+\textbf{Transición \timing{5:00}:} ``Le paso a [P4] que cuenta cómo intentamos cerrar ese gap.''
+\end{cue}
+
+% ===================================================================
+\section{Persona 4 — Ejercicio 3 (Pack C, búsqueda del 98\%)}\label{sec:p4}
+
+\begin{persona}{Persona 4 · 5 minutos · Slides 20 a 26}
+\textbf{Objetivo:} contar la iteración Pack C, el descubrimiento del +10pp por más datos, el techo del 96.88\%, y por qué no llegamos al 98\%. Cerrar con conclusiones del TP.
+\end{persona}
+
+\subsection{Hipótesis y plan \timing{0:00 -- 0:40}}
+
+\slidenum{20, plan}\quad ``Si el problema es distribution shift y no falta de capacidad, el primer movimiento natural es \textbf{más datos}. \enunciado{El enunciado del ejercicio 3 nos provee \code{more\_digits.csv}} con 15.742 muestras adicionales. Si eso no alcanza, activamos Pack C: regularización L2, dropout, augmentation gaussiana, lr\_schedule. Si nada llega al 98\%, escalamos capacidad.
+
+El engine \code{mlp/} ya soporta esto: el config tiene un campo \code{regularization} y \code{extra\_csv\_paths} concatena CSVs antes del split. Cero cambios al training loop.''
+
+\subsection{El primer movimiento dominó \timing{0:40 -- 1:40}}
+
+\slidenum{21, more\_digits}\quad ``Concatenamos \code{more\_digits.csv} sin tocar nada más. Resultado:
+
+\begin{center}\large
+val K=5: $96.22\% \to 97.06\%$ \quad y \quad test: $\boldsymbol{86.30\%} \to \boldsymbol{96.36\%}$
+\end{center}
+
+\textbf{+10 puntos porcentuales en test, cero cambios al modelo.} Confirma la hipótesis. El macro F1 saltó de 0.857 a 0.959 \(\to\) la clase 8 que estaba colapsada en Ejercicio 2 ahora se predice correctamente.''
+
+\subsection{Iteración Pack C \timing{1:40 -- 3:00}}
+
+\slidenum{22, tabla Pack C}\quad ``Sobre eso aplicamos las técnicas Pack C, primero individuales, después combinaciones. Doce configs evaluadas en total --- van a ver la tabla completa.
+
+\begin{center}\small
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+Config & val K=5 & test & $\Delta$ \\
+\midrule
+base\_extra\_data           & 0.9706 & 0.9636 & --- (baseline) \\
+\quad +\,L2                 & 0.9758 & 0.9656 & $+0.20$ \\
+\quad +\,dropout            & 0.9750 & 0.9628 & $-0.08$ \\
+\quad +\,L2 + dropout       & 0.9772 & 0.9604 & $-0.32$ \\
+\textbf{\quad +\,L2 + aug}  & \textbf{0.9760} & \textbf{0.9688} & $\boldsymbol{+0.52}$ \\
+\quad +\,wider + L2 + aug   & 0.9777 & 0.9640 & $+0.04$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Ganador: L2 (1e-4) + augmentation gaussiana (\(\sigma=0.05\)) \(\to\) 96.88\% en test.} Eso requirió \textbf{implementar dropout, augmentation y lr\_schedule en el engine} --- los detalles de implementación están en \file{mlp/network.py}, con tests verde.''
+
+\subsection{Análisis: qué movió la aguja \timing{3:00 -- 4:00}}
+
+\slidenum{23, qué ayudó / qué no}\quad ``El análisis honesto:
+
+\textbf{Lo que ayudó:}
+\begin{itemize}[leftmargin=1.4em, itemsep=1pt]
+  \item Más datos: +10pp. El movimiento dominante.
+  \item L2: +0.20pp consistente.
+  \item Aug gaussiana: +0.32pp \emph{adicional} sobre L2 (sinergia con L2).
+\end{itemize}
+
+\textbf{Lo que no ayudó:}
+\begin{itemize}[leftmargin=1.4em, itemsep=1pt]
+  \item Dropout: ayuda en val, no transfiere a test. Reduce varianza específica al fold, no al shift.
+  \item \code{wider} \([784,200,100,10]\): mejor en val, peor en test. Más capacidad memoriza el train, no generaliza. Eso descarta que el problema sea capacidad.
+  \item Combinar todo a la vez: la regularización compite consigo misma. L2+dropout+aug fue peor que L2+aug solo.
+\end{itemize}''
+
+\subsection{Por qué no llegamos al 98\% \timing{4:00 -- 4:30}}
+
+\slidenum{24, hipótesis del techo}\quad ``El target del 98\% no lo alcanzamos. Mejor: 96.88\%, faltan 1.12pp. Tres hipótesis:
+
+\begin{enumerate}[leftmargin=1.4em, itemsep=1pt]
+  \item \textbf{Augmentation insuficiente}: gaussian noise es isotrópico --- ruido independiente por píxel. El shift entre train y test parece ser de \emph{estilo de escritura} (rotación, traslación, grosores). Eso pide augmentation por transformaciones geométricas, no por noise. No la implementamos --- gaussian noise era la primera aproximación.
+  \item \textbf{Sub-representación}: el final\_eval usa val 10\% random para early stopping. Si los digits ``difíciles'' del test no aparecen ahí, la red para antes de tiempo.
+  \item \textbf{Capacidad}: subjetivamente improbable porque \code{wider} sobreajustó. Pero quizás con augmentation geométrica una arquitectura mayor sí ayudaría.
+\end{enumerate}''
+
+\subsection{Conclusiones del TP \timing{4:30 -- 5:00}}
+
+\slidenum{25, conclusiones}\quad ``Tres ideas para llevarse:
+
+\begin{enumerate}[leftmargin=1.4em, itemsep=1pt]
+  \item Una buena pipeline gana más que tunear hiperparámetros: el +10pp del Ejercicio 3 vino de \emph{datos}, no de modelo.
+  \item Los empates técnicos (diferencia menor a 0.3pp con std $\approx 0.4$\%) son mucho más comunes que los wins claros. Hay que elegir por parsimonia, no por 0.05pp en val.
+  \item ``Mejor en val'' no es ``mejor en test'' cuando hay shift. Dropout fue el ejemplo: ganador en val K-fold, perdedor en test.
+\end{enumerate}''
+
+\slidenum{26, cumplimiento + cierre}\quad ``Cumplimos todo lo de la consigna excepto el 98\% del Ejercicio 3. Está documentado honestamente con hipótesis verificables en \file{ejercicio3/README.md}. El informe técnico completo en \file{docs/informe\_tp3.pdf}, la guía operativa en \file{docs/guia\_compañeros.md}, y el repo en \file{github.com/pi-na/SIA-TP3} branch \code{tp3-mlp}. Gracias. Preguntas.''
+
+% ===================================================================
+\section*{Apéndice — preguntas anticipadas y cómo responder}
+\addcontentsline{toc}{section}{Apéndice — preguntas anticipadas}
+
+\begin{cue}
+\textbf{¿Por qué no usaron sklearn / PyTorch?} \enunciado{El enunciado lo prohíbe explícitamente.} La consigna pide perceptrones desde cero con NumPy. Es parte de la evaluación.
+\end{cue}
+
+\begin{cue}
+\textbf{¿Por qué dos fases en el Ejercicio 2?} Para no caer en sweep aleatorio. Fase 1 con k\_folds=1 explora rápido y reduce $O(n^4)$ a $O(4n)$; Fase 2 con K=5 valida. Sin Fase 2, una elección que ganó por suerte en un solo fold parece definitiva.
+\end{cue}
+
+\begin{cue}
+\textbf{¿Por qué no llegan al 98\% del Ejercicio 3?} (Si la pregunta es hostil) ``Identificamos que el techo viene de la calidad del augmentation, no de capacidad. Probamos las cuatro técnicas Pack C del enunciado y combinaciones. Lo que faltaba implementar era augmentation por transformaciones geométricas --- queda explicitado como follow-up. La autocrítica está en el README.''
+\end{cue}
+
+\begin{cue}
+\textbf{¿Por qué el Ejercicio 1 está aparte del engine?} Lo implementé hace un mes con scripts independientes, antes de unificar la codebase. Funcionalmente es correcto y los resultados son válidos; mantener la implementación separada preserva la trazabilidad histórica del repo.
+\end{cue}
+
+\begin{cue}
+\textbf{¿Cómo se reproducen los resultados?} Cualquiera puede correr \code{python3 -m mlp.train --config \textless ruta\textgreater\ --csv-root . --output-dir \textless out\textgreater}. El ganador del Ej3 es \file{ejercicio3/configs/pack\_c/l2\_aug.json}. Comandos exactos están en el apéndice del informe técnico.
+\end{cue}
+
+\begin{cue}
+\textbf{¿Por qué eligieron threshold=0.89 en el Ejercicio 1?} (P2) Porque maximiza F1 en el sweep. Si el cliente prefiere precisión sobre recall, threshold=0.95 o más alto. Es una decisión de negocio sobre el costo asimétrico entre falso positivo y falso negativo.
+\end{cue}
+
+\begin{cue}
+\textbf{¿Qué bugs encontraron?} (P1, si hay tiempo) Cuatro reales durante el desarrollo: predicción bipolar mal codificada, identity activation aliasaba su input, identity row spread perdía strings en el run\_summary, \code{numerical\_grad} con int dtype daba garbage. Todos detectados por los tests del XOR y AND \emph{antes} de tirar el código a dígitos.
+\end{cue}
+
+\bigskip
+\noindent\rule{\linewidth}{0.4pt}\par
+\smallskip
+\noindent\textcolor{muted}{\small Fin del guion. Slides en \file{docs/slides\_presentacion.pdf}.}
+
+\end{document}
