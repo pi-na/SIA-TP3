@@ -137,6 +137,112 @@
 }
 
 % ===================================================================
+% ============= SECCION NUEVA: DECISIONES DE DISEÑO =============
+\sectiondivider{Antes de los ejercicios}{Decisiones de diseño}
+
+% ---- Slide D1: overview de las 4 decisiones ----
+\begin{frame}{Cuatro decisiones que afectan a todos los ejercicios}
+\centering\large
+Antes de mostrar resultados, conviene fijar cuatro elementos que aparecen en cada experimento:\\[1.2em]
+
+\begin{tabular}{@{}p{0.42\linewidth}p{0.5\linewidth}@{}}
+\toprule
+\textbf{Decisión} & \textbf{Pregunta que responde} \\
+\midrule
+\textbf{1. Función de activación} & ¿Qué transformación no-lineal aplicamos en cada capa? \\
+\textbf{2. Inicialización de pesos} & ¿Con qué valores arrancamos antes de entrenar? \\
+\textbf{3. Optimizador} & ¿Cómo movemos los pesos en cada paso? \\
+\textbf{4. Función de costo} & ¿Qué error estamos minimizando? \\
+\bottomrule
+\end{tabular}
+\end{frame}
+
+% ---- Slide D2: Función de activación ----
+\begin{frame}{1. Función de activación — \textbf{cuál y por qué}}
+\small
+\begin{tabular}{@{}p{0.32\linewidth}p{0.18\linewidth}p{0.46\linewidth}@{}}
+\toprule
+\textbf{Dónde} & \textbf{Cuál} & \textbf{Por qué} \\
+\midrule
+Ej 0 — AND (perceptrón) & escalón & Salida discreta $\{-1,+1\}$. Una sola capa, sin backprop, no necesita derivable. \\
+Ej 0 — XOR (MLP) & tanh & Bipolar y derivable. Lo que pide el apunte para problemas $\{-1,+1\}$. \\
+Ej 1 — distillation & sigmoide & Target en $[0,1]$ (probabilidad). La sigmoide naturalmente devuelve ese rango. \\
+\rowcolor{accent2!10}
+Ej 2 / Ej 3 — capas ocultas & \textbf{ReLU} & Gradiente fuerte y constante en zona positiva. No satura como tanh/sigmoide. Entrena rápido. \\
+\rowcolor{accent2!10}
+Ej 2 / Ej 3 — capa de salida & \textbf{softmax} & Clasificación multiclase: devuelve distribución de probabilidad sobre las 10 clases. \\
+\bottomrule
+\end{tabular}\\[0.6em]
+
+\begin{insight}
+La clase descarta dos opciones: \textbf{escalón} (no derivable) y \textbf{lineal pura} (colapsa el MLP a una transformación lineal). Las descartamos también nosotros en los MLP.
+\end{insight}
+\end{frame}
+
+% ---- Slide D3: Inicialización ----
+\begin{frame}{2. Inicialización de pesos — \textbf{cuál y por qué}}
+\textbf{Regla del apunte:} valores \emph{pequeños}, \emph{no cero}, \emph{no grandes}.\\[0.5em]
+
+\begin{itemize}\setlength\itemsep{0.2em}\small
+  \item \textbf{¿Por qué no cero?} Si todas las neuronas arrancan iguales, hacen exactamente lo mismo en cada capa. El gradiente las mueve igual y \emph{nunca se diferencian} (problema de simetría).
+  \item \textbf{¿Por qué pequeños?} Pesos grandes saturan las activaciones (especialmente sigmoide/tanh): la salida queda en zonas planas, el gradiente es casi cero, la red no aprende.
+\end{itemize}
+\vspace{0.6em}
+
+\centering\small
+\begin{tabular}{@{}p{0.18\linewidth}p{0.34\linewidth}p{0.44\linewidth}@{}}
+\toprule
+\textbf{Esquema} & \textbf{Distribución} & \textbf{Cuándo lo usamos} \\
+\midrule
+\textbf{He}      & $\mathcal{N}\!\left(0, \sqrt{2/\text{fan\_in}}\right)$ & Capas con \textbf{ReLU}: compensa que ReLU descarta la mitad del input. \\
+\textbf{Xavier}  & $\mathcal{N}\!\left(0, \sqrt{1/\text{fan\_in}}\right)$ & Capas con \textbf{tanh / sigmoide / softmax}: mantiene varianza balanceada. \\
+\textbf{Uniforme} & $\mathcal{U}[-0.1, +0.1]$                            & Perceptrón simple del Ej 1 (sin propagación profunda). \\
+\bottomrule
+\end{tabular}\\[0.4em]
+
+\textcolor{muted}{\footnotesize El config tiene un modo \emph{auto} que elige el inicializador según la activación de cada capa.}
+\end{frame}
+
+% ---- Slide D4: Optimizador ----
+\begin{frame}{3. Optimizador — \textbf{cuál y por qué}}
+\textbf{La clase introduce gradiente descendente clásico} (SGD); Momentum y Adam son extensiones modernas. Comparamos los tres.\\[0.6em]
+
+\begin{itemize}\setlength\itemsep{0.25em}\small
+  \item \textbf{SGD vanilla}: $w \leftarrow w - \eta \cdot \nabla L$. Lo más simple. Funciona pero es lento, especialmente en superficies con valles alargados.
+  \item \textbf{Momentum} ($\beta = 0.9$): acumula \emph{velocidad} en la dirección del gradiente. Atraviesa valles sin oscilar.
+  \item \textbf{Adam} ($\beta_1 = 0.9$, $\beta_2 = 0.999$): combina momentum con \emph{learning rate adaptativo por parámetro}. El más usado en la práctica.
+\end{itemize}
+\vspace{0.6em}
+
+\begin{takeaway}
+\textbf{Resultado en Ej 2} (sweep Fase 1.2, K-fold=5): \\
+\textbf{Adam} 96.74\% (best\_ep=7) \quad $\approx$ \quad Momentum 96.34\% \quad $\gg$ \quad SGD 94.81\% (no convergió en 50 epochs).\\[0.2em]
+\textbf{Elegimos Adam} por convergencia más rápida y resultado igual o mejor.
+\end{takeaway}
+\end{frame}
+
+% ---- Slide D5: Función de costo ----
+\begin{frame}{4. Función de costo — \textbf{cuál y por qué}}
+\textbf{La clase arranca con MSE.} Cambiar la función de costo cambia la derivada y, por lo tanto, el algoritmo de actualización.\\[0.5em]
+
+\centering\small
+\begin{tabular}{@{}p{0.22\linewidth}p{0.34\linewidth}p{0.42\linewidth}@{}}
+\toprule
+\textbf{Función} & \textbf{Forma} & \textbf{Cuándo la usamos} \\
+\midrule
+\textbf{MSE} \emph{(mean squared error)} & $E = \frac{1}{N}\sum (y - O)^2$ & \textbf{Ej 0 (XOR)} y \textbf{Ej 1 (distillation)}: la salida es continua, queremos que sea cercana al target. \\
+\rowcolor{accent2!10}
+\textbf{Cross-entropy} & $E = -\frac{1}{N}\sum y \log O$ & \textbf{Ej 2 y Ej 3}: clasificación multiclase. Penaliza fuerte la confianza en la clase incorrecta. \\
+BCE & $E = -[y \log O + (1-y) \log(1-O)]$ & Disponible (clasificación binaria con sigmoide). No usado en este TP. \\
+\bottomrule
+\end{tabular}\\[0.6em]
+
+\begin{insight}
+\textbf{Por qué cross-entropy + softmax en Ej 2-3:} su combinación tiene un gradiente especialmente limpio, $\partial L / \partial z = O - y$, que cancela términos numéricamente delicados de la sigmoide y el logaritmo. Es la elección estándar para clasificación multiclase.
+\end{insight}
+\end{frame}
+
+% ===================================================================
 \sectiondivider{1 / 4}{Validación: AND y XOR}
 
 % ============= 2. Qué pide el TP =============
