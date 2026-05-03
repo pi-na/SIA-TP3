@@ -141,9 +141,9 @@
 \sectiondivider{Antes de los ejercicios}{Decisiones de diseño}
 
 % ---- Slide D1: overview de las 4 decisiones ----
-\begin{frame}{Cuatro decisiones que afectan a todos los ejercicios}
-\centering\large
-Antes de mostrar resultados, conviene fijar cuatro elementos que aparecen en cada experimento:\\[1.2em]
+\begin{frame}{Cinco decisiones que afectan a todos los ejercicios}
+\centering\normalsize
+Antes de mostrar resultados, conviene fijar los cinco elementos que aparecen en cada experimento:\\[1em]
 
 \begin{tabular}{@{}p{0.42\linewidth}p{0.5\linewidth}@{}}
 \toprule
@@ -152,7 +152,8 @@ Antes de mostrar resultados, conviene fijar cuatro elementos que aparecen en cad
 \textbf{1. Función de activación} & ¿Qué transformación no-lineal aplicamos en cada capa? \\
 \textbf{2. Inicialización de pesos} & ¿Con qué valores arrancamos antes de entrenar? \\
 \textbf{3. Optimizador} & ¿Cómo movemos los pesos en cada paso? \\
-\textbf{4. Función de costo} & ¿Qué error estamos minimizando? \\
+\textbf{4. Learning rate} & ¿De qué tamaño es ese paso? \\
+\textbf{5. Función de costo} & ¿Qué error estamos minimizando? \\
 \bottomrule
 \end{tabular}
 \end{frame}
@@ -221,8 +222,36 @@ La clase descarta dos opciones: \textbf{escalón} (no derivable) y \textbf{linea
 \end{takeaway}
 \end{frame}
 
-% ---- Slide D5: Función de costo ----
-\begin{frame}{4. Función de costo — \textbf{cuál y por qué}}
+% ---- Slide D5: Learning rate ----
+\begin{frame}{4. Learning rate — \textbf{cuál y por qué}}
+\textbf{Recomendación de la clase:} learning rate \emph{pequeño}; probar varios órdenes de magnitud y mapear cómo afectan a la convergencia.\\[0.5em]
+
+\begin{itemize}\setlength\itemsep{0.15em}\small
+  \item \textbf{Demasiado grande} → la red oscila o diverge.
+  \item \textbf{Demasiado chico} → no converge en tiempo razonable.
+\end{itemize}
+\vspace{0.6em}
+
+\textbf{Experimentación en dos pasos} (Ej 2):\\[0.3em]
+
+\centering\small
+\begin{tabular}{@{}p{0.18\linewidth}p{0.40\linewidth}p{0.36\linewidth}@{}}
+\toprule
+\textbf{Etapa} & \textbf{Valores barridos} & \textbf{Resultado} \\
+\midrule
+Fase 1.3 (k=1, coarse)  & $\{10^{-4}, 5\!\cdot\!10^{-4}, 10^{-3}, 5\!\cdot\!10^{-3}, 10^{-2}\}$ & $10^{-3}$ ganó. $10^{-4}$ muy lento; $\geq 5\!\cdot\!10^{-3}$ overshooting. \\
+\rowcolor{accent2!10}
+Fase 2 (k=5, validación) & $\{10^{-4}, 10^{-3}, 10^{-2}, 0.1, 10\}$ con extremos & $10^{-3}$ confirmado. $10$ → accuracy random (12\%). $0.1$ diverge. \\
+\bottomrule
+\end{tabular}\\[0.6em]
+
+\begin{takeaway}
+\textbf{Elegimos $lr = 10^{-3}$} (con Adam). Validado por dos sweeps independientes y consistente con el rango típico que sugiere el apunte.
+\end{takeaway}
+\end{frame}
+
+% ---- Slide D6: Función de costo ----
+\begin{frame}{5. Función de costo — \textbf{cuál y por qué}}
 \textbf{La clase arranca con MSE.} Cambiar la función de costo cambia la derivada y, por lo tanto, el algoritmo de actualización.\\[0.5em]
 
 \centering\small
