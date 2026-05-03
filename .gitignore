@@ -6,3 +6,15 @@ output/
 docs/superpowers/
 .DS_Store
 .worktrees/
+
+# LaTeX build artifacts
+*.aux
+*.log
+*.out
+*.toc
+*.nav
+*.snm
+*.vrb
+*.fls
+*.fdb_latexmk
+*.synctex.gz
