@@ -597,44 +597,56 @@ Ej 1 (perceptrón simple) usa \textbf{online estricto} siguiendo la regla del ap
 \end{frame}
 
 % ============= 16. Sweeps arch + opt =============
-\begin{frame}{Ej 2 — Sweeps de Arquitectura y Optimizador}
-\begin{columns}[T]
-\column{0.5\linewidth}
+\begin{frame}{Ej 2 — Sweep de Arquitectura (Fase 2)}
 \centering
-\includegraphics[width=\linewidth]{../ejercicio2/presentacion/03_sweep_arch.png}\\
-\textcolor{muted}{\footnotesize \code{wider} (200/100) gana en val por 0.17pp\\\textbf{pero tarda 3.6$\times$ más} → empate técnico}
+\includegraphics[width=0.62\linewidth]{../ejercicio2/presentacion/03_sweep_arch.png}\\[0.4em]
 
-\column{0.5\linewidth}
+\begin{insight}
+\textbf{\code{wider} (200/100) gana en val por 0.17pp pero tarda $3.6\times$ más.}\\
+Empate técnico $\Rightarrow$ mantenemos la base por parsimonia.
+\end{insight}
+\end{frame}
+
+\begin{frame}{Ej 2 — Sweep de Optimizador (Fase 2)}
 \centering
-\includegraphics[width=\linewidth]{../ejercicio2/presentacion/06_sweep_opt.png}\\
-\textcolor{muted}{\footnotesize Adam y Momentum empatan dentro del std.\\SGD claramente atrás.}
-\end{columns}
-\vspace{0.4em}
+\includegraphics[width=0.62\linewidth]{../ejercicio2/presentacion/06_sweep_opt.png}\\[0.4em]
 
 \begin{takeaway}
-\textbf{Fase 2 valida más que descubre.} Solo el sweep de LR muestra rangos catastróficos. Arch, opt e init quedan en empate técnico. \\
-$\Rightarrow$ La metodología coarse-to-fine de Fase 1 ya hizo el grueso del trabajo.
+\textbf{Adam y Momentum empatan dentro del desvío.} SGD claramente atrás (y no convergió en 50 epochs sin aceleración).\\
+$\Rightarrow$ Confirma la elección de Adam de Fase 1.
+\end{takeaway}
+\end{frame}
+
+\begin{frame}{Ej 2 — Lo que confirmó Fase 2}
+\textbf{Conclusión transversal de los cuatro sweeps de Fase 2:}\\[0.6em]
+
+\begin{itemize}\setlength\itemsep{0.3em}
+  \item \textbf{Solo el sweep de LR} muestra rangos catastróficos (lr=10 da accuracy random, lr=0.1 diverge).
+  \item \textbf{Arquitectura, optimizador, inicializador} quedan en empate técnico — ninguna alternativa supera claramente al base.
+\end{itemize}
+\vspace{0.6em}
+
+\begin{takeaway}
+\textbf{Fase 2 valida más que descubre.}\\
+La metodología coarse-to-fine de Fase 1 ya hizo el grueso del trabajo: Fase 2 confirma con K-fold=5 que las elecciones de Fase 1 son robustas, no suerte de un solo split.
 \end{takeaway}
 \end{frame}
 
 % ============= 17. Curvas + matriz =============
-\begin{frame}{Ej 2 — Curvas y matriz del modelo base (val K=5)}
-\begin{columns}[T]
-\column{0.5\linewidth}
+\begin{frame}{Ej 2 — Curvas de aprendizaje del modelo base (K=5)}
 \centering
-\includegraphics[width=\linewidth]{../ejercicio2/presentacion/01_curvas_aprendizaje_base.png}\\[0.3em]
-\textcolor{muted}{\footnotesize Convergencia limpia $\sim 5$ epochs.\\Sin overfitting visible.}
+\includegraphics[width=0.78\linewidth]{../ejercicio2/presentacion/01_curvas_aprendizaje_base.png}\\[0.3em]
 
-\column{0.5\linewidth}
+\textbf{Convergencia limpia} en $\sim 5$ epochs. Train y validación bajan juntos: \textbf{sin overfitting visible}.
+\end{frame}
+
+\begin{frame}{Ej 2 — Matriz de confusión del base (val K=5)}
 \centering
-\includegraphics[width=\linewidth]{../ejercicio2/presentacion/04_confusion_matrix_base.png}\\[0.3em]
-\textcolor{warn}{\footnotesize \textbf{La clase 8 colapsa: precision = recall = 0.}\\La red no la predice nunca.}
-\end{columns}
-\vspace{0.4em}
+\includegraphics[width=0.38\linewidth]{../ejercicio2/presentacion/04_confusion_matrix_base.png}\\[0.2em]
 
-\begin{insight}
-\textbf{Hint:} la clase 8 colapsada en val ya da una pista de que algo raro pasa con la distribución de los datos.
-\end{insight}
+\begin{warning}
+\textbf{Diagonal limpia para 9 de 10 clases. La clase 8 colapsa} (precision = recall = 0). $\Rightarrow$ Hint: algo raro pasa con la distribución de los datos.
+\end{warning}
 \end{frame}
 
 % ============= 18. Final eval cachetazo =============
@@ -753,19 +765,22 @@ base\_extra\_data            & 0.9706 & 0.9636 & --- (referencia) \\
 \textbf{El salto principal viene del baseline con extra data}, no de la regularización fina.
 \end{frame}
 
-% ============= 24. Curvas + matriz Ej3 ganador =============
-\begin{frame}{Ej 3 — Modelo ganador (l2\_aug)}
-\begin{columns}[T]
-\column{0.5\linewidth}
+% ============= Curvas Ej3 ganador =============
+\begin{frame}{Ej 3 — Curvas de aprendizaje del modelo ganador}
 \centering
-\includegraphics[width=\linewidth]{../ejercicio3/presentacion/04_curvas_aprendizaje_ej3.png}\\
-\textcolor{muted}{\footnotesize Convergencia más lenta que Ej 2 base (best\_ep $\sim 10$ vs $5$) por la regularización.}
+\includegraphics[width=0.78\linewidth]{../ejercicio3/presentacion/04_curvas_aprendizaje_ej3.png}\\[0.3em]
 
-\column{0.5\linewidth}
+\textbf{Convergencia más lenta que Ej 2 base} (best\_ep $\sim 10$ vs $5$) por la regularización L2 + augmentation. Sin overfitting visible.
+\end{frame}
+
+% ============= Matriz Ej3 ganador =============
+\begin{frame}{Ej 3 — Matriz de confusión del ganador (test)}
 \centering
-\includegraphics[width=\linewidth]{../ejercicio3/presentacion/02_confusion_matrix_ej3.png}\\
-\textcolor{muted}{\footnotesize Matriz sobre digits\_test.csv: clase 8 ya predice correctamente.}
-\end{columns}
+\includegraphics[width=0.42\linewidth]{../ejercicio3/presentacion/02_confusion_matrix_ej3.png}\\[0.3em]
+
+\begin{takeaway}
+\textbf{La clase 8 que estaba colapsada en Ej 2 ahora se predice correctamente.} La diagonal está mucho más limpia, los errores residuales se reparten — síntoma de que ya no hay un agujero específico de cobertura, sino limitaciones globales del modelo.
+\end{takeaway}
 \end{frame}
 
 % ============= 25. Qué movió la aguja =============
