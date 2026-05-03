@@ -408,12 +408,12 @@ Full-batch           & todo el dataset & Estable pero costoso por update \\
 \end{tabular}\\[0.5em]
 
 \raggedright\small
-\textbf{Pseudo-código por epoch} (lo que hace Ej 2 y Ej 3): \pausa\
+\textbf{Pseudo-código por epoch} (lo que hace Ej 2 y Ej 3):
 \textbf{1.}~shuffle del train set $\to$ \textbf{2.}~partir en chunks de $B$ muestras $\to$ \textbf{3.}~para cada chunk: forward + backward + un único update.\\[0.5em]
 
 \normalsize
 \begin{insight}
-Ej 1 (perceptrón simple) usa \textbf{online estricto} siguiendo la regla del apunte: un update por muestra. \pausa\ Ej 2 y Ej 3 usan \textbf{mini-batch} con $B$ determinado por sweep (Fase 1.4).
+Ej 1 (perceptrón simple) usa \textbf{online estricto} siguiendo la regla del apunte: un update por muestra. Ej 2 y Ej 3 usan \textbf{mini-batch} con $B$ determinado por sweep (Fase 1.4).
 \end{insight}
 \end{frame}
 
@@ -563,6 +563,28 @@ test: \textcolor{warn}{\(86.30\%\)} \(\to\) \textcolor{accent2}{\(\boldsymbol{96
 \textbf{Macro F1: $0.857 \to 0.959$.}\\
 La clase 8 que estaba colapsada en Ej 2 ahora se predice correctamente. Más datos cubrieron el agujero de cobertura. Confirma la hipótesis del shift.
 \end{takeaway}
+\end{frame}
+
+% ============= NUEVO. ¿Qué es Pack C? =============
+\begin{frame}{Ej 3 — ¿Qué es ``Pack C''?}
+\small \textbf{Nomenclatura interna del proyecto} (no del enunciado): tres niveles de capacidades del engine, activados según el contexto.\\[0.4em]
+
+\centering\footnotesize
+\begin{tabular}{@{}p{0.12\linewidth}p{0.36\linewidth}p{0.42\linewidth}@{}}
+\toprule
+\textbf{Pack} & \textbf{Qué incluye} & \textbf{Cuándo lo usamos} \\
+\midrule
+\textbf{Pack A} & Perceptrón clásico (escalón, regla delta). & Ej 0 (AND) y Ej 1 (Adaline + sigmoide). \\
+\midrule
+\textbf{Pack B} \emph{(estándar académico)} & Activaciones, losses, optimizadores SGD/Momentum/Adam, He/Xavier, mini-batch, early stopping, K-fold. & Engine \code{mlp/} core. Todo Ej 2 y baseline de Ej 3. \\
+\midrule
+\rowcolor{accent2!15}
+\textbf{Pack C} \emph{(módulos opcionales)} & \textbf{L2, dropout, lr scheduling, augmentation gaussiana.} & \textbf{Solo si Ej 3 con \code{more\_digits.csv} no alcanza target $\geq 98\%$.} \\
+\bottomrule
+\end{tabular}\\[0.5em]
+
+\raggedright\small
+\textbf{¿Por qué Pack C?} Para mantener la regularización avanzada \emph{enchufable y desactivada por default}.
 \end{frame}
 
 % ============= 22. Pack C tabla =============
