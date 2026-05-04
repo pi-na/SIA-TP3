@@ -382,7 +382,7 @@ SGD vanilla                              & 94.81\%          & 48          & No c
 \end{tabular}\\[0.8em]
 
 \begin{takeaway}
-\textbf{Adam gana por convergencia más rápida y resultado igual o mejor.} El PDF de optimizadores lo califica textual como \emph{``muy usado en la práctica''} (defaults idénticos al paper Kingma \& Ba 2015). Momentum queda dentro del desvío; SGD claramente atrás sin aceleración.
+\textbf{Adam gana por convergencia más rápida y resultado igual o mejor.} Momentum queda dentro del desvío; SGD claramente atrás sin aceleración.
 \end{takeaway}
 \end{frame}
 
@@ -437,7 +437,7 @@ Ej 2 / Ej 3 — capa de salida & \textbf{softmax} & Clasificación multiclase: d
 \begin{itemize}\setlength\itemsep{0.25em}\small
   \item \textbf{SGD vanilla}: $w \leftarrow w - \eta \cdot \nabla L$. Lo más simple. Funciona pero es lento, especialmente en superficies con valles alargados.
   \item \textbf{Momentum} ($\beta = 0.9$): acumula \emph{velocidad} en la dirección del gradiente. Atraviesa valles sin oscilar.
-  \item \textbf{Adam} ($\beta_1 = 0.9$, $\beta_2 = 0.999$, $\varepsilon = 10^{-8}$): combina momentum con \emph{learning rate adaptativo por parámetro}. El PDF de optimizadores lo califica textual como \emph{``muy usado en la práctica''} (defaults idénticos al paper Kingma \& Ba 2015).
+  \item \textbf{Adam} ($\beta_1 = 0.9$, $\beta_2 = 0.999$, $\varepsilon = 10^{-8}$): combina momentum con \emph{learning rate adaptativo por parámetro}.
 \end{itemize}
 \vspace{0.6em}
 
@@ -612,7 +612,6 @@ test (digits\_test.csv): \textcolor{warn}{\textbf{86.30\%}}\\[0.8em]
 \begin{enumerate}
   \item \textbf{Más datos.} Concatenar \code{more\_digits.csv} (15.742 muestras adicionales). Si llega a $\geq 0.98$, listo.
   \item \textbf{Se emplea regularización} (L2, dropout, augmentation gaussiana, lr scheduling) y combinaciones.
-  \item \textbf{Capacidad.} Si nada llega, probar \code{arch\_wider}.
 \end{enumerate}
 \end{frame}
 
@@ -712,7 +711,7 @@ base\_extra\_data            & 0.9706 & 0.9636 & --- (referencia) \\
 \textbf{Hipótesis principal:}
 \begin{itemize}\setlength\itemsep{0.3em}
   \item El \textbf{augmentation gaussiano} simula \emph{ruido por píxel}. Pero el shift entre train y test parece ser \emph{geométrico}: distintas personas escriben los dígitos con rotación, desplazamiento y grosor de trazo distintos.
-  \item \textbf{El PDF de regularización lista cuatro formas de augmentation; sólo implementamos una} (gaussiano). Faltan rotación, traslación y cambios de escala.
+  \item \textbf{En la clase de regularización vimos cuatro formas de augmentation; sólo implementamos una} (gaussiano). Faltan rotación, traslación y cambios de escala.
   \item Aumentar la capacidad (\code{wider}) empeoró: \textbf{no es problema de modelo, es problema de cobertura}.
 \end{itemize}
 \vspace{0.6em}
