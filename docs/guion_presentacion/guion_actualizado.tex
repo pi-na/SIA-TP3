@@ -145,22 +145,7 @@ dominarían el cálculo del gradiente sin normalización perfecta.
 \nref{decisiones\_y\_backing\_teorico.md}
 \end{nota}
 
-\subsection{Slide 5 — Ej 1: conclusión del análisis}
-
-\begin{decir}
-\begin{itemize}[leftmargin=*,topsep=0pt]
-  \item \textbf{El 80\% del fraude se etiqueta con tres \texttt{if}, sin un solo FP}.
-  \item El 20\% restante (174 casos) son fraudes \emph{sutiles}: respetan los umbrales
-        y solo se detectan combinando features continuas.
-  \item Tres implicancias para el TinyModel: (a) tiene que igualar a las tres reglas
-        como línea de base (recall $\geq 80\%$), (b) el valor agregado se mide en
-        cuántos de los 174 fraudes recupera, (c) las discontinuidades duras (saltos
-        de $\sim$6\% a 100\% al cruzar un entero) son geométricamente imposibles
-        para una recta — ahí debería brillar la sigmoide.
-\end{itemize}
-\end{decir}
-
-\subsection{Slide 6 — Ej 1: lineal vs no-lineal (MSE)}
+\subsection{Slide 5 — Ej 1: lineal vs no-lineal (MSE)}
 
 \begin{decir}
 \begin{itemize}[leftmargin=*,topsep=0pt]
@@ -175,7 +160,7 @@ dominarían el cálculo del gradiente sin normalización perfecta.
 \end{itemize}
 \end{decir}
 
-\subsection{Slide 7 — Ej 1: pruebas sobre threshold}
+\subsection{Slide 6 — Ej 1: pruebas sobre threshold}
 
 \begin{decir}
 \begin{itemize}[leftmargin=*,topsep=0pt]
@@ -190,7 +175,7 @@ dominarían el cálculo del gradiente sin normalización perfecta.
 \end{itemize}
 \end{decir}
 
-\subsection{Slide 8 — Ej 1: recomendación de umbral}
+\subsection{Slide 7 — Ej 1: recomendación de umbral}
 
 \begin{decir}
 \begin{itemize}[leftmargin=*,topsep=0pt]
@@ -207,7 +192,7 @@ dominarían el cálculo del gradiente sin normalización perfecta.
 % =====================================================================
 \section{Ejercicio 2 — Clasificación de dígitos}
 
-\subsection{Slide 9 — Divider Ej 2}
+\subsection{Slide 8 — Divider Ej 2}
 
 \begin{decir}
 \begin{itemize}[leftmargin=*,topsep=0pt]
@@ -217,7 +202,7 @@ dominarían el cálculo del gradiente sin normalización perfecta.
 \end{itemize}
 \end{decir}
 
-\subsection{Slide 10 — Ej 2: el problema}
+\subsection{Slide 9 — Ej 2: el problema}
 
 \begin{decir}
 \begin{itemize}[leftmargin=*,topsep=0pt]
@@ -231,7 +216,7 @@ dominarían el cálculo del gradiente sin normalización perfecta.
 \end{itemize}
 \end{decir}
 
-\subsection{Slide 11 — Ej 2: fases de experimentación}
+\subsection{Slide 10 — Ej 2: fases de experimentación}
 
 \begin{decir}
 \begin{itemize}[leftmargin=*,topsep=0pt]
@@ -247,7 +232,7 @@ dominarían el cálculo del gradiente sin normalización perfecta.
 \end{itemize}
 \end{decir}
 
-\subsection{Slide 12 — Ej 2: sweep de arquitectura}
+\subsection{Slide 11 — Ej 2: sweep de arquitectura}
 
 \begin{decir}
 \begin{itemize}[leftmargin=*,topsep=0pt]
@@ -273,7 +258,7 @@ overfitting. \emph{Wider} sin más datos cae en la zona de overfitting — es lo
 que vimos. \nref{decisiones\_y\_backing\_teorico.md \S 6}
 \end{nota}
 
-\subsection{Slide 13 — Ej 2: sweep de optimizador}
+\subsection{Slide 12 — Ej 2: sweep de optimizador}
 
 \begin{decir}
 \begin{itemize}[leftmargin=*,topsep=0pt]
@@ -284,7 +269,7 @@ que vimos. \nref{decisiones\_y\_backing\_teorico.md \S 6}
 \end{itemize}
 \end{decir}
 
-\subsection{Slide 14 — Función de activación}
+\subsection{Slide 13 — Función de activación}
 
 \begin{decir}
 \begin{itemize}[leftmargin=*,topsep=0pt]
@@ -316,7 +301,7 @@ que vimos. \nref{decisiones\_y\_backing\_teorico.md \S 6}
 \nref{relu.md}
 \end{nota}
 
-\subsection{Slide 15 — Inicialización de pesos}
+\subsection{Slide 14 — Inicialización de pesos}
 
 \begin{decir}
 \begin{itemize}[leftmargin=*,topsep=0pt]
@@ -341,7 +326,7 @@ empíricamente quedaron en empate técnico ($\sim$96\%, std $\sim 0.3\%$).
 \nref{decisiones\_y\_backing\_teorico.md \S 2}
 \end{nota}
 
-\subsection{Slide 16 — Optimizador}
+\subsection{Slide 15 — Optimizador}
 
 \begin{decir}
 \begin{itemize}[leftmargin=*,topsep=0pt]
@@ -364,7 +349,7 @@ por parámetro. Defaults: $\alpha = 10^{-3}$, $\beta_1 = 0.9$, $\beta_2 = 0.999$
 $\varepsilon = 10^{-8}$. \nref{decisiones\_y\_backing\_teorico.md \S 3}
 \end{nota}
 
-\subsection{Slide 17 — Learning rate}
+\subsection{Slide 16 — Learning rate}
 
 \begin{decir}
 \begin{itemize}[leftmargin=*,topsep=0pt]
@@ -378,7 +363,7 @@ $\varepsilon = 10^{-8}$. \nref{decisiones\_y\_backing\_teorico.md \S 3}
 \end{itemize}
 \end{decir}
 
-\subsection{Slide 18 — Learning rate: Fase 1 exploratoria (k=1)}
+\subsection{Slide 17 — Learning rate: Fase 1 exploratoria (k=1)}
 
 \begin{decir}
 \begin{itemize}[leftmargin=*,topsep=0pt]
@@ -402,7 +387,7 @@ $\varepsilon = 10^{-8}$. \nref{decisiones\_y\_backing\_teorico.md \S 3}
 \nref{lr\_sweep\_conclusion.md}
 \end{nota}
 
-\subsection{Slide 19 — Learning rate: Fase 2 validación (k=5)}
+\subsection{Slide 18 — Learning rate: Fase 2 validación (k=5)}
 
 \begin{decir}
 \begin{itemize}[leftmargin=*,topsep=0pt]
@@ -415,7 +400,7 @@ $\varepsilon = 10^{-8}$. \nref{decisiones\_y\_backing\_teorico.md \S 3}
 \end{itemize}
 \end{decir}
 
-\subsection{Slide 20 — Convergencia y bias}
+\subsection{Slide 19 — Convergencia y bias}
 
 \begin{decir}
 \begin{itemize}[leftmargin=*,topsep=0pt]
@@ -443,7 +428,7 @@ $\varepsilon = 10^{-8}$. \nref{decisiones\_y\_backing\_teorico.md \S 3}
 \nref{early\_stopping.md}
 \end{nota}
 
-\subsection{Slide 21 — Ej 2: curvas de aprendizaje (K=5)}
+\subsection{Slide 20 — Ej 2: curvas de aprendizaje (K=5)}
 
 \begin{decir}
 \begin{itemize}[leftmargin=*,topsep=0pt]
@@ -454,7 +439,7 @@ $\varepsilon = 10^{-8}$. \nref{decisiones\_y\_backing\_teorico.md \S 3}
 \end{itemize}
 \end{decir}
 
-\subsection{Slide 22 — Ej 2: matriz de confusión del base (val K=5)}
+\subsection{Slide 21 — Ej 2: matriz de confusión del base (val K=5)}
 
 \begin{decir}
 \begin{itemize}[leftmargin=*,topsep=0pt]
@@ -465,7 +450,7 @@ $\varepsilon = 10^{-8}$. \nref{decisiones\_y\_backing\_teorico.md \S 3}
 \end{itemize}
 \end{decir}
 
-\subsection{Slide 23 — Ej 2: final eval, el cachetazo}
+\subsection{Slide 22 — Ej 2: final eval, el cachetazo}
 
 \begin{decir}
 \begin{itemize}[leftmargin=*,topsep=0pt]
@@ -492,7 +477,7 @@ porque \emph{train y test son poblaciones distintas}.
 \nref{explicacion\_distribution\_shift.md}
 \end{nota}
 
-\subsection{Slide 24 — Ej 2: matriz sobre digits\_test.csv}
+\subsection{Slide 23 — Ej 2: matriz sobre digits\_test.csv}
 
 \begin{decir}
 \begin{itemize}[leftmargin=*,topsep=0pt]
@@ -507,7 +492,7 @@ porque \emph{train y test son poblaciones distintas}.
 % =====================================================================
 \section{Ejercicio 3 — Mejorar la clasificación}
 
-\subsection{Slide 25 — Divider Ej 3}
+\subsection{Slide 24 — Divider Ej 3}
 
 \begin{decir}
 \begin{itemize}[leftmargin=*,topsep=0pt]
@@ -516,7 +501,7 @@ porque \emph{train y test son poblaciones distintas}.
 \end{itemize}
 \end{decir}
 
-\subsection{Slide 26 — Ej 3: hipótesis y plan}
+\subsection{Slide 25 — Ej 3: hipótesis y plan}
 
 \begin{decir}
 \begin{itemize}[leftmargin=*,topsep=0pt]
@@ -528,7 +513,7 @@ porque \emph{train y test son poblaciones distintas}.
 \end{itemize}
 \end{decir}
 
-\subsection{Slide 27 — Ej 3: el movimiento dominó}
+\subsection{Slide 26 — Ej 3: el movimiento dominó}
 
 \begin{decir}
 \begin{itemize}[leftmargin=*,topsep=0pt]
@@ -541,7 +526,7 @@ porque \emph{train y test son poblaciones distintas}.
 \end{itemize}
 \end{decir}
 
-\subsection{Slide 28 — Ej 3: matriz de confusión del ganador (test)}
+\subsection{Slide 27 — Ej 3: matriz de confusión del ganador (test)}
 
 \begin{decir}
 \begin{itemize}[leftmargin=*,topsep=0pt]
@@ -551,7 +536,7 @@ porque \emph{train y test son poblaciones distintas}.
 \end{itemize}
 \end{decir}
 
-\subsection{Slide 29 — Ej 3: resultados}
+\subsection{Slide 28 — Ej 3: resultados}
 
 \begin{decir}
 \begin{itemize}[leftmargin=*,topsep=0pt]
@@ -580,7 +565,7 @@ porque \emph{train y test son poblaciones distintas}.
 \nref{resultados\_ejercicio3\_explicacion.md, clase\_regularizacion\_cosas\_implementadas.md}
 \end{nota}
 
-\subsection{Slide 30 — Ej 3: comparación visual con Ej 2}
+\subsection{Slide 29 — Ej 3: comparación visual con Ej 2}
 
 \begin{decir}
 \begin{itemize}[leftmargin=*,topsep=0pt]
@@ -592,7 +577,7 @@ porque \emph{train y test son poblaciones distintas}.
 \end{itemize}
 \end{decir}
 
-\subsection{Slide 31 — Ej 3: curvas del modelo ganador}
+\subsection{Slide 30 — Ej 3: curvas del modelo ganador}
 
 \begin{decir}
 \begin{itemize}[leftmargin=*,topsep=0pt]
@@ -603,7 +588,7 @@ porque \emph{train y test son poblaciones distintas}.
 \end{itemize}
 \end{decir}
 
-\subsection{Slide 32 — Ej 3: qué ayudó y qué no}
+\subsection{Slide 31 — Ej 3: qué ayudó y qué no}
 
 \begin{decir}
 \begin{itemize}[leftmargin=*,topsep=0pt]
@@ -625,7 +610,7 @@ necesariamente mejora test cuando hay shift.
 \nref{explicacion\_distribution\_shift.md}
 \end{nota}
 
-\subsection{Slide 33 — Ej 3: por qué no llegamos al 98\%}
+\subsection{Slide 32 — Ej 3: por qué no llegamos al 98\%}
 
 \begin{decir}
 \begin{itemize}[leftmargin=*,topsep=0pt]
@@ -659,26 +644,7 @@ principal del techo en 96.88\%.
 % =====================================================================
 \section{Cierre}
 
-\subsection{Slide 34 — Conclusiones del TP}
-
-\begin{decir}
-\begin{itemize}[leftmargin=*,topsep=0pt]
-  \item Tres ideas para llevarse:
-  \begin{enumerate}[leftmargin=*,label=(\arabic*)]
-    \item \textbf{Una buena pipeline gana más que tunear hiperparámetros.} El
-          $+10$ pp del Ej 3 vino de \emph{datos}, no de modelo.
-    \item \textbf{Los empates técnicos son más comunes que los wins claros.}
-          Hay que elegir por simplicidad y criterio de complejidad en tiempo
-          y espacio, no por décimas en val.
-    \item \textbf{``Mejor en val'' $\neq$ ``mejor en test'' cuando hay shift.}
-          Dropout fue el ejemplo de manual.
-  \end{enumerate}
-  \item Status: Ej 1, Ej 2, Ej 3 completos. \textbf{Target $\geq 98\%$: no se
-        alcanzó (96.88\%).} Lo documentamos con hipótesis y próximos pasos.
-\end{itemize}
-\end{decir}
-
-\subsection{Slide 35 — Gracias}
+\subsection{Slide 33 — Gracias}
 
 \begin{decir}
 \begin{itemize}[leftmargin=*,topsep=0pt]
