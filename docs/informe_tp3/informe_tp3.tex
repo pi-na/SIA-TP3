@@ -7,7 +7,7 @@
 \usepackage{lmodern}
 \usepackage[a4paper,margin=2.4cm]{geometry}
 \usepackage{graphicx}
-\usepackage{xcolor}
+\usepackage[table]{xcolor}
 \usepackage{booktabs}
 \usepackage{array}
 \usepackage{caption}
@@ -22,6 +22,7 @@
 \usepackage[hidelinks,colorlinks=true,linkcolor=accent,urlcolor=accent,citecolor=accent]{hyperref}
 \usepackage{enumitem}
 \usepackage{microtype}
+\usepackage{fontawesome5}
 
 % ----- Colors (paleta accent + grises) -----
 \definecolor{accent}{HTML}{1F6FEB}
@@ -440,20 +441,20 @@ El \textbf{\code{base.json}} consolidado corre con K-fold$=$5 antes de Fase 2, d
 \begin{figure}[h]
 \centering
 \begin{subfigure}{0.48\textwidth}
-\includegraphics[width=\linewidth]{../ejercicio2/presentacion/02_sweep_lr.png}
+\includegraphics[width=\linewidth]{../../ejercicio2/presentacion/02_sweep_lr.png}
 \caption{Sweep de Learning Rate}
 \end{subfigure}\hfill
 \begin{subfigure}{0.48\textwidth}
-\includegraphics[width=\linewidth]{../ejercicio2/presentacion/03_sweep_arch.png}
+\includegraphics[width=\linewidth]{../../ejercicio2/presentacion/03_sweep_arch.png}
 \caption{Sweep de Arquitectura}
 \end{subfigure}
 \\[0.6em]
 \begin{subfigure}{0.48\textwidth}
-\includegraphics[width=\linewidth]{../ejercicio2/presentacion/06_sweep_opt.png}
+\includegraphics[width=\linewidth]{../../ejercicio2/presentacion/06_sweep_opt.png}
 \caption{Sweep de Optimizador}
 \end{subfigure}\hfill
 \begin{subfigure}{0.48\textwidth}
-\includegraphics[width=\linewidth]{../ejercicio2/presentacion/07_sweep_init.png}
+\includegraphics[width=\linewidth]{../../ejercicio2/presentacion/07_sweep_init.png}
 \caption{Sweep de Inicializador}
 \end{subfigure}
 \caption{Fase 2 — \emph{one-at-a-time}. Solo el sweep de LR muestra rangos catastróficos (lr$=$10 deja la red en accuracy random \(\approx 12\%\)); arch/opt/init quedan en empate técnico, validando el \texttt{base.json} consolidado en Fase 1.}
@@ -467,17 +468,17 @@ Los sweeps de Fase 2 \emph{validan} la elección de Fase 1 más que descubrir un
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.8\linewidth]{../ejercicio2/presentacion/01_curvas_aprendizaje_base.png}
+\includegraphics[width=0.8\linewidth]{../../ejercicio2/presentacion/01_curvas_aprendizaje_base.png}
 \caption{\code{base.json} con K-fold$=$5. Líneas finas: folds individuales; líneas gruesas: media. Convergencia rápida (\(\sim\)5 epochs) y val\_loss estable.}
 \end{figure}
 
 \begin{figure}[h]
 \centering
 \begin{subfigure}{0.55\textwidth}
-\includegraphics[width=\linewidth]{../ejercicio2/presentacion/04_confusion_matrix_base.png}
+\includegraphics[width=\linewidth]{../../ejercicio2/presentacion/04_confusion_matrix_base.png}
 \end{subfigure}\hfill
 \begin{subfigure}{0.43\textwidth}
-\includegraphics[width=\linewidth]{../ejercicio2/presentacion/05_per_class_metrics_base.png}
+\includegraphics[width=\linewidth]{../../ejercicio2/presentacion/05_per_class_metrics_base.png}
 \end{subfigure}
 \caption{Diagonal limpia para 9 de 10 clases. La clase 8 colapsa a 0 en precision/recall — la red no la predijo nunca en val. Indicador de desbalance o ambigüedad de feature en \code{digits.csv}.}
 \end{figure}
@@ -492,10 +493,10 @@ Drop de \textbf{10\,pp}. El modelo está bien — \emph{los datos no se parecen}
 \begin{figure}[h]
 \centering
 \begin{subfigure}{0.55\textwidth}
-\includegraphics[width=\linewidth]{../ejercicio2/presentacion/08_confusion_matrix_final.png}
+\includegraphics[width=\linewidth]{../../ejercicio2/presentacion/08_confusion_matrix_final.png}
 \end{subfigure}\hfill
 \begin{subfigure}{0.43\textwidth}
-\includegraphics[width=\linewidth]{../ejercicio2/presentacion/09_per_class_metrics_final.png}
+\includegraphics[width=\linewidth]{../../ejercicio2/presentacion/09_per_class_metrics_final.png}
 \end{subfigure}
 \caption{Matriz y métricas por clase del \texttt{final\_eval} sobre \texttt{digits\_test.csv}. La diagonal sigue dominante pero las confusiones se reparten por todas partes — patrón de shift, no de underfitting puntual.}
 \end{figure}
@@ -542,7 +543,7 @@ base\_extra\_data            & 0.9706 & 0.9636 & --- (referencia) \\
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.78\linewidth]{../ejercicio3/presentacion/01_comparacion_ej2_vs_ej3.png}
+\includegraphics[width=0.78\linewidth]{../../ejercicio3/presentacion/01_comparacion_ej2_vs_ej3.png}
 \caption{Comparación Ej2 vs Ej3 (ganador) sobre \code{digits\_test.csv}. La línea roja punteada marca el target \(\geq 98\%\).}
 \end{figure}
 
@@ -570,17 +571,17 @@ base\_extra\_data            & 0.9706 & 0.9636 & --- (referencia) \\
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.8\linewidth]{../ejercicio3/presentacion/04_curvas_aprendizaje_ej3.png}
+\includegraphics[width=0.8\linewidth]{../../ejercicio3/presentacion/04_curvas_aprendizaje_ej3.png}
 \caption{\code{l2\_aug} con K$=$5. Convergencia más lenta que el Ej2 base (best\_ep$\approx$10 vs 5) por la regularización. Sin overfitting visible.}
 \end{figure}
 
 \begin{figure}[h]
 \centering
 \begin{subfigure}{0.55\textwidth}
-\includegraphics[width=\linewidth]{../ejercicio3/presentacion/02_confusion_matrix_ej3.png}
+\includegraphics[width=\linewidth]{../../ejercicio3/presentacion/02_confusion_matrix_ej3.png}
 \end{subfigure}\hfill
 \begin{subfigure}{0.43\textwidth}
-\includegraphics[width=\linewidth]{../ejercicio3/presentacion/03_per_class_metrics_ej3.png}
+\includegraphics[width=\linewidth]{../../ejercicio3/presentacion/03_per_class_metrics_ej3.png}
 \end{subfigure}
 \caption{Modelo ganador del Ej3 sobre \code{digits\_test.csv}. La clase 8, ausente en el Ej2 base, ya tiene F1 sólido. Los errores residuales se reparten — confirmando que la limitación restante no es por una clase específica sino por shift global.}
 \end{figure}
