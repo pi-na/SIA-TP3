@@ -1,0 +1,1274 @@
+WEBVTT
+
+1
+00:00:00.070 --> 00:00:00.939
+Marina Fuster: Ahí está.
+
+2
+00:00:02.530 --> 00:00:11.380
+Marina Fuster: Quería comentar que cambió el cronograma. Esperen que lo me fijo. Si está subido.
+
+3
+00:00:12.450 --> 00:00:17.380
+Marina Fuster: el cambio que creo que lo lo cambió.
+
+4
+00:00:17.790 --> 00:00:23.700
+Marina Fuster: Dime un segundo entre la Tp, 3 recuperación, Tp: Tres
+
+5
+00:00:24.710 --> 00:00:35.479
+Marina Fuster: Okay. Yo no sé si se acuerdan, pero lo hizo, por si no lo habían visto, se ve igual horrible este cronograma acá Lo voy a descargar
+
+6
+00:00:36.000 --> 00:00:37.590
+Marina Fuster: en
+
+7
+00:00:39.070 --> 00:00:55.719
+Marina Fuster: por las dudas para que lo tengan presente. Fíjense que hoy estamos. Acá. No regularización. La clase que viene antes era full de consultas de Tp: Tres, pero hubo algunos cambios que tuvimos que gestionar y
+
+8
+00:00:55.720 --> 00:01:13.060
+Marina Fuster: Euge va a dar el arranque de aprendizaje supervisado. Sí, no va a ser Full. No va a ser muy largo. También hay bastante espacio para consultas, pero como para que lo tengan en cuenta, Si no tenían consultas, igual, va a haber clase o viceversa. Después, la entrega del P de 3 el martes. Eso no cambió
+
+9
+00:01:13.060 --> 00:01:20.050
+Marina Fuster: y separamos lo que era recuperación del Tp 3 con una pre entregaga de un ejercicio que tienen que hacer
+
+10
+00:01:20.050 --> 00:01:24.610
+Marina Fuster: que antes estaban las 2 juntas el jueves. Así que
+
+11
+00:01:24.830 --> 00:01:43.039
+Marina Fuster: nada eso. El la recuperación del T. P. Tres quedó martes siguiente, y después este ejercicio que ya lo van a ver post P: 3. Así que ahora no se preocupen alguna duda de esto, o está todo. Ok, también deberían tener ya subidas las notas A.
+
+12
+00:01:43.260 --> 00:01:45.810
+Marina Fuster: Y temas de Pe. Dos.
+
+13
+00:01:48.220 --> 00:01:52.609
+Marina Fuster: Eso estamos shock alguna duda.
+
+14
+00:02:02.540 --> 00:02:08.740
+Marina Fuster: Bueno, si no hay ninguna pregunta, paso.
+
+15
+00:02:09.000 --> 00:02:17.989
+Marina Fuster: bien, ¿qué es lo que vamos a ver Ahora, un poco brevemente, es el área de regularización.
+
+16
+00:02:17.990 --> 00:02:42.990
+Marina Fuster: Es el último tema que no está explícitamente evaluado en el Tp. Tres no es que sí o sí van a tener que implementarlo a no ser que lo necesiten, y es un recurso más que pueden tener, pero tienen que saber qué es lo que significa, dónde se aplica y por qué existe. Ok, Mini. Repaso las cosas que fuimos cubriendo a medida que pasaron las clases. Vimos percepción.
+
+17
+00:02:42.990 --> 00:02:48.649
+Marina Fuster: simple, escalón lineal, no lineal. Alguien brevemente me quiere decir la distinción entre estos 3.
+
+18
+00:02:50.980 --> 00:02:52.639
+Marina Fuster: Mientras me tomo un mate
+
+19
+00:03:11.140 --> 00:03:13.769
+Marina Fuster: alguno, se acuerda.
+
+20
+00:03:13.770 --> 00:03:16.200
+JOAQUÍN NICOLÁS YULÁN LUCIOLI: Era un lineal que servía para todos los
+
+21
+00:03:16.780 --> 00:03:20.840
+JOAQUÍN NICOLÁS YULÁN LUCIOLI: los problemas que se podían, los problemas de clasificación en 2,
+
+22
+00:03:21.100 --> 00:03:24.569
+JOAQUÍN NICOLÁS YULÁN LUCIOLI: y el percepción no lineal era para hallar patrones en los datos.
+
+23
+00:03:26.330 --> 00:03:37.880
+Marina Fuster: Ojo. El primero era el escalón, no el de clasificación. Bien. Y el no lineal era para patrones en los datos de estilo, como su nombre lo indica, cuál.
+
+24
+00:03:37.880 --> 00:03:38.980
+JOAQUÍN NICOLÁS YULÁN LUCIOLI: Nominal, Sí.
+
+25
+00:03:38.980 --> 00:03:47.810
+Marina Fuster: Perfecto. Entonces la distinción entre lineal y no lineal está en cómo 1 hace esa regresión o esa aproximación al patrón de los datos
+
+26
+00:03:47.860 --> 00:03:59.110
+Marina Fuster: y lo que cambiábamos. Habíamos visto que los algoritmos eran todos medios parecidos, que era lo principal que cambiaba, que te permitía moldear un problema distinto entre esos 3
+
+27
+00:04:13.510 --> 00:04:16.589
+Marina Fuster: que un poco su nombre lo lo indica.
+
+28
+00:04:19.329 --> 00:04:37.610
+Marina Fuster: o sea, como yo paso la función de activación bien perfecto. Entonces estos 3 son prácticamente iguales. Lo que cambia lo que te permite moldear sin los problemas es la función de activación. Después, tercer trono multicapa alguno. Brevemente que ¿cuál era la característica
+
+29
+00:04:38.310 --> 00:04:40.840
+Marina Fuster: principal de un par de tron multicapa
+
+30
+00:04:49.870 --> 00:04:52.469
+Marina Fuster: era la composición de varios parcetrones buenísimo.
+
+31
+00:04:52.470 --> 00:04:53.659
+JOAQUÍN NICOLÁS YULÁN LUCIOLI: Una buena neurona.
+
+32
+00:04:54.370 --> 00:04:55.340
+Marina Fuster: Cómo.
+
+33
+00:04:55.340 --> 00:04:57.310
+JOAQUÍN NICOLÁS YULÁN LUCIOLI: Tenía más de una capa de neuronas.
+
+34
+00:04:57.470 --> 00:05:14.870
+Marina Fuster: Bien composición de varios parcetrones, y eso también importante en distintas capas, o sea, tenés mínimo, una capa en el medio. ¿y qué era lo que habíamos visto. O sea, recién dijimos, ok, hiperceptrón simple. Yo puedo usarlo para o clasificación en 2 clases, el lineal para algo.
+
+35
+00:05:14.870 --> 00:05:20.940
+Marina Fuster: Aprender algún patrón de datos más o menos lineal, no lineal. Algunos sismo, idea con las funciones que vimos.
+
+36
+00:05:20.940 --> 00:05:24.919
+Marina Fuster: el perceptrón multicapa en teoría. ¿para qué me servía
+
+37
+00:05:29.590 --> 00:05:47.959
+Marina Fuster: toda función continua, perfecto. Habíamos visto un teorema que nos decía que era muy flexible en cuanto a la familia de funciones que yo podría llegar a representar. Después vimos optimización, que es lo que se llevaron de optimización para que lo utilizo. ¿cuál es la idea central.
+
+38
+00:05:51.290 --> 00:05:56.059
+JOAQUÍN NICOLÁS YULÁN LUCIOLI: La idea central es hacer que los pesos del perceptrón sean los óptimos.
+
+39
+00:05:56.540 --> 00:05:57.410
+JOAQUÍN NICOLÁS YULÁN LUCIOLI: Me.
+
+40
+00:05:57.410 --> 00:05:58.989
+Marina Fuster: De acuerdo a qué.
+
+41
+00:05:59.600 --> 00:06:01.360
+JOAQUÍN NICOLÁS YULÁN LUCIOLI: O sea, teníamos que
+
+42
+00:06:07.110 --> 00:06:10.239
+JOAQUÍN NICOLÁS YULÁN LUCIOLI: teníamos que minimizar la función de despiración. Puede ser.
+
+43
+00:06:11.310 --> 00:06:13.330
+Marina Fuster: Minimizar la función de costo.
+
+44
+00:06:13.700 --> 00:06:14.150
+JOAQUÍN NICOLÁS YULÁN LUCIOLI: Es.
+
+45
+00:06:14.150 --> 00:06:20.389
+Marina Fuster: Teníamos una función que definíamos nosotros, que, en general, como dice Gonzalo, la función de error
+
+46
+00:06:20.390 --> 00:06:36.469
+Marina Fuster: puede ser error, costo. Tiene distintos nombres. En general, aparece también con función de costo que nosotros, en en las clases, las fórmulas, las dejamos hechas para la diferencia al cuadrado. Entonces el rol de optimización es como yo, ajusto esos pesos.
+
+47
+00:06:36.470 --> 00:06:47.090
+Marina Fuster: ¿y cuál era el algoritmo principal mediante el cual yo ajustaba esos pesos. El el más conocido.
+
+48
+00:06:48.210 --> 00:06:48.930
+JOAQUÍN NICOLÁS YULÁN LUCIOLI: Mhm.
+
+49
+00:06:54.170 --> 00:06:58.310
+Marina Fuster: O si se acuerdan de algún otro. La clase anterior, vimos varios.
+
+50
+00:07:07.480 --> 00:07:10.449
+JOAQUÍN NICOLÁS YULÁN LUCIOLI: Eran todas esas cuentas que tenían letra. W.
+
+51
+00:07:11.430 --> 00:07:23.870
+Marina Fuster: Bien claro en el doble de Teníamos vieron con Rodri al principio todo lo que es el área general de optimización y el introdujo lo que era optimización no lineal
+
+52
+00:07:24.110 --> 00:07:40.270
+Marina Fuster: de primer orden y había un un algoritmo que era el de gradiente descendente que ese es por excelencia. El algoritmo base que se usa para entrenar redes neuronales. No, yo ajusto el del W en la dirección contraria al gradiente de la función de ron.
+
+53
+00:07:40.270 --> 00:07:48.230
+Marina Fuster: Eso ¿Alguien tiene alguna duda al respecto. O sea, no pasa nada. Si me dicen, si la verdad que no entendí nada, pero eso es central.
+
+54
+00:07:48.230 --> 00:08:01.639
+Marina Fuster: y y es algo que si eso no lo tienen claro, claro, nada es un problema.
+
+55
+00:08:01.640 --> 00:08:03.110
+JOAQUÍN NICOLÁS YULÁN LUCIOLI: Lo podrías repetir.
+
+56
+00:08:03.570 --> 00:08:10.630
+Marina Fuster: Bien, todo lo que es optimización es el área que se usa para ajustar los pesos
+
+57
+00:08:10.630 --> 00:08:25.489
+Marina Fuster: perfecto y el algoritmo central que 1 usa en base al cual después se construye en los otros, Es el algoritmo del gradiente descendente que, o sea, el gradiente es lo que sabían en análisis que te da la dirección de máximo crecimiento de una función.
+
+58
+00:08:25.490 --> 00:08:38.190
+Marina Fuster: Y cómo es que yo lo uso como un mecanismo de optimización. Bueno, la función va a ser el error. Va a ser una forma de expresar cómo mi herramienta se equivoca si entonces.
+
+59
+00:08:38.190 --> 00:08:52.439
+Marina Fuster: porque yo uso el gradiente descendente en base al cálculo del gradiente, porque si el gradiente me da la dirección de máximo crecimiento. Yo puedo decir Joya, yo quiero minimizarlo. Entonces me muevo en la dirección opuesta.
+
+60
+00:08:52.440 --> 00:09:00.429
+Marina Fuster: Y habíamos visto que todos estos algoritmos para redes neuronales se suelen abordar de forma iterativa
+
+61
+00:09:00.710 --> 00:09:04.899
+Marina Fuster: y todos se basan en la primera derivada más menos.
+
+62
+00:09:06.230 --> 00:09:07.790
+Marina Fuster: Eso quedó claro.
+
+63
+00:09:09.760 --> 00:09:16.620
+JOAQUÍN NICOLÁS YULÁN LUCIOLI: Sí. Ahora sí buscamos que el gradiente de la función costo baje lo más posible.
+
+64
+00:09:17.210 --> 00:09:29.919
+Marina Fuster: Sí, perfecto, al que más o menos lo tiene flojo. Le recomiendo revisar un poquito por ahí la clase de Rodri, o inclusive lo que vimos de percepción multicapa o la última clase, mucho menos un poco de cualquier cosa, preguntan.
+
+65
+00:09:29.920 --> 00:09:46.459
+Marina Fuster: Entonces, tenemos optimización sobre el algoritmo de la gente descendente. Habíamos visto 2 versiones: Online Batch, y después lucho, presentó Adame a rmc, pro etcétera, No me voy a meter, pero nada como para que vayan teniendo una idea de dónde se ubica cada cosa.
+
+66
+00:09:46.540 --> 00:09:50.680
+Marina Fuster: métricas de evaluación que se acuerdan que vimos de métricas de evaluación
+
+67
+00:10:10.500 --> 00:10:12.199
+Marina Fuster: de la clase anterior.
+
+68
+00:10:26.840 --> 00:10:32.030
+Marina Fuster: algo que les resuene, que les haya quedado más o menos
+
+69
+00:10:36.110 --> 00:10:47.499
+Marina Fuster: Over Fit y Under, Feet Okay, perfecto, perdón, pero tú me dijo, no, pudiste, No, No pasa nada. Y Ander Fit: Bien.
+
+70
+00:10:47.720 --> 00:10:53.740
+Marina Fuster: la matriz de confusión perfecto. Te acordás la matriz de confusión para que se usaba
+
+71
+00:10:57.270 --> 00:11:00.750
+Marina Fuster: o alguno, ¿Se acuerdan antes de confusión para que se usaba
+
+72
+00:11:15.330 --> 00:11:17.200
+Marina Fuster: para evaluar los
+
+73
+00:11:17.600 --> 00:11:34.530
+Marina Fuster: true positive positive perfecto. Había varias métricas que habían definido con auge que ya tenían su definición formal y que me permitían entender la performance de mi modelo sí para problemas, por ejemplo, de clasificación, que lo van a tener que usar en el trabajo práctico.
+
+74
+00:11:34.610 --> 00:11:52.800
+Marina Fuster: Y, por último, tenemos normalidad. Ander feeting, yo ver Feetting lo vamos a para esta clase, Así que no me meto más en profundidad. Y por último, tenemos normalización o estandarización que habíamos visto que trataba de cuando yo tenía distintas variables con magnitudes muy distintas.
+
+75
+00:11:52.820 --> 00:12:02.050
+Marina Fuster: En general, necesito hacer un tratamiento de esas variables, porque si los números son muy grandes, quizás eso, me como
+
+76
+00:12:03.290 --> 00:12:21.239
+Marina Fuster: me domina por sobre todas las otras variables, porque la magnitud es muy grande y por otro lado, me puede generar Hoverflow cuando yo estoy haciendo los productos, las sumas, etcétera, en la computadora. Entonces ojo con eso que quizás dependiendo de cómo son sus variables tengan que aplicar
+
+77
+00:12:21.240 --> 00:12:30.879
+Marina Fuster: alguna especie de rescalado. Sí, alguna duda de esto que les haya quedado como medio ahí volando, o seguimos.
+
+78
+00:12:31.350 --> 00:12:33.639
+Marina Fuster: podemos detener un un cachito.
+
+79
+00:12:41.140 --> 00:12:48.660
+Marina Fuster: Estamos Hok, o sea, aunque no tengan dudas, dígame si no seguimos.
+
+80
+00:12:49.990 --> 00:12:54.979
+Marina Fuster: estamos, Ok, estamos bien. Ok, Perfecto. Bien, entonces.
+
+81
+00:12:55.510 --> 00:13:01.070
+Marina Fuster: si recordamos de la clase de métricas, ¿qué era lo que expresaban estas 2 imágenes.
+
+82
+00:13:03.140 --> 00:13:03.590
+GUIDO DE CARO: Bueno.
+
+83
+00:13:03.590 --> 00:13:05.760
+Marina Fuster: Es la de la izquierda, que es la de la derecha.
+
+84
+00:13:07.060 --> 00:13:17.319
+GUIDO DE CARO: Lo de la izquierda no era under fitting y lo de la derecha Lower fitting, o sea, te ajustás de Ma: muy poco o te ajustas demasiado a los resultados. La verdad.
+
+85
+00:13:18.130 --> 00:13:21.440
+Marina Fuster: Bien a los resultados, ¿A qué te referís.
+
+86
+00:13:21.440 --> 00:13:25.120
+GUIDO DE CARO: A los a los datos que o sea, ajustas tu función
+
+87
+00:13:25.390 --> 00:13:28.980
+GUIDO DE CARO: o muy poco, en base a los datos que tenés, que es el caso de la izquierda.
+
+88
+00:13:29.130 --> 00:13:34.699
+GUIDO DE CARO: entonces no estás ajustando la la función lineal en ese caso.
+
+89
+00:13:35.000 --> 00:13:49.080
+GUIDO DE CARO: Por eso no sirve. Y en la segunda, te estás ajustando demasiado a los datos de entrenamiento o a los datos que vos tenés. Entonces, si el si un nuevo dato te cae fuera de la línea. No, lo no lo estarías evaluando bien.
+
+90
+00:13:49.820 --> 00:13:56.909
+Marina Fuster: Bien, vos decís, si yo tengo un dato nuevo, acá no hay chance de que lo evalúe bien o inclusive si siguiera esta tendencia por acá.
+
+91
+00:13:57.450 --> 00:14:04.030
+GUIDO DE CARO: Claro, si siguieras esas tendencia como vos, te estás ajustando demasiado
+
+92
+00:14:04.220 --> 00:14:13.950
+GUIDO DE CARO: a los datos que tenés en ese punto. Y entonces la recta te queda por abajo. No vas a llegar a identificar o poder evaluar el dato que te quedó
+
+93
+00:14:14.180 --> 00:14:15.670
+GUIDO DE CARO: medio píxel arriba.
+
+94
+00:14:16.300 --> 00:14:26.690
+Marina Fuster: Bien, perfecto, entonces tenemos estos 2 esquemas que ambos son un problema. Sí, no quiero estar en ninguna de las 2 situaciones.
+
+95
+00:14:27.030 --> 00:14:33.170
+Marina Fuster: Y también habíamos visto este gráfico alguno. Quiere explicar
+
+96
+00:14:34.130 --> 00:14:36.840
+Marina Fuster: a qué se está refiriendo. Este gráfico
+
+97
+00:14:41.220 --> 00:14:47.860
+Marina Fuster: era un gráfico de Aquiles y dije: ¿por qué están al revés las rectas? Este era un gráfico de
+
+98
+00:14:48.930 --> 00:14:51.589
+Marina Fuster: no le puse el eje y me terminó.
+
+99
+00:14:51.810 --> 00:14:57.279
+Marina Fuster: Este gráfico sería de aquí ahora sí que sería como inverso al error, no más grande. Es mejor.
+
+100
+00:15:04.670 --> 00:15:07.369
+Marina Fuster: o sea, que que estaría pasando en esta instancia.
+
+101
+00:15:08.120 --> 00:15:15.530
+GUIDO DE CARO: Que no estarías teniendo una quie, o sea, que estarías teniendo una. Quiero decir malo con cuando
+
+102
+00:15:15.680 --> 00:15:18.160
+GUIDO DE CARO: salís a los datos de de testeo.
+
+103
+00:15:19.490 --> 00:15:38.440
+Marina Fuster: Bien lo que dijiste está perfecto. Y lo que dijeron acá Juan Pablo Camila, Juan Ignacio. Bien, estás muy ajustado a los datos de entrenamiento. O sea que estamos en un régimen de over fitting, sí que vendría a ser de las 2 de las 2 que vimos antes, el de la derecha.
+
+104
+00:15:38.540 --> 00:15:48.179
+Marina Fuster: Entonces, ¿cómo reducimos este gag? Porque a ver cuál es el objetivo de mi herramienta que mis datos performan bien.
+
+105
+00:15:48.470 --> 00:15:49.490
+Marina Fuster: Cuándo.
+
+106
+00:15:52.000 --> 00:15:53.850
+GUIDO DE CARO: En la evaluación, o sea.
+
+107
+00:15:53.850 --> 00:15:55.680
+Marina Fuster: En general en la evaluación?
+
+108
+00:15:56.120 --> 00:15:57.570
+Marina Fuster: Sí. Sí. Perfecto.
+
+109
+00:15:57.580 --> 00:15:59.760
+GUIDO DE CARO: Los datos nuevos performer y los viejos buenos.
+
+110
+00:16:01.550 --> 00:16:18.799
+Marina Fuster: Bien. Excelente, porque si no entrenamiento, si yo eso lo hago perfecto, pero el resto no no me sirve para nada ojo que nosotros habíamos charlado. La clase pasada. Es como que acá hay una distinción entre como yo. Separo el conjunto de datos, se acuerdan que teníamos entrenamiento, validación y testeo.
+
+111
+00:16:20.470 --> 00:16:24.079
+Marina Fuster: Algunos se acuerdan porque teníamos esos 3 niveles.
+
+112
+00:16:24.550 --> 00:16:28.010
+Marina Fuster: En lugar de 2. Acá Estamos viendo entrenamiento y evaluación
+
+113
+00:16:34.720 --> 00:16:43.730
+Marina Fuster: con validación ajustada parámetros. Bien, quería dejar eso un pelín como grabado claro. Creo que lo mencionó, pero por las dudas lo vuelvo a traer
+
+114
+00:16:43.730 --> 00:16:58.970
+Marina Fuster: que la forma correcta es esa no entrenamiento, validación y testeo. Y cuando yo estoy mirando este gag en lo que es entrenamiento. Y veo el overfitting, el underfetting. El conjunto de test
+
+115
+00:16:58.970 --> 00:17:05.010
+Marina Fuster: suele ser el conjunto de validación, porque yo sigo bajo ese esquema de estar ajustando hiper parámetros.
+
+116
+00:17:05.490 --> 00:17:11.189
+Marina Fuster: Ustedes tienen acá 2 opciones. O pueden hacerlo de la forma como
+
+117
+00:17:11.349 --> 00:17:30.140
+Marina Fuster: más buenas prácticas en lo que es machine learning, o sea, los conjuntos de datos son grandes o más grandes de lo que eran antes. Entonces en el ejercicio, 1, si quisieran hacer bien esta separación la pueden hacer, pero no es requerimiento fuerte, o sea, si van a hacer solamente entrenamiento y testeo.
+
+118
+00:17:30.140 --> 00:17:48.080
+Marina Fuster: Lo pueden también llevar adelante de esa forma, pero tienen que tener en claro que al no hacerlo con el conjunto de entrenamiento, validación y testing. Hay una especie de sesgo a los hiperparámetros que yo estoy eligiendo. Si eso lo aclaro, por las dudas.
+
+119
+00:17:48.080 --> 00:17:53.579
+Marina Fuster: Entonces, ¿cómo reducimos ese Gap, que es lo que a mí me interesa. Bueno.
+
+120
+00:17:54.400 --> 00:18:10.460
+Marina Fuster: por eso la clase lo hacemos con técnicas de regularización. ¿y qué es regularización? Bueno, es el área que estudia distintas cosas que puedo hacer yo para cerrar el error de test o validación de esta aclaración que acabo de hacer
+
+121
+00:18:10.460 --> 00:18:18.780
+Marina Fuster: y acá una una cuestión importante regularización busca cerrar este gap
+
+122
+00:18:19.080 --> 00:18:39.019
+Marina Fuster: y, en particular, bajar el error de generalización, entonces no siempre, las técnicas de regularización van a acompañar el aprendizaje. Sí, hay distintas técnicas que quizás en pos de mejorar la generalización inclusive hacen que el error de entrenamiento suba, sí, o sea, regularización.
+
+123
+00:18:39.020 --> 00:18:45.360
+Marina Fuster: Se ocupa de este gap que existe y de tratar de mejorar el error de generalización
+
+124
+00:18:45.540 --> 00:18:47.180
+Marina Fuster: alguna pregunta sobre esto?
+
+125
+00:18:54.820 --> 00:18:58.190
+Marina Fuster: Bueno, asumo que no. Entonces
+
+126
+00:18:58.660 --> 00:19:16.529
+Marina Fuster: vamos a de forma muy informal introducir esto, que si ustedes se ponen a pensar. Mira que lo fuimos charlando, O sea, vimos distintos ejemplos, pero vamos a introducir el el concepto de capacidad, o sea, aquello. Me refiero con que el modelo tiene cierta capacidad
+
+127
+00:19:16.530 --> 00:19:22.910
+Marina Fuster: y es la habilidad o el potencial que tiene un modelo de ajustar distintas funciones.
+
+128
+00:19:22.910 --> 00:19:31.110
+Marina Fuster: Por ejemplo, si yo les pregunto ¿qué tiene más capacidad, un perceptrón simple, no lineal o un perceptrón multicavar?
+
+129
+00:19:31.420 --> 00:19:36.400
+Marina Fuster: ¿cuál es su intuición al.
+
+130
+00:19:36.400 --> 00:19:38.870
+GUIDO DE CARO: Depende a qué te quieras ajustar.
+
+131
+00:19:39.390 --> 00:19:44.609
+GUIDO DE CARO: O sea, depen depende de la situación. Porque por ahí un un simple no lineal
+
+132
+00:19:45.010 --> 00:19:52.539
+GUIDO DE CARO: para la situación. Te sobra, entonces el preceptor multicapa ya es ower kill, entonces tienen la misma capacidad.
+
+133
+00:19:52.930 --> 00:19:58.049
+GUIDO DE CARO: o sea, si es un o sea, depende del problema que estés encarando. Es
+
+134
+00:19:58.440 --> 00:20:04.190
+GUIDO DE CARO: la capacidad, porque por ahí el problema es muy simple. Entonces los 2 tienen una capacidad
+
+135
+00:20:05.200 --> 00:20:07.959
+GUIDO DE CARO: demasiado, o sea, se qué se pasa?
+
+136
+00:20:08.560 --> 00:20:10.450
+GUIDO DE CARO: No sé si en si se entiende la idea.
+
+137
+00:20:10.950 --> 00:20:17.480
+Marina Fuster: Sí sí se entiende. Y ojo que ahí vos ya estás hablando de la elección, O sea.
+
+138
+00:20:17.890 --> 00:20:21.240
+Marina Fuster: una cosa, es la capacidad que tiene el modelo
+
+139
+00:20:21.540 --> 00:20:32.960
+Marina Fuster: por sí solo. Y lo que vos estás mencionando es importante, el Che. Quizás te estás agarrando algo que es softwarekill para un problema muy simple, pero igual
+
+140
+00:20:33.530 --> 00:20:41.040
+Marina Fuster: por más de que vos estés como haciendo Overkill en relación a lo que quieres ajustar. Hay 1 de los 2 que en principio tiene más capacidad que el otro.
+
+141
+00:20:43.630 --> 00:20:45.979
+Marina Fuster: No sé si esa distinción queda clara.
+
+142
+00:20:50.270 --> 00:20:58.299
+Marina Fuster: o sea tu herramienta. Tiene ese tu herramienta, Tu modelo. Machine Learning tiene ese potencial. Que el problema sea simple. Esa es otra historia
+
+143
+00:20:58.430 --> 00:21:03.309
+Marina Fuster: que ahora lo vamos a probar y es súper relevante. Lo que planteas
+
+144
+00:21:03.590 --> 00:21:15.799
+Marina Fuster: no me acuerdo. ¿quién estaba hablando? Creo que fue guido, igual el multicapa perfecto no podría depender de la función de activación, sí, o sea, que el modelo tenga más o menos capacidad de depender de un montón de cosas.
+
+145
+00:21:15.940 --> 00:21:28.770
+Marina Fuster: Ahora llamamos un ganchito. Pero de entre estos 2, el que tendría más capacidad o más potencial de aproximar un rango más amplio funciones viene a ser el multicapa. Entonces ahí, en línea con lo que decía Juan Ea.
+
+146
+00:21:28.770 --> 00:21:43.959
+Marina Fuster: como Vos por ahí movéis la capacidad. Bueno, primero, ¿qué modelo estás eligiendo? No que eso se data un poquito a lo de la función de activación. Si yo tengo un parcetrón en simple lineal. No es lo mismo que el simple no lineal que con el no lineal. Quizás de alguna forma
+
+147
+00:21:44.140 --> 00:21:56.840
+Marina Fuster: trato puede llegar a aproximar algo que el lineal también hace, aunque no sea como lo más natural, sino por elegir un multicapa. Después ya nos vamos a poner un poco más en en distintas redes.
+
+148
+00:21:56.840 --> 00:22:07.620
+Marina Fuster: pero cambiando la arquitectura del modelo, yo también puedo ir moviendo. Qué capacidad tiene cantidad de características que uso. Como input, no sé, yo tengo un dataced que tiene
+
+149
+00:22:07.620 --> 00:22:23.950
+Marina Fuster: un 10 0 variables, quizás al principio uso 2 000 y trato así de entrenar lo que yo quiero. Bueno, si no él me alcanza, quizá digo, bueno, por ahí necesito más variables. Esa es otra forma de aumentar la capacidad.
+
+150
+00:22:24.150 --> 00:22:29.330
+Marina Fuster: Entonces tenemos esta idea un poco general de lo que es la capacidad del modelo. Sí,
+
+151
+00:22:29.560 --> 00:22:49.430
+Marina Fuster: vamos a estudiar un cachito en detalle esta imagen que si se fijan, si se fijan sintetiza un poco en lo que Recién estuvimos charlando, no del andar setting del over fitting, etcétera. Y acá está la cuestión que mencionaba Guido. Me parece que fue el que habló de que yo no me quiero pasar a.
+
+152
+00:22:49.430 --> 00:22:55.999
+Marina Fuster: o sea, de capacidad de capacidad infinita. No necesariamente me ayuda a mí a resolver mi problema. Es más.
+
+153
+00:22:56.150 --> 00:23:11.650
+Marina Fuster: tener más capacidad puede ser lo que me genere cosas que después tengo que resolver. Entonces, ¿qué es la capacidad. Un modelo es lo que vimos recién es esta habilidad de plata. También es esta habilidad de
+
+154
+00:23:11.650 --> 00:23:21.150
+Marina Fuster: logran aproximar un rango más amplio de funciones. Entonces acá les pregunto: ¿por qué menor me quedo re mal escrito, porque
+
+155
+00:23:22.290 --> 00:23:26.630
+Marina Fuster: menos capacidad de la óptima es la que me da el underfetting
+
+156
+00:23:30.260 --> 00:23:32.960
+Marina Fuster: después, lo corrijo, pues yo redactado horrible.
+
+157
+00:23:39.720 --> 00:23:43.820
+GUIDO DE CARO: Porque no te pode porque no puedo llegar a evaluar o ajustarte
+
+158
+00:23:44.070 --> 00:23:54.279
+GUIDO DE CARO: a la mayo, o sea, si tienes menos capacidad que los datos que tenés. Eso quiere decir que no puedes evaluar todos los datos. Entonces la recta no se ajusta del todo bien.
+
+159
+00:23:55.930 --> 00:23:59.949
+Marina Fuster: ¿a qué le llamás? Porque tenés menos capacidad que los datos que tenés.
+
+160
+00:24:02.450 --> 00:24:06.790
+GUIDO DE CARO: Si tienes un set muy complejo de datos o un set muy grande
+
+161
+00:24:07.340 --> 00:24:11.200
+GUIDO DE CARO: para para entrenamiento y tu capacidad
+
+162
+00:24:11.480 --> 00:24:15.770
+GUIDO DE CARO: no se puede ajustar a la complexión de los de los datos que tenés.
+
+163
+00:24:15.880 --> 00:24:21.470
+GUIDO DE CARO: Entonces lo que o la ecuación matemática que vos estás usando para ajustarte
+
+164
+00:24:21.670 --> 00:24:29.230
+GUIDO DE CARO: No, no va bien, entonces la recta. Resulta. Digo, recta lo que queda resultante de tu
+
+165
+00:24:29.510 --> 00:24:33.399
+GUIDO DE CARO: del modelo no se ajusta bien a los datos que van a venir después.
+
+166
+00:24:33.980 --> 00:24:34.720
+Marina Fuster: Bien.
+
+167
+00:24:34.720 --> 00:24:39.100
+GUIDO DE CARO: Los datos, que que es como la foto de la izquierda, que tenemos positiva.
+
+168
+00:24:40.120 --> 00:24:44.930
+Marina Fuster: Perfecto. Ahí hay que un poco más claro ojo que no es una cuestión
+
+169
+00:24:46.140 --> 00:24:55.889
+Marina Fuster: a ver si siempre está atado a la calidad de los datos y cuántos datos tengo yo. Pero el el core de yo, estar en una en un régimen de andar sitting tiene que ver con
+
+170
+00:24:56.130 --> 00:25:06.909
+Marina Fuster: lo que yo puedo llegar a representar con mi modelo también. Sí, eso es como como el ejemplo clásico y porque esto igual ya lo justo Lo mencionaron antes, porque
+
+171
+00:25:07.200 --> 00:25:19.269
+Marina Fuster: la App me quedó del otro lado. No sé por qué, porque a mayor capacidad óptima. Se produce overgiting Y esto es, no sé si alguno lo quiere
+
+172
+00:25:19.620 --> 00:25:23.330
+Marina Fuster: repasar, pero ¿a qué ve a qué se refería.
+
+173
+00:25:23.330 --> 00:25:41.679
+Marina Fuster: Perdón, que era la capacidad. Tengo ríos de construcción de fondo. Ok, La capacidad, dicho de forma informal, porque no es que introducimos una definición matemática viene a representar la habilidad que tiene un modelo o el potencial que tiene un modelo por cómo está definido de
+
+174
+00:25:42.670 --> 00:25:57.440
+Marina Fuster: lograr aproximar un rango de funciones, por ejemplo, con un perceptrón simple lineal. Vos Tenés un rango de funciones lineales que puedes aproximar con un perceptrón multicapa Vos tenés, un rango de funciones continuas que puedes aproximar
+
+175
+00:25:57.440 --> 00:26:05.030
+Marina Fuster: con el simple lo lineal, lo mismo y así sucesivamente. Entonces la capacidad del modelo. Habla de eso, de
+
+176
+00:26:05.200 --> 00:26:11.459
+Marina Fuster: del modelo que yo estoy eligiendo. ¿qué funciones me permite que familia de funciones me permita representar.
+
+177
+00:26:12.420 --> 00:26:14.150
+JOAQUÍN NICOLÁS YULÁN LUCIOLI: Okay y cuál es la última?
+
+178
+00:26:14.690 --> 00:26:16.550
+JOAQUÍN NICOLÁS YULÁN LUCIOLI: ¿por qué existe una óptima.
+
+179
+00:26:17.140 --> 00:26:35.680
+Marina Fuster: Bueno, ese es un punto teórico que a todos nos encantaría encontrar. Pero el punto de la capacidad óptima vendría a ser el balance en el cual yo logré aprender bien los datos, pero a mí, a su mismo. Al mismo tiempo, también aprendí a generalizar, sí
+
+180
+00:26:35.780 --> 00:26:49.720
+Marina Fuster: y óptima a mayor capacidad, vas a ajustar de forma tan ahí leo. Y termino. La idea de esto óptima viene por el hecho de que esa es aquel punto en el que yo logré bajar lo máximo posible. Tanto
+
+181
+00:26:50.110 --> 00:27:04.719
+Marina Fuster: Training era como validation, error sin que se me empiecen a abrir. Si Si te fijas acá a la derecha, yo ya entro en el régimen entre que en el que si yo sigo bajando el error de entrenamiento, empiezo a subir el de generalización.
+
+182
+00:27:04.720 --> 00:27:23.830
+Marina Fuster: Entonces, cuando yo me paso de este punto en el que empiezo a subir. El de generalización es que entro en el tema de overfitting, donde yo me estoy ajustando mucho a mis datos de entrenamiento. Pero por otro lado, si me quedo muy hacia la izquierda, yo tengo el problema de que todavía no entrené todo lo que pude entrenar, y tengo más ganancia. Todavía
+
+183
+00:27:23.930 --> 00:27:30.480
+Marina Fuster: ahí quedó claro. Mientras leo mayor capacidad vas a ajustar de forma tan estricta.
+
+184
+00:27:31.560 --> 00:27:39.380
+Marina Fuster: Sí. Perfecto. Perfecto. Lo que dice Juan Bautista, mayor capacidad, ajustada de forma tan estricta que es eso de que vimos de que los datos se ajustaban un montón.
+
+185
+00:27:40.260 --> 00:27:55.940
+Marina Fuster: Bien, ¿dónde ayudan las técnicas de regularización según lo que vimos? Bueno, ayudan en la parte de la derecha, sí. ¿y por qué les muestro esta imagen? Es para que ustedes se lleven bien la idea de
+
+186
+00:27:56.080 --> 00:28:19.950
+Marina Fuster: qué tengo que hacer yo en distintos régimen. Si ustedes están entrenando un modelo y ven que el error de entrenamiento no baja se me estancó. No es un problema donde yo voy aplico regularización. Es en este. En esta sección no es un problema que quizás mi modelo no me alcanza por ahí. La red neuronal tiene que ser más grande o tengo un perceptrón
+
+187
+00:28:19.950 --> 00:28:24.899
+Marina Fuster: lineal, y tendría que tener alguna no linealidad linealidad.
+
+188
+00:28:24.900 --> 00:28:34.630
+Marina Fuster: Entonces, si yo estoy de este lado. No me meto en técnicas de regularización, porque las técnicas de regularización en realidad me ayudan a mí
+
+189
+00:28:34.630 --> 00:28:41.319
+Marina Fuster: con esta brecha que se me empieza a abrir. Ok, alguna pregunta de eso?
+
+190
+00:28:42.580 --> 00:28:44.989
+Marina Fuster: Bueno, no hay mucho, Pero
+
+191
+00:28:49.480 --> 00:29:03.579
+Marina Fuster: Ok, vamos a ver 3 técnicas de lo que es regularización. No, me no nos vamos a meter Full Full Full en detalle matemático. Agarré 3 que son una más compleja. Las otras medio simples. Pero la idea es que
+
+192
+00:29:03.580 --> 00:29:15.470
+Marina Fuster: se lleven un mini panorama del área. Y si ustedes se encuentran en este régimen de la derecha, y tienen ganas de seguir iterando para ver cómo mejorarlo. Bueno, esto es lo que se suele hacer.
+
+193
+00:29:15.470 --> 00:29:16.720
+Marina Fuster: La primera es
+
+194
+00:29:16.720 --> 00:29:36.300
+Marina Fuster: hiper simple. Y la verdad, que es medio, una pavada, no implementarlo, que tiene que ver con Erlist Toping. Si recién charlamos que está este punto de capacidad óptima. Entonces lo que yo termino haciendo para aplicar la técnica, darles topping es Ok, yo. Esto voy avanzando época, a época. No.
+
+195
+00:29:36.650 --> 00:29:45.620
+Marina Fuster: Lo que podría hacer es poner una validación. Donde me diga Che, si el error de validación dejó de bajar por las últimas
+
+196
+00:29:45.700 --> 00:29:59.219
+Marina Fuster: 5, 10 15 épocas. Entonces corto sí, porque fíjense que quizás les pasaba también cuando ustedes seguían con generaciones, no En la parte de algoritmos genéticos.
+
+197
+00:29:59.220 --> 00:30:10.989
+Marina Fuster: Si ustedes ponen una cantidad fija de épocas, pero siempre se están pasando. Es decir, siempre les ocurre que el error de validación les empieza a subir. Entonces
+
+198
+00:30:10.990 --> 00:30:20.650
+Marina Fuster: no están quedándose con la mejor herramienta. Sí, quizás tener esta estrategia de Orlystoping es una forma súper simple de decir: bueno.
+
+199
+00:30:20.770 --> 00:30:28.040
+Marina Fuster: en lugar de ajustar hasta la muerte corto un poco antes, y me quedo con algo que tenga un mejor balance de
+
+200
+00:30:28.470 --> 00:30:29.970
+Marina Fuster: generalización?
+
+201
+00:30:31.020 --> 00:30:33.590
+Marina Fuster: Eso es todo. ¿alguna pregunta de ese
+
+202
+00:30:39.480 --> 00:30:41.600
+Marina Fuster: Sí, no seguimos.
+
+203
+00:30:44.250 --> 00:30:49.640
+JOAQUÍN NICOLÁS YULÁN LUCIOLI: Acá lo que estás haciendo es, estás parando, Han tomado
+
+204
+00:30:50.310 --> 00:30:53.499
+JOAQUÍN NICOLÁS YULÁN LUCIOLI: a determinado número de época para evitar tener más error.
+
+205
+00:30:54.570 --> 00:30:58.079
+Marina Fuster: Claro si en lugar de ello, decir, entreno por 1 000 épocas
+
+206
+00:30:58.270 --> 00:31:01.420
+Marina Fuster: la alternativa, es decir, entreno 1 000 épocas.
+
+207
+00:31:01.440 --> 00:31:19.919
+Marina Fuster: pero agrego una validación en mi algoritmo que está corriendo a las 1 000 épocas que dice: Che. Si por 10 épocas el error de validación se mantuvo igual o dejó de bajar, o inclusive pioch por 5 épocas. Empezó a subir corto. No sigo ajustando ok, es eso.
+
+208
+00:31:21.730 --> 00:31:28.269
+Marina Fuster: Es como para evi evitar que la curva me vuelva a subir una vez que ya encontré un buen punto de error.
+
+209
+00:31:33.160 --> 00:31:42.489
+Marina Fuster: Bien, Ok, la segunda estrategia. No sé por qué no me está pasando. La segunda estrategia.
+
+210
+00:31:42.820 --> 00:32:03.840
+Marina Fuster: que a veces no aparece como técnica de regularización, pero que se usa para eso es aumentación o aumentation de datos. Todas estas palabras, traducidas al español siempre me quedan raras, pero la estrategia se llama data aumentation. Entonces, ¿de dónde es que sale la idea de data aumentation? Bueno, parte de lo que ya
+
+211
+00:32:03.840 --> 00:32:13.449
+Marina Fuster: fueron charlando en la intro, Y supongo de lo que el que ve las noticias o ve cosas de Machín Larry no habrá visto es que tener muchos datos.
+
+212
+00:32:13.570 --> 00:32:27.940
+Marina Fuster: Te ayuda a los algoritmos que vos estás usando y tratar de aproximar funciones. Porque si nosotros, como que volvemos a lo que es la base de lo que estamos haciendo. Si nosotros
+
+213
+00:32:30.100 --> 00:32:39.069
+Marina Fuster: lo que tenemos por detrás es un tera género generation process generation process. Lo voy a escribir, porque lo dije mal.
+
+214
+00:32:39.330 --> 00:32:43.520
+Marina Fuster: es una decisión razas. Sí que este proceso.
+
+215
+00:32:43.520 --> 00:32:59.849
+Marina Fuster: nosotros nos podemos imaginar que es del cual salen las muestras, que son los datos. Si como si fuera una distribución a la que nosotros no tenemos acceso, de la cual salen nuestros datos, y nosotros nos podemos imaginar que esta es la entre muchas comillas, de verdad
+
+216
+00:32:59.910 --> 00:33:03.569
+Marina Fuster: sí, pero nosotros.
+
+217
+00:33:03.670 --> 00:33:15.199
+Marina Fuster: esto es a lo que tenemos acceso, no un conjunto de datos que salió de algún lado y que a que lo que nosotros nos gustaría estimar o aproximar es este proceso.
+
+218
+00:33:15.270 --> 00:33:34.660
+Marina Fuster: Sí, nos gustaría entender cómo es que se forman esos datos, pero a partir de estos datos que tengo yo lo mejor que puede hacer. Es decir, bueno, esta es la muestra que yo tengo. Se para el entrenamiento y se paro en validación. Sí, pero ¿qué puede pasar con este proceso tal cual está, ¿Cuál puede ser 1 de los problemas
+
+219
+00:33:35.220 --> 00:33:36.829
+Marina Fuster: o varios de los problemas.
+
+220
+00:33:36.830 --> 00:33:49.910
+GUIDO DE CARO: Por ejemplo, tienes un dato en validación que no tenés ningún tipo de datos, o sea, primero que nada, el entrenamiento tenés, datos rojos y en validación no tenés datos rojos. Entonces vos estás entrenando para un dato que no estás validando.
+
+221
+00:33:50.040 --> 00:33:52.640
+GUIDO DE CARO: Entonces, no estás valiendo si los estás reconociendo bien.
+
+222
+00:33:53.130 --> 00:33:58.529
+GUIDO DE CARO: Por el otro lado, en validación tenés, un dato azul y en el entrenamiento no tenés un dato azul.
+
+223
+00:33:58.820 --> 00:34:02.880
+GUIDO DE CARO: por lo que no estás entrenando para reconocer ese tipo de datos.
+
+224
+00:34:03.010 --> 00:34:06.779
+GUIDO DE CARO: O sea, si no haces bien la separación entre entrenamiento y validación.
+
+225
+00:34:07.490 --> 00:34:10.670
+GUIDO DE CARO: o es o no entrenar para cierto tipo de datos.
+
+226
+00:34:10.830 --> 00:34:15.589
+GUIDO DE CARO: o entrenar para cierto tipo de datos que después no vas a estar fijándote. Si lo hiciste bien o no.
+
+227
+00:34:16.530 --> 00:34:26.470
+Marina Fuster: Bien, Entonces, fíjense que en este ejemplo muy de juguete yo algunas cosas las podría resolver. Quizás podría decir, bueno, eché un dato rojo, me lo reservo y lo pongo en validación.
+
+228
+00:34:26.469 --> 00:34:46.520
+Marina Fuster: pero quizás, por ejemplo, con el dato azul, No puedo hacer eso, sí o lo entreno o lo valido. Es como que tengo una cantidad insuficiente. Y quizás 1 lo ve como muy delimitado con clases, Pero cuantos más datos tengamos que hayan salido de ese proceso real
+
+229
+00:34:46.639 --> 00:34:59.530
+Marina Fuster: tal cual, yo no tengo acceso mejor, porque es más información que yo tengo para mi modelo para entender todas las distintas instancias que tienen o muchos aspectos de cómo se ve ese conjunto de datos. Entonces
+
+230
+00:35:00.340 --> 00:35:17.760
+Marina Fuster: a mí me encantaría, ¿sí? O sea lo que yo puedo hacer como alternativa es conseguir más datos, pero eso a veces es costoso, perfecto. Me resuelve un montón de cuestiones de que por ahí me faltaban muestras de alguna clase o los tenía desbalanceados, etcétera.
+
+231
+00:35:17.760 --> 00:35:23.349
+Marina Fuster: Pero esto no siempre se puede hacer, y algo que se puede
+
+232
+00:35:23.500 --> 00:35:31.180
+Marina Fuster: usar para solventar esta situación, que me permite mejorar el error de generalización es
+
+233
+00:35:31.300 --> 00:35:37.999
+Marina Fuster: fabricar datos con distintas estrategias y lograr tener un mejor dataset. Si, por ejemplo.
+
+234
+00:35:38.000 --> 00:35:55.299
+Marina Fuster: algo que se puede hacer valor es la clasificación de objetos es tener datos donde yo les agrego ruido, los roto, los traslado cambio de escala, etcétera. ¿y por qué esto sería algo razonable de hacer. Fíjense que si yo estoy tratando de clasificar objetos.
+
+235
+00:35:55.300 --> 00:36:02.279
+Marina Fuster: Sí, no sé. Estoy tratando de clasificar perro gato, no sé ballena.
+
+236
+00:36:03.100 --> 00:36:21.610
+Marina Fuster: etcétera. No hay ciertas cosas que son invariantes a lo que yo estoy queriendo hacer: las rotaciones, las traslaciones, el cambio de escalas. Si yo estoy queriendo clasificar un gatito de este tamaño. Si es lo mismo que querer clasificar un gato de este tamaño.
+
+237
+00:36:21.690 --> 00:36:30.800
+Marina Fuster: sí, entonces hay hay ciertas modificaciones que yo puedo hacer en los datos que me sirven para aumentar el conjunto que yo ya tenía.
+
+238
+00:36:31.530 --> 00:36:37.570
+Marina Fuster: ¿con qué tengo que tener cuidado cuando yo estoy haciendo esto, cuando yo estoy aumentando los datos.
+
+239
+00:36:42.410 --> 00:36:45.300
+Marina Fuster: Hay algo que se les ocurra, que puede salir mal.
+
+240
+00:36:46.230 --> 00:36:54.579
+GUIDO DE CARO: De no clasificar un o sea, de cuando los aumentas clasificar un dato malo, o sea, un dato que, por ejemplo clasificaste como azul.
+
+241
+00:36:54.910 --> 00:36:58.489
+GUIDO DE CARO: En realidad era verde. Pero tenés que tener cuidado también con eso.
+
+242
+00:37:00.290 --> 00:37:10.700
+Marina Fuster: Vos decir, cuando estás creando. Por ejemplo, si yo este es mi gato original, no que lo tengo como gato. Vos decís que cuando yo creo esto de asignarle bien la etiqueta.
+
+243
+00:37:11.330 --> 00:37:12.300
+GUIDO DE CARO: Claro, sano
+
+244
+00:37:12.820 --> 00:37:17.870
+GUIDO DE CARO: o por ahí. Cuando vos tratas de crear eso, no te queda un gato. Te llega un tigre.
+
+245
+00:37:18.660 --> 00:37:20.560
+Marina Fuster: Bien.
+
+246
+00:37:20.720 --> 00:37:33.420
+Marina Fuster: Perfecto. Eso. Si bien. Bueno, acá sería un poco más difícil, pero no cambiar la clase cuando vos estás modificando el dato. Si ustedes, en el trabajo práctico que tienen el ejercicio, 2,
+
+247
+00:37:36.530 --> 00:37:38.380
+Marina Fuster: qué tipo de conjunto de datos
+
+248
+00:37:39.380 --> 00:37:46.080
+Marina Fuster: dígitos y qué puede salir mal de todas estas modificaciones cuando yo estoy lidiando con dígitos. Por ejemplo.
+
+249
+00:37:46.200 --> 00:37:48.170
+Marina Fuster: si quiero hacer attagmentation
+
+250
+00:37:51.490 --> 00:38:04.989
+Marina Fuster: que un 6 se te haga un 9 perfecto, entonces el tipo de modificaciones que yo hago. Tengo que tener cuidado de que no me terminen arruinando el conjunto datos y terminen siendo señales inconsistentes para el modelo.
+
+251
+00:38:04.990 --> 00:38:12.950
+Marina Fuster: Bien, esto es lo que es data. Augumentation, Bueno, acá. Cuidado con no modificar el dato hasta el ejemplo del conjunto de Didgets.
+
+252
+00:38:12.950 --> 00:38:16.959
+Marina Fuster: Y la tercera, que vamos a ver que es una que se usa un montón
+
+253
+00:38:16.960 --> 00:38:33.629
+Marina Fuster: es la de penalización de norma penalización de norma es una categoría más grande. Está l 1, L: 2. Nosotros vamos a ver l 2, que es la más conocida que también se llama Weight Key. Y básicamente, lo que yo voy a hacer es cambiar la función de rol.
+
+254
+00:38:33.660 --> 00:38:35.690
+Marina Fuster: Fíjense que esto
+
+255
+00:38:36.040 --> 00:38:55.840
+Marina Fuster: de acá esto es lo que nosotros hicimos las clases anteriores. Yo he definido la función de error en función de los pesos, que era la diferencia al cuadrado, ¿no? Entonces, en el error de regularización, lo que estoy haciendo es agregar una penalización relacionada con la magnitud de los pesos, si que es la norma al cuadrado.
+
+256
+00:38:56.090 --> 00:39:09.519
+Marina Fuster: Y por qué va por partes? Primero, una vez que yo modifico esta función de error. Si tengo que tener en cuenta que me va a cambiar esto, lo voy a borrar.
+
+257
+00:39:09.520 --> 00:39:19.340
+Marina Fuster: me va a cambiar como es la derivada. Ok. Entonces, si ustedes esto lo estuvieran implementando. Fíjense que esta parte es la que ya vimos.
+
+258
+00:39:19.410 --> 00:39:36.429
+Marina Fuster: a lo cual le tienen que sumar el término, que es de Weidy Key. Si, y cuando yo derivo esta expresión me termina quedando que la forma de actualizar los pesos, que es esta última, es achicar los pesos por un factor tiene ser esta parte.
+
+259
+00:39:36.630 --> 00:39:37.400
+Marina Fuster: No.
+
+260
+00:39:37.980 --> 00:39:49.350
+Marina Fuster: Esta es la parte donde yo estoy achicando los pesos en un factor. Uno menos. Este E, T A es la tasa de aprendizaje, que es la que veíamos
+
+261
+00:39:49.490 --> 00:39:56.309
+Marina Fuster: ya de antes. Y este landa es otro hiperma hiperparámetro que se ajusta, que viene a ser como el
+
+262
+00:39:56.310 --> 00:40:09.679
+Marina Fuster: el peso que le doy a Waiki Kate sin entonces la idea general de esto es que yo integración, iteración achico, los pesos y también aplico el movimiento en funcional gradiente. Entonces
+
+263
+00:40:09.680 --> 00:40:14.959
+Marina Fuster: acá me quedó mal esto que lo voy a subir? Bien, Esto tendría que ser Eta.
+
+264
+00:40:14.990 --> 00:40:19.579
+Marina Fuster: Sí, recién me doy cuenta alguna pregunta con esta fórmula.
+
+265
+00:40:24.050 --> 00:40:34.069
+Marina Fuster: o sea, si ustedes quisieran implementarlo, es agregar esta parte, que es ir achicando los pesos y también movernos en la dirección contraria al gradiente.
+
+266
+00:40:37.510 --> 00:40:38.570
+Marina Fuster: Bien.
+
+267
+00:40:46.110 --> 00:40:47.399
+Marina Fuster: o no bien.
+
+268
+00:40:52.130 --> 00:40:56.770
+JOAQUÍN NICOLÁS YULÁN LUCIOLI: Sí, o sea, usas esta función de error nueva. ¿para qué perdón.
+
+269
+00:40:57.430 --> 00:41:07.359
+Marina Fuster: Bien la función de error nueva, lo que te agrega es una penalización en la magnitud de los pesos. Si La idea es ir achicando los pesos para que
+
+270
+00:41:07.540 --> 00:41:10.100
+Marina Fuster: estén más centrados en el 0.
+
+271
+00:41:14.270 --> 00:41:16.250
+JOAQUÍN NICOLÁS YULÁN LUCIOLI: ¿por qué quer ¿Por qué querrías eso?
+
+272
+00:41:16.510 --> 00:41:32.279
+Marina Fuster: Bien, perfecto. Esa es la cuestión. ¿no? Porque yo querría hacer esto, o sea, ¿de qué me sirve y cómo es que se conecta con el tema de regularización, la fórmula. Esto se entendió. Ahora vamos a porque yo querría hacer esto, pero esto alguna pregunta
+
+273
+00:41:33.940 --> 00:41:35.550
+Marina Fuster: o está masoca?
+
+274
+00:41:39.660 --> 00:41:56.910
+Marina Fuster: Asumo poco? Bien, porque yo querría hacer esto después de que los detalles al que quiera ver la derivación matemática lo puede hacer. No nos vamos a meter, porque la idea de esto es que sea cortito. Pero fíjense lo siguiente: yo quizás tengo un problema donde quiero predecir la probabilidad de sentimiento de una película
+
+275
+00:41:56.910 --> 00:42:17.179
+Marina Fuster: de que sea positivo. Y es una realidad entre y 1. Y tengo una red neuronal acá en el medio. Tengo muchos pesos que no. No es ninguna arquitectura particular, y tengo estas 5 variables, no cambia palabras ratio de palabras positivas sobre el total signos de exclamación fuente utilizada y ancho de pantalla en píxels del dispositivo.
+
+276
+00:42:17.510 --> 00:42:23.910
+Marina Fuster: ¿qué opinan de estas características en relación a la tarea que estoy tratando de modelar.
+
+277
+00:42:34.310 --> 00:42:37.060
+JOAQUÍN NICOLÁS YULÁN LUCIOLI: No son todas igual de importantes.
+
+278
+00:42:38.080 --> 00:42:54.439
+Marina Fuster: Bien no son todas igual de importantes. Hay 2. La fuente que yo uso para escribir eso, o el ancho pantalla en pixel del dispositivo que quizás son variables que tengo, pero que al menos viéndolo desde afuera, lo que 1 esperaría es que no tengan una
+
+279
+00:42:54.440 --> 00:42:58.570
+Marina Fuster: relación causal real con el sentimiento.
+
+280
+00:42:58.570 --> 00:43:10.400
+Marina Fuster: el sentimiento positivo que va a tener esa persona sobre la película. Entonces lo que termina en forzando Boyty Key por cómo funciona.
+
+281
+00:43:10.870 --> 00:43:18.419
+Marina Fuster: Es perenne esto? Voy a dibujar. Tenemos los 2 términos de antes. No tenemos el que va minimizando
+
+282
+00:43:19.310 --> 00:43:37.410
+Marina Fuster: los pesos, interacción, integración. Y yo me voy moviendo. Por otro lado, esto vuelve a ser Eta en la dirección del gradiente. Fíjense que estas 2, estos 2 términos son conflictivos. Si, por un lado, yo tengo el primer término que lo que me va haciendo es achicarme los pesos
+
+283
+00:43:37.410 --> 00:43:49.419
+Marina Fuster: hacia 0 y, por otro lado, tengo el término del gradiente que me va cambiando. La magnitud, sí que me va diciendo, Che movete tanto hacia allá y así sucesivamente. Entonces.
+
+284
+00:43:50.180 --> 00:44:08.309
+Marina Fuster: para aquellas variables que sí sean importantes para el error, como puede ser el ratio de palabras positivas. Fíjense que si yo me muevo así en esta dirección o hacia allá. Me estoy moviendo un montón hacia arriba en el error.
+
+285
+00:44:08.710 --> 00:44:10.470
+Marina Fuster: Sí, eso se ve
+
+286
+00:44:10.970 --> 00:44:18.670
+Marina Fuster: que si yo me muevo hacia un lado o hacia el otro, sí, perfecto, no sé si alguien me dijo sí, o si era una pregunta.
+
+287
+00:44:20.400 --> 00:44:21.909
+JOAQUÍN NICOLÁS YULÁN LUCIOLI: Sí, Sí, yo te dije, sí.
+
+288
+00:44:22.190 --> 00:44:33.320
+Marina Fuster: Perfecto. Bien, Entonces, si ustedes ven esta gráfica la variable de ratio de palabras positivas, me impacta en el error. Si entonces esto
+
+289
+00:44:33.790 --> 00:44:57.899
+Marina Fuster: va a ser significativo cuando yo esté ajustando los pesos. Por otro lado, el W. Dos, la fuente usada, Si yo me muevo así. Fíjense que me estoy quedando prácticamente en el mismo error. Sí, esto no va a ser tan perfecto, pero lo que quería ilustrar con este ejemplo más simple es que este término va a ir provocando que el W se vaya achicando interacción, iteración
+
+290
+00:44:57.900 --> 00:44:58.880
+Marina Fuster: y que
+
+291
+00:44:58.880 --> 00:45:11.640
+Marina Fuster: la la magnitud de lo que yo me muevo por el gradiente va a ser prácticamente despreciable, entonces el efecto total que va a terminar teniendo es que las variables importantes
+
+292
+00:45:11.640 --> 00:45:19.310
+Marina Fuster: van a mantener su magnitud. Quizá se achican, pero el gradiente va a seguir empujando para que esos pesos
+
+293
+00:45:19.310 --> 00:45:26.449
+Marina Fuster: se acerquen a lo que yo necesito. Por otro lado, las variables que son ruido, que el que quizás
+
+294
+00:45:26.450 --> 00:45:41.619
+Marina Fuster: son causa del overffiting, porque por ahí yo estoy overfitiando a lo que es la fuente, cuando en realidad a mí me importa. Y para datos nuevos. No me sirve ese tipo de variables que en realidad no tienen un impacto y que son más
+
+295
+00:45:41.980 --> 00:45:52.529
+Marina Fuster: que quizás me quedaron variables medidas que no necesitaba, etcétera. Esas se van a ir achicando la magnitud de los pesos, con lo cual, cuando yo haga este producto, si venimos para acá,
+
+296
+00:45:52.830 --> 00:46:09.469
+Marina Fuster: cuando se haga estos productos matriciales. Si el peso es prácticamente 0, esa variable va a tener poco impacto. Si Esa es la intuición detrás de lo que es Weidy Key.
+
+297
+00:46:09.550 --> 00:46:24.649
+Marina Fuster: al que le interesa ver la derivación. Y porque eso funciona así, necesitamos algunas cosas que todavía no vimos que se ven más en talla adelante, pero acá les dejé por ahí los los pasos de las cosas que deberían ver si les copa como.
+
+298
+00:46:24.650 --> 00:46:25.240
+JOAQUÍN NICOLÁS YULÁN LUCIOLI: Entonces.
+
+299
+00:46:25.240 --> 00:46:25.630
+Marina Fuster: Claro.
+
+300
+00:46:25.630 --> 00:46:31.060
+JOAQUÍN NICOLÁS YULÁN LUCIOLI: Vamos a usar esto solo para las variables que no nos parezcan importantes.
+
+301
+00:46:31.440 --> 00:46:39.310
+Marina Fuster: No vos. Esto. Lo que tiene de bueno es que vos esto lo haces general, ¿no? O sea, cuando vos haces Esto oye esto. Así,
+
+302
+00:46:39.770 --> 00:46:52.409
+Marina Fuster: cuando cambias la fórmula del error con el término de regularización. ¿vos lo haces para todos, sí. Y el mismo algoritmo va a ir manejando esta atención a medida que Vos avanzás
+
+303
+00:46:52.830 --> 00:47:12.630
+Marina Fuster: porque no, vos no sabés en general, qué es ruido que es no. Cuáles pesos están levantando ruido y cuáles no? Entonces la idea es que vos aplicas esta el primer término que te los va achicando a los pesos en general. Y después el movimiento que vos hacés en el gradiente te va como
+
+304
+00:47:13.940 --> 00:47:14.980
+Marina Fuster: entra en.
+
+305
+00:47:14.980 --> 00:47:16.060
+JOAQUÍN NICOLÁS YULÁN LUCIOLI: Para bailar. Es importante.
+
+306
+00:47:16.060 --> 00:47:16.410
+Marina Fuster: Has hecho.
+
+307
+00:47:16.410 --> 00:47:21.170
+JOAQUÍN NICOLÁS YULÁN LUCIOLI: Nos la va a tocar poco y para las variables no importantes nos la va a bajar mucho.
+
+308
+00:47:21.640 --> 00:47:26.849
+Marina Fuster: Sí, pero esto vos no lo haces por tu cuenta, sino que es el camino general.
+
+309
+00:47:26.850 --> 00:47:29.220
+JOAQUÍN NICOLÁS YULÁN LUCIOLI: El algoritmo sabe cuáles son las importantes.
+
+310
+00:47:29.520 --> 00:47:39.169
+Marina Fuster: Sí no es que sabe, sino que matemáticamente tiene que ver con la forma de la función de error.
+
+311
+00:47:39.210 --> 00:47:58.380
+Marina Fuster: De acuerdo a los pesos si no se los que hicieron Mma, si ahora ya es full correlativo o no, es si se acuerdan de la descomposición en auto valores de auto vectores tiene que ver con eso, o sea, a vos. Te queda una forma de la función de error en función de los pesos y
+
+312
+00:47:58.540 --> 00:48:13.640
+Marina Fuster: podés tratar esta pe esta función de error podés verla como una descomposición en ese aspecto y ver qué variables son las que te van a ayudar más menos a minimizar el error.
+
+313
+00:48:13.850 --> 00:48:18.110
+Marina Fuster: pero nada es meternos en un detalle que que ahora no es la idea.
+
+314
+00:48:19.450 --> 00:48:38.679
+Marina Fuster: Desafortunadamente, sí. Okay, veo que matemática no No sé si es lo que más te gusta, o al menos fórmulas muy, muy pesadas. Bueno, eso por ahora hay un montón de otras técnicas de regularización. Lo que quiero que se lleven es que
+
+315
+00:48:38.760 --> 00:48:53.480
+Marina Fuster: 1 regularizó, sube un montón, pero 1 empieza a usar regularización cuando quizás tu algoritmo ya está logrando bajar el error de entrenamiento, pero estás teniendo problemas para generalizar.
+
+316
+00:48:53.530 --> 00:49:09.240
+Marina Fuster: Si yo estoy en la instancia la que tengo problemas en aprender mi conjunto, datos de entrenamiento, acá todavía no me meto, ¿sí? Y acá les dije algunos más que son bastante conocidos. Pero bueno, les recomiendo este libro este capítulo el que quiera chumbiar.
+
+317
+00:49:09.540 --> 00:49:18.639
+Marina Fuster: pero eso es por ahora lo que es todo alguna pregunta, sino esta sección. La cerramos.
+
+318
+00:49:24.320 --> 00:49:31.870
+Marina Fuster: No, claro a ver, voy a Mhm parar la grabación.
+

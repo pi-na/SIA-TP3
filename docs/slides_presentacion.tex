@@ -141,9 +141,9 @@
 \sectiondivider{Antes de los ejercicios}{Decisiones de diseño}
 
 % ---- Slide D1: overview de las 4 decisiones ----
-\begin{frame}{Cinco decisiones que afectan a todos los ejercicios}
-\centering\normalsize
-Antes de mostrar resultados, conviene fijar los cinco elementos que aparecen en cada experimento:\\[1em]
+\begin{frame}{Decisiones que afectan a todos los ejercicios}
+\centering\small
+Antes de mostrar resultados, conviene fijar los siete elementos que aparecen en cada experimento:\\[0.6em]
 
 \begin{tabular}{@{}p{0.42\linewidth}p{0.5\linewidth}@{}}
 \toprule
@@ -154,6 +154,8 @@ Antes de mostrar resultados, conviene fijar los cinco elementos que aparecen en 
 \textbf{3. Optimizador} & ¿Cómo movemos los pesos en cada paso? \\
 \textbf{4. Learning rate} & ¿De qué tamaño es ese paso? \\
 \textbf{5. Función de costo} & ¿Qué error estamos minimizando? \\
+\textbf{6. Criterio de convergencia} & ¿Cuándo paramos de entrenar? \\
+\textbf{7. Manejo del bias} & ¿Cómo lo incorporamos a cada capa? \\
 \bottomrule
 \end{tabular}
 \end{frame}
@@ -201,7 +203,7 @@ La clase descarta dos opciones: \textbf{escalón} (no derivable) y \textbf{linea
 \bottomrule
 \end{tabular}\\[0.4em]
 
-\textcolor{muted}{\footnotesize El config tiene un modo \emph{auto} que elige el inicializador según la activación de cada capa.}
+\textcolor{muted}{\footnotesize Modo \emph{auto}: He para ReLU, Xavier para tanh/sigmoid/softmax, Uniform para identity. Fuente: HTML \emph{``best weight initialization techniques''} provisto por la cátedra. \textit{Nota:} nuestro Xavier usa $\sqrt{1/\text{fan\_in}}$ (variante LeCun); el HTML cita la forma Glorot $\sqrt{2/(\text{n\_in}+\text{n\_out})}$ — empíricamente equivalentes acá (sweep init en empate técnico).}
 \end{frame}
 
 % ---- Slide D4: Optimizador ----
@@ -211,7 +213,7 @@ La clase descarta dos opciones: \textbf{escalón} (no derivable) y \textbf{linea
 \begin{itemize}\setlength\itemsep{0.25em}\small
   \item \textbf{SGD vanilla}: $w \leftarrow w - \eta \cdot \nabla L$. Lo más simple. Funciona pero es lento, especialmente en superficies con valles alargados.
   \item \textbf{Momentum} ($\beta = 0.9$): acumula \emph{velocidad} en la dirección del gradiente. Atraviesa valles sin oscilar.
-  \item \textbf{Adam} ($\beta_1 = 0.9$, $\beta_2 = 0.999$): combina momentum con \emph{learning rate adaptativo por parámetro}. El más usado en la práctica.
+  \item \textbf{Adam} ($\beta_1 = 0.9$, $\beta_2 = 0.999$, $\varepsilon = 10^{-8}$): combina momentum con \emph{learning rate adaptativo por parámetro}. El PDF de optimizadores lo califica textual como \emph{``muy usado en la práctica''} (defaults idénticos al paper Kingma \& Ba 2015).
 \end{itemize}
 \vspace{0.6em}
 
@@ -269,6 +271,43 @@ BCE & $E = -[y \log O + (1-y) \log(1-O)]$ & Disponible (clasificación binaria c
 \begin{insight}
 \textbf{Por qué cross-entropy + softmax en Ej 2-3:} su combinación tiene un gradiente especialmente limpio, $\partial L / \partial z = O - y$, que cancela términos numéricamente delicados de la sigmoide y el logaritmo. Es la elección estándar para clasificación multiclase.
 \end{insight}
+\end{frame}
+
+% ---- Slide D7: Convergencia y bias ----
+\begin{frame}{6 y 7. Convergencia y bias — \textbf{decisiones de implementación}}
+\small
+\begin{columns}[T]
+\column{0.50\linewidth}
+\textbf{Criterio de convergencia}\\[0.3em]
+
+\begin{tabular}{@{}p{0.16\linewidth}p{0.78\linewidth}@{}}
+\toprule
+\textbf{Ej} & \textbf{Criterio} \\
+\midrule
+Ej 1 & $\varepsilon$ absoluto sobre MSE de train (\emph{regla del apunte} para perceptrón simple). Corta cuando $\text{mse} < \varepsilon$. \\
+\rowcolor{accent2!10}
+Ej 2/3 & \textbf{Early stopping} sobre \code{val\_loss} con \code{patience}=10. \\
+\bottomrule
+\end{tabular}\\[0.5em]
+
+\begin{insight}
+Early stopping = slide 14 del PDF de regularización. Detecta overfitting que $\varepsilon$-train no ve.\\[0.2em]
+\code{epochs}=50 máx; \code{best\_epoch} promedio $\sim 5$.
+\end{insight}
+
+\column{0.50\linewidth}
+\textbf{Manejo del bias}\\[0.3em]
+
+\begin{itemize}\setlength\itemsep{0.2em}
+  \item \textbf{Bias trick}: agregamos columna de 1's al input de cada capa $\Rightarrow$ pesos con shape \code{(n\_out, n\_in+1)}. El bias es un peso más, se actualiza con la misma regla de gradiente.
+  \item \textbf{El bias NO se penaliza con L2}: en Pack C, el regularizador toma \code{W[:,1:]} (omite la columna del bias).
+\end{itemize}
+\vspace{0.4em}
+
+\begin{takeaway}
+\textbf{Práctica estándar} (Goodfellow et al. 2016, Cap.~7 — referencia citada al final del PDF de regularización): el bias no aporta varianza al modelo, penalizarlo sesga el ajuste.
+\end{takeaway}
+\end{columns}
 \end{frame}
 
 % ===================================================================
@@ -388,7 +427,8 @@ con un perceptrón \emph{simple} (una sola capa).
 \column{0.45\linewidth}
 \begin{warning}
 \textbf{Regla del enunciado:}\\ \code{flagged\_fraud} \emph{nunca} se usa para entrenar. Solo para métricas operativas (precision, recall, F1) post-hoc.
-\end{warning}\\[0.6em]
+\end{warning}
+\vspace{0.6em}
 
 \textbf{Salida esperada en $[0,1]$} $\Rightarrow$ activación sigmoide.
 \end{columns}
@@ -591,7 +631,8 @@ Ej 1 (perceptrón simple) usa \textbf{online estricto} siguiendo la regla del ap
 
 \begin{warning}
 \textbf{Extremos catastróficos:} \(\text{lr}=10\) deja la red en accuracy random (12\%); \(\text{lr}=0.1\) también diverge.
-\end{warning}\\[0.4em]
+\end{warning}
+\vspace{0.4em}
 
 \textbf{Óptimo: lr = 0.001} (consistente con la elección de Fase 1).
 \end{frame}
@@ -734,6 +775,34 @@ La clase 8 que estaba colapsada en Ej 2 ahora se predice correctamente. Más dat
 \textbf{¿Por qué Pack C?} Para mantener la regularización avanzada \emph{enchufable y desactivada por default}.
 \end{frame}
 
+% ============= Pack C ↔ clase de regularización (matching) =============
+\begin{frame}{Ej 3 — Pack C $\leftrightarrow$ clase de regularización}
+\small ¿Qué dice el PDF de regularización y qué implementamos?\\[0.3em]
+
+\centering\footnotesize
+\begin{tabular}{@{}p{0.48\linewidth}cp{0.36\linewidth}@{}}
+\toprule
+\textbf{Técnica del PDF} & \textbf{Impl.} & \textbf{Resultado en Ej 3} \\
+\midrule
+Early stopping (slide 14)                       & \ok & Activo en todos los configs \\
+\rowcolor{accent2!10}
+\textbf{Augmentation — gaussiano} (slide 18)    & \ok & $\sigma=0.05$, $+0.32$ pp (parte del ganador) \\
+Augmentation — rotaciones (slide 18)            & \nok & --- \\
+Augmentation — traslaciones (slide 18)          & \nok & --- \\
+Augmentation — cambios de escala (slide 18)     & \nok & --- \\
+\rowcolor{accent2!10}
+\textbf{L2 / Weight Decay} (slides 20--25)      & \ok & $\lambda = 10^{-4}$, $+0.20$ pp \\
+Dropout (slide 26 — mención)                    & \ok & val sí, test no ($-0.08$ pp) \\
+Modelos de ensamble                             & --- & fuera de alcance \\
+Semi-supervisado / adversarial                  & --- & fuera de alcance \\
+\bottomrule
+\end{tabular}\\[0.6em]
+
+\begin{insight}
+Las \textbf{tres formas de augmentation que NO implementamos} (rotaciones, traslaciones, escalas) son la hipótesis principal del techo en 96.88\% — coherente con que el shift parece geométrico, no de ruido isotrópico.
+\end{insight}
+\end{frame}
+
 % ============= 22. Pack C tabla =============
 \begin{frame}{Ej 3 — Tabla de resultados Pack C}
 \centering
@@ -814,7 +883,7 @@ base\_extra\_data            & 0.9706 & 0.9636 & --- (referencia) \\
 \begin{enumerate}\setlength\itemsep{0.2em}
   \item \textbf{Augmentation insuficiente.} Gaussian noise es \emph{isotrópico} (por píxel). El shift parece ser de \emph{estilo de escritura}: rotación, traslación, grosor de trazo. Pide augmentation \textbf{geométrica}, no implementada acá.
   \item \textbf{Sub-representación en val interno del final\_eval.} Val 10\% random para early stopping puede no incluir los digits difíciles del test.
-  \item \textbf{Capacidad}: improbable, \code{wider} sobreajustó.
+  \item \textbf{Capacidad}: improbable, \code{wider} sobreajustó (consistente con la curva U del PDF de regularización, slide 9: más capacidad sin más datos $\Rightarrow$ overfitting).
 \end{enumerate}
 \vspace{0.4em}
 
@@ -849,6 +918,8 @@ base\_extra\_data            & 0.9706 & 0.9636 & --- (referencia) \\
   \textcolor{muted}{La clase descarta escalón y lineal; softmax es obligatorio en la salida multiclase; ReLU es el estándar para capas ocultas.}
   \item \textbf{Convergencia por early stopping en validación}, no $\varepsilon$ absoluto sobre el train.\\
   \textcolor{muted}{El train solo no detecta overfitting; la validación, sí. (Ej 1 sí usa $\varepsilon$ por su problema distinto.)}
+  \item \textbf{Implementamos \code{lr\_schedule} (step decay), no el $\eta$ adaptativo del PDF.}\\
+  \textcolor{muted}{El PDF muestra $\Delta\eta = +a$ si el error decrece consistente, $-b\eta$ si empieza a aumentar. Nosotros usamos step decay (\code{lr *= decay} cada N épocas). Misma familia (modificar $\eta$ durante el entrenamiento), regla distinta.}
   \item \textbf{La estructura del TP cambió respecto a la clase.}\\
   \textcolor{muted}{La clase: Ej 1 = XOR, Ej 2 = paridad, Ej 3 = dígito + ruido. El enunciado actual (1Q 2026): Ej 1 = fraude (distillation), Ej 3 = mejorar accuracy. No es decisión nuestra.}
 \end{itemize}

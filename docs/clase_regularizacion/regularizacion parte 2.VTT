@@ -1,0 +1,1698 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:01.160
+MARCO SCILIPOTI: Un cambio de equipo.
+
+2
+00:00:02.000 --> 00:00:05.760
+Marina Fuster: Marca y puso a grabar, aunque no, no lo había.
+
+3
+00:00:06.390 --> 00:00:12.529
+MARCO SCILIPOTI: Votación porque tuvo un par de los retos, Así que nada justo. Lo que dije es.
+
+4
+00:00:12.850 --> 00:00:17.799
+MARCO SCILIPOTI: Lees, este ejercicio numérico basado derivadas y un poco de grafos.
+
+5
+00:00:18.410 --> 00:00:31.099
+MARCO SCILIPOTI: Se puede entender. Es de idea de hacerlo así, más haberlo escrito y un poco. La definición clave preliminar es ¿qué significa la derivada, Y sobre derivada X en esto de que es cuánto cambio ahí sobre un cambio de X,
+
+6
+00:00:31.260 --> 00:00:37.799
+MARCO SCILIPOTI: cuánto a mí, solo en cambio de equis un poco la intuición.
+
+7
+00:00:37.960 --> 00:00:43.589
+MARCO SCILIPOTI: Porque después, un poco el lo último que que es el objetivo, no. Todo esto es
+
+8
+00:00:43.950 --> 00:00:48.929
+MARCO SCILIPOTI: yo defino, No sé una función de error que sea e no. Y yo quiero ver. Bueno.
+
+9
+00:00:49.620 --> 00:00:58.099
+MARCO SCILIPOTI: cuando cambia la función de error no es que si cuánto es mi error, no solamente cuánto, no. Pero si crece o baja, crece o decrece
+
+10
+00:00:58.160 --> 00:01:16.949
+MARCO SCILIPOTI: más al signo. En base a no sé, Por ejemplo, me va a s. No vallas o por mi Waves que por ahí estamos silemático siendo el miss lerma o el parámetros, no o parámetros de aprendizaje. También se podría decir que es
+
+11
+00:01:17.290 --> 00:01:28.809
+MARCO SCILIPOTI: lo que última. Uno busca optimizar. No. Uno mu busca modificar cuando 1 optimiza. ¿no? Entonces se acuerdan un poco de la presentación. Ahora después tenemos algoritmo, pero 1 hacía un forpass.
+
+12
+00:01:29.330 --> 00:01:39.350
+MARCO SCILIPOTI: No se puede decir un baguarbas. Después aplicaba a todos los pesos un delta W, no que lo que buscaba es minis minimizar el error.
+
+13
+00:01:39.880 --> 00:01:46.030
+MARCO SCILIPOTI: Ese concepto de minimizar el error es últimamente los que no da el gradiente, no es decir, este
+
+14
+00:01:46.530 --> 00:01:54.189
+MARCO SCILIPOTI: ¿cuánto cambia el error en base a cuánto cambia mi mi peso, es decir, del da que 1 aplica.
+
+15
+00:01:54.740 --> 00:01:58.310
+MARCO SCILIPOTI: Eso es un poco el el general.
+
+16
+00:01:59.010 --> 00:02:11.499
+MARCO SCILIPOTI: Ahora, una definición que vamos a ver al principio, que es matemática, pero la derivada sobre de X sobre la daría X como para no sacarla de la arena un rato es
+
+17
+00:02:11.650 --> 00:02:17.600
+MARCO SCILIPOTI: aplicar la definición derivada, que es el límite, no de
+
+18
+00:02:18.230 --> 00:02:28.580
+MARCO SCILIPOTI: F. X más H. Menos fx sobre H: No es como el en este caso.
+
+19
+00:02:29.190 --> 00:02:31.589
+MARCO SCILIPOTI: F: No es X.
+
+20
+00:02:35.550 --> 00:02:40.320
+MARCO SCILIPOTI: Y esto lo que significa es que me quedé el límite de 0.
+
+21
+00:02:40.830 --> 00:02:50.679
+MARCO SCILIPOTI: Sí que nos noche menos X sobre X, no que es el límite.
+
+22
+00:02:52.740 --> 00:02:54.840
+MARCO SCILIPOTI: Pero en esto estamos en estos 8,
+
+23
+00:02:56.820 --> 00:03:00.599
+MARCO SCILIPOTI: Creo que es un cambio infinitesimal no es cuando cambia
+
+24
+00:03:01.100 --> 00:03:05.850
+MARCO SCILIPOTI: la función de X sobre un cambio infinitesimal del ese cambio de la entrada.
+
+25
+00:03:06.010 --> 00:03:07.110
+MARCO SCILIPOTI: Bueno.
+
+26
+00:03:07.380 --> 00:03:23.270
+MARCO SCILIPOTI: y esto no se va así. Me queda H sobre 8, que es igual a 1 nada. Esto es anecdótico, simplemente que la derivada X sobre X es igual a 1 que viene de la definición de del límite que vieron en análisis. Uno
+
+27
+00:03:23.500 --> 00:03:25.260
+MARCO SCILIPOTI: de realidad.
+
+28
+00:03:26.010 --> 00:03:33.969
+MARCO SCILIPOTI: ni más ni menos. Simplemente era como para no otra cosa que no se termina entendiendo esto. Si lo vieron en su momento.
+
+29
+00:03:34.310 --> 00:03:41.990
+MARCO SCILIPOTI: La segunda cosa que vamos a también usar es la de la definición de la cadena
+
+30
+00:03:42.130 --> 00:03:43.729
+MARCO SCILIPOTI: de la regla de la cadena.
+
+31
+00:03:44.330 --> 00:03:51.689
+MARCO SCILIPOTI: En esto también, no, como poco. La definición formal es si yo quiero
+
+32
+00:03:51.850 --> 00:03:55.049
+MARCO SCILIPOTI: el cambio de la derivada, no al telón al puntero.
+
+33
+00:03:55.480 --> 00:04:03.309
+MARCO SCILIPOTI: la derivada, Y en función de X. Y La clave de esto es que, y es una función
+
+34
+00:04:03.460 --> 00:04:05.799
+MARCO SCILIPOTI: de de una manera intermedia u
+
+35
+00:04:06.020 --> 00:04:13.149
+MARCO SCILIPOTI: y que a esa a esa medida no le va a determinada U también es en función de X, entonces la puedo expresar. Así,
+
+36
+00:04:13.300 --> 00:04:17.099
+MARCO SCILIPOTI: la clave siempre es esa. No, No es que esta U, que método es como
+
+37
+00:04:17.930 --> 00:04:28.989
+MARCO SCILIPOTI: algo que no está relacionado, sino que está, ¿no? Entonces esto se cumple donde y depende de un
+
+38
+00:04:33.940 --> 00:04:40.640
+MARCO SCILIPOTI: y depende, Sí, equis
+
+39
+00:04:42.590 --> 00:04:53.589
+MARCO SCILIPOTI: muy bien. Para hacer un ejemplo que también vamos a estar usando dentro de poco de la regla de cadena. Vamos a hacer definir una función
+
+40
+00:04:53.690 --> 00:04:57.250
+MARCO SCILIPOTI: y se iba a la tangente hiperbólico
+
+41
+00:04:57.390 --> 00:05:03.010
+MARCO SCILIPOTI: que, como hemos visto, es una de las funciones no lineales que se usan de
+
+42
+00:05:03.710 --> 00:05:11.440
+MARCO SCILIPOTI: doble X, No, En este caso no sumo loals también. La función que elijo es como arbitraria es simplemente, por ejemplo. Pero bueno.
+
+43
+00:05:11.710 --> 00:05:14.359
+MARCO SCILIPOTI: podría decirse que es como una
+
+44
+00:05:14.600 --> 00:05:22.960
+MARCO SCILIPOTI: la función de una neurona. Y acá no. Yo. Lo que quiero calcular es la serie
+
+45
+00:05:23.340 --> 00:05:25.540
+MARCO SCILIPOTI: iba ahí en función de X
+
+46
+00:05:26.030 --> 00:05:28.589
+MARCO SCILIPOTI: o un poco con esta institución que venimos
+
+47
+00:05:28.840 --> 00:05:39.900
+MARCO SCILIPOTI: armando es cuánto cambia ahí, ¿no? En base un cambio infinitesimal, No, para esto voy a definir V X
+
+48
+00:05:40.300 --> 00:05:41.840
+MARCO SCILIPOTI: como esta funciona, acá
+
+49
+00:05:43.400 --> 00:05:49.290
+MARCO SCILIPOTI: que es igual a doble de X. Por lo tanto, si ahora aplico la regla que tenemos arriba.
+
+50
+00:05:50.190 --> 00:05:59.890
+MARCO SCILIPOTI: entonces digo la arida el agente hiperólico de U, no sobre
+
+51
+00:06:03.050 --> 00:06:09.079
+MARCO SCILIPOTI: derivado por la deriva de V X sobre
+
+52
+00:06:09.940 --> 00:06:18.130
+MARCO SCILIPOTI: X. No, esto? Bueno, la primera no sale de la tabla. Quiero decir esta a ¿
+
+53
+00:06:19.430 --> 00:06:29.590
+MARCO SCILIPOTI: Igual que en análisis que, bueno, la tabla te dice que es 1 menos tangente hiperbólico de X
+
+54
+00:06:30.110 --> 00:06:37.729
+MARCO SCILIPOTI: este cuadrado ¿no? Y la otra en realidad es simplemente Bueno, si esto lo reescribo acá? Es
+
+55
+00:06:38.300 --> 00:06:41.429
+MARCO SCILIPOTI: doble. X, ¿no? Y si, bueno.
+
+56
+00:06:42.360 --> 00:06:48.799
+MARCO SCILIPOTI: no sé como un poco de análisis, termina siendo W, no el resultado.
+
+57
+00:06:50.380 --> 00:06:54.819
+MARCO SCILIPOTI: Muy bien. Enton Eso es como el ejemplo la regla de la cadena.
+
+58
+00:06:55.410 --> 00:07:04.839
+MARCO SCILIPOTI: Sinceramente la matemática y como el arregle. Y eso no es lo más importante de esto. Siento que es mala intuición un poco del objetivo. Bueno, la regla, y
+
+59
+00:07:05.100 --> 00:07:07.940
+MARCO SCILIPOTI: es también ver que no sale
+
+60
+00:07:08.060 --> 00:07:18.360
+MARCO SCILIPOTI: como que que no es tan una magia negra como diciendo que a veces puede parecer. Por eso bueno es hacerlo sin manual y
+
+61
+00:07:19.180 --> 00:07:25.600
+MARCO SCILIPOTI: en la en el ipad. Acá quería sí, no irme sin conectar un poco con la clase de
+
+62
+00:07:25.960 --> 00:07:34.520
+MARCO SCILIPOTI: de multicava. No como vimos el Al fin y al cabo, la el alcoholismo del preceptor multicapa. Esto viene a ser entrenamiento. No tenemos
+
+63
+00:07:34.640 --> 00:07:40.540
+MARCO SCILIPOTI: un número de épocas, no después. Por cada ejemplo, entrenamiento, el Dataset
+
+64
+00:07:40.830 --> 00:07:47.509
+MARCO SCILIPOTI: que tenemos, acá Lo que primero hacemos, y esto es lo que vamos a hacer nosotros manualmente es el for Arpass.
+
+65
+00:07:49.510 --> 00:07:53.649
+MARCO SCILIPOTI: Lo que vamos a hacer ahora es redefinir una red
+
+66
+00:07:54.120 --> 00:07:58.230
+MARCO SCILIPOTI: como una anorexia. No es una renuncia de una neurona
+
+67
+00:07:58.380 --> 00:08:01.200
+MARCO SCILIPOTI: íbamos a hacer Ford bas de una neurona
+
+68
+00:08:01.250 --> 00:08:20.500
+MARCO SCILIPOTI: en base a un a un valor del W a tipo a una inicialización de pesos no que va a tener que va a tener un doble B, va a tener un B, es decir, vayas y un la matriz de pesos va a tener un valor de entrada, ¿sí? Y va a tener un valor esperada de salida.
+
+69
+00:08:20.880 --> 00:08:22.690
+MARCO SCILIPOTI: Nos llevamos a hacer el Fore Bass.
+
+70
+00:08:22.780 --> 00:08:40.950
+MARCO SCILIPOTI: Y después lo que también vamos a hacer es de en este paso. Esto justamente habla de la optimización, no el aplicar los pesos y el bayas. Pero vamos a calcular este de acá que es un poco el el output, no del Pack propaia.
+
+71
+00:08:41.570 --> 00:09:00.590
+MARCO SCILIPOTI: No es un algoritmo de optimización. No, Eso siente que es algo muy clave de entender como conceptualmente Va Preparation Es un algoritmo que simplemente te permite propagar el gradiente, obtener el valor de un gradiente, en su caso máximo. Es este
+
+72
+00:09:00.740 --> 00:09:03.269
+MARCO SCILIPOTI: que acá bueno, justo, gemma arquil
+
+73
+00:09:03.970 --> 00:09:12.450
+MARCO SCILIPOTI: no sería. Esto es un poco lo que muestra lo de adelante. No es el es el
+
+74
+00:09:14.500 --> 00:09:24.530
+MARCO SCILIPOTI: el error sobre un cambio en un peso diario. Entonces, esto para conseguir que, en realidad, lo que nos falta acá en el algoritmo es lo que vamos a hacer ahora.
+
+75
+00:09:24.810 --> 00:09:32.109
+MARCO SCILIPOTI: manualmente. Y después, una vez que tenemos el gradiente, bueno, tenemos el algoritmo de optimización que está acá planteado
+
+76
+00:09:32.830 --> 00:09:34.060
+MARCO SCILIPOTI: en
+
+77
+00:09:34.440 --> 00:09:41.280
+MARCO SCILIPOTI: muy bien. Eso era vamos para conectarme un poco con lo de Maru. Y ahora, como dije, vamos a hacer el fogar pass de la neurona.
+
+78
+00:09:41.440 --> 00:09:56.009
+MARCO SCILIPOTI: Bueno, esto entra lo del grafo que en realidad siento que es más para hacerlo visual formalmente. Es muy interesante porque se arma un grafo, es decir, como dije, la grababation es el algoritmo. No
+
+79
+00:09:56.200 --> 00:10:08.230
+MARCO SCILIPOTI: se pueden hacer librerías. Había una muy buena de Andrés Carpati después la puedo mandar Link, que era como micrograd o algo así. ¿no? Brother, que era como un enjin de cómo hacer la Corporation.
+
+80
+00:10:08.630 --> 00:10:14.779
+MARCO SCILIPOTI: Y él armaba un daga que viene a ser un grafo o tirete. O decir, diré, diré clic
+
+81
+00:10:14.990 --> 00:10:21.039
+MARCO SCILIPOTI: así que Craft hace tanto. No hablo con grafos
+
+82
+00:10:22.240 --> 00:10:26.800
+MARCO SCILIPOTI: que no vino al caso. Simplemente ahora es mucho más fácil de para explicar.
+
+83
+00:10:27.820 --> 00:10:42.010
+MARCO SCILIPOTI: Así que es la razón que lo hacemos así. Entonces la neurona que definimos es esta. No es la función de la neurona en mi función no lineal. Está en antiperólico.
+
+84
+00:10:42.340 --> 00:10:46.870
+MARCO SCILIPOTI: Mi w no es mi mis webs.
+
+85
+00:10:47.160 --> 00:11:01.290
+MARCO SCILIPOTI: mi vallas, y X es mi input igual es mi Iput. Ahora, como bien, vieron todas estas cosas. Generalmente son victoriales, matriciales tienen dimensiones
+
+86
+00:11:01.670 --> 00:11:04.449
+MARCO SCILIPOTI: sensores si 1 se va incluso más grande.
+
+87
+00:11:04.920 --> 00:11:11.779
+MARCO SCILIPOTI: Pero ahora va a ser un escalar, ¿no? Si no, los números se llegan a ser muy feos.
+
+88
+00:11:11.990 --> 00:11:19.009
+MARCO SCILIPOTI: y estos están definidos acá entonces tenemos los parámetros de inicialización de minebrona, que es W, un medio
+
+89
+00:11:19.250 --> 00:11:26.710
+MARCO SCILIPOTI: de un cuarto todo para hacer los números un poco más fácil. Y después tengo lo que yo llamo como mi tuple entrenamiento. No.
+
+90
+00:11:27.450 --> 00:11:28.300
+MARCO SCILIPOTI: Estos son
+
+91
+00:11:28.450 --> 00:11:39.789
+MARCO SCILIPOTI: la tupla de entrenamiento. Viene a ser esencialmente mi mi input. No recuerdan acá que yo en el algoritmo decía, bueno, tomó un training example ese U a
+
+92
+00:11:40.290 --> 00:11:43.300
+MARCO SCILIPOTI: ese Mooc sería este. Este es tu plan.
+
+93
+00:11:43.400 --> 00:11:44.999
+MARCO SCILIPOTI: Sería mi input
+
+94
+00:11:45.160 --> 00:12:00.040
+MARCO SCILIPOTI: de mi neurona y y prima. Es mi espectro, ¿no? Acá como ven, también yo tengo la definición de mi neurona. Y después tengo la función de mi error, que es el error cuadrático, medio.
+
+95
+00:12:00.130 --> 00:12:05.760
+MARCO SCILIPOTI: o Mins Square Earl, que está acá definido
+
+96
+00:12:06.000 --> 00:12:11.050
+MARCO SCILIPOTI: al final, y un poco como como se lee El grafo es en
+
+97
+00:12:11.560 --> 00:12:17.890
+MARCO SCILIPOTI: quiero pensar directo en los círculos. Tenemos las operaciones, no como la suma, la multiplicación.
+
+98
+00:12:18.110 --> 00:12:29.000
+MARCO SCILIPOTI: el tangente hiperólico y, bueno, el error al final, ya ya lo agrego así. Y después en cada cajita, lo que viene a ser Bueno, en cada Liv, No, esto sería la Liv.
+
+99
+00:12:29.260 --> 00:12:36.100
+MARCO SCILIPOTI: cada hoja, tengo, al fin y al cabo, una entrada. No tengo mi equis entrada.
+
+100
+00:12:36.650 --> 00:12:38.889
+MARCO SCILIPOTI: 1 000 000 de pesos y vayas.
+
+101
+00:12:39.200 --> 00:12:47.279
+MARCO SCILIPOTI: y acá después tengo como si fuesen los valores intermedios, no, por ejemplo, mi agente hipoblórico doble X
+
+102
+00:12:47.380 --> 00:12:54.840
+MARCO SCILIPOTI: a ver. Entonces, primero tengo doble X, no es X, por W, no sería así
+
+103
+00:12:55.450 --> 00:13:04.399
+MARCO SCILIPOTI: me doble X. Después le sumo beta me ha dado el X beta. Después le aplico el tangente hiperbólico, y acá me queda no que sea un poco chico. Pero bueno.
+
+104
+00:13:04.960 --> 00:13:07.590
+MARCO SCILIPOTI: esta gente hipolico del X I plus B
+
+105
+00:13:07.720 --> 00:13:11.590
+MARCO SCILIPOTI: Y después aplico la fórmula del error
+
+106
+00:13:12.100 --> 00:13:17.640
+MARCO SCILIPOTI: que es esta, que simplemente no reemplacé. Y por esto, porque si no, no voy a entrar.
+
+107
+00:13:17.980 --> 00:13:26.340
+MARCO SCILIPOTI: así que nada, eso es lo que vendría a ser el el grafo directo a cíclico.
+
+108
+00:13:26.450 --> 00:13:30.779
+MARCO SCILIPOTI: que en realidad na es una neurona. Siento que también lo hace más visual.
+
+109
+00:13:31.330 --> 00:13:37.450
+MARCO SCILIPOTI: Y de alguna manera sí tiene que ver con cómo 1 implementaría este algoritmo, así que también está bueno que
+
+110
+00:13:38.240 --> 00:13:43.939
+MARCO SCILIPOTI: rebotar un poco las el La Nom, la sí, los términos.
+
+111
+00:13:45.270 --> 00:13:48.960
+MARCO SCILIPOTI: Muy bien, alguna pregunta de estos tan medianamente
+
+112
+00:13:50.660 --> 00:13:53.610
+MARCO SCILIPOTI: claro. Ahora voy a proseguir a hacer.
+
+113
+00:13:53.610 --> 00:13:56.870
+JOAQUÍN NICOLÁS YULÁN LUCIOLI: Es solo aplicar la fórmula no exacto.
+
+114
+00:13:56.980 --> 00:14:02.730
+MARCO SCILIPOTI: Muy bien. Entonces, con eso, ¿cuál sería el cavar? Muy bien, ¿Cuál sería valores
+
+115
+00:14:03.670 --> 00:14:05.649
+MARCO SCILIPOTI: en data? ¿vamos a abordar el valor.
+
+116
+00:14:12.890 --> 00:14:17.440
+MARCO SCILIPOTI: Si hago tipo X por doble B, multiplico, los data y me daría acá
+
+117
+00:14:21.940 --> 00:14:23.420
+MARCO SCILIPOTI: un cuarto, ¿no?
+
+118
+00:14:24.970 --> 00:14:31.980
+MARCO SCILIPOTI: Bueno, después, si lo sumo, como dije, me daría.
+
+119
+00:14:33.050 --> 00:14:34.980
+MARCO SCILIPOTI: Entramos con los apuntes.
+
+120
+00:14:37.270 --> 00:14:38.090
+MARCO SCILIPOTI: Sí,
+
+121
+00:14:38.530 --> 00:14:50.010
+MARCO SCILIPOTI: me haría un medio. No concordamos un cuarto de su medio, simplemente aplico en sobre el data el el elemento de acá Y después lleva tarjeta probólico, o, bueno, esto ya sea 0, coma. 46,
+
+122
+00:14:50.140 --> 00:14:51.870
+MARCO SCILIPOTI: es usar la calculadora
+
+123
+00:14:53.200 --> 00:15:00.759
+MARCO SCILIPOTI: y a cada vuelta. No puedo aplicar el data porque yo también tengo este, y entonces es un medio
+
+124
+00:15:01.300 --> 00:15:08.260
+MARCO SCILIPOTI: menos 0 con un 6, no al cuadrado.
+
+125
+00:15:08.820 --> 00:15:20.020
+MARCO SCILIPOTI: Y esto me da mi error, que también es interesante. ¿no? Uno de los países siempre habla de errores, pero nunca. Bueno, nunca lo calculo es el error para este ejemplo de entrenamiento.
+
+126
+00:15:20.170 --> 00:15:23.209
+MARCO SCILIPOTI: no para este ejemplo puntual. Y esta
+
+127
+00:15:23.420 --> 00:15:32.799
+MARCO SCILIPOTI: este peso que tenía mi neurona, el error me da eso que si ven, es bastante chiquito, no, porque también tiene sentido Si 1 ve, bueno, mi i medio 0, 46,
+
+128
+00:15:33.090 --> 00:15:35.930
+MARCO SCILIPOTI: y mi esperado es un medio, no un 0 coma. Cinco.
+
+129
+00:15:36.170 --> 00:15:42.549
+MARCO SCILIPOTI: Entonces la verdad que está bastante cerca y Bueno, efectivamente el rock cuadrado medio, bastante intuitivo. Y también me da muy chico.
+
+130
+00:15:43.220 --> 00:15:48.440
+MARCO SCILIPOTI: Eso es el favor pass que viene a ser esta parte de acá
+
+131
+00:15:48.900 --> 00:15:50.820
+MARCO SCILIPOTI: Ahora, lo que vamos a hacer es
+
+132
+00:15:51.450 --> 00:15:54.059
+MARCO SCILIPOTI: el Valward Bass que nos vas a dar esto
+
+133
+00:15:54.750 --> 00:16:03.890
+MARCO SCILIPOTI: y vamos a hacerlo desde acá. Ahora tengo todo rellenado. Y ahora empiezo un poco como arma.
+
+134
+00:16:04.270 --> 00:16:11.750
+MARCO SCILIPOTI: ¿cómo aplica el algoritmo que ustedes ya vieron formalmente la clase de Maru. Pero ahora vamos a hacerlo como
+
+135
+00:16:12.150 --> 00:16:23.040
+MARCO SCILIPOTI: manualmente. El objetivo de vuelta es llegar acá yo el gradiente Siempre se entiende como que se visualiza
+
+136
+00:16:23.640 --> 00:16:28.780
+MARCO SCILIPOTI: como que se mueve, así como a través de los que conectan los nodos.
+
+137
+00:16:29.230 --> 00:16:39.420
+MARCO SCILIPOTI: Alguien dijo algo, está todo si no interrumpan. Y mi objetivo. No, si llego encontrar al gerente que entra, acá que es
+
+138
+00:16:39.740 --> 00:16:50.390
+MARCO SCILIPOTI: que, al fin y al cabo, siempre 1 piensa que la gente sobre el error. Ahora van a ver por qué. Pero es el agente del error sobre W, No, Este es mi objetivo.
+
+139
+00:16:51.250 --> 00:16:56.179
+MARCO SCILIPOTI: Mhm: y en realidad, donde 1 parte siempre es desde el final.
+
+140
+00:16:56.460 --> 00:16:57.480
+MARCO SCILIPOTI: ¿por qué?
+
+141
+00:16:57.650 --> 00:17:03.420
+MARCO SCILIPOTI: Bueno, es un poco la definición del algoritmo? No siento que podría haber otras maneras, pero
+
+142
+00:17:04.190 --> 00:17:07.550
+MARCO SCILIPOTI: al fin y al cabo, al final, 1 dice: el
+
+143
+00:17:09.290 --> 00:17:14.280
+MARCO SCILIPOTI: tiene esta identidad que mostrábamos al principio, que es la derivada del error en función del error. No.
+
+144
+00:17:14.819 --> 00:17:24.019
+MARCO SCILIPOTI: esto, como vimos, es 1, y es un poco la base o el el el caso base que tiene todo el grafo que se arma
+
+145
+00:17:24.790 --> 00:17:29.730
+MARCO SCILIPOTI: y es lo que, al fin y al cabo, es el primer valor que después nos permite ir moviendo el gradiente.
+
+146
+00:17:30.070 --> 00:17:34.299
+MARCO SCILIPOTI: Una vez que tengo esto, la idea es moverme a través del grafo.
+
+147
+00:17:34.930 --> 00:17:38.409
+MARCO SCILIPOTI: no por todas las operaciones hasta llegar acá
+
+148
+00:17:39.080 --> 00:17:43.629
+MARCO SCILIPOTI: y así obtener es moverme, es decir, aplicar la red de la cadena.
+
+149
+00:17:43.820 --> 00:17:44.980
+MARCO SCILIPOTI: ¿en
+
+150
+00:17:45.590 --> 00:17:53.050
+MARCO SCILIPOTI: qué es lo que vamos a hacer ahora Esto simplemente es como para que sea un poco más visual. Entonces acá lo que puedo ver es
+
+151
+00:17:53.160 --> 00:17:56.690
+MARCO SCILIPOTI: la derivada del error en base a ella, no
+
+152
+00:17:56.900 --> 00:18:03.490
+MARCO SCILIPOTI: que sería anulear. Esto es igual a I y es igual a bueno
+
+153
+00:18:04.740 --> 00:18:12.679
+MARCO SCILIPOTI: para hacer eso nada. Ahora, sí vamos a empezar a usar la regla. Copiamos de vuelta.
+
+154
+00:18:13.050 --> 00:18:19.079
+MARCO SCILIPOTI: Que la deriva del error es sobre sí mismo. Es 1
+
+155
+00:18:19.340 --> 00:18:24.139
+MARCO SCILIPOTI: por definición de arriba. Y ahora vamos a buscar.
+
+156
+00:18:25.420 --> 00:18:29.070
+MARCO SCILIPOTI: Este tendría el error en función de ello, no
+
+157
+00:18:31.090 --> 00:18:37.210
+MARCO SCILIPOTI: ahora que en realidad se puede escribir, no como el día de y
+
+158
+00:18:40.030 --> 00:18:44.080
+MARCO SCILIPOTI: sobre deriva de. Y ahora, si bien esto ya acá siento que
+
+159
+00:18:44.800 --> 00:18:57.919
+MARCO SCILIPOTI: es algo que han hecho, no estaría. No es nada muy del otro mundo En análisis, siento que ha hecho cosas más difíciles, si no en física. Acá lo que hacemos, no definir u de X acá
+
+160
+00:19:00.410 --> 00:19:07.850
+MARCO SCILIPOTI: como la función de adentro, ¿no? Y sobre Y ahora.
+
+161
+00:19:09.250 --> 00:19:16.760
+MARCO SCILIPOTI: y en realidad esto se transforma en lo que Bueno, si lo reemplazo solo es la mente prolija.
+
+162
+00:19:20.270 --> 00:19:26.200
+MARCO SCILIPOTI: se le iba a de u cuadrado hombre, definición.
+
+163
+00:19:26.700 --> 00:19:37.360
+MARCO SCILIPOTI: Una vez que definí, vamos a mantener con la definición inicial que hicimos una vez que definí, U es la derivada de Soriu, la derivada de
+
+164
+00:19:37.860 --> 00:19:38.590
+MARCO SCILIPOTI: no.
+
+165
+00:19:39.080 --> 00:19:43.630
+MARCO SCILIPOTI: Y esto es igual a deriva de
+
+166
+00:19:45.840 --> 00:19:50.909
+MARCO SCILIPOTI: al cuadrado, no porque al fin y al cabo, es lo que hice acá. Arriba.
+
+167
+00:19:51.270 --> 00:19:59.080
+MARCO SCILIPOTI: Ohh sobre derivada de U por la derivada de
+
+168
+00:19:59.210 --> 00:20:07.600
+MARCO SCILIPOTI: y prima acordarse acá que imprimes un valor no imprimes, mi valor de entrenamiento, entonces, y prima en realidades.
+
+169
+00:20:08.030 --> 00:20:12.749
+MARCO SCILIPOTI: un medio que es, sí salir a esperar.
+
+170
+00:20:17.900 --> 00:20:25.420
+MARCO SCILIPOTI: Y en realidad también bueno, ya que estamos en eso y también no acordarse que estaba haciendo el Varg. El algoritmo
+
+171
+00:20:26.050 --> 00:20:36.840
+MARCO SCILIPOTI: puede hacer un fort bass y puede ser un vapor pass. Entonces el y viene a ser el data que Esto es 0, coma. 26 Eso está bueno a tener en cuenta que terminan siendo números.
+
+172
+00:20:37.020 --> 00:20:40.729
+MARCO SCILIPOTI: pero bueno, lo vamos a saber bien.
+
+173
+00:20:41.220 --> 00:20:48.190
+MARCO SCILIPOTI: por ir más delante de ese extremo. Pero bueno, ¿y ahora, si aplicamos la derivada, ¿no? Bueno, la derivada, Esto me queda 2 por 1,
+
+174
+00:20:48.970 --> 00:20:55.779
+MARCO SCILIPOTI: sí por derivada de I prima sobre I es una constante.
+
+175
+00:20:56.270 --> 00:21:03.860
+MARCO SCILIPOTI: Entonces me quedo a 0 y después le I, sobre y me queda los unos.
+
+176
+00:21:04.600 --> 00:21:11.819
+MARCO SCILIPOTI: Y esto es igualado por y menos mi prima, porque cambian menos.
+
+177
+00:21:12.220 --> 00:21:20.170
+MARCO SCILIPOTI: Y ahora, si reemplazo, no Ahora, lo que lo que termino introduciendo acá es los datos del Four Pass.
+
+178
+00:21:22.010 --> 00:21:22.940
+MARCO SCILIPOTI: Mhm.
+
+179
+00:21:26.690 --> 00:21:38.089
+MARCO SCILIPOTI: Porque de vuelta yo lo que voy a buscar es cuánto cambio mi error en base a mi salida para el ejemplo de de de entrenamiento, ¿no? Y la configuración de mi neurona en ese punto
+
+180
+00:21:38.590 --> 00:21:41.020
+MARCO SCILIPOTI: por más.
+
+181
+00:21:45.360 --> 00:21:49.929
+MARCO SCILIPOTI: Y esto, bueno, me termina dando menos 0, coma 0, 8.
+
+182
+00:21:51.170 --> 00:21:56.470
+MARCO SCILIPOTI: Muy bien. Bueno, tenemos la primera llegada que es esta, y
+
+183
+00:21:56.680 --> 00:22:04.610
+MARCO SCILIPOTI: lo que voy a hacer ahora es anotarlas acá. Así. Vamos tragueando
+
+184
+00:22:09.980 --> 00:22:22.149
+MARCO SCILIPOTI: muy bien. Ahora, la próxima es, como dije, los círculos son operaciones en este caso, el tangente hiperónico es otra operación, como es la suma, la obligación.
+
+185
+00:22:22.580 --> 00:22:25.920
+MARCO SCILIPOTI: Entonces lo que voy a hacer acá es
+
+186
+00:22:26.680 --> 00:22:35.460
+MARCO SCILIPOTI: la deriva del error, No repito lo mismo. Es cuanto al error versus cuánto es como lo que
+
+187
+00:22:36.900 --> 00:22:40.660
+MARCO SCILIPOTI: está. Entonces es como se llama. Esto M,
+
+188
+00:22:42.970 --> 00:22:48.330
+MARCO SCILIPOTI: sobre que vendría a ser a cuánto cambio el error en base a mi argumento a tangente hiperbólico.
+
+189
+00:22:49.180 --> 00:22:59.380
+MARCO SCILIPOTI: y ahora es simplemente hago la misma vuelta y aplico la regla, no la deriva del error.
+
+190
+00:23:00.670 --> 00:23:06.989
+MARCO SCILIPOTI: Yo, el argumento de tanta gente hipodónico es esto es simplemente la definición.
+
+191
+00:23:08.330 --> 00:23:09.610
+MARCO SCILIPOTI: Mhm.
+
+192
+00:23:14.120 --> 00:23:16.050
+MARCO SCILIPOTI: no donde ir.
+
+193
+00:23:16.320 --> 00:23:25.310
+MARCO SCILIPOTI: Por definición que vimos ya antes era doble Xer.
+
+194
+00:23:26.840 --> 00:23:35.300
+MARCO SCILIPOTI: ¿sí? Y esto por eso había notado eso. Me estaba entendiendo. A mí me preguntó esta gente y proligo de M. Entonces me queda que
+
+195
+00:23:36.220 --> 00:23:46.900
+MARCO SCILIPOTI: deriva de sobre de Is también. Notar que esto es justo lo que yo calculé, no cuanto cambia mi error en base a la salida de mi neurona.
+
+196
+00:23:48.130 --> 00:23:56.420
+MARCO SCILIPOTI: Entonces ya ya tengo un resultado. Esto es como lo dejo simplemente lo que siempre voy a tener que expandir, por así decir, la parte de la derecha no lo mismo pasó? Acá.
+
+197
+00:23:57.410 --> 00:24:02.749
+MARCO SCILIPOTI: Bueno, sí, a través de U B.
+
+198
+00:24:03.190 --> 00:24:09.450
+MARCO SCILIPOTI: Pero bueno, de ahí sobre M, vamos a reescribirlo tangente de H.
+
+199
+00:24:10.690 --> 00:24:21.690
+MARCO SCILIPOTI: T, M: Sobre esto del principio, puedo reemplazar. No termino igual. Está atado el L
+
+200
+00:24:22.040 --> 00:24:29.360
+MARCO SCILIPOTI: hasta acá no es como general, y acá lo que hago es reemplazo el Four Bass. El
+
+201
+00:24:31.750 --> 00:24:40.249
+MARCO SCILIPOTI: como dije, ya me estoy repitiendo el valor de mi inserción de mi neurona en antes de estiración a este Epoc, ¿no? Y
+
+202
+00:24:41.690 --> 00:24:47.400
+MARCO SCILIPOTI: mi para el ordenamiento.
+
+203
+00:24:47.700 --> 00:24:58.979
+MARCO SCILIPOTI: Bueno, esto sale de la tabla, ¿no? Como también os había dicho antes, y ahora simplemente puedo reemplazar, No porque M: meto el valor que está arriba de todo.
+
+204
+00:24:59.310 --> 00:25:04.010
+MARCO SCILIPOTI: que M. Era un medio. Entonces me quedan todos números.
+
+205
+00:25:04.500 --> 00:25:09.050
+MARCO SCILIPOTI: y esto me da no 0 como 0, 6. Muy bien.
+
+206
+00:25:09.920 --> 00:25:16.240
+MARCO SCILIPOTI: Ahora, repito, esto es un poco lo lo que tiene el
+
+207
+00:25:17.460 --> 00:25:28.299
+MARCO SCILIPOTI: el grafo. Qué? Bueno que los hace en las computadoras es que atrás de toda operación no
+
+208
+00:25:28.840 --> 00:25:30.809
+MARCO SCILIPOTI: acá tengo otra operación que se llamas.
+
+209
+00:25:31.400 --> 00:25:37.779
+MARCO SCILIPOTI: Tengo el qué sé cálculo de gradientes. Esto lo llamamos Q
+
+210
+00:25:39.350 --> 00:25:44.780
+MARCO SCILIPOTI: Y acá podemos ya calcular, no que eso está Bueno.
+
+211
+00:25:45.080 --> 00:25:48.239
+MARCO SCILIPOTI: intuitivamente siento que es interesante que ya estamos viendo
+
+212
+00:25:48.370 --> 00:25:56.040
+MARCO SCILIPOTI: cuánto cambia el error, no de mi neurona. En base al V a Ias en
+
+213
+00:25:56.580 --> 00:26:11.750
+MARCO SCILIPOTI: vamos a hacerlo. Y acá lo que se dice noche en Drive Mhm sobre ya, pues lo vamos a
+
+214
+00:26:13.170 --> 00:26:16.839
+MARCO SCILIPOTI: de q por estar seguro. Es el barrio. Sí,
+
+215
+00:26:20.270 --> 00:26:31.050
+MARCO SCILIPOTI: muy bien, entonces jugando a la menor. No sea Q: No estás jugando el error en base a
+
+216
+00:26:31.410 --> 00:26:39.540
+MARCO SCILIPOTI: primero defina Moscú, que derivó a la tú le ve X, ¿no?
+
+217
+00:26:40.200 --> 00:26:47.290
+MARCO SCILIPOTI: Y al mismo tiempo, Bueno, esto es un poco molesto, Pero antes yo había definido e m no es molesto, pero nada.
+
+218
+00:26:47.570 --> 00:26:52.809
+MARCO SCILIPOTI: muchas letras extras como para que la regla de acá no quede tan difícil
+
+219
+00:26:53.030 --> 00:26:59.090
+MARCO SCILIPOTI: m es el argumento de mi tarjeta hiperbólico y Q es bueno la entrada por el
+
+220
+00:26:59.900 --> 00:27:08.410
+MARCO SCILIPOTI: los weits. Y ahora sí puedo descomponer esto en sobre sobre eco.
+
+221
+00:27:09.490 --> 00:27:10.740
+MARCO SCILIPOTI: Mhm.
+
+222
+00:27:10.860 --> 00:27:16.949
+MARCO SCILIPOTI: Este no es el resultado que justo calculamos arriba. Como ven, este no
+
+223
+00:27:17.080 --> 00:27:22.260
+MARCO SCILIPOTI: se empieza siempre a encadenar. Por eso darle la cadena.
+
+224
+00:27:22.960 --> 00:27:34.960
+MARCO SCILIPOTI: Así que es un valor dado y el otro. Si lo expando como a ver Q,
+
+225
+00:27:35.920 --> 00:27:41.809
+MARCO SCILIPOTI: este es igual a esencialmente es de sobre, no.
+
+226
+00:27:45.480 --> 00:27:55.260
+MARCO SCILIPOTI: entonces tengo que sí sobre eco schoola.
+
+227
+00:27:55.460 --> 00:27:57.590
+MARCO SCILIPOTI: pero 0 1 0, 0, 6.
+
+228
+00:27:59.610 --> 00:28:12.659
+MARCO SCILIPOTI: Y ahora a ver si entra acá el byas o si ya había saltado directamente. Sí, vamos a hacer lo del byas. Y vamos a terminar ahí. Lo que es hacer el backorback, no podríamos llegar hasta acá. ¿no?
+
+229
+00:28:12.800 --> 00:28:13.740
+MARCO SCILIPOTI: ¿
+
+230
+00:28:14.000 --> 00:28:22.209
+MARCO SCILIPOTI: Es decir, llegar hasta el doble B. Ya me doy cuenta por qué siempre terminan el bayas porque se pone molesto rápido las derivadas a mano por no llegar hasta acá
+
+231
+00:28:22.390 --> 00:28:33.209
+MARCO SCILIPOTI: vamos a llegar hasta acá en realidad, la siendo la mecanismo lo mismo, no en este caso voy a tener multiplicación. Entonces voy a tener acá. El
+
+232
+00:28:34.290 --> 00:28:36.760
+MARCO SCILIPOTI: de Uf.
+
+233
+00:28:42.310 --> 00:28:48.310
+MARCO SCILIPOTI: El error le pasa a doble X, ¿no? Y después lo hago.
+
+234
+00:28:48.860 --> 00:28:54.069
+MARCO SCILIPOTI: Pero vamos a quedarnos con la condición de cómo cambia los errores más un cambio en el vallas.
+
+235
+00:28:54.190 --> 00:29:05.289
+MARCO SCILIPOTI: interpretarlo y ver ¿Cómo generaliza esto un poco en entonces? ¿cómo cambiaron loyas?
+
+236
+00:29:07.700 --> 00:29:13.029
+MARCO SCILIPOTI: No, Yo se que por la larga cadena, El error
+
+237
+00:29:13.460 --> 00:29:17.259
+MARCO SCILIPOTI: más a M: no por M.
+
+238
+00:29:18.180 --> 00:29:22.319
+MARCO SCILIPOTI: Yo de B, donde m. Si regalamos bien, es doble. X,
+
+239
+00:29:23.100 --> 00:29:30.239
+MARCO SCILIPOTI: siento que estaría bueno tener un mini snep del grafo mientras hago esto porque se aprendiendo, pero doble X, es Q:
+
+240
+00:29:30.880 --> 00:29:32.550
+MARCO SCILIPOTI: No estoy eso.
+
+241
+00:29:33.550 --> 00:29:34.430
+MARCO SCILIPOTI: Venga.
+
+242
+00:29:34.950 --> 00:29:40.090
+MARCO SCILIPOTI: M: E, D, W, B, Y yo quiero ser obtener este
+
+243
+00:29:40.300 --> 00:29:50.210
+MARCO SCILIPOTI: y viene el el gradiente de m. Entonces X, B: Exacto.
+
+244
+00:29:51.360 --> 00:29:59.610
+MARCO SCILIPOTI: Y ahora, simplemente, este y vuelta es el dato anterior, que es menos 0, 6.
+
+245
+00:30:01.800 --> 00:30:08.550
+MARCO SCILIPOTI: Y este otro termina siendo de vuelta doble equi plus, B
+
+246
+00:30:11.440 --> 00:30:17.180
+MARCO SCILIPOTI: y vídeos de bebé. Y bueno, la primera medalla
+
+247
+00:30:17.430 --> 00:30:20.779
+MARCO SCILIPOTI: 0, porque es una constante, y la otra me da. Uno.
+
+248
+00:30:21.000 --> 00:30:25.439
+MARCO SCILIPOTI: Es una constante fusión de B. No me queda menos. Menos. Entonces
+
+249
+00:30:26.240 --> 00:30:31.970
+MARCO SCILIPOTI: bien, ya logramos el cuánto cambia el error en base a mis varias.
+
+250
+00:30:34.140 --> 00:30:37.419
+MARCO SCILIPOTI: Y ahora es un poco el
+
+251
+00:30:38.300 --> 00:30:47.790
+MARCO SCILIPOTI: L ¿Qué vendría después? Les voy a preguntar, una vez que tengo cuánto cambiar el masa albayas. Lo que tengo que hacer es la optimización. ¿no? En algún momento
+
+252
+00:30:48.000 --> 00:30:52.720
+MARCO SCILIPOTI: alguien se acuerda cómo era la función cortita de optimización. Siento que
+
+253
+00:30:54.830 --> 00:30:59.320
+MARCO SCILIPOTI: si no podemos no irnos al fuera de tema.
+
+254
+00:30:59.510 --> 00:31:09.199
+MARCO SCILIPOTI: pero en realidad es algo bastante corto. Y siento que va yo cuando la primera vez que lo vi fue muy interesante porque la anotación que causa es
+
+255
+00:31:09.790 --> 00:31:13.730
+MARCO SCILIPOTI: sobre como para mantenerlo. Es lo mismo. No.
+
+256
+00:31:14.510 --> 00:31:18.160
+MARCO SCILIPOTI: no es lo mismo, pero esencialmente como a actualizo el
+
+257
+00:31:18.330 --> 00:31:21.210
+MARCO SCILIPOTI: lo hayas. Y como actualizo el
+
+258
+00:31:25.540 --> 00:31:36.460
+MARCO SCILIPOTI: la matriz de peso doble de W. E: Muy bien, claro que eres, todo
+
+259
+00:31:39.570 --> 00:31:47.030
+MARCO SCILIPOTI: acá no tiene. Sería más 1 Okay, porque ahora son índice.
+
+260
+00:31:47.870 --> 00:31:55.729
+MARCO SCILIPOTI: Entonces yo con Just. Bueno, este bacuar paz de la neurona manual, yo podría hacer una actualización
+
+261
+00:31:55.910 --> 00:31:57.029
+MARCO SCILIPOTI: de mi B.
+
+262
+00:31:57.250 --> 00:32:01.410
+MARCO SCILIPOTI: No, esencialmente.
+
+263
+00:32:04.040 --> 00:32:14.239
+MARCO SCILIPOTI: Estoy haciendo estoy haciendo. Aprender a la neurona. No, Esto es lo que viene a hacer el el aprendizaje de la red neuronal, o qué sé yo es
+
+264
+00:32:14.930 --> 00:32:25.960
+MARCO SCILIPOTI: formas de la neurona. No evalúas frente a un una configuración de tu neurona en el o tu red multicapa o tu red, tu transformer si quieres
+
+265
+00:32:26.970 --> 00:32:36.549
+MARCO SCILIPOTI: baguar pass para obtener gradientes y después simplemente es actualizar el peso que tenía en iteración anterior. No, en este caso tenemos un bayas.
+
+266
+00:32:36.730 --> 00:32:43.350
+MARCO SCILIPOTI: simplemente cualquier beso Por l esencialmente. Yo quiero
+
+267
+00:32:43.520 --> 00:32:48.830
+MARCO SCILIPOTI: ir en la dirección bueno de de mi gradiente que minimice el error
+
+268
+00:32:50.340 --> 00:32:54.139
+MARCO SCILIPOTI: masticando un poco más. Se puede decir: no se acuerda que ingrediente. Te da
+
+269
+00:32:54.580 --> 00:32:59.819
+MARCO SCILIPOTI: la dirección en el gradiente. Tiene una función, ya sea escalar o editorial, te da la dirección.
+
+270
+00:33:00.190 --> 00:33:05.569
+MARCO SCILIPOTI: Y por bien estoy diciendo algo formal, pero el mayor crecimiento no. Entonces, si yo
+
+271
+00:33:06.420 --> 00:33:14.799
+MARCO SCILIPOTI: el resto. Eso esencialmente estoy minimizando. Eso es un poco la clave de de esto de acá que estamos haciendo como optimización.
+
+272
+00:33:15.390 --> 00:33:18.380
+MARCO SCILIPOTI: Mhm: No
+
+273
+00:33:19.290 --> 00:33:33.899
+MARCO SCILIPOTI: vamos a ver si puedo separar un poco esto que estoy escuchando ahora, la optimización, pero siento que la optimización va preparation para nosotros. Tiene sentido por optimización. Si no tuviese usado el gradiente, no tendría sentido sacar el gradiente, y el gradiente es un poco lo que
+
+274
+00:33:34.050 --> 00:33:37.480
+MARCO SCILIPOTI: codifica esa intuición de decir, bueno, yo quiero
+
+275
+00:33:38.680 --> 00:33:46.260
+MARCO SCILIPOTI: hacer aprender. No defino un error. Quiero mimizar error y, bueno, estoy diciendo que está aprendiendo.
+
+276
+00:33:46.370 --> 00:33:50.270
+MARCO SCILIPOTI: y eso la verdad que funciona en su formalidad.
+
+277
+00:33:50.760 --> 00:33:56.059
+MARCO SCILIPOTI: Y se ve, acá ¿no? Lo que me da Barboration es esto.
+
+278
+00:33:56.540 --> 00:34:01.120
+MARCO SCILIPOTI: Entonces Auswood de la Corporation.
+
+279
+00:34:03.490 --> 00:34:08.190
+MARCO SCILIPOTI: Y lo que me da luego optimización es frente a
+
+280
+00:34:09.670 --> 00:34:21.350
+MARCO SCILIPOTI: 1. Puede decir cada época. En este caso, sí, por ahí puede ser más complejo optimización. Sí, siento que si son muchos más avances, lo que es el aerolínea, pero no porque vuelta es explicar la regla de cadena repetitivas veces.
+
+281
+00:34:21.409 --> 00:34:32.799
+MARCO SCILIPOTI: Últimamente. Son las 2 combinaciones, los 2 es lo que hace aprender en la red. Nah. Después hay un montón de cosas que hay que poner regularización, como dijo muy bien Maru.
+
+282
+00:34:33.260 --> 00:34:38.939
+MARCO SCILIPOTI: porque la verdad, que es bastante naif siendo que ya en este este estado y la gente como
+
+283
+00:34:39.350 --> 00:34:45.150
+MARCO SCILIPOTI: 1 se da cuenta como que los no es mágico, ¿no? Muchas veces errores boludos
+
+284
+00:34:46.320 --> 00:34:59.749
+MARCO SCILIPOTI: como que buscan afrontar un modelo de una manera muy unidireccional. Y eso, bueno, si se va hoy en día con el M, cuando 1 habla una red para clasificar imágenes es aún más grande.
+
+285
+00:34:59.870 --> 00:35:16.139
+MARCO SCILIPOTI: la verdad. Así que nada optimización, estás como la base de bartration. Y hago esta actualización en dirección opuesta, de gradiente del error. Y digo, bueno, estoy minimizando mi error. Estoy aprendiendo mi neurona.
+
+286
+00:35:16.970 --> 00:35:20.909
+MARCO SCILIPOTI: pero sí, eso es esencialmente el baguardpass.
+
+287
+00:35:21.160 --> 00:35:27.660
+MARCO SCILIPOTI: El lo que es Barrobation como algoritmo es lo que hice yo normalmente. Recién Bueno.
+
+288
+00:35:27.930 --> 00:35:36.860
+MARCO SCILIPOTI: pueden volver a la clase de maru para ver la más definición del algoritmo. No se termina codeando todo esto
+
+289
+00:35:37.330 --> 00:35:42.709
+MARCO SCILIPOTI: justo en este caso. Bueno, es lo que quería tocar después lo que hicimos recién es
+
+290
+00:35:43.640 --> 00:35:46.659
+MARCO SCILIPOTI: el Baggrupation dentro de una neurona
+
+291
+00:35:47.540 --> 00:35:50.269
+MARCO SCILIPOTI: que eso en realidad no se hace. No
+
+292
+00:35:50.860 --> 00:36:04.069
+MARCO SCILIPOTI: es una slide nueva, porque siempre llega al final. Y yo quería como conectar con el concepto de que lo que hicimos recién de ca pasar el gradiente entre cada operación, suma, multiplicación, también tipo probable que no se hace
+
+293
+00:36:04.270 --> 00:36:10.460
+MARCO SCILIPOTI: en porque sería muy ineficiente. No todos esos pasos que yo hice
+
+294
+00:36:10.700 --> 00:36:13.760
+MARCO SCILIPOTI: lo que me terminan dando es
+
+295
+00:36:14.550 --> 00:36:18.759
+MARCO SCILIPOTI: una ventaja y una desventaja, No, la ventaja de Org Vation.
+
+296
+00:36:19.550 --> 00:36:30.290
+MARCO SCILIPOTI: no lo decir todavía ahora. Pero la ventaja es que es muy, son muchas operaciones cuando yo realmente, si no cambio lo que hay de dentro de una neurona no Si mi neurona
+
+297
+00:36:30.680 --> 00:36:40.430
+MARCO SCILIPOTI: contra gente hipoblórico siempre tiene la misma forma. Yo simplemente puedo guardar o harcodear, pero puedo
+
+298
+00:36:40.660 --> 00:36:51.220
+MARCO SCILIPOTI: guardar en mi librería. No imagine learning que no sé. La derivada de y no y definido como un coso sobre W, Es
+
+299
+00:36:52.110 --> 00:37:00.039
+MARCO SCILIPOTI: L lo tenemos arriba, No, no lo tengo formalmente, pero es al fin y al cabo, la la concatenación de
+
+300
+00:37:00.960 --> 00:37:05.330
+MARCO SCILIPOTI: todos los derivadas, no a través de la red de la cadena
+
+301
+00:37:05.920 --> 00:37:08.350
+MARCO SCILIPOTI: y al fin y al cabo, es una
+
+302
+00:37:09.420 --> 00:37:14.999
+MARCO SCILIPOTI: reemplazar los valores del four pass, los W, no
+
+303
+00:37:15.340 --> 00:37:18.270
+MARCO SCILIPOTI: los B y mi input y mi infoud
+
+304
+00:37:18.710 --> 00:37:29.219
+MARCO SCILIPOTI: para poder obtener grandes. Yo quiero decir que esto se puede guardar. Por ejemplo, si yo no tengo que guardar la fórmula y va a ser más claro. Pero esto se puede guardar que si, bueno, si yo tengo una
+
+305
+00:37:29.950 --> 00:37:39.269
+MARCO SCILIPOTI: neurona tangente hidrobólico, sie siempre va a ser lo mismo, ¿no? Entonces podemos encontrarlo a través de bubbletion, pero lo hago una vez
+
+306
+00:37:39.390 --> 00:37:46.189
+MARCO SCILIPOTI: ahora, cuando realmente entra power operation y un poco. La razón por la que existe es
+
+307
+00:37:47.190 --> 00:37:54.829
+MARCO SCILIPOTI: qué sucede si ahora sí vamos a lo que es. No sé, una una red multicapa. No, Incluso vamos a hacer antes algo más
+
+308
+00:37:55.160 --> 00:37:56.750
+MARCO SCILIPOTI: fácil. Así no están.
+
+309
+00:37:58.240 --> 00:38:06.450
+Marina Fuster: Perdón, marco te interrumpe un gatito. Antes de pasar multicapa, vienen bien, necesitan 5, porque no me di cuenta que fuimos.
+
+310
+00:38:06.830 --> 00:38:08.740
+MARCO SCILIPOTI: sí. Joder unas.
+
+311
+00:38:08.750 --> 00:38:20.720
+Marina Fuster: Menos 20. No me di cuenta de hacer un break Cuando cuando corte vienen bien, les parece seguir o necesitan antes de pasar multicapaz.
+
+312
+00:38:20.720 --> 00:38:23.829
+MARCO SCILIPOTI: Igual. Era como una persona.
+
+313
+00:38:23.830 --> 00:38:26.210
+GUIDO DE CARO: Ya está, cerramos.
+
+314
+00:38:26.210 --> 00:38:34.890
+MARCO SCILIPOTI: A ver alguna pregunta, mientras que puedo parar un poco tanto.
+
+315
+00:38:34.890 --> 00:38:39.419
+JOAQUÍN NICOLÁS YULÁN LUCIOLI: Principalmente seguir las fórmulas que vimos la clase pasada y en las diapositivas.
+
+316
+00:38:41.960 --> 00:38:43.000
+MARCO SCILIPOTI: Sí
+
+317
+00:38:43.130 --> 00:38:49.559
+MARCO SCILIPOTI: seguir la fórmula siempre, y es Buah. Yo, por lo menos la primera vez que vi esa fórmula, no la entendí,
+
+318
+00:38:49.800 --> 00:38:54.759
+MARCO SCILIPOTI: siendo que la formalidad necesaria personalmente cuando se presenta.
+
+319
+00:38:55.430 --> 00:39:04.330
+MARCO SCILIPOTI: pero y particularmente intuición, siento por ahí lo que destaco es si hicimos eso. Pero la intuición de decir, bueno, no.
+
+320
+00:39:04.470 --> 00:39:11.779
+MARCO SCILIPOTI: ¿Qué estoy haciendo con el barbarition? ¿no? ¿qué es la optimización? Partiendo de esto, que dije ahora del
+
+321
+00:39:12.700 --> 00:39:15.100
+MARCO SCILIPOTI: de la dirección no puede estar gradiente
+
+322
+00:39:15.540 --> 00:39:19.549
+MARCO SCILIPOTI: y que va aprobación. Es la manera que me da.
+
+323
+00:39:19.890 --> 00:39:27.520
+MARCO SCILIPOTI: sí, pero es eso lo que dijiste bien, te iba a decir sí,
+
+324
+00:39:27.750 --> 00:39:30.619
+MARCO SCILIPOTI: quedó claro. No sé si sería otra aportación.
+
+325
+00:39:43.720 --> 00:39:48.919
+MARCO SCILIPOTI: Bueno, como en Off, ya cerrando
+
+326
+00:39:49.070 --> 00:39:50.940
+MARCO SCILIPOTI: un poco lo que estaba diciendo es
+
+327
+00:39:51.250 --> 00:39:58.230
+MARCO SCILIPOTI: 1. No va a ser va agro para ello, nunca a través de una neurona, porque de vuelta.
+
+328
+00:39:58.620 --> 00:40:06.569
+MARCO SCILIPOTI: como bien acaban de decir es aplicar la fórmula ¿no? Y si yo la neurona nunca cambia, no siempre mi neurona
+
+329
+00:40:06.720 --> 00:40:22.380
+MARCO SCILIPOTI: mismo. Si entonces esta gente hipoblórico de h, esta gente hipoblórico 9 mismo. Si no sé decís. Bueno, por ahí tengo, no sé el arreglo. Bueno, haces puedes guardar también la arrelu ¿no? Y guardas como las variaciones básicas, y tienes esto.
+
+330
+00:40:22.530 --> 00:40:30.650
+MARCO SCILIPOTI: Pero lo que sí cambia y un poco la razón que sí existe. La preocupación es que, ¿qué pasa si yo cambio la arquitectura, No digamos que
+
+331
+00:40:31.170 --> 00:40:39.720
+MARCO SCILIPOTI: cada círculo Sí, tengo una neurona. Yo tengo. Estos son los tengo.
+
+332
+00:40:40.430 --> 00:40:46.030
+MARCO SCILIPOTI: Sí, Tocabas 3 entradas, ¿no? Y 2 de salida.
+
+333
+00:40:46.500 --> 00:40:49.190
+MARCO SCILIPOTI: ¿sí? Y lo entré en un rato en el algoritmo.
+
+334
+00:40:49.540 --> 00:40:56.129
+MARCO SCILIPOTI: Bueno, vamos que están bien las líneas y después. No sé
+
+335
+00:40:56.940 --> 00:41:02.649
+MARCO SCILIPOTI: si si ven bien, si por lo menos la intuición que doy ahora es que mi D E. No
+
+336
+00:41:02.800 --> 00:41:07.770
+MARCO SCILIPOTI: mi, de sobre esto sería así sobre de.
+
+337
+00:41:07.880 --> 00:41:20.440
+MARCO SCILIPOTI: bueno, lo voy a tener acá con lo que calcula mi error, no eso. Yo, la salida, y que voy a tener mi mi todo eso. Y acá al fin y al cabo, no sé, voy a tener el el peso.
+
+338
+00:41:20.520 --> 00:41:30.650
+MARCO SCILIPOTI: Uno, 1, no 1 siendo esta capa, pero es lo mismo, mi un peso, un aerona acá que va a ser modificado como
+
+339
+00:41:30.800 --> 00:41:32.990
+MARCO SCILIPOTI: el peso. Menos.
+
+340
+00:41:33.270 --> 00:41:34.160
+MARCO SCILIPOTI: ¿
+
+341
+00:41:34.720 --> 00:41:42.020
+MARCO SCILIPOTI: Esto era, ¿por cuánto cambio era de gente en función de sobre no.
+
+342
+00:41:42.400 --> 00:41:43.460
+MARCO SCILIPOTI: Ahora.
+
+343
+00:41:43.620 --> 00:41:50.949
+MARCO SCILIPOTI: si yo les digo no esto. Yo, esto es un Esto es una función, No es una función matemática. No, no es que puedo
+
+344
+00:41:51.250 --> 00:41:58.150
+MARCO SCILIPOTI: Dependi, que está armada a partir de cómo es cómo están los cables acá. Conectados, No por dónde pasó?
+
+345
+00:41:58.450 --> 00:42:04.639
+MARCO SCILIPOTI: Porque depende de de el gerente que entra acá el gerente que entra acá el ente que entra. Acá Sí,
+
+346
+00:42:05.370 --> 00:42:17.889
+MARCO SCILIPOTI: Ahora, si yo tomo esta misma arquitectura, sí, y no sé, agrego, hago lo mismo, pero
+
+347
+00:42:18.470 --> 00:42:26.390
+MARCO SCILIPOTI: que esto ha pasado entre pez, especialmente la out Encoder, que yo agrego, acá no sé una una más
+
+348
+00:42:26.770 --> 00:42:36.260
+MARCO SCILIPOTI: o no sé, abrigo una una más. Acá ¿no? Y pongo todos, acá sí.
+
+349
+00:42:38.300 --> 00:42:43.800
+MARCO SCILIPOTI: Y hago lo mismo de acá no puedo.
+
+350
+00:42:44.330 --> 00:42:52.680
+MARCO SCILIPOTI: Les parece que es lo mismo. Esto no llamemos esto.
+
+351
+00:42:55.370 --> 00:42:58.780
+MARCO SCILIPOTI: ¿qué piensas? ¿qué le dices en ella? Por más que por ahí ya lo
+
+352
+00:43:02.120 --> 00:43:07.329
+MARCO SCILIPOTI: puedo actualizar con con esta función o esta
+
+353
+00:43:07.760 --> 00:43:11.259
+MARCO SCILIPOTI: en base a la arquitectura. Si yo cambio, la arquitectura
+
+354
+00:43:12.290 --> 00:43:19.210
+MARCO SCILIPOTI: es la clave de esto cambia, como como es el gradiente que llega a mi peso doblegate.
+
+355
+00:43:20.930 --> 00:43:29.059
+MARCO SCILIPOTI: Por lo tanto, no puedo, si yo, si yo soy cuando 1, ya veo que 1 lo hace, Pero cuando 1 cambia la arquitectura
+
+356
+00:43:30.040 --> 00:43:39.920
+MARCO SCILIPOTI: no puede usar el mismo. La misma función de gradiente, porque la función grata está determinado justamente por la arquitectura. ¿cómo yo, el error que funciones encadeno, ¿Qué? No sé qué
+
+357
+00:43:40.910 --> 00:43:45.500
+MARCO SCILIPOTI: Entonces, rápidamente se puede ver
+
+358
+00:43:45.820 --> 00:43:53.820
+MARCO SCILIPOTI: que hay que recalcular, no o rearmar el grafo que acabamos de hacer, rehacer las derivadas
+
+359
+00:43:54.080 --> 00:44:01.800
+MARCO SCILIPOTI: cada vez que no sé al Researcher o se le bueno, vamos a cambiar de esta noche a relu
+
+360
+00:44:02.170 --> 00:44:10.460
+MARCO SCILIPOTI: hay que recalcular todos los gradientes. No haremos una neurona más. Al final se rompe. Va a preparation
+
+361
+00:44:11.400 --> 00:44:22.280
+MARCO SCILIPOTI: proposition, se rompe, pero se rompe unai implementation de optimización. Si la manera que calculo el gradiente, no si el gradiente está fijo.
+
+362
+00:44:23.280 --> 00:44:24.620
+MARCO SCILIPOTI: ¿se entiende eso?
+
+363
+00:44:24.960 --> 00:44:28.160
+MARCO SCILIPOTI: Entonces eso es el valor del back Corporation.
+
+364
+00:44:28.560 --> 00:44:35.160
+MARCO SCILIPOTI: Es, no, lo no lo no lo dije formalmente hasta ahora, pero la complejidad
+
+365
+00:44:36.020 --> 00:44:44.380
+MARCO SCILIPOTI: en base al número de de de operaciones que tengo es lineal. Es decir, bueno, lo podemos contar
+
+366
+00:44:44.850 --> 00:45:03.860
+MARCO SCILIPOTI: a través de la cantidad de veces que aplique la regla de la cadena. Pero es lineal. ¿por qué? Porque por cada opera es lineal cantidad de operaciones, no donde en esas operaciones. Pero yo tengo una operación acá al fin y al cabo, cuando has inscrito 1, 2, 3, 4, No, Sí, es lineal.
+
+367
+00:45:04.130 --> 00:45:09.599
+MARCO SCILIPOTI: No tengo el más. Tengo el tangente de hiperbólico, y tengo acá. Bueno, esta no la cuento. Entonces
+
+368
+00:45:10.780 --> 00:45:14.830
+MARCO SCILIPOTI: es un algoritmo, volvimos a complejidad.
+
+369
+00:45:16.320 --> 00:45:22.549
+MARCO SCILIPOTI: Y también se puede decir que está en el omega de lo que es. Si vos querés calcular
+
+370
+00:45:23.170 --> 00:45:26.949
+MARCO SCILIPOTI: algo de acá. No.
+
+371
+00:45:27.090 --> 00:45:31.450
+MARCO SCILIPOTI: No sé si se acuerda tanto de a yo. La verdad que me acuerdo poco, pero
+
+372
+00:45:32.510 --> 00:45:40.560
+MARCO SCILIPOTI: no puedo ir. El Omega no es como el el límite inferior conceptual de un algoritmo, ¿no? Por ejemplo, en Sorti. No puede ser menor que eres
+
+373
+00:45:40.820 --> 00:45:52.280
+MARCO SCILIPOTI: por ahí. Ahora hay alguna excepción y se puede. Pero ponerlo en sorting. Si yo quiero ordenar una rey, tengo que ver todo elemento una vez, no. Si no me dicen nada de todos los valores, tengo que ver cada elemento por lo menos una vez.
+
+374
+00:45:52.510 --> 00:45:58.940
+MARCO SCILIPOTI: y esto es un poco lo mismo, ¿no? Si yo quiero calcular el gradiente de doble di, acá no
+
+375
+00:46:00.440 --> 00:46:06.470
+MARCO SCILIPOTI: de algo que parta acá y por lo menos voy a tener que pasar por cada no pasar por cada evento y verlo.
+
+376
+00:46:06.850 --> 00:46:12.559
+MARCO SCILIPOTI: Entonces es un algoritmo que se hizo en los 80. Me parece. No recuerdo muy bien
+
+377
+00:46:12.920 --> 00:46:15.850
+MARCO SCILIPOTI: que es el teoríticamente
+
+378
+00:46:16.240 --> 00:46:22.130
+MARCO SCILIPOTI: especialmente complejidad, no si 1 habla de un l m un trillón de parámetros que tiene más de un trillón de parámetros.
+
+379
+00:46:22.590 --> 00:46:30.260
+MARCO SCILIPOTI: Y yo modifico algo de eso. ¿cómo escala en términos de complejidad
+
+380
+00:46:30.760 --> 00:46:42.870
+MARCO SCILIPOTI: es fundamental. Es un poco. Por eso está un poco el árbol al principio, esto un poco, pero es como el árbol de mucho de deep learning. El algoritmo. Va Preparation es lo que permitió
+
+381
+00:46:43.400 --> 00:46:44.690
+MARCO SCILIPOTI: poder
+
+382
+00:46:45.590 --> 00:46:51.189
+MARCO SCILIPOTI: hacer las arquitecturas actuales. Porque la verdad, que es muy eficiente, es o n es más operaciones, y es
+
+383
+00:46:51.420 --> 00:46:57.130
+MARCO SCILIPOTI: un poco el límite límite inferior de la complejidad que puede tener algo así.
+
+384
+00:46:57.720 --> 00:47:00.999
+MARCO SCILIPOTI: Mhm: Así que no van a ser.
+
+385
+00:47:01.000 --> 00:47:05.440
+JOAQUÍN NICOLÁS YULÁN LUCIOLI: Cambia la arquitectura de las neuronas me cambia la fórmula del vactor propagantion.
+
+386
+00:47:06.880 --> 00:47:14.579
+MARCO SCILIPOTI: Si yo cambio la arquitectura, las neuronas, no las tocas, lo que tocás es cómo se se conecta, no.
+
+387
+00:47:14.580 --> 00:47:17.969
+JOAQUÍN NICOLÁS YULÁN LUCIOLI: Cuántas hay? Sí, Cuántas.
+
+388
+00:47:17.970 --> 00:47:18.600
+MARCO SCILIPOTI: Vamos a ver.
+
+389
+00:47:18.600 --> 00:47:20.270
+JOAQUÍN NICOLÁS YULÁN LUCIOLI: Cambio. ¿eso ¿Qué es lo que cambia.
+
+390
+00:47:21.120 --> 00:47:23.900
+MARCO SCILIPOTI: Claro. Bueno, cambiar cambiar.
+
+391
+00:47:23.920 --> 00:47:24.870
+JOAQUÍN NICOLÁS YULÁN LUCIOLI: La E.
+
+392
+00:47:27.120 --> 00:47:28.759
+MARCO SCILIPOTI: Claro, cambia el gradiente
+
+393
+00:47:29.310 --> 00:47:35.779
+MARCO SCILIPOTI: a ver, al fin y al cabo, una una neurona, no o una red, Una red neuronal. Es
+
+394
+00:47:36.340 --> 00:47:41.400
+MARCO SCILIPOTI: bueno. Es lo que dice abrís. Bueno, una F X que por ahí se suele hacer veteral y sale uni.
+
+395
+00:47:41.570 --> 00:47:43.010
+MARCO SCILIPOTI: Y también puede ser editorial.
+
+396
+00:47:43.530 --> 00:47:50.969
+MARCO SCILIPOTI: Tu F. X es esencialmente es pasar tus X por todos estos cosas, no
+
+397
+00:47:52.210 --> 00:48:07.449
+MARCO SCILIPOTI: por todo, por todas esas líneas que al fin y al cabo, son otras funciones. Entonces, si yo cambio acá, cambio como el error que depende de esta salida, es más a la entrada, porque es lo que los conecta. No sé si se entiende.
+
+398
+00:48:10.270 --> 00:48:13.169
+MARCO SCILIPOTI: Ca: cambia el gradiente. Si yo modifico.
+
+399
+00:48:13.470 --> 00:48:18.629
+MARCO SCILIPOTI: entonces borro esta neurona no cambió mi definición de mi función. F
+
+400
+00:48:20.610 --> 00:48:29.570
+MARCO SCILIPOTI: y como un migrañante depende, y la definición de efe también cambia. Entonces, cuando yo creo que a veces este peso no es el mismo gradiente que tenía antes. La modificación.
+
+401
+00:48:30.080 --> 00:48:32.339
+Rodrigo Ramele: Marco me dejas meter un bocado.
+
+402
+00:48:32.780 --> 00:48:34.460
+MARCO SCILIPOTI: Sí. Rodrigo, cómo estás.
+
+403
+00:48:35.060 --> 00:48:52.599
+Rodrigo Ramele: Tal. Así es, tal así como lo está describiendo marco y como ustedes se están dando cuenta que cuando en cuando, digamos la parte Esta, digamos, de hace 10 años, cuando Deblarning empezó a crecer a salir de la academia pura y meterse en en aplicación se tuvo que desarrollar una herramienta que es autodiff
+
+404
+00:48:52.700 --> 00:49:02.249
+Rodrigo Ramele: y que es parte de las herramientas, ahora de Pay Tors, etcétera. Hay tanto Pay Toch como Tenso Flow, y todos todos tienen detrás un poco. Eso.
+
+405
+00:49:02.250 --> 00:49:17.710
+Rodrigo Ramele: Lo que hace es genera un grafo computacional. Genera este grafo de cálculo de cómo es que tiene que ir a que que ir procesándose los gradientes 1 detrás de otro para después poder hacer el cálculo del del Back Propation de forma directa, automática.
+
+406
+00:49:17.710 --> 00:49:23.129
+Rodrigo Ramele: Eso es una herramienta que se llama Auto Div, que está detrás de todos los motores actuales. Y es buenísima porque construye eso.
+
+407
+00:49:25.080 --> 00:49:34.940
+MARCO SCILIPOTI: Exacto rodris, siempre tirando y le dice exactamente el auto. Dice lo que hace la la derivada que yo digo, Bueno, la tabla o
+
+408
+00:49:35.290 --> 00:49:42.059
+MARCO SCILIPOTI: lo que es? Yo tengo de M. D, B, No. Y lo Y lo lo paso a un valor es lo que hace el autodefe
+
+409
+00:49:42.200 --> 00:49:48.740
+MARCO SCILIPOTI: que, como dijo Ray muy bien, es lo que permite que nos en una librería, te sientas, cambio la arquitectura y que funcione
+
+410
+00:49:49.340 --> 00:49:51.120
+MARCO SCILIPOTI: internamente no es.
+
+411
+00:49:51.120 --> 00:49:59.619
+JOAQUÍN NICOLÁS YULÁN LUCIOLI: Entonces lo que hace el back propagation es que si yo acá es que si yo cambio la arquitectura, no tengo que calcular manualmente todo el gradiente de vuelta.
+
+412
+00:50:00.210 --> 00:50:07.170
+MARCO SCILIPOTI: Exacto, lo que te permite no El Barbrahim es el algoritmo, pero si lo que te permite es eso
+
+413
+00:50:07.950 --> 00:50:16.649
+MARCO SCILIPOTI: que automa y junto con auto div, no que automáticamente tengas el gradiente correcto para actualizar tus pesos. Cuando vos cames, la partitura.
+
+414
+00:50:17.640 --> 00:50:18.809
+JOAQUÍN NICOLÁS YULÁN LUCIOLI: Ahora, Sí. Gracias.
+
+415
+00:50:19.540 --> 00:50:21.640
+MARCO SCILIPOTI: Muy bien, ¿Sí?
+
+416
+00:50:22.330 --> 00:50:26.970
+MARCO SCILIPOTI: Y bueno, eso es. Siento que la última. Bueno, esta es la
+
+417
+00:50:27.140 --> 00:50:30.059
+MARCO SCILIPOTI: el lo mismo que estaba diciendo antes, no
+
+418
+00:50:31.400 --> 00:50:39.420
+MARCO SCILIPOTI: que nunca voy a hacer de una neurona especial, sino que simplemente la neurona suele ser así. Y yo termino haciendo si la última es más esto que termino, es que no
+
+419
+00:50:39.920 --> 00:50:47.560
+MARCO SCILIPOTI: escribiendo acá Barbaration me permite en redes neuronales poder obtener gradiente en un punto específico.
+
+420
+00:50:48.950 --> 00:50:58.049
+MARCO SCILIPOTI: Bueno, eso sería todo de mi lado. No sé si alguna pregunta más acotación, observación. Rodri Maru.
+
+421
+00:51:01.050 --> 00:51:02.269
+Rodrigo Ramele: Genial marco.
+
+422
+00:51:02.750 --> 00:51:03.900
+Marina Fuster: Perfecto.
+
+423
+00:51:04.760 --> 00:51:05.740
+MARCO SCILIPOTI: Buenísimo.
+
+424
+00:51:06.300 --> 00:51:08.070
+Marina Fuster: Si quieren paro.
+

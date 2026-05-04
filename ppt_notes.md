@@ -54,3 +54,5 @@ Pasarle a claude el paper que nos mandaron, y el transcript de la clase optimiza
 (c) Además de sus propias técnicas, ¿existen otros factores que influyeron en el cambio de
 rendimiento entre este ejercicio y el anterior?
 
+Aca se hizo lo de "Pack C" de estrategias. Son lo explicado en la clase de regularizacion. HACER UN MATCHING ACA DE TEORIA Y LO HECHOO
+
