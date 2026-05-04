@@ -18,3 +18,7 @@ docs/superpowers/
 *.fls
 *.fdb_latexmk
 *.synctex.gz
+
+docs/clase_optimizadores/clase optimizadores.pdf
+
+docs/clase_optimizadores/clase optimizadores.VTT

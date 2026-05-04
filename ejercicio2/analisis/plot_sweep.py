@@ -23,6 +23,8 @@ def extract_label(run_dir: Path, label_by: str) -> str:
         return f"init={cfg['architecture']['initializer']}"
     if label_by == "batch":
         return f"bs={cfg['training']['batch_size']}"
+    if label_by == "activation":
+        return f"act={cfg['architecture']['activations'][0]}"
     return cfg["model_name"]
 
 
@@ -31,7 +33,7 @@ def main():
     parser.add_argument("--run-dirs", nargs="+", required=True, type=Path)
     parser.add_argument("--metric", default="val_acc_final")
     parser.add_argument("--label-by", default="lr",
-                        choices=["lr", "arch", "optimizer", "init", "batch", "model_name"])
+                        choices=["lr", "arch", "optimizer", "init", "batch", "activation", "model_name"])
     parser.add_argument("--out", required=True, type=Path)
     parser.add_argument("--title", default="Sweep")
     args = parser.parse_args()

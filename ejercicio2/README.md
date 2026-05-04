@@ -39,7 +39,7 @@ for cfg in configs/sweeps_fase2/*.json; do
 done
 ```
 
-Sweeps: LR (5 valores incl. extremos 0.1 y 10), arquitectura (4: shallow, base, wider, deeper), optimizador (3: sgd/momentum/adam), inicializador (3: uniform/he/xavier).
+Sweeps: LR (5 valores incl. extremos 0.1 y 10), arquitectura (4: shallow, base, wider, deeper), optimizador (3: sgd/momentum/adam), inicializador (3: uniform/he/xavier), activación (3: relu/tanh/sigmoid, init `auto` para emparejar con la activación).
 
 ### Plotting
 
@@ -105,6 +105,17 @@ Ver `docs/superpowers/specs/2026-05-01-tp3-completion-design.md`.
 | Arch | wider [784,200,100,10] | base, deeper | wider 0.17pp mejor pero 3.6× más lento → base mantiene óptimo |
 | Optimizer | momentum (96.29%) | adam (96.22%) | empate; adam best_ep menor → keep adam |
 | Init | he/xavier/uniform | sí (todos ~96%) | empate total (std ≈0.3%) |
+| Activación | relu (96.22%) | sigmoid (96.01%), tanh (95.94%) | empate técnico (Δ ≤0.3pp); relu converge más rápido (best_ep 4.6 vs sigmoid 12.8) y entrena ~35% más rápido → keep relu |
+
+**Sweep activación (K=5, base.json con `activations=[<act>,<act>,softmax]`, init `auto`):**
+
+| Activación | val_acc (mean ± std) | macro_f1 (mean ± std) | best_epoch | Tiempo/fold (s) |
+|---|---|---|---|---|
+| relu | **0.9622 ± 0.0043** | 0.8575 ± 0.0064 | **4.6** | **16.9** |
+| sigmoid | 0.9601 ± 0.0037 | 0.8543 ± 0.0060 | 12.8 | 26.6 |
+| tanh | 0.9594 ± 0.0041 | 0.8539 ± 0.0044 | 6.6 | 20.4 |
+
+Las tres activaciones llegan a val_acc ~96% (diferencia ≤0.3pp, dentro del std entre folds), pero relu converge ~3× más rápido en épocas que sigmoid y entrena ~35% más rápido en wall-clock — consistente con que relu evita la saturación de gradiente que sufren sigmoid/tanh en capas internas. Plot: `presentacion/06_sweep_activation.png`.
 
 **Final eval (digits_test.csv, evaluado UNA SOLA VEZ):**
 | Métrica | Valor |
