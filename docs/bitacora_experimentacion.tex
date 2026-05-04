@@ -1,0 +1,640 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-tabla]{babel}
+\usepackage{lmodern}
+\usepackage[a4paper,margin=2.4cm]{geometry}
+\usepackage{graphicx}
+\usepackage[table]{xcolor}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{tikz}
+\usetikzlibrary{positioning, arrows.meta, fit, shapes.geometric, calc, shadows.blur}
+\usepackage[most]{tcolorbox}
+\usepackage{fancyhdr}
+\setlength{\headheight}{22pt}
+\usepackage{titlesec}
+\usepackage[hidelinks,colorlinks=true,linkcolor=accent,urlcolor=accent,citecolor=accent]{hyperref}
+\usepackage{enumitem}
+\usepackage{microtype}
+\usepackage{pifont}
+
+% ----- Colors -----
+\definecolor{accent}{HTML}{1F6FEB}
+\definecolor{accent2}{HTML}{0A8754}
+\definecolor{warn}{HTML}{D1351A}
+\definecolor{bg}{HTML}{F6F8FA}
+\definecolor{bgbox}{HTML}{EDF2F7}
+\definecolor{rule}{HTML}{D0D7DE}
+\definecolor{ink}{HTML}{1F2328}
+\definecolor{muted}{HTML}{57606A}
+\definecolor{good}{HTML}{1A7F37}
+
+\color{ink}
+
+% ----- Header/footer -----
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{muted}\textsc{TP3 — Bitácora de experimentación}}
+\fancyhead[R]{\small\color{muted}ITBA · 1Q 2026}
+\fancyfoot[C]{\small\color{muted}\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{rule}\leaders\hrule height \headrulewidth\hfill}}
+
+% ----- Section style -----
+\titleformat{\section}
+  {\Large\bfseries\color{accent}}
+  {\thesection.}{0.6em}{}
+\titleformat{\subsection}
+  {\large\bfseries\color{ink}}
+  {\thesubsection}{0.6em}{}
+\titleformat{\subsubsection}
+  {\normalsize\bfseries\color{accent2}}
+  {\thesubsubsection}{0.4em}{}
+
+% ----- TCB boxes (sin title="" — usamos un bold inline) -----
+\newtcolorbox{decidimos}{
+  breakable,
+  colback=accent2!8, colframe=accent2,
+  boxrule=0pt, leftrule=4pt,
+  arc=2pt, outer arc=0pt,
+  left=10pt, right=10pt, top=8pt, bottom=8pt,
+  before upper={\textcolor{accent2}{\textbf{\textsf{DECIDIMOS}}}\par\smallskip}
+}
+\newtcolorbox{aprendimos}{
+  breakable,
+  colback=bgbox, colframe=accent,
+  boxrule=0pt, leftrule=4pt,
+  arc=2pt, outer arc=0pt,
+  left=10pt, right=10pt, top=8pt, bottom=8pt,
+  before upper={\textcolor{accent}{\textbf{\textsf{APRENDIMOS}}}\par\smallskip}
+}
+\newtcolorbox{sorpresa}{
+  breakable,
+  colback=bgbox, colframe=warn,
+  boxrule=0pt, leftrule=4pt,
+  arc=2pt, outer arc=0pt,
+  left=10pt, right=10pt, top=8pt, bottom=8pt,
+  before upper={\textcolor{warn}{\textbf{\textsf{SORPRESA}}}\par\smallskip}
+}
+
+\newcommand{\code}[1]{\texttt{\textcolor{accent}{#1}}}
+\newcommand{\file}[1]{\texttt{\small #1}}
+\newcommand{\ok}{\textcolor{good}{\ding{52}}}
+\newcommand{\nok}{\textcolor{warn}{\ding{56}}}
+\newcommand{\winner}[1]{\cellcolor{accent2!15}\textbf{#1}}
+
+% ===================================================================
+\begin{document}
+
+% =============== COVER ===============
+\begin{titlepage}
+\thispagestyle{empty}
+\begin{tikzpicture}[remember picture, overlay]
+  % Background gradient bar on the left
+  \fill[accent!90] (current page.north west) rectangle ($(current page.south west) + (1.6,0)$);
+  \fill[accent!60] ($(current page.north west) + (1.6,0)$) rectangle ($(current page.south west) + (1.85,0)$);
+  % Decorative dots
+  \foreach \x in {0,...,16} {
+    \foreach \y in {0,...,24} {
+      \fill[white!85!accent, opacity=0.4]
+        ($(current page.north west) + (0.18 + 0.085*\x, -0.18 - 0.085*\y)$) circle (0.35pt);
+    }
+  }
+\end{tikzpicture}
+
+\vspace*{3cm}
+\begin{flushleft}
+{\fontsize{42}{48}\selectfont\bfseries\color{ink}Bitácora}\\[0.4em]
+{\fontsize{32}{38}\selectfont\bfseries\color{accent}de experimentación}\\[0.6em]
+{\Large\color{muted}TP3 — Perceptrones · cómo fue evolucionando.}\\[2em]
+
+\rule{\linewidth}{0.4pt}\\[0.6em]
+{\large\textbf{Sistemas de Inteligencia Artificial} \textcolor{muted}{·}\ Trabajo Práctico 3}\\[0.3em]
+{\large\color{muted}ITBA · Primer Cuatrimestre 2026}\\[3em]
+
+\textbf{Una crónica}, en orden cronológico, de cada experimento que corrimos: qué probamos, qué esperábamos, qué obtuvimos, qué decidimos. Incluye los descubrimientos sorpresa, las hipótesis revisadas, y las decisiones que el camino fue forzando.
+\end{flushleft}
+
+\vfill
+\begin{flushleft}
+\rule{\linewidth}{0.4pt}\\[0.4em]
+\textcolor{muted}{\small Companion técnico: \file{docs/informe\_tp3.pdf}.\\
+Datos crudos de los experimentos: \file{ejercicio2/output/} y \file{ejercicio3/output/} en el repo.}
+\end{flushleft}
+\end{titlepage}
+
+% =============== TOC ===============
+\tableofcontents
+\bigskip\hrule\bigskip
+
+% =============== ARRANQUE ===============
+\section{Punto de partida}
+
+\textbf{Estado del repo al inicio de la experimentación:}
+\begin{itemize}[leftmargin=1.4em, itemsep=2pt]
+  \item Engine \code{mlp/} ya construido y testeado (78 tests verde).
+  \item Validación Ej 0 ya pasaba: AND con escalón (error 0) y XOR con MLP (configs $[2,2,1]$ y $[2,3,2,1]$ convergiendo).
+  \item Ej 1 (knowledge distillation) ya implementado por Tomás con scripts independientes.
+  \item Cuatro configs de arquitectura para Ej 2 ya creados.
+\end{itemize}
+
+\textbf{Lo que faltaba experimentar:}
+\begin{itemize}[leftmargin=1.4em, itemsep=2pt]
+  \item Búsqueda completa de hiperparámetros para Ej 2 (Fase 1 + Fase 2).
+  \item Final eval del Ej 2 contra \code{digits\_test.csv}.
+  \item Ej 3 con \code{more\_digits.csv} y, eventualmente, Pack C.
+\end{itemize}
+
+\begin{aprendimos}
+La estrategia que adoptamos fue \textbf{coarse-to-fine en dos fases}: una Fase 1 exploratoria con K-folds=1 (split simple) para barrer rápido, y una Fase 2 con K-fold=5 para validar las elecciones con rigor. \\[0.2em]
+Esto reduce el espacio de búsqueda de $\mathcal{O}(n^4)$ (cuatro hiperparámetros independientes) a $\mathcal{O}(4n)$ (sweeps secuenciales).
+\end{aprendimos}
+
+% =============== FASE 1 ===============
+\section{Fase 1 — sweeps coarse-to-fine sobre Ej 2 (k\_folds=1)}
+
+Cuatro sub-fases secuenciales: arquitectura $\to$ optimizador $\to$ learning rate $\to$ batch size. Cada sub-fase usa el ganador de la anterior. Split simple 80/20 estratificado para velocidad.
+
+\subsection{Sub-fase 1.1 — Arquitectura}
+
+\textbf{Hipótesis inicial:} no sabemos si el problema necesita una red profunda o si una capa oculta alcanza. Probamos cuatro variantes alrededor de $[784,100,10]$.
+
+\begin{center}
+\small
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+\textbf{Config} & \textbf{val\_acc} & \textbf{macro\_f1} & \textbf{best\_ep} & \textbf{tiempo} \\
+\midrule
+arch\_128\_64        & 0.9686 & 0.863 & 10 & 42.3 s \\
+\winner{arch\_100\_50}     & \winner{0.9674} & \winner{0.863} & \winner{7}  & \winner{27.6 s} \\
+arch\_100            & 0.9670 & 0.859 & 11 & 35.1 s \\
+arch\_50             & 0.9578 & 0.856 & 16 & 39.9 s \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{decidimos}
+Elegimos \texttt{arch\_100\_50} ($[784, 100, 50, 10]$). \texttt{arch\_128\_64} estaba 0.12 pp arriba, pero con std del orden de 0.4\% es \textbf{empate técnico}, y \texttt{arch\_100\_50} es 35\% más rápida y converge antes (best\_ep=7 vs 10).
+\end{decidimos}
+
+\subsection{Sub-fase 1.2 — Optimizador}
+
+\textbf{Hipótesis inicial:} basados en lo que dice el apunte y la literatura, esperamos que Adam gane y SGD vanilla se quede atrás. Pero queríamos ver el orden de magnitud.
+
+\begin{center}
+\small
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+\textbf{Config} & \textbf{val\_acc} & \textbf{macro\_f1} & \textbf{best\_ep} & \textbf{tiempo} \\
+\midrule
+\winner{adam (lr=0.001)}     & \winner{0.9674} & \winner{0.863} & \winner{7}  & \winner{29.0 s} \\
+momentum (lr=0.01, $\beta=0.9$)  & 0.9634 & 0.860 & 18 & 45.9 s \\
+sgd (lr=0.01)        & 0.9481 & 0.846 & 48 & 77.0 s \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{aprendimos}
+\textbf{SGD no convergió en 50 epochs.} Llegó a accuracy 94.81\% con best\_epoch=48 (todavía mejorando). Para que SGD vanilla compita necesitaríamos muchas más epochs o un schedule de LR. \\[0.2em]
+Momentum quedó cerca pero con best\_ep=18 (vs 7 de Adam). El learning rate adaptativo de Adam acelera la convergencia inicial.
+\end{aprendimos}
+
+\subsection{Sub-fase 1.3 — Learning rate}
+
+\textbf{Hipótesis inicial:} el rango ``típico'' que sugiere el apunte es $10^{-4}$ a $10^{-2}$. Probamos cinco valores cubriendo ese rango.
+
+\begin{center}
+\small
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+\textbf{Config} & \textbf{val\_acc} & \textbf{macro\_f1} & \textbf{best\_ep} & \textbf{tot\_ep} \\
+\midrule
+\winner{lr = 0.001}        & \winner{0.9674} & \winner{0.863} & \winner{7}  & \winner{18} \\
+lr = 0.0005                & 0.9654 & 0.864 & 17 & 28 \\
+lr = 0.0001                & 0.9622 & 0.861 & 47 & 50 \\
+lr = 0.005                 & 0.9602 & 0.857 & 4  & 15 \\
+lr = 0.01                  & 0.9530 & 0.850 & 2  & 13 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{aprendimos}
+La curva de val\_acc en función del learning rate tiene la forma esperada: un \textbf{máximo claro en } $\boldsymbol{10^{-3}}$, con caída a la izquierda (lento) y a la derecha (overshooting). \\[0.2em]
+$lr = 10^{-4}$ no converge en 50 epochs (best\_ep=47, total\_ep=50). $lr = 10^{-2}$ overshoot fuerte (best\_ep=2). $lr = 5\!\cdot\!10^{-3}$ overshoot moderado.
+\end{aprendimos}
+
+\subsection{Sub-fase 1.4 — Batch size}
+
+\textbf{Hipótesis inicial:} esperamos que batch chico converja antes (más actualizaciones por epoch) pero quizá con val\_acc final similar.
+
+\begin{center}
+\small
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+\textbf{Config} & \textbf{val\_acc} & \textbf{macro\_f1} & \textbf{best\_ep} & \textbf{tiempo} \\
+\midrule
+\winner{batch = 16}    & \winner{0.9674} & \winner{0.8646} & \winner{3}  & \winner{12.3 s} \\
+batch = 64             & 0.9674 & 0.8635 & 7  & 31.0 s \\
+batch = 32             & 0.9658 & 0.8640 & 7  & 94.2 s \\
+batch = 128            & 0.9658 & 0.8628 & 11 & 21.4 s \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{decidimos}
+\texttt{batch=16} con \textbf{best\_epoch=3}, mejor macro\_f1 (0.8646), y el más rápido por bastante (12.3 s). El gradiente más ruidoso lleva a converger antes.
+\end{decidimos}
+
+\subsection{Consolidación: \texttt{base.json} con K-fold=5}
+
+Con los cuatro ganadores, armamos \code{base.json}: arquitectura $[784,100,50,10]$, Adam con $lr=10^{-3}$, batch=16, 50 epochs con early stopping (patience=10). Lo corrimos con K-fold=5 antes de Fase 2.
+
+\begin{center}
+\small
+\begin{tabular}{@{}lcc@{}}
+\toprule
+& \textbf{mean} & \textbf{std} \\
+\midrule
+val\_acc\_final  & \textbf{0.9622} & 0.0043 \\
+macro\_f1        & \textbf{0.857}  & 0.006 \\
+best\_epoch      & 4.6   & 1.0 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{aprendimos}
+El baseline con K-fold=5 confirmó la elección: \textbf{96.22\% $\pm$ 0.43\%}, std bajo. Convergencia muy rápida (best\_ep=4.6 promedio). Este es el modelo que defendemos.
+\end{aprendimos}
+
+% =============== FASE 2 ===============
+\section{Fase 2 — one-at-a-time con K-fold=5}
+
+Sobre el \code{base.json} consolidado, variamos un solo HP a la vez para tener comparativas robustas. Quince corridas en total.
+
+\subsection{LR sweep (5 valores con extremos)}
+
+\begin{center}
+\small
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+\textbf{Config} & \textbf{val\_acc} & \textbf{macro\_f1} & \textbf{best\_ep} & \textbf{tiempo (mean)} \\
+\midrule
+\winner{lr = 0.001}    & \winner{0.9622} & \winner{0.857} & \winner{4.6}  & \winner{449 s} \\
+lr = 0.0001            & 0.9579 & 0.852 & 31.6 & 1390 s \\
+lr = 0.01              & 0.9471 & 0.839 & 4.6  & 455 s \\
+lr = 0.1               & 0.2900 & 0.158 & 7.2  & 444 s \\
+lr = 10                & 0.1248 & 0.028 & 11.6 & 689 s \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{sorpresa}
+$lr = 10$ deja la red en \textbf{accuracy random (12.5\%)}. El loss explota a NaN tras pocas iteraciones; las predicciones quedan colapsadas. \\[0.2em]
+$lr = 0.1$ no es tan catastrófico pero diverge claramente (29\% accuracy).
+\end{sorpresa}
+
+\subsection{Arquitectura sweep (4 variantes)}
+
+\begin{center}
+\small
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+\textbf{Config} & \textbf{val\_acc} & \textbf{macro\_f1} & \textbf{best\_ep} & \textbf{tiempo (mean)} \\
+\midrule
+arch\_wider $[200,100]$    & 0.9639 & 0.860 & 4.0  & 3445 s \\
+\winner{arch\_base $[100,50]$}   & \winner{0.9622} & \winner{0.857} & \winner{4.6} & \winner{945 s} \\
+arch\_deeper $[100,50,25]$  & 0.9620 & 0.856 & 4.0  & 876 s \\
+arch\_shallow $[30]$        & 0.9515 & 0.846 & 7.6  & 17 s \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{aprendimos}
+\texttt{arch\_wider} gana por 0.17 pp \textbf{pero tarda $3.6\times$ más} en entrenar (3445 s vs 945 s). Empate técnico con la base \(\Rightarrow\) parsimonia. \\[0.2em]
+\texttt{arch\_shallow} corre en 17 segundos pero pierde 1 pp: claramente subajustado.
+\end{aprendimos}
+
+\subsection{Optimizador sweep (3)}
+
+\begin{center}
+\small
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+\textbf{Config} & \textbf{val\_acc} & \textbf{macro\_f1} & \textbf{best\_ep} & \textbf{tiempo} \\
+\midrule
+momentum                & 0.9629 & 0.857 & 6.0  & 292 s \\
+\winner{adam}           & \winner{0.9622} & \winner{0.857} & \winner{4.6}  & \winner{417 s} \\
+sgd                     & 0.9586 & 0.853 & 36.4 & 691 s \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Inicializador sweep (3)}
+
+\begin{center}
+\small
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+\textbf{Config} & \textbf{val\_acc} & \textbf{macro\_f1} & \textbf{std (val\_acc)} \\
+\midrule
+he         & 0.9602 & 0.854 & 0.003 \\
+xavier     & 0.9598 & 0.854 & 0.004 \\
+uniform    & 0.9594 & 0.854 & 0.002 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{aprendimos}
+\textbf{Empate total entre los tres inicializadores}, std del orden de 0.3\%. La elección no es un cuello de botella en este problema. \\[0.2em]
+La conclusión transversal de Fase 2 es que \textbf{Fase 2 valida más que descubre}. Solo el sweep de LR muestra rangos catastróficos; los demás quedan en empate técnico. La metodología coarse-to-fine de Fase 1 ya hizo el grueso del trabajo.
+\end{aprendimos}
+
+% =============== FINAL EVAL EJ2 ===============
+\section{Final eval Ej 2 — el cachetazo}
+
+Con \code{base.json} congelado, corrimos el final eval: entrenar con todo \code{digits.csv} y evaluar UNA SOLA VEZ contra \code{digits\_test.csv}.
+
+\begin{center}
+\large
+\begin{tabular}{@{}lc@{}}
+\toprule
+val K-fold=5         & \textbf{0.9622} \\
+\textbf{test (digits\_test.csv)} & \cellcolor{warn!10}\textbf{0.8630} \\
+\textbf{Drop}        & \cellcolor{warn!10}\textbf{$-10$ pp} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{sorpresa}
+\textbf{Drop de 10 puntos porcentuales} entre val K-fold=5 y test. Diez veces más grande que el std del K-fold (0.43\%). Imposible que sea ruido. \\[0.2em]
+La matriz de confusión sobre test confirma que las confusiones se reparten por todo el grid: no es una clase específica que falla, es \textbf{patrón de distribution shift}.
+\end{sorpresa}
+
+\begin{aprendimos}
+La interpretación: \textbf{el modelo está bien, los datos no se parecen.} \code{digits.csv} y \code{digits\_test.csv} no son muestras de la misma distribución. Si esto es cierto, la solución no es un modelo más grande sino \textbf{más datos que cubran la distribución del test}. \\[0.2em]
+Por suerte, eso es justo lo que el Ej 3 nos provee.
+\end{aprendimos}
+
+% =============== EJ 3 ===============
+\section{Ej 3 — la búsqueda del 98\%}
+
+\subsection{Movimiento 1 — más datos, sin tocar el modelo}
+
+\textbf{Hipótesis:} si el problema es shift, agregar \code{more\_digits.csv} (15.742 muestras adicionales) debería levantar el test sin necesidad de tocar la regularización.
+
+\textbf{Cambio único:} agregar \code{"extra\_csv\_paths": ["data and documentation/more\_digits.csv"]} al config. Cero cambios al modelo.
+
+\begin{center}
+\small
+\begin{tabular}{@{}lrr@{}}
+\toprule
+& \textbf{val K=5} & \textbf{test} \\
+\midrule
+Ej 2 base                 & 0.9622 & 0.8630 \\
+\winner{Ej 3 base\_extra\_data}  & \winner{0.9706} & \winner{0.9636} \\
+$\Delta$                  & $+0.84$ pp & $\boldsymbol{+10.06}$ \textbf{pp} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{sorpresa}
+\textbf{+10 puntos porcentuales en test}, sin tocar el modelo. \\[0.2em]
+Macro F1 saltó de 0.857 a 0.959. Inspeccionando: la clase 8, que en Ej 2 quedaba con precision = recall = 0 (la red nunca la predecía), \textbf{ahora se predice correctamente}. Más datos cubrieron el agujero de cobertura.
+\end{sorpresa}
+
+\begin{aprendimos}
+La hipótesis del shift se confirmó. Pero no llegamos al target del 98\%: faltan 1.64 pp en val K-fold (97.06\% vs 98\%) y, sobre todo, 1.64 pp en test (96.36\% vs 98\%).
+\end{aprendimos}
+
+\subsection{Movimiento 2 — Pack C: probar regularización}
+
+Sobre \code{base\_extra\_data}, activamos las técnicas Pack C \textbf{una por una y en combinaciones}.
+
+\subsubsection{L2 (weight decay $1\!\cdot\!10^{-4}$)}
+
+\begin{center}
+\small
+\begin{tabular}{@{}lrr@{}}
+\toprule
+& \textbf{val K=5} & \textbf{test} \\
+\midrule
+base\_extra\_data        & 0.9706 & 0.9636 \\
+\winner{+ L2 (1e-4)}     & \winner{0.9758} & \winner{0.9656} \\
+$\Delta$                 & $+0.52$ pp & $+0.20$ pp \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+L2 mejoró tanto val como test, aunque la mejora en test es modesta. Faltan 1.44 pp para el target.
+
+\subsubsection{Dropout ($p = 0.2$)}
+
+\textbf{Hipótesis:} dropout es la otra técnica clásica de regularización. Esperamos un efecto similar a L2.
+
+\begin{center}
+\small
+\begin{tabular}{@{}lrr@{}}
+\toprule
+& \textbf{val K=5} & \textbf{test} \\
+\midrule
+base\_extra\_data        & 0.9706 & 0.9636 \\
++ dropout (p=0.2)        & 0.9750 & \cellcolor{warn!10}\textbf{0.9628} \\
+$\Delta$                 & $+0.44$ pp & \cellcolor{warn!10}$\boldsymbol{-0.08}$ \textbf{pp} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{sorpresa}
+\textbf{Dropout gana 0.44 pp en val pero pierde 0.08 pp en test}. \\[0.2em]
+La regularización ayudó a no sobreajustar a un fold particular, pero \emph{no transfirió} al test. Esto es coherente con la hipótesis del shift: dropout reduce varianza \emph{dentro} de la distribución del train, pero el test viene de una distribución parcialmente distinta.
+\end{sorpresa}
+
+\subsubsection{L2 + dropout (combinado)}
+
+\textbf{Hipótesis:} si L2 ayuda y dropout también, combinarlos debería mejorar.
+
+\begin{center}
+\small
+\begin{tabular}{@{}lrr@{}}
+\toprule
+& \textbf{val K=5} & \textbf{test} \\
+\midrule
+base\_extra\_data        & 0.9706 & 0.9636 \\
++ L2 + dropout           & 0.9772 & \cellcolor{warn!10}\textbf{0.9604} \\
+$\Delta$                 & $+0.66$ pp & \cellcolor{warn!10}$\boldsymbol{-0.32}$ \textbf{pp} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{sorpresa}
+\textbf{Aún peor en test} ($-0.32$ pp). Combinar L2 y dropout sobre-regulariza: gana en val (donde la regularización ayuda) pero pierde en test (donde el problema es otro).
+\end{sorpresa}
+
+\subsubsection{Augmentation gaussiana ($\sigma = 0.05$, sobre L2)}
+
+\textbf{Hipótesis:} si el problema es shift, simular variabilidad en el input durante training podría ayudar.
+
+\textit{Nota técnica:} este sweep requirió \textbf{implementar augmentation gaussiana en el engine}, que no estaba en Phase A. Implementamos también dropout (con cache extendido para que el backward maneje el mask) y lr\_schedule durante esta fase.
+
+\begin{center}
+\small
+\begin{tabular}{@{}lrr@{}}
+\toprule
+& \textbf{val K=5} & \textbf{test} \\
+\midrule
++ L2                       & 0.9758 & 0.9656 \\
+\winner{+ L2 + aug ($\sigma=0.05$)} & \winner{0.9760} & \winner{0.9688} \\
+$\Delta$ vs L2 solo        & $+0.02$ pp & $+0.32$ pp \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{aprendimos}
+\textbf{La augmentation aporta sobre L2 en test} (+0.32 pp adicional sobre L2 solo). \\[0.2em]
+\textbf{Sinergia:} aug solo no funcionaría tanto, pero combinada con L2 sí. \\[0.2em]
+Llegamos a 96.88\% en test. Faltan 1.12 pp para el 98\%.
+\end{aprendimos}
+
+\subsubsection{Augmentation $\sigma = 0.10$ — ¿más ruido es mejor?}
+
+\textbf{Hipótesis:} si $\sigma=0.05$ aporta, $\sigma=0.10$ podría aportar más.
+
+\begin{center}
+\small
+\begin{tabular}{@{}lrr@{}}
+\toprule
+& \textbf{val K=5} & \textbf{test} \\
+\midrule
++ L2 + aug ($\sigma=0.05$) & 0.9760 & \textbf{0.9688} \\
++ L2 + aug ($\sigma=0.10$) & 0.9768 & 0.9672 \\
+$\Delta$                   & $+0.08$ pp & $-0.16$ pp \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Más ruido no es mejor.} $\sigma=0.10$ degrada test apenas, $\sigma=0.05$ se mantiene como ganador.
+
+\subsubsection{L2 + dropout + augmentation — todo combinado}
+
+\begin{center}
+\small
+\begin{tabular}{@{}lrr@{}}
+\toprule
+& \textbf{val K=5} & \textbf{test} \\
+\midrule
++ L2 + aug                 & \textbf{0.9760} & \textbf{0.9688} \\
++ L2 + aug + dropout       & 0.9768 & 0.9656 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Agregar dropout sobre L2+aug \textbf{empeora test} ($-0.32$ pp). Confirma que dropout en este problema no transfiere.
+
+\subsubsection{Wider + L2 + aug — más capacidad}
+
+\textbf{Hipótesis:} si la regularización limita y necesitamos más expresividad, una arquitectura más grande con regularización podría romper el techo.
+
+\begin{center}
+\small
+\begin{tabular}{@{}lrr@{}}
+\toprule
+& \textbf{val K=5} & \textbf{test} \\
+\midrule
++ L2 + aug ($[100,50]$)    & 0.9760 & \textbf{0.9688} \\
++ wider $[200,100]$ + L2 + aug & \textbf{0.9777} & 0.9640 \\
+$\Delta$ vs L2+aug          & $+0.17$ pp & $-0.48$ pp \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{sorpresa}
+\textbf{Más capacidad mejora en val pero empeora en test.} \\[0.2em]
+Esto cierra el caso: el problema no es capacidad, es generalización. Más parámetros memorizan el train pero no transfieren al test que viene de distribución parcialmente distinta.
+\end{sorpresa}
+
+\subsection{Resumen final del Ej 3}
+
+\begin{center}
+\small
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+\textbf{Config} & \textbf{val K=5} & \textbf{test} & \textbf{$\Delta$ vs base\_extra} \\
+\midrule
+base\_extra\_data            & 0.9706 & 0.9636 & --- (referencia) \\
++ L2 (1e-4)                  & 0.9758 & 0.9656 & $+0.20$ pp \\
++ dropout (p=0.2)            & 0.9750 & 0.9628 & $-0.08$ pp \\
++ L2 + dropout               & 0.9772 & 0.9604 & $-0.32$ pp \\
+\winner{+ L2 + aug ($\sigma=0.05$)} & \winner{0.9760} & \winner{\textbf{0.9688}} & \winner{$+0.52$ pp} \\
++ L2 + aug ($\sigma=0.10$)   & 0.9768 & 0.9672 & $+0.36$ pp \\
++ L2 + aug + dropout         & 0.9768 & 0.9656 & $+0.20$ pp \\
++ wider + L2 + aug           & 0.9777 & 0.9640 & $+0.04$ pp \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Ganador: \texttt{l2\_aug}} — L2 (1e-4) + augmentation gaussiana ($\sigma=0.05$). Test \textbf{0.9688}.
+
+\textbf{Target del 98\% no alcanzado.} Mejor: 96.88\%, faltan 1.12 pp.
+
+% =============== INCIDENTES ===============
+\section{Incidentes técnicos durante la experimentación}
+
+No todo fue limpio. Tres cosas valen la pena anotar para próximas iteraciones:
+
+\subsection{Multiprocessing fallando silenciosamente}
+
+A partir del cuarto o quinto sweep largo de Fase 2, los jobs lanzados con \code{--workers=5} empezaron a terminar con \texttt{exit 0} \textbf{sin escribir todos los CSVs}. El proceso multiprocessing iniciaba los workers, pero alguno moría sin reportar error visible. \\[0.4em]
+\textbf{Workaround:} bajar a \code{--workers=1} (folds en serie). Más lento (~5x), pero confiable. Las corridas afectadas se re-ejecutaron en serie y completaron correctamente.
+
+\subsection{\texttt{final\_eval.py} con \texttt{ModuleNotFoundError}}
+
+La primera vez que corrimos \code{python3 ejercicio2/final\_eval.py} se rompió con \\
+\code{ModuleNotFoundError: No module named 'mlp'}, porque el script vive en una subcarpeta y Python no incluye la raíz del proyecto en \code{sys.path}. \\[0.4em]
+\textbf{Fix:} agregar \code{sys.path.insert(0, str(Path(\_\_file\_\_).resolve().parent.parent))} al inicio de \file{final\_eval.py}. Aplicado a Ej 2 y Ej 3. Tests siguen verde (78/78).
+
+\subsection{Implementación de Pack C en el engine}
+
+L2 ya estaba en Phase A. Pero \textbf{dropout, augmentation gaussiana y lr\_schedule no estaban implementados}. Los agregamos durante la iteración Pack C:
+\begin{itemize}[leftmargin=1.4em, itemsep=2pt]
+  \item \textbf{Dropout}: extendimos el cache del forward a \code{(z, a\_pre, mask)} para que el backward use la mask en chain rule. Tests existentes seguían verde después de actualizar \code{test\_forward\_cache\_pre\_and\_post\_activation} a la nueva 3-tupla.
+  \item \textbf{Augmentation gaussiana}: agregada al inicio del loop de mini-batches, antes del forward.
+  \item \textbf{LR schedule (step decay)}: agregado al final de cada época, antes del check de early stopping.
+\end{itemize}
+
+% =============== APRENDIZAJES FINALES ===============
+\section{Aprendizajes generales}
+
+\begin{aprendimos}
+\textbf{1. Una buena pipeline gana más que tunear hiperparámetros.}\\
+El \(+10\)\,pp del Ej 3 vino de \emph{datos} (\code{more\_digits.csv}), no de modelo. La regularización aportó solo \(+0.5\)\,pp adicional. La lección: cuando hay un drop train$\to$test grande, mirar primero la distribución de los datos, no la arquitectura.
+\end{aprendimos}
+
+\begin{aprendimos}
+\textbf{2. Los empates técnicos son más comunes que los wins claros.}\\
+La mayoría de los sweeps que corrimos tienen ganadores con margen $<0.3$ pp y std del orden de $0.4\%$. En esos casos, hay que elegir por \textbf{parsimonia} (más simple, más rápido), no por $0.05$ pp en val. Si no, estás haciendo cherry-picking de ruido.
+\end{aprendimos}
+
+\begin{aprendimos}
+\textbf{3. ``Mejor en val'' no es ``mejor en test'' cuando hay shift.}\\
+Dropout fue el ejemplo de manual: ganador consistente en val K-fold ($+0.44$ pp) y \emph{perdedor} en test ($-0.08$ pp). La razón: dropout reduce la varianza dentro de la distribución del train, pero no compensa el shift train$\to$test. Con K-fold (que comparte distribución), funciona; con final\_eval (que la cambia), no.
+\end{aprendimos}
+
+\begin{aprendimos}
+\textbf{4. Iterar técnicas de a una, no todas juntas.}\\
+\code{L2+dropout+aug} fue \emph{peor} que \code{L2+aug} solas. Combinar regularizaciones cuando ya hay suficiente puede degradar. Si tuviéramos que repetir, mantendríamos el principio: agregar de a una y medir el delta antes de combinar.
+\end{aprendimos}
+
+\begin{aprendimos}
+\textbf{5. La hipótesis del techo del 98\% es coherente con los datos.}\\
+\code{wider} mejorando val pero empeorando test descarta que el problema sea capacidad. Augmentation gaussiana (isotrópica) ayuda apenas; el shift parece ser \emph{geométrico} (estilo de escritura: rotación, traslación, grosor de trazo). El próximo paso natural sería augmentation por transformaciones geométricas — no implementada en este TP.
+\end{aprendimos}
+
+\bigskip
+\noindent\rule{\linewidth}{0.4pt}\par
+\smallskip
+\noindent\textcolor{muted}{\small Fin de la bitácora. Datos crudos de cada experimento (CSVs por fold, epoch history, weights .npz) en \file{ejercicio2/output/} y \file{ejercicio3/output/} del repo.}
+
+\end{document}
