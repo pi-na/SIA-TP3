@@ -604,13 +604,25 @@ test (digits\_test.csv): \textcolor{warn}{\textbf{86.30\%}}\\[0.8em]
 \end{warning}
 \end{frame}
 
-% ============= Matriz final (ok) =============
-\begin{frame}{Ej 2 — Matriz de confusión sobre digits\_test.csv}
+% ============= Matriz final (val K=5 vs digits_test.csv) =============
+\begin{frame}{Ej 2 — Matrices de confusión: validación vs test}
 \centering
-\includegraphics[width=0.38\linewidth]{../../ejercicio2/presentacion/08_confusion_matrix_final.png}\\[0.2em]
+\begin{columns}[T]
+\column{0.5\linewidth}
+\centering
+\textbf{\small Validación (K-fold=5) — base}\\[0.2em]
+\includegraphics[width=0.78\linewidth]{../../ejercicio2/presentacion/04_confusion_matrix_base.png}\\[0.2em]
+{\footnotesize Diagonal limpia salvo la \textbf{clase 8} colapsada.}
+\column{0.5\linewidth}
+\centering
+\textbf{\small Test (\file{digits\_test.csv})}\\[0.2em]
+\includegraphics[width=0.78\linewidth]{../../ejercicio2/presentacion/08_confusion_matrix_final.png}\\[0.2em]
+{\footnotesize Errores \textbf{distribuidos} en muchas clases.}
+\end{columns}
+\vspace{0.4em}
 
 \begin{takeaway}
-\textbf{Shift, no falta de capacidad:} confusiones distribuidas. $\Rightarrow$ \textbf{Más datos}, no más modelo. Eso es lo que el Ej 3 provee.
+\textbf{Shift, no falta de capacidad:} en validación falla un agujero puntual; en test las confusiones se reparten. $\Rightarrow$ \textbf{Más datos}, no más modelo. Eso es lo que el Ej 3 provee.
 \end{takeaway}
 \end{frame}
 
