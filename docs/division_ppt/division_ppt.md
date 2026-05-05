@@ -1,23 +1,33 @@
-1 a 4
-5 a 7
-9 a 12
-13 a 15
-16 a 19
-20 a 23
-25 y 26
-27 a 29
-30 y 31
-32
+1 a 5
+6 a 8
+10 a 13
+14 a 17
+18 a 21
+22 a 25
+27 y 28
+29 a 31
+32 y 33
+34
 
 
 ---
 
 # Análisis de dificultad, tiempo y distribución
 
-**Total**: 33 slides (se eliminaron la conclusión del análisis del Ej 1 y la
-slide de "Conclusiones del TP"). Las slides 8 (divider Ej 2), 24 (divider Ej 3)
-y 33 (Gracias) no están asignadas a ningún bloque — quien esté hablando
+**Total**: 35 slides. Las slides 9 (divider Ej 2), 26 (divider Ej 3) y
+35 (Gracias) no están asignadas a ningún bloque — quien esté hablando
 antes/después las cubre.
+
+> **Cambios desde la versión original (33 slides):**
+> - **+1 en bloque A**: nueva slide "intuición de cómo ajusta la sigmoide"
+>   (foto + insight) entre el análisis del dataset y el comparativo MSE
+>   del Ej 1 → bloque A pasa a 5 slides (1–5).
+> - **+1 en bloque D**: nueva slide "ReLU y Softmax — visualización"
+>   (dos gráficos representativos + mini-explicación) inmediatamente
+>   después de la slide de función de activación → bloque D pasa a
+>   4 slides (14–17). Asignada a **Tomas**.
+> - El resto de los bloques mantiene contenido pero queda corrido
+>   +1 ó +2 slides según corresponda.
 
 **Tiempo objetivo**: 20 minutos de presentación + Q&A. Promedio ~1 min por slide.
 
@@ -25,22 +35,24 @@ antes/después las cubre.
 
 | Bloque | Slides | # | Contenido | Dificultad | Q&A risk | Tiempo |
 |---|---|---|---|---|---|---|
-| **A** | 1–4    | 4 | Portada + setup Ej 1 + análisis del dataset (3 reglas, 80% derivable de la tabla) | Media | Bajo–Medio | 3 min |
-| **B** | 5–7    | 3 | Lineal vs no-lineal MSE + threshold sweep + recomendación de umbral | Media-Alta | Medio | 3 min |
-| **C** | 9–12   | 4 | Setup Ej 2 + fases + sweep arquitectura + sweep optimizador | Media | Medio | 3 min |
-| **D** | 13–15  | 3 | **Decisiones de diseño**: activación + inicialización + optimizador | **Alta** | **Alto** | 4 min |
-| **E** | 16–19  | 4 | Learning rate + dos tablas LR + convergencia y bias | Media | Medio | 3 min |
-| **F** | 20–23  | 4 | Curvas + matriz base + final eval (cachetazo) + matriz test | **Alta** | **Alto** | 3 min |
-| **G** | 25–26  | 2 | Hipótesis Ej 3 + el movimiento dominó (+10 pp) | Baja-Media | Bajo | 2 min |
-| **H** | 27–29  | 3 | Matriz ganador + tabla de resultados Pack C + comparación visual | Media | Medio | 3 min |
-| **I** | 30–31  | 2 | Curvas del ganador + qué ayudó / qué no | **Alta** | **Alto** | 3 min |
-| **J** | 32     | 1 | Por qué no llegamos al 98 % | Media | Medio | 2 min |
+| **A** | 1–5    | 5 | Portada + setup Ej 1 + análisis del dataset (3 reglas) + intuición sigmoide | Media | Bajo–Medio | 4 min |
+| **B** | 6–8    | 3 | Lineal vs no-lineal MSE + threshold sweep + recomendación de umbral | Media-Alta | Medio | 3 min |
+| **C** | 10–13  | 4 | Setup Ej 2 + fases + sweep arquitectura + sweep optimizador | Media | Medio | 3 min |
+| **D** | 14–17  | 4 | **Decisiones de diseño**: activación + visualización ReLU/softmax + inicialización + optimizador | **Alta** | **Alto** | 4 min |
+| **E** | 18–21  | 4 | Learning rate + dos tablas LR + convergencia y bias | Media | Medio | 3 min |
+| **F** | 22–25  | 4 | Curvas + matriz base + final eval (cachetazo) + matriz test | **Alta** | **Alto** | 3 min |
+| **G** | 27–28  | 2 | Hipótesis Ej 3 + el movimiento dominó (+10 pp) | Baja-Media | Bajo | 2 min |
+| **H** | 29–31  | 3 | Matriz ganador + tabla de resultados Pack C + comparación visual | Media | Medio | 3 min |
+| **I** | 32–33  | 2 | Curvas del ganador + qué ayudó / qué no | **Alta** | **Alto** | 3 min |
+| **J** | 34     | 1 | Por qué no llegamos al 98 % | Media | Medio | 2 min |
 
 ### Por qué cada bloque tiene esa dificultad
 
 - **Bloque D (decisiones)** — alta. Cualquier pregunta sobre matemática
   (vanishing gradient, fórmula de He vs Xavier, defaults de Adam) puede ir
   profundo. Hay que saber defender por qué ReLU + softmax y por qué Adam.
+  La nueva slide de visualización ayuda a anclar la intuición en las
+  formas de ReLU y softmax antes de entrar a init y optimizador.
 - **Bloque F (cachetazo + shift)** — alta. Introduce el concepto de
   *distribution shift*. Q&A puede pedir tipos (covariate, label), por qué no
   es overfitting, por qué la clase 8 colapsó.
@@ -60,18 +72,20 @@ Criterio: Tomas y Katia toman los bloques de **alta dificultad / alto Q&A risk**
 Nicolas toma bloques medios donde el guion lleva el peso. Mateo toma los bloques
 con más respaldo visual (gráficos / números grandes) y menor superficie técnica.
 
-### Tomas — 2 bloques, 7 slides (~7 min)
-- **Bloque D** (13–15): Decisiones de diseño (activación / init / optimizador)
-- **Bloque F** (20–23): Curvas, matriz base, **cachetazo** y matriz final
+### Tomas — 2 bloques, 8 slides (~8 min)
+- **Bloque D** (14–17): Decisiones de diseño (activación + viz ReLU/softmax + init + optimizador)
+- **Bloque F** (22–25): Curvas, matriz base, **cachetazo** y matriz final
 
 > Le toca defender los dos puntos donde el Q&A puede ir más profundo
-> (matemática de las decisiones y distribution shift). Sigue siendo el
+> (matemática de las decisiones y distribution shift). La slide nueva
+> de visualización ReLU/softmax (15) aporta intuición visual antes de
+> que aparezcan las fórmulas de He/Xavier en la 16. Sigue siendo el
 > presentador con mayor carga técnica de Q&A.
 
 ### Katia — 3 bloques, 7 slides (~7 min)
-- **Bloque B** (5–7): Lineal vs no-lineal + threshold sweep + recomendación
-- **Bloque H** (27–29): Matriz ganador + tabla resultados + comparación visual
-- **Bloque J** (32): Por qué no llegamos al 98 %
+- **Bloque B** (6–8): Lineal vs no-lineal + threshold sweep + recomendación
+- **Bloque H** (29–31): Matriz ganador + tabla resultados + comparación visual
+- **Bloque J** (34): Por qué no llegamos al 98 %
 
 > Cierra la presentación, que es donde hay que vender la historia. Maneja
 > threshold (Q&A: ROC/precision-recall) y la tabla de Pack C (Q&A: cómo se
@@ -79,18 +93,18 @@ con más respaldo visual (gráficos / números grandes) y menor superficie técn
 > hipótesis honesta sin sonar a derrota.
 
 ### Nicolas — 2 bloques, 8 slides (~8 min)
-- **Bloque C** (9–12): Setup Ej 2 + fases + sweeps de arquitectura y optimizador
-- **Bloque E** (16–19): Learning rate + tablas Fase 1/Fase 2 + convergencia/bias
+- **Bloque C** (10–13): Setup Ej 2 + fases + sweeps de arquitectura y optimizador
+- **Bloque E** (18–21): Learning rate + tablas Fase 1/Fase 2 + convergencia/bias
 
 > Casi todo es leer tablas y gráficos. El guion va a tener todo el contenido
 > necesario. Si le preguntan algo difícil sobre learning rate (por ej. sobre
 > el lr adaptativo del paper de optimizadores) Tomas o Katia rescatan: ya lo
 > manejan por estar a cargo de los bloques D / F.
 
-### Mateo — 3 bloques, 8 slides (~7 min)
-- **Bloque A** (1–4): Portada + setup Ej 1 + análisis del dataset
-- **Bloque G** (25–26): Hipótesis Ej 3 + el **dominó** del +10 pp
-- **Bloque I** (30–31): Curvas del modelo ganador + qué ayudó / qué no
+### Mateo — 3 bloques, 9 slides (~7 min)
+- **Bloque A** (1–5): Portada + setup Ej 1 + análisis del dataset + intuición sigmoide
+- **Bloque G** (27–28): Hipótesis Ej 3 + el **dominó** del +10 pp
+- **Bloque I** (32–33): Curvas del modelo ganador + qué ayudó / qué no
 
 > Le tocan el arranque (portada + setup), el punto alto visual del Ej 3
 > (el dominó del +10 pp se vende solo) y el cierre de Pack C donde sólo hay
@@ -98,8 +112,12 @@ con más respaldo visual (gráficos / números grandes) y menor superficie técn
 > **Sobre el bloque I**: cuando Mateo lo presente, Tomas ya habrá explicado
 > distribution shift en el bloque F, así que el bullet de ``dropout: gana en
 > val, pierde en test'' se lee verbatim y se puede derivar a Tomas si
-> profundizan. Slide 30 (curvas) es factual: ``best\_ep ~10 vs 5 por L2 +
-> aug, sin overfitting''.
+> profundizan. La slide de curvas (32) es factual: ``best\_ep ~10 vs 5 por
+> L2 + aug, sin overfitting''.
+> **Sobre la slide 5 (intuición sigmoide)**: es la slide nueva del bloque A.
+> El insight box explica por qué el modelo no-lineal va a ganar en el MSE
+> que viene en el bloque B. Mateo la lee verbatim; si profundizan en por
+> qué el lineal sale del rango $[0,1]$, deriva a Katia.
 > **Q&A sobre slide 4 (análisis del dataset)**: la tabla muestra TP=695,
 > FN=174, FP=0. Mateo lee esos números literales (de ahí sale el ``80\%
 > del fraude con tres if y cero FP'') y deriva al equipo si profundizan en
@@ -121,7 +139,7 @@ con más respaldo visual (gráficos / números grandes) y menor superficie técn
 
 | Persona | # bloques | # slides | Tiempo aprox | Carga Q&A |
 |---|---|---|---|---|
-| Tomas    | 2 | 7 | ~7 min | Alta (la lleva) |
+| Tomas    | 2 | 8 | ~8 min | Alta (la lleva) |
 | Katia    | 3 | 7 | ~7 min | Alta (la lleva) |
 | Nicolas  | 2 | 8 | ~8 min | Media (con guion) |
-| Mateo    | 3 | 8 | ~7 min | Baja (visual / scripted, con rescate) |
+| Mateo    | 3 | 9 | ~7 min | Baja (visual / scripted, con rescate) |
