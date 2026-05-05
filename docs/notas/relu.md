@@ -1,5 +1,40 @@
 # ReLU (Rectified Linear Unit)
 
+## Por qué ReLU: converge en menos épocas
+
+La razón principal por la que ReLU se volvió el estándar en capas ocultas es que **hace converger la red en muchas menos épocas** que sigmoide o tanh.
+
+### El mecanismo en una línea
+
+Como la derivada de ReLU es **1** en la zona activa, el gradiente retropropaga **sin atenuarse** capa por capa → las capas tempranas reciben señal útil desde la primera época → todos los pesos se actualizan a buen ritmo → menos épocas para converger.
+
+### Comparado con sigmoide
+
+Con sigmoide la derivada máxima es 0.25. En una red de N capas, el gradiente que llega a la primera capa se multiplica por algo del orden de `0.25^N`:
+
+- 3 capas: `≈ 0.016`
+- 5 capas: `≈ 0.001`
+- 10 capas: `≈ 10⁻⁶`
+
+Las primeras capas casi no aprenden → la red tarda **mucho** más, o directamente no converge en redes profundas. Este es el problema histórico que frenó al deep learning hasta ~2012.
+
+### Evidencia en el TP
+
+El sweep del Ej 2 con ReLU + Adam convergió en `best_epoch = 7` sobre una red `[784, 100, 50, 10]`. Con sigmoide en las capas ocultas, en esa misma arquitectura, hubieran sido necesarias del orden de cientos de épocas (o nunca llegar a 96.7%).
+
+### Matiz importante
+
+ReLU acelera la convergencia **medida en épocas**, no porque cada época sea más rápida. Cada época con ReLU dura prácticamente lo mismo que con sigmoide. Lo que cambia es **cuántas épocas se necesitan** para llegar al mismo loss.
+
+### ¿Y el costo por iteración?
+
+Calcular la derivada de ReLU es trivial: un `if z > 0`. Comparado con:
+
+- **Sigmoide:** `σ'(z) = σ(z)·(1−σ(z))` → requiere haber calculado la sigmoide (con un `exp`).
+- **Tanh:** `tanh'(z) = 1 − tanh²(z)` → ídem, requiere `exp`.
+
+Es más barato computacionalmente, pero en una GPU moderna esto es ruido. **Este efecto es marginal** comparado con la reducción en cantidad de épocas.
+
 ## Definición
 
 ```
