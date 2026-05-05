@@ -1,0 +1,35 @@
+┌───────┬────────────┬─────────────────┬─────────────────┐                                                                  
+  │ Clase │ digits.csv │ digits_test.csv │ more_digits.csv │                                                                
+  ├───────┼────────────┼─────────────────┼─────────────────┤                                                                  
+  │ 0     │ 1480       │ 245             │ 1776            │                                                                
+  ├───────┼────────────┼─────────────────┼─────────────────┤
+  │ 1     │ 1685       │ 283             │ 2022            │
+  ├───────┼────────────┼─────────────────┼─────────────────┤
+  │ 2     │ 1489       │ 258             │ 1787            │
+  ├───────┼────────────┼─────────────────┼─────────────────┤                                                                  
+  │ 3     │ 1532       │ 252             │ 1839            │
+  ├───────┼────────────┼─────────────────┼─────────────────┤                                                                  
+  │ 4     │ 1460       │ 245             │ 1752            │                                                                
+  ├───────┼────────────┼─────────────────┼─────────────────┤
+  │ 5     │ 271        │ 223             │ 542             │
+  ├───────┼────────────┼─────────────────┼─────────────────┤                                                                  
+  │ 6     │ 1479       │ 239             │ 1775            │
+  ├───────┼────────────┼─────────────────┼─────────────────┤                                                                  
+  │ 7     │ 1566       │ 257             │ 1879            │                                                                
+  ├───────┼────────────┼─────────────────┼─────────────────┤
+  │ 8     │ 0          │ 243             │ 585             │
+  ├───────┼────────────┼─────────────────┼─────────────────┤                                                                  
+  │ 9     │ 1487       │ 252             │ 1784            │
+  └───────┴────────────┴─────────────────┴─────────────────┘                                                                  
+                                                                                                                            
+  Hallazgos:
+
+  1. digits.csv no contiene NINGÚN 8. Cero. La hipótesis "falta cobertura de la clase 8" se queda corta — el modelo           
+  literalmente nunca vio un 8 durante el entrenamiento de Ej 2. Por eso predice cero 8s en test (columna 8 toda en cero).
+  2. La clase 5 también está sub-representada (271 vs ~1500 de las otras). Es la clase con segundo peor desempeño en test     
+  (192/223 = 86% acc vs ~95-99% del resto).                                                                                   
+  3. more_digits.csv aporta 585 ochos. Eso es lo que permitió que el modelo aprendiera la clase 8 en Ej 3.
+  4. digits_test.csv está balanceado (~250 por clase, los 8s incluidos). Por eso el drop fue tan grande: 243 ochos imposibles 
+  de acertar / 2497 total ≈ 9.7 pp de error garantizado solo por la clase ausente. Coincide exactamente con el drop observado 
+  (96.22 → 86.30 = 9.92 pp).                                                                                                  
+                                             
