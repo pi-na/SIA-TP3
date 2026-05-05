@@ -613,7 +613,6 @@ Early stopping detecta overfitting que $\varepsilon$ solo no detecta.
 \end{tabular}
 
 \column{0.62\linewidth}
-\textbf{Hallazgos}\\[0.3em]
 \begin{itemize}\setlength\itemsep{0.5em}\small
   \item \textbf{\file{digits.csv} no contiene ningún 8.} Cero. El modelo \emph{literalmente nunca vio un 8} durante el entrenamiento del Ej 2 $\Rightarrow$ predice cero ochos en test (la columna 8 de la matriz colapsa).
   \item \textbf{La clase 5 también está sub-representada} ($271$ vs $\sim 1500$ del resto). Es la clase con segundo peor desempeño en test ($\sim 86\%$ acc vs $\sim 95$–$99\%$ del resto).
@@ -634,7 +633,7 @@ test (digits\_test.csv): \textcolor{warn}{\textbf{86.30\%}}\\[0.8em]
 
 \normalsize
 \begin{warning}
-\textbf{Distribution shift, no underfitting.} El val K-fold daba $96\%$ porque \file{digits.csv} \textbf{no contiene la clase 8} — el K-fold ni siquiera podía evaluar esa clase: el modelo aprendió 9 de 10 clases bien y el K-fold reportaba accuracy sobre esas 9. Cuando llega \file{digits\_test.csv} con 243 ochos ($\sim 10\%$ del set), el modelo falla los 243 $\Rightarrow$ drop de $\sim 10$ pp, casi exacto.
+El val K-fold daba $96\%$ porque \file{digits.csv} \textbf{no contiene la clase 8} — el K-fold ni siquiera podía evaluar esa clase: el modelo aprendió 9 de 10 clases bien y el K-fold reportaba accuracy sobre esas 9. Cuando llega \file{digits\_test.csv} con 243 ochos ($\sim 10\%$ del set), el modelo falla los 243 $\Rightarrow$ drop de $\sim 10$ pp, casi exacto.
 \end{warning}
 \end{frame}
 
