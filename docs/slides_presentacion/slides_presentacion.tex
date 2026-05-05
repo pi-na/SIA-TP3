@@ -439,7 +439,7 @@ Ej 2 / Ej 3 — capa de salida & \textbf{softmax} & Clasificación multiclase: d
 \end{tabular}\\[0.8em]
 
 \begin{insight}\small
-\textbf{Mismo objetivo, distinta calibración.} He y Xavier preservan la varianza de las activaciones a través de las capas (evitan vanishing/exploding gradient). \textbf{He} usa $\sqrt{2/\text{fan\_in}}$ — el doble que Xavier — porque \textbf{ReLU pone a cero la mitad del input}; sin esa compensación la señal se atenúa capa a capa.
+\textbf{Mismo objetivo, distinta calibración.} He y Xavier preservan la varianza de las activaciones a través de las capas. \textbf{He} usa $\sqrt{2/\text{fan\_in}}$ — el doble que Xavier — porque \textbf{ReLU pone a cero la mitad del input}; sin esa compensación la señal se atenúa capa a capa.
 \end{insight}
 \end{frame}
 
@@ -681,7 +681,7 @@ test: \textcolor{warn}{\(86.30\%\)} \(\to\) \textcolor{accent2}{\(\boldsymbol{96
 \normalsize
 \begin{takeaway}
 \textbf{Macro F1: $0.857 \to 0.959$.}\\
-La clase 8 que estaba colapsada en Ej 2 ahora se predice correctamente. Más datos cubrieron el agujero de cobertura. Confirma la hipótesis del shift.
+La clase 8 que estaba colapsada en Ej 2 ahora se predice correctamente. Más datos cubrieron el agujero de cobertura. Confirma la hipótesis: el problema era cobertura de clases, no capacidad del modelo.
 \end{takeaway}
 \end{frame}
 
@@ -763,7 +763,7 @@ base\_extra\_data            & 0.9706 & 0.9636 & --- (referencia) \\
 \normalsize\raggedright
 \textbf{Hipótesis principal:}
 \begin{itemize}\setlength\itemsep{0.3em}
-  \item El \textbf{augmentation gaussiano} simula \emph{ruido por píxel}. Pero el shift entre train y test parece ser \emph{geométrico}: distintas personas escriben los dígitos con rotación, desplazamiento y grosor de trazo distintos.
+  \item El \textbf{augmentation gaussiano} simula \emph{ruido por píxel}, pero la diferencia que castiga al test parece más \emph{geométrica}: distintas personas escriben los dígitos con rotación, desplazamiento y grosor de trazo distintos.
   \item \textbf{En la clase de regularización vimos cuatro formas de augmentation; sólo implementamos una} (gaussiano). Faltan rotación, traslación y cambios de escala.
   \item Aumentar la capacidad (\code{wider}) empeoró: \textbf{no es problema de modelo, es problema de cobertura}.
 \end{itemize}
