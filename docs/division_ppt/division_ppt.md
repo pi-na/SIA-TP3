@@ -1,7 +1,7 @@
 1 a 5
 6 a 8
-10 a 13
-14 a 17
+10 a 14   (slide 13 la presenta Tomas)
+15 a 17
 18 a 21
 22 a 26
 28 y 29
@@ -24,8 +24,13 @@ antes/después las cubre.
 >   del Ej 1 → bloque A pasa a 5 slides (1–5).
 > - **+1 en bloque D**: nueva slide "ReLU y Softmax — visualización"
 >   (dos gráficos representativos + mini-explicación) inmediatamente
->   después de la slide de función de activación → bloque D pasa a
->   4 slides (14–17). Asignada a **Tomas**.
+>   después de la slide de función de activación. Asignada a **Tomas**.
+> - **Reordenamiento bloque C/D**: la slide "Optimizador — cuál y por qué"
+>   (originalmente en bloque D) se movió a la posición 13 (entre sweep
+>   arquitectura y sweep optimizador), de modo que la teoría preceda al
+>   sweep de tabla. La slide queda dentro de bloque C pero la presenta
+>   **Tomas** (interjección). Bloque D pasa a 3 slides (15–17, sólo
+>   Tomas: activación + viz + init).
 > - **+1 en bloque F**: nueva slide "Distribución de clases en train vs
 >   test" (tabla de conteos por clase + hallazgos) entre la matriz base
 >   y el cachetazo → bloque F pasa a 5 slides (22–26). Asignada a
@@ -42,8 +47,8 @@ antes/después las cubre.
 |---|---|---|---|---|---|---|
 | **A** | 1–5    | 5 | Portada + setup Ej 1 + análisis del dataset (3 reglas) + intuición sigmoide | Media | Bajo–Medio | 4 min |
 | **B** | 6–8    | 3 | Lineal vs no-lineal MSE + threshold sweep + recomendación de umbral | Media-Alta | Medio | 3 min |
-| **C** | 10–13  | 4 | Setup Ej 2 + fases + sweep arquitectura + sweep optimizador | Media | Medio | 3 min |
-| **D** | 14–17  | 4 | **Decisiones de diseño**: activación + visualización ReLU/softmax + inicialización + optimizador | **Alta** | **Alto** | 4 min |
+| **C** | 10–14  | 5 | Setup Ej 2 + fases + sweep arq + **optimizador cuál y por qué (slide 13, Tomas)** + sweep optimizador | Media | Medio | 4 min |
+| **D** | 15–17  | 3 | **Decisiones de diseño**: activación + visualización ReLU/softmax + inicialización | **Alta** | **Alto** | 3 min |
 | **E** | 18–21  | 4 | Learning rate + dos tablas LR + convergencia y bias | Media | Medio | 3 min |
 | **F** | 22–26  | 5 | Curvas + matriz base + distribución de clases + final eval (cachetazo) + matrices val/test | **Alta** | **Alto** | 4 min |
 | **G** | 28–29  | 2 | Hipótesis Ej 3 + el movimiento dominó (+10 pp) | Baja-Media | Bajo | 2 min |
@@ -77,8 +82,9 @@ Criterio: Tomas y Katia toman los bloques de **alta dificultad / alto Q&A risk**
 Nicolas toma bloques medios donde el guion lleva el peso. Mateo toma los bloques
 con más respaldo visual (gráficos / números grandes) y menor superficie técnica.
 
-### Tomas — 2 bloques, 9 slides (~9 min)
-- **Bloque D** (14–17): Decisiones de diseño (activación + viz ReLU/softmax + init + optimizador)
+### Tomas — 2 bloques + 1 slide aislada, 9 slides (~9 min)
+- **Slide 13** (dentro de bloque C): Optimizador — cuál y por qué (interjección entre el sweep de arquitectura y el sweep de optimizador, sirve para que Nicolas no tenga que defender la teoría de SGD/Momentum/Adam antes de leer la tabla del sweep)
+- **Bloque D** (15–17): Decisiones de diseño (activación + viz ReLU/softmax + init)
 - **Bloque F** (22–26): Curvas, matriz base, distribución de clases, **cachetazo** y matrices val vs test
 
 > Le toca defender los dos puntos donde el Q&A puede ir más profundo
@@ -98,7 +104,7 @@ con más respaldo visual (gráficos / números grandes) y menor superficie técn
 > hipótesis honesta sin sonar a derrota.
 
 ### Nicolas — 2 bloques, 8 slides (~8 min)
-- **Bloque C** (10–13): Setup Ej 2 + fases + sweeps de arquitectura y optimizador
+- **Bloque C** (10, 11, 12, 14): Setup Ej 2 + fases + sweep de arquitectura + sweep de optimizador (la slide 13 la cubre Tomas en el medio)
 - **Bloque E** (18–21): Learning rate + tablas Fase 1/Fase 2 + convergencia/bias
 
 > Casi todo es leer tablas y gráficos. El guion va a tener todo el contenido
@@ -144,7 +150,7 @@ con más respaldo visual (gráficos / números grandes) y menor superficie técn
 
 | Persona | # bloques | # slides | Tiempo aprox | Carga Q&A |
 |---|---|---|---|---|
-| Tomas    | 2 | 9 | ~9 min | Alta (la lleva) |
+| Tomas    | 2 + 1 | 9 | ~9 min | Alta (la lleva) |
 | Katia    | 3 | 7 | ~7 min | Alta (la lleva) |
 | Nicolas  | 2 | 8 | ~8 min | Media (con guion) |
 | Mateo    | 3 | 9 | ~7 min | Baja (visual / scripted, con rescate) |
