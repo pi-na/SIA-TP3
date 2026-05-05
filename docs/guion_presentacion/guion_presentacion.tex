@@ -170,17 +170,17 @@ A ver, qué nos pide el Ejercicio uno. \Pausa\ Tenemos un BigModel que ya viene 
 
 \slidenum{4, Ej 1 — análisis del dataset}
 
-Antes de entrenar nada, miramos el dataset y nos encontramos con algo bastante llamativo. \Pausa\ Hay tres umbrales bien marcados, en tres features distintas, que separan las clases casi perfecto. \pausa\ Si el monto es mayor a quinientos, o la cantidad comprada es diez o más, o los items vistos antes de la compra son quince o más \pausa\ \emph{cualquiera de las tres}, casi seguro es fraude.
+Antes de entrenar nada, miramos el dataset y nos encontramos con algo bastante llamativo. \Pausa\ Hay tres umbrales bien marcados, en tres features distintas, que separan las clases casi perfecto. \pausa\ Si el monto es mayor a 500, o la cantidad comprada es diez o más, o los items vistos antes de la compra son quince o más \pausa\ \emph{cualquiera de las tres}, casi seguro es fraude.
 
-\Pausa\ La tabla de la izquierda muestra cuántos casos cubre cada regla por separado, y cuántos falsos positivos genera: \textbf{cero falsos positivos en las tres}. \pausa\ Y la de la derecha junta las tres con un OR lógico: precision cien por ciento, recall ochenta por ciento.
+\Pausa\ La tabla de la izquierda muestra cuántos casos cubre cada regla por separado, y cuántos falsos positivos genera: \textbf{cero falsos positivos en las tres}. \pausa\ Y la de la derecha junta las tres con un OR lógico: precision 100\%, recall 80\%.
 
 \timing{2:00}
 
 \slidenum{5, Ej 1 — conclusión del análisis}
 
-Lo que nos quedó de eso, que está acá en la caja del medio: \Pausa\ \textbf{el ochenta por ciento del fraude lo agarrás con tres ifs y no te queda un solo falso positivo}. \pausa\ El veinte por ciento que falta --- ciento setenta y cuatro casos --- son los fraudes ``sutiles'': los que respetan los tres umbrales y solo se detectan combinando varias features.
+Lo que nos quedó de eso, que está acá en la caja del medio: \Pausa\ \textbf{el 80\% del fraude lo agarrás con tres ifs y no te queda un solo falso positivo}. \pausa\ El 20\% que falta --- 174 casos --- son los fraudes ``sutiles'': los que respetan los tres umbrales y solo se detectan combinando varias features.
 
-\Pausa\ Y eso nos dejó tres conclusiones para entrenar el TinyModel. \pausa\ Primero, el modelo \emph{tiene} que igualar las tres reglas --- recall arriba del ochenta por ciento es el piso. \pausa\ Segundo, lo que aporta el modelo se mide en cuántos de esos ciento setenta y cuatro casos sutiles logra recuperar. \pausa\ Y tercero, los saltos duros que vemos --- de seis por ciento a cien por ciento --- son imposibles para un modelo lineal. Acá el perceptrón \emph{no lineal} debería ganarle clarito al lineal.
+\Pausa\ Y eso nos dejó tres conclusiones para entrenar el TinyModel. \pausa\ Primero, el modelo \emph{tiene} que igualar las tres reglas --- recall arriba del 80\% es el piso. \pausa\ Segundo, lo que aporta el modelo se mide en cuántos de esos 174 casos sutiles logra recuperar. \pausa\ Y tercero, los saltos duros que vemos --- de 6\% a 100\% --- son imposibles para un modelo lineal. Acá el perceptrón \emph{no lineal} debería ganarle clarito al lineal.
 
 \paso{Mateo→Katia} \quad \pausa\ Le paso a Katia para que cuente cómo se midió esa diferencia.
 
@@ -195,11 +195,11 @@ Lo que nos quedó de eso, que está acá en la caja del medio: \Pausa\ \textbf{e
 
 \slidenum{26, Ej 3 — hipótesis y plan}\quad \bloque{G}
 
-Vuelvo yo. \Pausa\ Tomás recién mostró que el modelo del Ejercicio dos rendía noventa y seis en validación pero se caía a ochenta y seis en el test. Diez puntos de diferencia. \pausa\ Eso no se explica por azar.
+Vuelvo yo. \Pausa\ Tomás recién mostró que el modelo del Ejercicio dos rendía 96 en validación pero se caía a 86 en el test. 10 puntos de diferencia. \pausa\ Eso no se explica por azar.
 
 \Pausa\ Entonces la hipótesis con la que arrancamos el Ejercicio tres fue esta: el problema no es el modelo --- el modelo está bien. El tema es que \emph{el test viene de una población distinta a la del train}. \pausa\ Si la hipótesis es esa, lo primero que hay que probar es \emph{más datos} que cubran lo que falta, no un modelo más grande.
 
-\Pausa\ \enunciado{Y el enunciado del Ejercicio tres nos da justo eso}: un dataset extra, \code{more\_digits.csv}, con quince mil setecientas muestras nuevas. \pausa\ El plan fue en dos pasos. Uno, agregar el dataset extra sin tocar el modelo. Si llegábamos al noventa y ocho con eso, listo. \pausa\ Dos, si no alcanzaba, activar regularización --- L2, dropout, augmentation gaussiana, learning rate scheduling --- y ver qué combinaciones funcionaban.
+\Pausa\ \enunciado{Y el enunciado del Ejercicio tres nos da justo eso}: un dataset extra, \code{more\_digits.csv}, con 15.742 muestras nuevas. \pausa\ El plan fue en dos pasos. Uno, agregar el dataset extra sin tocar el modelo. Si llegábamos al 98\% con eso, listo. \pausa\ Dos, si no alcanzaba, activar regularización --- L2, dropout, augmentation gaussiana, learning rate scheduling --- y ver qué combinaciones funcionaban.
 
 \timing{0:50}
 
@@ -207,9 +207,9 @@ Vuelvo yo. \Pausa\ Tomás recién mostró que el modelo del Ejercicio dos rendí
 
 Y este es el resultado del primer paso, que sinceramente nos sorprendió. \Pausa\ Pegamos los dos CSVs antes del split. \textbf{Cero cambios al modelo}, solo cambia un campo del config. \Pausa\ Miren los números.
 
-\Pausa\ Validación K-fold cinco: subió de noventa y seis veintidós a noventa y siete cero seis. \pausa\ Y el test, que es lo que importa: \textbf{de ochenta y seis treinta a noventa y seis treinta y seis}. \Pausa\ \textbf{Diez puntos en test, sin tocar el modelo.}
+\Pausa\ Validación K-fold=5: subió de 96.22 a 97.06. \pausa\ Y el test, que es lo que importa: \textbf{de 86.30 a 96.36}. \Pausa\ \textbf{10 puntos en test, sin tocar el modelo.}
 
-\Pausa\ Y miren acá, en la caja verde: \pausa\ macro F1 saltó de cero coma ochenta y cinco a cero coma noventa y cinco. \pausa\ ¿Se acuerdan que la clase ocho colapsaba en el Ejercicio dos? Ahora la red la predice bien. \pausa\ El dataset extra cubrió justo el agujero que faltaba. Eso \emph{confirma} la hipótesis.
+\Pausa\ Y miren acá, en la caja verde: \pausa\ macro F1 saltó de 0.85 a 0.95. \pausa\ ¿Se acuerdan que la clase 8 colapsaba en el Ejercicio dos? Ahora la red la predice bien. \pausa\ El dataset extra cubrió justo el agujero que faltaba. Eso \emph{confirma} la hipótesis.
 
 \paso{Mateo→Katia} \quad Le paso a Katia para que muestre la matriz, la tabla y la comparación con el Ej 2.
 
@@ -230,11 +230,11 @@ Vuelvo para mostrar las curvas y el balance. \Pausa\ Estas son las curvas de apr
 
 \slidenum{32, Ej 3 — qué ayudó y qué no}
 
-Y este slide es el resumen de qué movió la aguja y qué no. \Pausa\ \textbf{Lo que ayudó}: \pausa\ más datos, diez puntos --- de lejos lo más importante. \pausa\ L2, cero coma veinte puntos sólidos. \pausa\ Augmentation gaussiana, cero coma treinta y dos puntos \emph{adicionales} sobre L2 --- las dos juntas suman.
+Y este slide es el resumen de qué movió la aguja y qué no. \Pausa\ \textbf{Lo que ayudó}: \pausa\ más datos, diez puntos --- de lejos lo más importante. \pausa\ L2, 0.20 puntos sólidos. \pausa\ Augmentation gaussiana, 0.32 puntos \emph{adicionales} sobre L2 --- las dos juntas suman.
 
-\Pausa\ \textbf{Lo que no ayudó}: \pausa\ Dropout, y este caso es interesante. Dropout gana en validación pero pierde en test. \pausa\ La razón es que dropout reduce la varianza dentro del train, pero no te sirve cuando el test viene de una población distinta. \pausa\ La arquitectura \emph{wider}, doscientas-cien neuronas: mejor en validación, peor en test. Más capacidad memoriza el train mejor pero no generaliza. Y eso \emph{descarta} que el problema sea capacidad. \pausa\ Y lo último, combinar todo a la vez --- L2, dropout y augmentation juntos --- nos dio peor que solamente L2 con augmentation. Cuando exagerás la regularización, las técnicas se pelean entre ellas.
+\Pausa\ \textbf{Lo que no ayudó}: \pausa\ Dropout, y este caso es interesante. Dropout gana en validación pero pierde en test. \pausa\ La razón es que dropout reduce la varianza dentro del train, pero no te sirve cuando el test viene de una población distinta. \pausa\ La arquitectura \emph{wider}, 200-100 neuronas: mejor en validación, peor en test. Más capacidad memoriza el train mejor pero no generaliza. Y eso \emph{descarta} que el problema sea capacidad. \pausa\ Y lo último, combinar todo a la vez --- L2, dropout y augmentation juntos --- nos dio peor que solamente L2 con augmentation. Cuando exagerás la regularización, las técnicas se pelean entre ellas.
 
-\paso{Mateo→Katia} \quad Katia cierra con por qué nos quedamos en noventa y seis ochenta y ocho y las conclusiones.
+\paso{Mateo→Katia} \quad Katia cierra con por qué nos quedamos en 96.88 y las conclusiones.
 
 \medskip
 \textcolor{muted}{\small Wordcount bloque I: $\approx 295$ palabras / 2:00.}
@@ -248,7 +248,7 @@ Y este slide es el resumen de qué movió la aguja y qué no. \Pausa\ \textbf{Lo
 \section{Katia — Threshold, tabla de regularización y cierre}\label{sec:katia}
 
 \begin{persona}{katiaC}{Katia \pausa\ 6:00 totales \pausa\ Bloques B + H + J \pausa\ 8 slides}
-\textbf{Te toca:} cerrar el Ejercicio uno (decisión del threshold, que es lo más de negocio del TP), mostrar los resultados completos del Ejercicio tres, y cerrar todo con el ``por qué no llegamos al noventa y ocho'' y las conclusiones.\\
+\textbf{Te toca:} cerrar el Ejercicio uno (decisión del threshold, que es lo más de negocio del TP), mostrar los resultados completos del Ejercicio tres, y cerrar todo con el ``por qué no llegamos al 98\%'' y las conclusiones.\\
 \textbf{Tono:} bloque B necesita números claros (tablas), bloque H tiene la tabla de regularización (densa), bloque J es el cierre que vende la historia. Carisma para el final.\\
 \textbf{Q\&A:} alta. Threshold, tabla de regularización y conclusiones $\to$ vos.
 \end{persona}
@@ -260,7 +260,7 @@ Y este slide es el resumen de qué movió la aguja y qué no. \Pausa\ \textbf{Lo
 
 Buenas, soy Katia. \pausa\ Mateo dejó la pregunta abierta de si el perceptrón \emph{no lineal} le ganaba al lineal. La respuesta corta es que sí, y bastante.
 
-\Pausa\ Acá, en la tabla del medio, comparamos las dos versiones. Mismo dataset, mismo K-fold cinco estratificado, mismas features. \pausa\ Lo único que cambia entre los dos es la sigmoide. \Pausa\ El \emph{lineal} ---que es Adaline puro--- da MSE de cero coma cero dos seis seis. \pausa\ El \emph{no lineal}: \textbf{cero coma cero uno uno cero}. \textbf{Cincuenta y nueve por ciento menos de error.}
+\Pausa\ Acá, en la tabla del medio, comparamos las dos versiones. Mismo dataset, mismo K-fold=5 estratificado, mismas features. \pausa\ Lo único que cambia entre los dos es la sigmoide. \Pausa\ El \emph{lineal} ---que es Adaline puro--- da MSE de 0.0266. \pausa\ El \emph{no lineal}: \textbf{0.0110}. \textbf{Cincuenta y nueve por ciento menos de error.}
 
 \Pausa\ ¿Por qué nos da una diferencia tan grande? \pausa\ Acordate que el target es una probabilidad: tiene que estar entre cero y uno. \pausa\ La sigmoide \emph{automáticamente} mapea su salida a ese rango. El lineal puede tirarte valores fuera de cero a uno, y el MSE te castiga fuerte cuando la salida queda fuera del dominio. \pausa\ No es magia, es que la activación final tiene que ser coherente con la naturaleza del target.
 
@@ -268,11 +268,11 @@ Buenas, soy Katia. \pausa\ Mateo dejó la pregunta abierta de si el perceptrón 
 
 \slidenum{7, Ej 1 — pruebas sobre threshold}
 
-Ahora viene la parte que más nos hizo pensar. \Pausa\ Si tomamos el modelo no lineal con threshold cero coma cinco ---el default obvio para una sigmoide--- las métricas operativas dan mal. \pausa\ Precision treinta y tres por ciento, recall cien por ciento. Tira casi todo a fraude.
+Ahora viene la parte que más nos hizo pensar. \Pausa\ Si tomamos el modelo no lineal con threshold 0.5 ---el default obvio para una sigmoide--- las métricas operativas dan mal. \pausa\ Precision 33\%, recall 100\%. Tira casi todo a fraude.
 
-\Pausa\ A primera vista parece un modelo malísimo. Pero la cuestión es que el modelo no es el problema --- \emph{el threshold no está calibrado al modelo}. \pausa\ ¿Por qué? Porque las salidas de la sigmoide se concentran en la parte de arriba. La mediana de los scores de las muestras de fraude está en cero coma noventa y nueve. Y los \emph{no fraudes} no se van a cero coma cero cinco como uno esperaría --- quedan en cero coma cuatro o cero coma seis. \pausa\ La red aprendió un \emph{ranking} muy bueno, pero no un calibrado perfecto.
+\Pausa\ A primera vista parece un modelo malísimo. Pero la cuestión es que el modelo no es el problema --- \emph{el threshold no está calibrado al modelo}. \pausa\ ¿Por qué? Porque las salidas de la sigmoide se concentran en la parte de arriba. La mediana de los scores de las muestras de fraude está en 0.99. Y los \emph{no fraudes} no se van a 0.05 como uno esperaría --- quedan en 0.4 o 0.6. \pausa\ La red aprendió un \emph{ranking} muy bueno, pero no un calibrado perfecto.
 
-\Pausa\ La solución fue barrer el threshold de cero a uno con paso cero coma cero uno. En el plot ven precision en azul, recall en verde, F1 en negro. \pausa\ El óptimo por F1 está en \textbf{threshold cero coma ochenta y nueve}: precision ochenta y nueve, recall ochenta y seis, F1 ochenta y siete, accuracy noventa y siete por ciento.
+\Pausa\ La solución fue barrer el threshold de cero a uno con paso 0.01. En el plot ven precision en azul, recall en verde, F1 en negro. \pausa\ El óptimo por F1 está en \textbf{threshold 0.89}: precision ochenta y nueve, recall ochenta y seis, F1 ochenta y siete, accuracy 97\%.
 
 \timing{2:10}
 
@@ -280,7 +280,7 @@ Ahora viene la parte que más nos hizo pensar. \Pausa\ Si tomamos el modelo no l
 
 Y la última pregunta del Ejercicio uno: \emph{qué umbral le recomendamos al cliente}. \Pausa\ Y la respuesta es: depende. Depende del costo asimétrico que tenga el cliente entre falso positivo y falso negativo.
 
-\Pausa\ La tabla muestra cuatro puntos. \pausa\ Threshold cero coma ochenta y nueve maximiza F1: agarra el ochenta y seis por ciento de los fraudes con noventa y seis falsos positivos. Esto sirve si auditar manualmente cada flagged es barato. \pausa\ Threshold cero coma noventa y cinco baja a treinta y cinco falsos positivos pero pierde recall: solo recupera el setenta y cinco. Esto sirve si los falsos positivos son caros para el negocio. \pausa\ Y threshold cero coma noventa y nueve te da precision perfecta y cero falsos positivos --- pero pierde la mitad de los fraudes reales. Esto es para cuando hay tolerancia cero a falsos positivos.
+\Pausa\ La tabla muestra cuatro puntos. \pausa\ Threshold 0.89 maximiza F1: agarra el 86\% de los fraudes con noventa y seis falsos positivos. Esto sirve si auditar manualmente cada flagged es barato. \pausa\ Threshold 0.95 baja a 35 falsos positivos pero pierde recall: solo recupera el setenta y cinco. Esto sirve si los falsos positivos son caros para el negocio. \pausa\ Y threshold 0.99 te da precision perfecta y cero falsos positivos --- pero pierde la mitad de los fraudes reales. Esto es para cuando hay tolerancia cero a falsos positivos.
 
 \Pausa\ El modelo entrega scores. Decidir el umbral es una decisión del negocio.
 
@@ -297,7 +297,7 @@ Y la última pregunta del Ejercicio uno: \emph{qué umbral le recomendamos al cl
 
 \slidenum{28, Ej 3 — matriz del ganador}\quad \bloque{H}
 
-Vuelvo después del dominó de Mateo. \Pausa\ Esta es la matriz de confusión del modelo ganador del Ejercicio tres, evaluada sobre el test. \pausa\ La diagonal está bastante más limpia que la del Ejercicio dos. \pausa\ La clase ocho que en el dos colapsaba ahora se predice bien, y los errores que quedan se reparten entre varias clases en lugar de juntarse en una sola. \pausa\ Eso quiere decir que ya no hay un agujero específico de cobertura --- las limitaciones que quedan son globales, no de una clase puntual.
+Vuelvo después del dominó de Mateo. \Pausa\ Esta es la matriz de confusión del modelo ganador del Ejercicio tres, evaluada sobre el test. \pausa\ La diagonal está bastante más limpia que la del Ejercicio dos. \pausa\ La clase 8 que en el dos colapsaba ahora se predice bien, y los errores que quedan se reparten entre varias clases en lugar de juntarse en una sola. \pausa\ Eso quiere decir que ya no hay un agujero específico de cobertura --- las limitaciones que quedan son globales, no de una clase puntual.
 
 \timing{0:35}
 
@@ -305,13 +305,13 @@ Vuelvo después del dominó de Mateo. \Pausa\ Esta es la matriz de confusión de
 
 Esta es la tabla completa de los configs que probamos. \Pausa\ Vamos por la columna de test, que es la que vale para nosotros.
 
-\textbf{Base con datos extra}, sin nada de regularización: noventa y seis treinta y seis. \pausa\ \textbf{Más L2}: noventa y seis cincuenta y seis, sumamos cero coma veinte. \pausa\ \textbf{Dropout solo}: peor en test, perdió cero coma cero ocho. \pausa\ \textbf{L2 más dropout combinados}: peor todavía, perdió cero coma treinta y dos. \Pausa\ Y la fila resaltada en verde, \textbf{L2 más augmentation gaussiana con sigma cero coma cero cinco}: \textbf{noventa y seis ochenta y ocho por ciento}. Cero coma cincuenta y dos puntos sobre el baseline. \pausa\ Ese es nuestro ganador. \pausa\ Las dos filas siguientes muestran que combinar todo o agrandar la red empeoraba.
+\textbf{Base con datos extra}, sin nada de regularización: 96.36. \pausa\ \textbf{Más L2}: 96.56, sumamos 0.20. \pausa\ \textbf{Dropout solo}: peor en test, perdió 0.08. \pausa\ \textbf{L2 más dropout combinados}: peor todavía, perdió 0.32. \Pausa\ Y la fila resaltada en verde, \textbf{L2 más augmentation gaussiana con sigma 0.05}: \textbf{96.88 por ciento}. Cero coma cincuenta y dos puntos sobre el baseline. \pausa\ Ese es nuestro ganador. \pausa\ Las dos filas siguientes muestran que combinar todo o agrandar la red empeoraba.
 
 \timing{1:05}
 
 \slidenum{30, Ej 3 — comparación visual}
 
-Y este es el plot que compara directamente el Ejercicio dos con el ganador del tres, sobre el mismo test. \Pausa\ Las cinco métricas, lado a lado. La línea roja punteada es el target del noventa y ocho. \pausa\ Lo que se ve es que la mayor parte del salto vino del dataset extra --- ya las barras grandes están al nivel del ganador. La regularización aporta el último empujón.
+Y este es el plot que compara directamente el Ejercicio dos con el ganador del tres, sobre el mismo test. \Pausa\ Las cinco métricas, lado a lado. La línea roja punteada es el target del 98\%. \pausa\ Lo que se ve es que la mayor parte del salto vino del dataset extra --- ya las barras grandes están al nivel del ganador. La regularización aporta el último empujón.
 
 \paso{Katia→Mateo} \quad Mateo vuelve para las curvas y el balance.
 
@@ -326,7 +326,7 @@ Y este es el plot que compara directamente el Ejercicio dos con el ganador del t
 
 \slidenum{33, Ej 3 — por qué no llegamos al 98}\quad \bloque{J}
 
-Cierro yo. \Pausa\ La pregunta incómoda. ¿Por qué no llegamos al noventa y ocho? Mejor que tenemos: noventa y seis ochenta y ocho, faltan uno coma doce puntos.
+Cierro yo. \Pausa\ La pregunta incómoda. ¿Por qué no llegamos al 98\%? Mejor que tenemos: 96.88, faltan 1.12 puntos.
 
 \Pausa\ La hipótesis principal es la siguiente. \pausa\ El augmentation gaussiano que implementamos simula \emph{ruido píxel a píxel}. Pero la diferencia entre el train y el test no parece ser de ruido --- \emph{parece ser geométrica}. Distintas personas escriben los dígitos con rotaciones, traslaciones y grosores de trazo distintos. \pausa\ Y acá viene el detalle importante: \enunciado{en la clase de regularización vimos cuatro formas de augmentation}: ruido gaussiano, rotaciones, traslaciones y cambios de escala. \textbf{Solo implementamos la primera.} \pausa\ Las otras tres son justo las que atacarían el tipo de variación que falta cubrir en el test.
 
@@ -338,7 +338,7 @@ Cierro yo. \Pausa\ La pregunta incómoda. ¿Por qué no llegamos al noventa y oc
 
 Y para terminar, tres ideas para llevarse del TP. \Pausa\ \textbf{Una}: una buena pipeline rinde más que afinar hiperparámetros. El más diez puntos del Ejercicio tres vino de \emph{datos}, no de modelo. \Pausa\ \textbf{Dos}: los empates técnicos son más comunes que los wins claros. Hay que elegir por simplicidad --- mirar tiempo y memoria, no obsesionarse con una décima en validación. \Pausa\ \textbf{Tres}: ``mejor en validación'' no es ``mejor en test'' cuando la población cambia. Dropout fue el ejemplo de manual.
 
-\Pausa\ Tabla de status: \pausa\ Ej uno cumplido, Ej dos cumplido, Ej tres cumplido salvo el target del noventa y ocho. Mejor obtenido: noventa y seis ochenta y ocho. \Pausa\ Lo dejamos documentado con una hipótesis verificable de cómo seguir.
+\Pausa\ Tabla de status: \pausa\ Ej uno cumplido, Ej dos cumplido, Ej tres cumplido salvo el target del 98\%. Mejor obtenido: 96.88. \Pausa\ Lo dejamos documentado con una hipótesis verificable de cómo seguir.
 
 \slidenum{35, Gracias}\quad Gracias. \pausa\ Preguntas.
 
@@ -348,7 +348,7 @@ Y para terminar, tres ideas para llevarse del TP. \Pausa\ \textbf{Una}: una buen
 \bigskip
 \begin{cue}
 \textbf{Total Katia:} B (3:35) + H (1:45) + J (2:10) $= 7:30$. \pausa\ Es el bloque más cargado de palabras del equipo; cuidá el ritmo en threshold sweep (slide 7) y en la tabla de regularización (slide 29) que son los más densos.\\[0.3em]
-\textbf{Si llegás larga:} en J, sacar la línea del augmentation geométrico (decir solo ``faltó implementar las otras formas de augmentation que vimos en clase''). En B, no entrar en threshold cero coma noventa y nueve.
+\textbf{Si llegás larga:} en J, sacar la línea del augmentation geométrico (decir solo ``faltó implementar las otras formas de augmentation que vimos en clase''). En B, no entrar en threshold 0.99.
 \end{cue}
 
 % ===================================================================
@@ -371,23 +371,23 @@ Buenas, soy Nicolás. \pausa\ Pasamos al Ejercicio dos.
 
 \slidenum{10, Ej 2 — el problema}
 
-Clasificación multiclase de dígitos manuscritos del cero al nueve. \Pausa\ Cada muestra es una imagen de veintiocho por veintiocho píxeles, en escala de grises, aplanada en \enunciado{un vector de setecientos ochenta y cuatro floats entre cero y uno}. \pausa\ Train: doce mil cuatrocientas cuarenta y nueve muestras. Test: dos mil cuatrocientas noventa y ocho.
+Clasificación multiclase de dígitos manuscritos del cero al nueve. \Pausa\ Cada muestra es una imagen de veintiocho por veintiocho píxeles, en escala de grises, aplanada en \enunciado{un vector de 784 floats entre cero y uno}. \pausa\ Train: 12.449 muestras. Test: 2.498.
 
-\Pausa\ La arquitectura final, después de todos los sweeps que les voy a mostrar, es: \pausa\ entrada de setecientos ochenta y cuatro, capa oculta de cien con ReLU, otra de cincuenta con ReLU, salida de diez con softmax. \pausa\ Y la regla del juego, en la caja roja: \textbf{el test se usa una sola vez, al final}. La búsqueda de hiperparámetros es solo sobre \code{digits.csv}.
+\Pausa\ La arquitectura final, después de todos los sweeps que les voy a mostrar, es: \pausa\ entrada de 784, capa oculta de 100 con ReLU, otra de 50 con ReLU, salida de diez con softmax. \pausa\ Y la regla del juego, en la caja roja: \textbf{el test se usa una sola vez, al final}. La búsqueda de hiperparámetros es solo sobre \code{digits.csv}.
 
 \timing{1:00}
 
 \slidenum{11, Ej 2 — fases de experimentación}
 
-Para no probar al azar, dividimos la búsqueda en \textbf{dos fases}. \Pausa\ \emph{Fase uno, exploratoria}: K-folds igual a uno, o sea un solo train-val ochenta-veinte. \pausa\ Sweeps secuenciales: arquitectura, después optimizador, después learning rate, después batch size. \pausa\ Cada sub-fase usa el ganador de la anterior, así reducimos un montón el espacio de búsqueda.
+Para no probar al azar, dividimos la búsqueda en \textbf{dos fases}. \Pausa\ \emph{Fase uno, exploratoria}: K-folds = 1, o sea un solo train-val ochenta-veinte. \pausa\ Sweeps secuenciales: arquitectura, después optimizador, después learning rate, después batch size. \pausa\ Cada sub-fase usa el ganador de la anterior, así reducimos un montón el espacio de búsqueda.
 
-\Pausa\ \emph{Fase dos, validación}: K-fold igual a cinco. \pausa\ Tomamos el config ganador de la primera fase y variamos un solo hiperparámetro a la vez para ver si las elecciones se sostienen con K-fold completo. \pausa\ Y al final, un único \emph{final eval} contra el test set --- una sola vez, como dije recién.
+\Pausa\ \emph{Fase dos, validación}: K-fold = 5. \pausa\ Tomamos el config ganador de la primera fase y variamos un solo hiperparámetro a la vez para ver si las elecciones se sostienen con K-fold completo. \pausa\ Y al final, un único \emph{final eval} contra el test set --- una sola vez, como dije recién.
 
 \timing{1:40}
 
 \slidenum{12, Ej 2 — sweep de arquitectura}
 
-Empezamos por arquitectura. \Pausa\ Probamos cinco variantes alrededor del ganador. \pausa\ La fila verde es el ganador: setecientos ochenta y cuatro, cien, cincuenta, diez. Validación noventa y seis setenta y cuatro, y noventa y seis veintidós con K-fold cinco. \pausa\ La de abajo, ciento veintiocho-sesenta y cuatro, fue el empate técnico más cercano: cero coma cero cuatro arriba pero \emph{dentro del desvío}. \Pausa\ La que dice \emph{wider}, doscientas-cien, ganó cero coma diecisiete en validación pero perdió cero coma cuarenta y ocho en test, y tardó tres veces y media más en entrenar. \pausa\ \emph{Deeper} empató, y \emph{shallow} con treinta neuronas en una sola capa quedó subajustada.
+Empezamos por arquitectura. \Pausa\ Probamos cinco variantes alrededor del ganador. \pausa\ La fila verde es el ganador: 784, cien, cincuenta, diez. Validación 96.74, y 96.22 con K-fold=5. \pausa\ La de abajo, 128-64, fue el empate técnico más cercano: 0.04 arriba pero \emph{dentro del desvío}. \Pausa\ La que dice \emph{wider}, 200-cien, ganó 0.17 en validación pero perdió 0.48 en test, y tardó 3.5 veces más en entrenar. \pausa\ \emph{Deeper} empató, y \emph{shallow} con 30 neuronas en una sola capa quedó subajustada.
 
 \Pausa\ La decisión la tomamos por \emph{parsimonia} ---regla de Occam---: cuando dos modelos rinden igual, te quedás con el más simple y rápido. \pausa\ Y el experimento de \emph{wider} confirmó la curva U que vimos en la clase de regularización: si agrandás la red sin compensar con más datos, te metés en zona de overfitting.
 
@@ -395,7 +395,7 @@ Empezamos por arquitectura. \Pausa\ Probamos cinco variantes alrededor del ganad
 
 \slidenum{13, Ej 2 — sweep de optimizador}
 
-Sweep de optimizador. \pausa\ \textbf{Adam} con learning rate cero coma cero cero uno: noventa y seis setenta y cuatro, \emph{best epoch} siete. Ganador. \pausa\ Momentum con beta cero coma nueve: noventa y seis treinta y cuatro, converge más lento ---best epoch dieciocho. \pausa\ SGD vanilla: noventa y cuatro ochenta y uno, y la realidad es que \emph{no convergió en cincuenta epochs}, llegó al límite todavía mejorando. \Pausa\ Adam ganó por convergencia más rápida y resultado igual o mejor. Momentum quedó dentro del desvío, SGD sin aceleración no puede.
+Sweep de optimizador. \pausa\ \textbf{Adam} con learning rate 0.001: 96.74, \emph{best epoch} siete. Ganador. \pausa\ Momentum con beta 0.9: 96.34, converge más lento ---best epoch 18. \pausa\ SGD vanilla: 94.81, y la realidad es que \emph{no convergió en 50 epochs}, llegó al límite todavía mejorando. \Pausa\ Adam ganó por convergencia más rápida y resultado igual o mejor. Momentum quedó dentro del desvío, SGD sin aceleración no puede.
 
 \paso{Nicolás→Tomás} \quad Le paso a Tomás para que cuente \emph{por qué} elegimos cada cosa --- las decisiones de diseño con backing teórico.
 
@@ -412,13 +412,13 @@ Sweep de optimizador. \pausa\ \textbf{Adam} con learning rate cero coma cero cer
 
 Vuelvo yo. \Pausa\ Tomás cubrió las decisiones de diseño; ahora me toca contar cómo encontramos el learning rate ganador. \Pausa\ \enunciado{La recomendación de la clase es: probar varios órdenes de magnitud}. \pausa\ Los riesgos son simples: si lo elegís muy grande, la red oscila o diverge; si lo elegís muy chico, no converge en tiempo razonable.
 
-\Pausa\ La búsqueda fue en \textbf{dos pasos}, igual que el resto. \pausa\ Fase uno exploratoria, con cinco valores entre uno por diez a la menos cuatro y uno por diez a la menos dos. \pausa\ Fase dos con esos mismos cinco más \emph{extremos catastróficos} --- cero coma uno y diez --- para mapear el rango donde diverge.
+\Pausa\ La búsqueda fue en \textbf{dos pasos}, igual que el resto. \pausa\ Fase uno exploratoria, con cinco valores entre $10^{-4}$ y $10^{-2}$. \pausa\ Fase dos con esos mismos cinco más \emph{extremos catastróficos} --- 0.1 y diez --- para mapear el rango donde diverge.
 
 \timing{0:50}
 
 \slidenum{18, learning rate — Fase 1}
 
-Fase uno con K-folds igual a uno. \Pausa\ La fila verde, learning rate cero coma cero cero uno: noventa y seis setenta y cuatro, best epoch siete. Ganador. \pausa\ Cero coma cero cero cero cinco queda muy cerca pero converge más lento, best epoch diecisiete. \pausa\ Cero coma cero cero cero uno no termina de converger en cincuenta epochs. \pausa\ Y cero coma cero cero cinco con cero coma cero uno hacen overshoot ---best epoch dos a cuatro, demasiado temprano.
+Fase uno con K-folds = 1. \Pausa\ La fila verde, learning rate 0.001: 96.74, best epoch 7. Ganador. \pausa\ Cero coma cero cero cero cinco queda muy cerca pero converge más lento, best epoch 17. \pausa\ Cero coma cero cero cero uno no termina de converger en 50 epochs. \pausa\ Y 0.005 con 0.01 hacen overshoot ---best epoch 2 a 4, demasiado temprano.
 
 \Pausa\ Tres criterios apuntan al mismo valor: máximo de validación, convergencia rápida, sin overshoot.
 
@@ -426,15 +426,15 @@ Fase uno con K-folds igual a uno. \Pausa\ La fila verde, learning rate cero coma
 
 \slidenum{19, learning rate — Fase 2}
 
-Y la confirmación con K-fold cinco. \Pausa\ Mismos cinco valores más los extremos. \pausa\ Cero coma cero cero uno: noventa y seis veintidós, ganador. \pausa\ Cero coma cero cero cero uno: tres veces más lento, val\_acc apenas peor. \pausa\ Cero coma cero uno: overshoot. \Pausa\ Y los extremos: cero coma uno cae a veintinueve por ciento --- divergencia clara. \pausa\ Y \textbf{learning rate igual a diez} deja a la red en doce coma cuatro ocho --- accuracy random, \emph{equivalente a tirar una moneda con diez caras}. El loss explotó a NaN antes de converger.
+Y la confirmación con K-fold=5. \Pausa\ Mismos cinco valores más los extremos. \pausa\ Cero coma cero cero uno: 96.22, ganador. \pausa\ Cero coma cero cero cero uno: 3 veces más lento, val\_acc apenas peor. \pausa\ Cero coma cero uno: overshoot. \Pausa\ Y los extremos: 0.1 cae a veintinueve por ciento --- divergencia clara. \pausa\ Y \textbf{learning rate igual a diez} deja a la red en 12.48 --- accuracy random, \emph{equivalente a tirar una moneda con diez caras}. El loss explotó a NaN antes de converger.
 
-\Pausa\ Conclusión: \textbf{learning rate uno por diez a la menos tres confirmado por dos sweeps independientes}. Robusto frente a la varianza del K-fold.
+\Pausa\ Conclusión: \textbf{learning rate $10^{-3}$ confirmado por dos sweeps independientes}. Robusto frente a la varianza del K-fold.
 
 \timing{2:15}
 
 \slidenum{20, convergencia y bias}
 
-Y para terminar mi parte, dos detalles de implementación que no son hiperparámetros pero \enunciado{el TP nos pide discutir}. \Pausa\ \textbf{Criterio de convergencia.} \pausa\ En el Ejercicio uno usamos un \emph{epsilon absoluto} sobre el MSE de train --- la regla del apunte para perceptrón simple. \pausa\ En Ejercicio dos y tres usamos \textbf{early stopping sobre el loss de validación} con paciencia de diez epochs. \pausa\ La razón: si miramos solo el train, no detectamos overfitting. Con validación, sí.
+Y para terminar mi parte, dos detalles de implementación que no son hiperparámetros pero \enunciado{el TP nos pide discutir}. \Pausa\ \textbf{Criterio de convergencia.} \pausa\ En el Ejercicio uno usamos un \emph{epsilon absoluto} sobre el MSE de train --- la regla del apunte para perceptrón simple. \pausa\ En Ejercicio dos y tres usamos \textbf{early stopping sobre el loss de validación} con patience de 10 epochs. \pausa\ La razón: si miramos solo el train, no detectamos overfitting. Con validación, sí.
 
 \Pausa\ \textbf{Cómo manejamos el bias.} \pausa\ Truco del bias: a cada capa le agregamos una columna de unos al input antes del producto matricial, y los pesos pasan a tener shape \code{(n\_out, n\_in+1)}. \pausa\ El bias queda como un peso más y se actualiza con la misma regla del gradiente.
 
@@ -446,7 +446,7 @@ Y para terminar mi parte, dos detalles de implementación que no son hiperparám
 \bigskip
 \begin{cue}
 \textbf{Total Nicolás:} C (3:30) + E (3:15) $= 6:45$. \pausa\ Es el bloque más numerista; lee bien las tablas y dejá que los datos hablen.\\[0.3em]
-\textbf{Si llegás corto:} en C, expandir el detalle de \emph{shallow} (treinta neuronas claramente subajustada como prueba en sentido contrario al wider).\\
+\textbf{Si llegás corto:} en C, expandir el detalle de \emph{shallow} (30 neuronas claramente subajustada como prueba en sentido contrario al wider).\\
 \textbf{Si llegás largo:} en E slide 18, agrupar 0.0001 y 0.005--0.01 en una frase (``los extremos del rango fallan por razones opuestas: uno no converge, los otros oscilan'').
 \end{cue}
 
@@ -466,7 +466,7 @@ Y para terminar mi parte, dos detalles de implementación que no son hiperparám
 
 Buenas, soy Tomás. \pausa\ Nicolás mostró \emph{qué} elegimos en cada sweep, ahora me toca contar el \emph{por qué}. \Pausa\ Tres decisiones de diseño que aplican a todos los ejercicios: activación, inicialización y optimizador. \pausa\ El learning rate y la función de costo los retoma Nicolás cuando vuelva.
 
-\Pausa\ Función de activación, caso por caso. \pausa\ En el Ejercicio uno usamos \textbf{sigmoide} porque el target es una probabilidad acotada en cero a uno. \pausa\ En Ejercicio dos y tres, las capas ocultas con \textbf{ReLU} y la salida con \textbf{softmax}. \Pausa\ ¿Por qué ReLU en las capas ocultas? Porque el gradiente es fuerte y constante en zona positiva. \emph{No satura} como tanh o sigmoide. \pausa\ Y eso me lleva a la pregunta más importante del slide: \textbf{¿qué quiere decir saturar?} \pausa\ Una activación \emph{satura} cuando su pendiente se acerca a cero para entradas grandes en valor absoluto. Sigmoide y tanh saturan en sus extremos: el gradiente que llega hacia atrás se desvanece --- vanishing gradient --- y la red deja de aprender. \pausa\ ReLU en su zona activa tiene gradiente constante e igual a uno: el gradiente fluye sin atenuarse. Por eso ReLU es la activación estándar moderna para capas ocultas. \Pausa\ Y softmax en la salida es directo: para clasificar diez clases, queremos una distribución de probabilidad sobre las diez. Softmax la devuelve normalizada.
+\Pausa\ Función de activación, caso por caso. \pausa\ En el Ejercicio uno usamos \textbf{sigmoide} porque el target es una probabilidad acotada en cero a uno. \pausa\ En Ejercicio dos y tres, las capas ocultas con \textbf{ReLU} y la salida con \textbf{softmax}. \Pausa\ ¿Por qué ReLU en las capas ocultas? Porque el gradiente es fuerte y constante en zona positiva. \emph{No satura} como tanh o sigmoide. \pausa\ Y eso me lleva a la pregunta más importante del slide: \textbf{¿qué quiere decir saturar?} \pausa\ Una activación \emph{satura} cuando su pendiente se acerca a cero para entradas grandes en valor absoluto. Sigmoide y tanh saturan en sus extremos: el gradiente que llega hacia atrás se desvanece --- vanishing gradient --- y la red deja de aprender. \pausa\ ReLU en su zona activa tiene gradiente constante e = 1: el gradiente fluye sin atenuarse. Por eso ReLU es la activación estándar moderna para capas ocultas. \Pausa\ Y softmax en la salida es directo: para clasificar 10 clases, queremos una distribución de probabilidad sobre las diez. Softmax la devuelve normalizada.
 
 \timing{1:15}
 
@@ -474,15 +474,15 @@ Buenas, soy Tomás. \pausa\ Nicolás mostró \emph{qué} elegimos en cada sweep,
 
 Inicialización. \Pausa\ \enunciado{La regla de la cátedra}, que sale del HTML que nos compartieron, es: \emph{valores chicos, no cero, no muy grandes}. \pausa\ ¿Por qué no cero? Por simetría. Si todas las neuronas arrancan iguales, hacen exactamente lo mismo en cada paso del gradiente y \emph{nunca se diferencian}. \pausa\ ¿Por qué chicos? Porque pesos grandes saturan las activaciones --- otra vez vanishing gradient --- la salida queda en zonas planas, el gradiente es casi cero, la red no aprende.
 
-\Pausa\ Tres esquemas. \textbf{He}: distribución normal con desvío raíz de dos sobre fan-in, para capas con ReLU. La intuición es que ReLU descarta la mitad del input, así que doblamos la varianza para compensar. \pausa\ \textbf{Xavier}: raíz de uno sobre fan-in, para tanh, sigmoide y softmax, que son simétricas alrededor de cero. \pausa\ \textbf{Uniforme} entre menos cero coma uno y más cero coma uno, para el perceptrón simple del Ejercicio uno donde no hay propagación profunda.
+\Pausa\ Tres esquemas. \textbf{He}: distribución normal con desvío $\sqrt{2/\text{fan\_in}}$, para capas con ReLU. La intuición es que ReLU descarta la mitad del input, así que doblamos la varianza para compensar. \pausa\ \textbf{Xavier}: $\sqrt{1/\text{fan\_in}}$, para tanh, sigmoide y softmax, que son simétricas alrededor de cero. \pausa\ \textbf{Uniforme} entre menos 0.1 y más 0.1, para el perceptrón simple del Ejercicio uno donde no hay propagación profunda.
 
 \timing{2:15}
 
 \slidenum{16, Optimizador}
 
-Optimizador. \Pausa\ \enunciado{La clase introduce gradiente descendente clásico}; Momentum y Adam son extensiones modernas. Comparamos los tres. \Pausa\ \textbf{SGD vanilla}: la versión mínima, $w$ menos eta por gradiente. Funciona pero es lento, sobre todo en superficies con valles alargados. \pausa\ \textbf{Momentum} con beta cero coma nueve: acumula \emph{velocidad} en la dirección del gradiente. Atraviesa valles sin oscilar. \pausa\ \textbf{Adam}, con sus tres hiperparámetros default: combina \emph{momentum} con \emph{learning rate adaptativo por parámetro}. \pausa\ Cada peso se ajusta con su propia escala según cuánto varía históricamente.
+Optimizador. \Pausa\ \enunciado{La clase introduce gradiente descendente clásico}; Momentum y Adam son extensiones modernas. Comparamos los tres. \Pausa\ \textbf{SGD vanilla}: la versión mínima, $w$ menos eta por gradiente. Funciona pero es lento, sobre todo en superficies con valles alargados. \pausa\ \textbf{Momentum} con beta 0.9: acumula \emph{velocidad} en la dirección del gradiente. Atraviesa valles sin oscilar. \pausa\ \textbf{Adam}, con sus tres hiperparámetros default: combina \emph{momentum} con \emph{learning rate adaptativo por parámetro}. \pausa\ Cada peso se ajusta con su propia escala según cuánto varía históricamente.
 
-\Pausa\ \textbf{Resultado del sweep en el Ejercicio dos}: Adam noventa y seis setenta y cuatro con best epoch siete. Momentum noventa y seis treinta y cuatro --- empate técnico pero converge más lento. SGD noventa y cuatro ochenta y uno --- no convergió en cincuenta epochs. \Pausa\ Elegimos Adam por convergencia más rápida y resultado igual o mejor.
+\Pausa\ \textbf{Resultado del sweep en el Ejercicio dos}: Adam 96.74 con best epoch 7. Momentum 96.34 --- empate técnico pero converge más lento. SGD 94.81 --- no convergió en 50 epochs. \Pausa\ Elegimos Adam por convergencia más rápida y resultado igual o mejor.
 
 \paso{Tomás→Nicolás} \quad Le paso a Nicolás para learning rate y los detalles de convergencia y bias.
 
@@ -497,13 +497,13 @@ Optimizador. \Pausa\ \enunciado{La clase introduce gradiente descendente clásic
 
 \slidenum{21, Ej 2 — curvas del modelo base}\quad \bloque{F}
 
-Vuelvo yo. \Pausa\ Estas son las curvas de aprendizaje del modelo base, evaluadas con K-fold cinco. \pausa\ Train y validación bajan parejas, convergencia limpia en alrededor de cinco epochs. \pausa\ \textbf{Sin overfitting visible}: las dos curvas se mantienen pegadas hasta el final.
+Vuelvo yo. \Pausa\ Estas son las curvas de aprendizaje del modelo base, evaluadas con K-fold=5. \pausa\ Train y validación bajan parejas, convergencia limpia en alrededor de 5 epochs. \pausa\ \textbf{Sin overfitting visible}: las dos curvas se mantienen pegadas hasta el final.
 
 \timing{0:25}
 
 \slidenum{22, Ej 2 — matriz del base}
 
-Matriz de confusión sobre validación. \Pausa\ Diagonal limpia para nueve de las diez clases. \pausa\ La excepción ---y esto es clave--- es la \textbf{clase ocho}: precision cero, recall cero. La red \emph{nunca predice ocho}. \pausa\ Eso ya nos dio una pista de que algo raro pasaba con la distribución de los datos. Quédense con esto, va a volver al final.
+Matriz de confusión sobre validación. \Pausa\ Diagonal limpia para 9 de las 10 clases. \pausa\ La excepción ---y esto es clave--- es la \textbf{clase 8}: precision cero, recall cero. La red \emph{nunca predice ocho}. \pausa\ Eso ya nos dio una pista de que algo raro pasaba con la distribución de los datos. Quédense con esto, va a volver al final.
 
 \timing{0:55}
 
@@ -511,9 +511,9 @@ Matriz de confusión sobre validación. \Pausa\ Diagonal limpia para nueve de la
 
 Y entonces hicimos el \emph{final eval}. \pausa\ Entrenamos con todo \code{digits.csv} y evaluamos una sola vez contra el test set, \code{digits\_test.csv}. \Pausa\ Resultado.
 
-\Pausa\ Validación K-fold cinco: \textbf{noventa y seis veintidós por ciento}. \pausa\ Test sobre el set de prueba: \textbf{ochenta y seis treinta por ciento}. \Pausa\ \textbf{Diez puntos de diferencia.}
+\Pausa\ Validación K-fold=5: \textbf{96.22 por ciento}. \pausa\ Test sobre el set de prueba: \textbf{86.30 por ciento}. \Pausa\ \textbf{10 puntos de diferencia.}
 
-\Pausa\ Eso fue una sorpresa fuerte, sinceramente. \pausa\ Diez veces más grande que el desvío estándar del K-fold ---que era cero coma cuarenta y tres por ciento---, así que no se explica por azar. Hay algo más.
+\Pausa\ Eso fue una sorpresa fuerte, sinceramente. \pausa\ Diez veces más grande que el desvío estándar del K-fold ---que era 0.43 por ciento---, así que no se explica por azar. Hay algo más.
 
 \Pausa\ La caja roja lo dice corto: \emph{cambio de población, no underfitting}. El modelo está bien, los datos no se parecen.
 
@@ -532,7 +532,7 @@ Y la matriz de confusión sobre el test lo confirma. \Pausa\ La diagonal sigue s
 
 \bigskip
 \begin{cue}
-\textbf{Total Tomás:} D (3:35) + F (2:50) $= 6:25$. \pausa\ El bloque D es el más denso técnicamente; cuidá el ritmo en saturación / He / Adam. \pausa\ El bloque F se vende solo si construís el cachetazo con la pausa correcta antes de decir ``ochenta y seis treinta''.\\[0.3em]
+\textbf{Total Tomás:} D (3:35) + F (2:50) $= 6:25$. \pausa\ El bloque D es el más denso técnicamente; cuidá el ritmo en saturación / He / Adam. \pausa\ El bloque F se vende solo si construís el cachetazo con la pausa correcta antes de decir ``86.30''.\\[0.3em]
 \textbf{Si llegás corto:} en D, agregá la nota de que la combinación softmax+cross-entropy te da el gradiente analítico simple ($\partial L / \partial z = O - y$).\\
 \textbf{Si llegás largo:} en F slide 21, achicá la descripción de las curvas a una frase (``train y val bajan juntas, sin overfitting'').
 \end{cue}
@@ -542,18 +542,18 @@ Y la matriz de confusión sobre el test lo confirma. \Pausa\ La diagonal sigue s
 \addcontentsline{toc}{section}{Apéndice — preguntas anticipadas}
 
 \begin{cue}
-\textbf{¿Por qué eligieron threshold cero coma ochenta y nueve?} \textbf{(Katia)}\\
-Porque maximiza F1 en el sweep. Si el cliente prefiere precisión sobre recall, threshold mayor o igual a cero coma noventa y cinco. Es decisión de negocio sobre el costo asimétrico, no del modelo.
+\textbf{¿Por qué eligieron threshold 0.89?} \textbf{(Katia)}\\
+Porque maximiza F1 en el sweep. Si el cliente prefiere precisión sobre recall, threshold mayor o igual a 0.95. Es decisión de negocio sobre el costo asimétrico, no del modelo.
 \end{cue}
 
 \begin{cue}
 \textbf{¿Cuántas muestras tiene el dataset de fraude? ¿Cuál es la prevalencia?} \textbf{(Katia)}\\
-Aproximadamente nueve mil muestras totales. La clase positiva pesa alrededor del doce por ciento. Por eso la curva PR es más informativa que la ROC para este problema.
+Aproximadamente 9 mil muestras totales. La clase positiva pesa alrededor del 12\%. Por eso la curva PR es más informativa que la ROC para este problema.
 \end{cue}
 
 \begin{cue}
 \textbf{¿Qué es Adam? ¿No se ve en otra clase?} \textbf{(Tomás)}\\
-Adam combina dos ideas: \emph{momentum} (promedio del gradiente, para acumular dirección) y \emph{RMSProp} (learning rate adaptativo por parámetro, según el promedio del gradiente al cuadrado). \enunciado{El PDF de optimizadores de la cátedra lo recomienda} con los defaults del paper original: alpha igual a uno por diez a la menos tres, beta uno cero coma nueve, beta dos cero coma novecientos noventa y nueve, epsilon uno por diez a la menos ocho.
+Adam combina dos ideas: \emph{momentum} (promedio del gradiente, para acumular dirección) y \emph{RMSProp} (learning rate adaptativo por parámetro, según el promedio del gradiente al cuadrado). \enunciado{El PDF de optimizadores de la cátedra lo recomienda} con los defaults del paper original: alpha igual a $10^{-3}$, beta uno 0.9, beta dos 0.999, epsilon $10^{-8}$.
 \end{cue}
 
 \begin{cue}
@@ -567,7 +567,7 @@ Dropout reduce la varianza dentro de la distribución del train. Acá el problem
 \end{cue}
 
 \begin{cue}
-\textbf{¿Por qué no llegan al noventa y ocho?} \textbf{(Katia, con apoyo de Tomás)}\\
+\textbf{¿Por qué no llegan al 98\%?} \textbf{(Katia, con apoyo de Tomás)}\\
 El techo viene de la calidad del augmentation, no de la capacidad. \enunciado{La clase de regularización menciona cuatro formas}: ruido gaussiano, rotaciones, traslaciones, cambios de escala. Solo implementamos la primera. Las otras tres son justo las que atacarían el cambio que sospechamos en el test --- estilos de escritura. Es follow-up explícito.
 \end{cue}
 
@@ -578,12 +578,12 @@ El techo viene de la calidad del augmentation, no de la capacidad. \enunciado{La
 
 \begin{cue}
 \textbf{¿Qué relación hay entre lo que hicieron y la clase de regularización?} \textbf{(Tomás)}\\
-La clase enseña cuatro técnicas: \emph{early stopping} (slide 14), \emph{augmentation} en cuatro formas (slide 18), \emph{L2/weight decay} (slides 20-25) y \emph{dropout} (slide 26 mencionado). Nosotros usamos las cuatro: early stopping en todo Ejercicio dos y tres; L2 con lambda igual a uno por diez a la menos cuatro; augmentation gaussiana con sigma igual a cero coma cero cinco; y dropout probado pero descartado porque no transfirió. \pausa\ Lo que faltó: las otras tres formas de augmentation del slide dieciocho.
+La clase enseña cuatro técnicas: \emph{early stopping} (slide 14), \emph{augmentation} en cuatro formas (slide 18), \emph{L2/weight decay} (slides 20-25) y \emph{dropout} (slide 26 mencionado). Nosotros usamos las cuatro: early stopping en todo Ejercicio dos y tres; L2 con lambda igual a $10^{-4}$; augmentation gaussiana con sigma igual a 0.05; y dropout probado pero descartado porque no transfirió. \pausa\ Lo que faltó: las otras tres formas de augmentation del slide 18.
 \end{cue}
 
 \begin{cue}
 \textbf{¿Cómo eligieron el tamaño de batch?} \textbf{(Nicolás)}\\
-Sweep en Fase uno con cuatro tamaños: dieciséis, treinta y dos, sesenta y cuatro, ciento veintiocho. Ganó dieciséis: mismo val\_acc que sesenta y cuatro pero \emph{best epoch} en tres versus siete y total más rápido en wall clock. El gradiente más ruidoso lo lleva a converger antes.
+Sweep en Fase uno con cuatro tamaños: 16, 32, 64, 128. Ganó 16: mismo val\_acc que 64 pero \emph{best epoch} en tres versus siete y total más rápido en wall clock. El gradiente más ruidoso lo lleva a converger antes.
 \end{cue}
 
 \bigskip
