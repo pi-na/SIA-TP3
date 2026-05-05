@@ -432,14 +432,14 @@ Ej 2 / Ej 3 — capa de salida & \textbf{softmax} & Clasificación multiclase: d
 \toprule
 \textbf{Esquema} & \textbf{Distribución} & \textbf{Cuándo lo usamos} \\
 \midrule
-\textbf{He}      & $\mathcal{N}\!\left(0, \sqrt{2/\text{fan\_in}}\right)$ & Capas con \textbf{ReLU}: compensa que ReLU descarta la mitad del input. \\
-\textbf{Xavier}  & $\mathcal{N}\!\left(0, \sqrt{1/\text{fan\_in}}\right)$ & Capas con \textbf{tanh / sigmoide / softmax}: mantiene varianza balanceada. \\
+\textbf{He}      & $\mathcal{N}\!\left(0, \sqrt{2/\text{n\_inputs}}\right)$ & Capas con \textbf{ReLU}: compensa que ReLU descarta la mitad del input. \\
+\textbf{Xavier}  & $\mathcal{N}\!\left(0, \sqrt{1/\text{n\_inputs}}\right)$ & Capas con \textbf{tanh / sigmoide / softmax}: mantiene varianza balanceada. \\
 \textbf{Uniforme} & $\mathcal{U}[-0.1, +0.1]$                            & Perceptrón simple del Ej 1 (sin propagación profunda). \\
 \bottomrule
 \end{tabular}\\[0.8em]
 
 \begin{insight}\small
-\textbf{Mismo objetivo, distinta calibración.} He y Xavier preservan la varianza de las activaciones a través de las capas. \textbf{He} usa $\sqrt{2/\text{fan\_in}}$ — el doble que Xavier — porque \textbf{ReLU pone a cero la mitad del input}; sin esa compensación la señal se atenúa capa a capa.
+\textbf{Mismo objetivo, distinta calibración.} He y Xavier preservan la varianza de las activaciones a través de las capas. \textbf{He} usa $\sqrt{2/\text{n\_inputs}}$ — el doble que Xavier — porque \textbf{ReLU pone a cero la mitad del input}; sin esa compensación la señal se atenúa capa a capa.
 \end{insight}
 \end{frame}
 
