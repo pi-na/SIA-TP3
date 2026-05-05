@@ -173,47 +173,26 @@
 \code{amount\_usd > 500} $\;\vee\;$ \code{quantity\_purchased $\geq$ 10} $\;\vee\;$ \code{items\_viewed\_before\_purchase $\geq$ 15}
 }}
 \end{center}
-\vspace{0.3em}
+\vspace{0.4em}
 
-\centering\footnotesize
-\begin{columns}[T]
-\column{0.44\linewidth}
-\textbf{Aporte individual:}\\[0.2em]
-\begin{tabular}{@{}lrrr@{}}
-\toprule
-\textbf{Regla} & \textbf{Matches} & \textbf{TP} & \textbf{FP} \\
-\midrule
-\code{amount\_usd > 500}              & 199 & 199 & 0 \\
-\code{quantity $\geq$ 10}             & 524 & 524 & 0 \\
-\code{items\_viewed $\geq$ 15}        & 490 & 490 & 0 \\
-\bottomrule
-\end{tabular}\\[0.2em]
-\textcolor{muted}{\scriptsize Las tres juntas marcan \textbf{695 filas únicas}.}
-
-\column{0.54\linewidth}
-\textbf{OR como predictor (\code{simple\_prediction}):}\\[0.2em]
-\begin{tabular}{@{}lcc@{}}
-\toprule
- & \multicolumn{2}{c}{\textbf{Predicción}} \\
-\cmidrule(lr){2-3}
- & 1 (fraude) & 0 (no fraude) \\
-\midrule
-Real 1 (fraude)    & \textcolor{good}{\textbf{TP=695}} & \textcolor{warn}{\textbf{FN=174}} \\
-Real 0 (no fraude) & \textcolor{warn}{\textbf{FP=0}}   & \textcolor{good}{\textbf{TN=6631}} \\
-\bottomrule
-\end{tabular}\\[0.3em]
-
-\begin{tabular}{@{}lr@{}}
-Accuracy  & \textbf{97.68\%} \\
-Precision & \textbf{100.00\%} \\
-Recall    & \textbf{79.98\%} \\
-\end{tabular}
-\end{columns}
+\centering
+\includegraphics[width=0.95\linewidth]{../../ejercicio1/analisis_dataset/escalones.png}
 \end{frame}
 
-% ============= MSE comparison (ok) =============
+% ============= Foto + explicación de cómo ajusta la sigmoide (sin título) =============
+\begin{frame}[plain]
+\vspace*{0.4em}
+\centering
+\includegraphics[width=0.92\linewidth]{../../ejercicio1/analisis_dataset/escalones.png}\\[0.8em]
+
+\begin{insight}
+Las tres features con umbrales tienen forma de S marginal (piso bajo $\to$ subida $\to$ techo en 1) y todas apuntan al mismo lado: \emph{feature alta $\Rightarrow$ fraude}. La sigmoide colapsa las 6 entradas en un score $z = w\!\cdot\!x + b$ y aplica \textbf{una sola S} en la dirección $w$. Con pesos positivos en las tres features clave, ese score actúa como un \textbf{OR aproximado}: si alguna dispara, $z$ es grande y la salida satura en 1. El lineal no puede curvar y termina prediciendo fuera de $[0,1]$ en $\sim 7\%$ del dataset.
+\end{insight}
+\end{frame}
+
+% ============= MSE comparison =============
 \begin{frame}{Ej 1 — Lineal vs No-Lineal: MSE de distillation}
-\textbf{Mismo dataset, K-fold = 5 estratificado, mismas features.} Diferencia: presencia de la sigmoide.\\[0.8em]
+\textbf{Mismo dataset, K-fold = 5 estratificado, mismas features.} Diferencia: presencia de la sigmoide.\\[1.4em]
 
 \centering
 \begin{tabular}{@{}lr@{}}
@@ -224,12 +203,7 @@ Lineal (Adaline)        & $0.0266 \pm 0.0008$ \\
 \rowcolor{accent2!15}
 \textbf{No-Lineal (sigmoide)} & $\boldsymbol{0.0110 \pm 0.0004}$ \quad ($\boldsymbol{-59\%}$) \\
 \bottomrule
-\end{tabular}\\[1.2em]
-
-\begin{insight}
-\textbf{¿Por qué la sigmoide gana tan claro?}\\
-El target es una probabilidad acotada en $[0,1]$. La sigmoide \emph{naturalmente} mapea su salida a ese rango. El lineal puede producir valores fuera de $[0,1]$ y el MSE penaliza fuerte esa salida fuera de dominio.
-\end{insight}
+\end{tabular}
 \end{frame}
 
 % ============= Threshold sweep (titulo cambiado) =============
