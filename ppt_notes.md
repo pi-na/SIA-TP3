@@ -55,10 +55,6 @@ Incluir una diapo que introduzca relu
 Explicar: en clase dijeron que esta bueno mini batch *apunte ipad* y que por eso lo elegimos
 Contar el testing que hicimos sobre el batch size *ver pdf decisiones*
 
-## Initializer PENDIENTE
-También acá parece que claude eligio funciones initializer conocidas, de donde las sacó?
-Pasarle a claude el paper que nos mandaron, y el transcript de la clase optimizador para ver si coincide con algo de ahi y si no justificar...
-
 # Ejercicio 3
 (a) ¿Cuál es el mejor resultado que pudieron obtener con este nuevo conjunto de datos?
 (b) ¿Qué técnicas utilizaron para mejorar el rendimiento con respecto al caso anterior?
