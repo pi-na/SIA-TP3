@@ -20,19 +20,21 @@ Los hiperparametros del perceptron lineal ADALINE y no-lineal son
   - epochs — más épocas para LRs pequeños (actualmente 7500, podría probar 15000)
   - epsilon — criterio de parada anticipada         
   - threshold
-	  - analizar bien como lo vamos a evaluar, ahora tenemos ese grafico con 3 curvas precision / recall / f1 **que fue super confuso en la presentacion**
 
-**Experimentacion para decisión del LEARNING RATE en el perceptron NO LINEAL**
+  >[!warning] evaluacion del threshold
+  > HAY QUE REHACER LA EVALUACION!! HACER MEJORES EXPERIMENTOS Y DAR UNA JUSTIFICACION LIMPIA SOBRE LA DECISION
+
+**Experimentacion para decisión del LEARNING RATE en el perceptron NO LINEAL:**
 Armé plots de convergencia para cada learning rate:
 
-![[lr_0_001.png|450]]
-![[lr_0_01.png|451]]
-![[lr_0_0001.png|456]]
-![[sweep_all_zoom50.png|469]]
+![[lr_0_001.png|244]]
+![[lr_0_01.png|251]]
+![[lr_0_0001.png|257]]
 
 Las tres tasas (0.01, 0.001, 0.0001) producen resultados  prácticamente idénticos (MSE 0.0110-0.0113). La diferencia esta en la cantidad de epocas que les toma converger a cada una: lr=0.01 es más rápido (~30 épocas) que lr=0.001 (~100).
 
-Hay que elegir entre 0.01 y 0.001; Podriamos decir que LR=0.001 nos 
+>[!warning] CAMBIOS EN ESTA EJECUCION
+>DEJE EJECUTANDO OTRO SCRIPT Q PRUEBA MUCHOS SEED Y CALCULA POSTA PROMEDIO Y DESVIO DE MSE, JUNTO CON MAS METRICAS, PARA EVALUAR BIEN 
 
 #### Regularización
 No implementamos regularización (tipo L2 decay). Tema complejidad del ejercicio1.
