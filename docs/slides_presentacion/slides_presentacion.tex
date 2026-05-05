@@ -748,7 +748,7 @@ base\_extra\_data            & 0.9706 & 0.9636 & --- (referencia) \\
 \begin{warning}
 \textbf{Lo que no ayudó:}
 \begin{itemize}\setlength\itemsep{0.1em}
-  \item \textbf{Dropout:} gana en val, pierde en test. Reduce varianza al fold, no al shift.
+  \item \textbf{Dropout:} gana en val, pierde en test. Reduce varianza dentro del K-fold, pero no aporta donde el problema venía siendo la cobertura desigual de las clases 5 y 8.
   \item \textbf{wider} \([784,200,100,10]\): mejor en val, peor en test. Descarta falta de capacidad.
   \item \textbf{Combinar todo:} L2+dropout+aug peor que L2+aug solo.
 \end{itemize}
@@ -767,11 +767,6 @@ base\_extra\_data            & 0.9706 & 0.9636 & --- (referencia) \\
   \item \textbf{En la clase de regularización vimos cuatro formas de augmentation; sólo implementamos una} (gaussiano). Faltan rotación, traslación y cambios de escala.
   \item Aumentar la capacidad (\code{wider}) empeoró: \textbf{no es problema de modelo, es problema de cobertura}.
 \end{itemize}
-\vspace{0.6em}
-
-\begin{takeaway}
-\textbf{Próximo paso natural:} augmentation geométrica (rotación / traslación pequeñas).
-\end{takeaway}
 \end{frame}
 
 % ============= Cierre (modificada: solo "Gracias") =============
