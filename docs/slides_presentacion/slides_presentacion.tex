@@ -575,7 +575,7 @@ Early stopping detecta overfitting que $\varepsilon$ solo no detecta.
 \centering
 \includegraphics[width=0.78\linewidth]{../../ejercicio2/presentacion/01_curvas_aprendizaje_base.png}\\[0.3em]
 
-\textbf{Convergencia limpia} en $\sim 5$ epochs. Train y validación bajan juntos: \textbf{sin overfitting visible}.
+\textbf{Convergencia limpia} en $\sim 5$ epochs. Train y val bajan juntas en esa fase. Después del epoch 5 hay \textbf{overfitting suave en val\_loss}, pero val\_accuracy se mantiene estable $\to$ \textbf{early stopping cortó en best\_epoch $\approx 5$ y capturó el óptimo}. El overfitting no afectó la métrica de evaluación.
 \end{frame}
 
 % ============= Matriz base (ok) =============
