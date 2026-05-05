@@ -205,39 +205,56 @@ def sigmoid(x: np.ndarray) -> np.ndarray:
 def train_perceptron(
     df_train: pd.DataFrame, feature_cols: list[str], target_col: str,
     learning_rate: float, epochs: int, epsilon: float, seed: int,
-) -> tuple[np.ndarray, list[float]]:
+    df_test: pd.DataFrame | None = None,
+) -> tuple[np.ndarray, list[float], list[float]]:
     """Perceptron no-lineal (sigmoide) online learning multi-feature.
 
     Activacion: O = sigmoid(w . x)
     Update:     dw = eta * (z - O) * O*(1-O) * x
 
+    Si df_test se provee, evalua MSE de test al final de cada epoca tambien.
+
     Returns:
         weights: shape (n_features + 1,) -- weights[0] es bias.
-        mse_history: lista con MSE de train al final de cada epoca.
+        mse_train_history: MSE de train al final de cada epoca.
+        mse_test_history: MSE de test al final de cada epoca (vacia si df_test=None).
     """
     X_raw = df_train[feature_cols].to_numpy()
     z = df_train[target_col].to_numpy()
     P, n = X_raw.shape
     X = np.column_stack([np.ones(P), X_raw])  # bias trick
 
+    if df_test is not None:
+        X_test_raw = df_test[feature_cols].to_numpy()
+        z_test = df_test[target_col].to_numpy()
+        X_test = np.column_stack([np.ones(len(df_test)), X_test_raw])
+    else:
+        X_test = None
+        z_test = None
+
     rng = np.random.default_rng(seed)
     weights = rng.uniform(-0.1, 0.1, size=n + 1)
 
-    mse_history = []
+    mse_train_history = []
+    mse_test_history = []
     for epoch in range(epochs):
         for mu in range(P):
             h = weights @ X[mu]
             O = float(sigmoid(np.array([h]))[0])
             deriv = O * (1.0 - O)
             weights += learning_rate * (z[mu] - O) * deriv * X[mu]
-        # Predictions for full training set
-        H = X @ weights
-        predictions = sigmoid(H)
-        mse = float(np.mean((z - predictions) ** 2))
-        mse_history.append(mse)
-        if mse < epsilon:
+        # Train MSE
+        predictions = sigmoid(X @ weights)
+        mse_train = float(np.mean((z - predictions) ** 2))
+        mse_train_history.append(mse_train)
+        # Test MSE (si se provee)
+        if X_test is not None:
+            preds_test = sigmoid(X_test @ weights)
+            mse_test = float(np.mean((z_test - preds_test) ** 2))
+            mse_test_history.append(mse_test)
+        if mse_train < epsilon:
             break
-    return weights, mse_history
+    return weights, mse_train_history, mse_test_history
 
 
 # ----------------------------- Metrics -------------------------------------- #
@@ -295,10 +312,10 @@ def train_and_test_fold(
     train_df: pd.DataFrame, test_df: pd.DataFrame,
     test_original_indices: np.ndarray,
     feature_cols: list[str], config: dict, fold_seed: int, fold_idx: int,
-) -> tuple[dict, list[float], np.ndarray, list[dict]]:
+) -> tuple[dict, list[float], list[float], np.ndarray, list[dict]]:
     """Entrena en train_df, evalua en test_df.
 
-    Devuelve (metrics, mse_hist, weights, prediction_rows).
+    Devuelve (metrics, mse_train_hist, mse_test_hist, weights, prediction_rows).
     """
     target_col = config["target_col"]
     eval_col = config["eval_col"]
@@ -312,9 +329,10 @@ def train_and_test_fold(
     train_norm = apply_normalizer(train_df, means, stds, feature_cols)
     test_norm = apply_normalizer(test_df, means, stds, feature_cols)
 
-    weights, mse_history = train_perceptron(
+    weights, mse_history, mse_test_history = train_perceptron(
         train_norm, feature_cols, target_col,
         learning_rate=lr, epochs=epochs, epsilon=epsilon, seed=fold_seed,
+        df_test=test_norm,
     )
 
     test_metrics, scores = compute_metrics(
@@ -353,21 +371,22 @@ def train_and_test_fold(
         "tpr": test_metrics["tpr"],
         "fpr": test_metrics["fpr"],
     }
-    return fold_metrics, mse_history, weights, prediction_rows
+    return fold_metrics, mse_history, mse_test_history, weights, prediction_rows
 
 
 def _run_fold_worker(args):
-    """Worker para multiprocessing.Pool. Devuelve (fold_idx, metrics, hist, w, preds).
+    """Worker para multiprocessing.Pool.
 
+    Devuelve (fold_idx, metrics, mse_train_hist, mse_test_hist, w, preds).
     Top-level para que sea picklable en macOS (spawn).
     """
     (fold_idx, train_df, test_df, test_original_indices,
      feature_cols, config, fold_seed) = args
-    fold_metrics, mse_history, weights, prediction_rows = train_and_test_fold(
+    fold_metrics, mse_train_hist, mse_test_hist, weights, prediction_rows = train_and_test_fold(
         train_df, test_df, test_original_indices,
         feature_cols, config, fold_seed, fold_idx,
     )
-    return fold_idx, fold_metrics, mse_history, weights, prediction_rows
+    return fold_idx, fold_metrics, mse_train_hist, mse_test_hist, weights, prediction_rows
 
 
 def train_and_test_dataset(
@@ -415,14 +434,19 @@ def train_and_test_dataset(
     all_history = []
     all_weights = []
     all_predictions = []
-    for fold_idx, fold_metrics, mse_hist, weights, pred_rows in results:
+    for fold_idx, fold_metrics, mse_train_hist, mse_test_hist, weights, pred_rows in results:
         fold_metrics = {"fold": fold_idx, **fold_metrics}
         all_metrics.append(fold_metrics)
 
-        for epoch_idx, mse_val in enumerate(mse_hist):
-            all_history.append({
-                "fold": fold_idx, "epoch": epoch_idx, "mse_train": mse_val,
-            })
+        for epoch_idx, mse_train_val in enumerate(mse_train_hist):
+            row = {
+                "fold": fold_idx,
+                "epoch": epoch_idx,
+                "mse_train": mse_train_val,
+            }
+            if epoch_idx < len(mse_test_hist):
+                row["mse_test"] = mse_test_hist[epoch_idx]
+            all_history.append(row)
 
         weights_row = {"fold": fold_idx, "bias": float(weights[0])}
         for fname, w in zip(feature_cols, weights[1:]):
