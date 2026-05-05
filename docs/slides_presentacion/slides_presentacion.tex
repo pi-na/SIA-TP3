@@ -320,6 +320,24 @@ $[784, 50, 10]$                    & 95.78\% & Subajustado \\
 \end{takeaway}
 \end{frame}
 
+% ============= MOVED: Optimizador — cuál y por qué (antes del sweep) =============
+\begin{frame}{Optimizador — \textbf{cuál y por qué}}
+\textbf{Implementamos los siguientes optimizadores:}\\[0.6em]
+
+\begin{itemize}\setlength\itemsep{0.25em}\small
+  \item \textbf{SGD vanilla}: $w \leftarrow w - \eta \cdot \nabla L$. Lo más simple. Funciona pero es lento, especialmente en superficies con valles alargados.
+  \item \textbf{Momentum} ($\beta = 0.9$): acumula \emph{velocidad} en la dirección del gradiente. Atraviesa valles sin oscilar.
+  \item \textbf{Adam} ($\beta_1 = 0.9$, $\beta_2 = 0.999$, $\varepsilon = 10^{-8}$): combina momentum con \emph{learning rate adaptativo por parámetro}.
+\end{itemize}
+\vspace{0.6em}
+
+\begin{takeaway}
+\textbf{Resultado en Ej 2} (sweep Fase 1.2, K-fold=5): \\
+\textbf{Adam} 96.74\% (best\_ep=7) \quad $\approx$ \quad Momentum 96.34\% \quad $\gg$ \quad SGD 94.81\% (no convergió en 50 epochs).\\[0.2em]
+\textbf{Elegimos Adam} por convergencia más rápida y resultado igual o mejor.
+\end{takeaway}
+\end{frame}
+
 % ============= NUEVA: Sweep optimizador — tabla de seccion 3 de decisiones_y_backing_teorico.md =============
 \begin{frame}{Ej 2 — Sweep de optimizador}
 \centering\footnotesize
@@ -432,33 +450,15 @@ Ej 2 / Ej 3 — capa de salida & \textbf{softmax} & Clasificación multiclase: d
 \toprule
 \textbf{Esquema} & \textbf{Distribución} & \textbf{Cuándo lo usamos} \\
 \midrule
-\textbf{He}      & $\mathcal{N}\!\left(0, \sqrt{2/\text{fan\_in}}\right)$ & Capas con \textbf{ReLU}: compensa que ReLU descarta la mitad del input. \\
-\textbf{Xavier}  & $\mathcal{N}\!\left(0, \sqrt{1/\text{fan\_in}}\right)$ & Capas con \textbf{tanh / sigmoide / softmax}: mantiene varianza balanceada. \\
+\textbf{He}      & $\mathcal{N}\!\left(0, \sqrt{2/\text{n\_inputs}}\right)$ & Capas con \textbf{ReLU}: compensa que ReLU descarta la mitad del input. \\
+\textbf{Xavier}  & $\mathcal{N}\!\left(0, \sqrt{1/\text{n\_inputs}}\right)$ & Capas con \textbf{tanh / sigmoide / softmax}: mantiene varianza balanceada. \\
 \textbf{Uniforme} & $\mathcal{U}[-0.1, +0.1]$                            & Perceptrón simple del Ej 1 (sin propagación profunda). \\
 \bottomrule
 \end{tabular}\\[0.8em]
 
 \begin{insight}\small
-\textbf{Mismo objetivo, distinta calibración.} He y Xavier preservan la varianza de las activaciones a través de las capas. \textbf{He} usa $\sqrt{2/\text{fan\_in}}$ — el doble que Xavier — porque \textbf{ReLU pone a cero la mitad del input}; sin esa compensación la señal se atenúa capa a capa.
+\textbf{Mismo objetivo, distinta calibración.} He y Xavier preservan la varianza de las activaciones a través de las capas. \textbf{He} usa $\sqrt{2/\text{n\_inputs}}$ — el doble que Xavier — porque \textbf{ReLU pone a cero la mitad del input}; sin esa compensación la señal se atenúa capa a capa.
 \end{insight}
-\end{frame}
-
-% ============= MOVED: D4 Optimizador =============
-\begin{frame}{Optimizador — \textbf{cuál y por qué}}
-\textbf{Implementamos los siguientes optimizadores:}\\[0.6em]
-
-\begin{itemize}\setlength\itemsep{0.25em}\small
-  \item \textbf{SGD vanilla}: $w \leftarrow w - \eta \cdot \nabla L$. Lo más simple. Funciona pero es lento, especialmente en superficies con valles alargados.
-  \item \textbf{Momentum} ($\beta = 0.9$): acumula \emph{velocidad} en la dirección del gradiente. Atraviesa valles sin oscilar.
-  \item \textbf{Adam} ($\beta_1 = 0.9$, $\beta_2 = 0.999$, $\varepsilon = 10^{-8}$): combina momentum con \emph{learning rate adaptativo por parámetro}.
-\end{itemize}
-\vspace{0.6em}
-
-\begin{takeaway}
-\textbf{Resultado en Ej 2} (sweep Fase 1.2, K-fold=5): \\
-\textbf{Adam} 96.74\% (best\_ep=7) \quad $\approx$ \quad Momentum 96.34\% \quad $\gg$ \quad SGD 94.81\% (no convergió en 50 epochs).\\[0.2em]
-\textbf{Elegimos Adam} por convergencia más rápida y resultado igual o mejor.
-\end{takeaway}
 \end{frame}
 
 % ============= MOVED: D5 Learning rate =============

@@ -110,8 +110,8 @@ Este documento sigue el \textbf{orden real de la presentación}, slide por slide
 \midrule
 1 & A — \textcolor{mateoC}{\textbf{Mateo}}    & Apertura + Ej 1 setup + análisis dataset       & 1--5     & 3:30 \\
 2 & B — \textcolor{katiaC}{\textbf{Katia}}    & Lineal vs no-lineal + threshold                & 6--8     & 3:30 \\
-3 & C — \textcolor{nicoC}{\textbf{Nicolás}}   & Setup Ej 2 + fases + sweeps arch/opt           & 9--13    & 3:30 \\
-4 & D — \textcolor{tomasC}{\textbf{Tomás}}    & Decisiones de diseño (activación + viz + init + opt)  & 14--17   & 4:00 \\
+3 & C — \textcolor{nicoC}{\textbf{Nicolás}}   & Setup Ej 2 + fases + sweeps arch/opt \emph{(slide 13: \textcolor{tomasC}{Tomás} interjecta — optimizador)} & 9--14 & 3:30 + 0:30 \\
+4 & D — \textcolor{tomasC}{\textbf{Tomás}}    & Decisiones de diseño (activación + viz + init)  & 15--17   & 3:15 \\
 5 & E — \textcolor{nicoC}{\textbf{Nicolás}}   & Learning rate + convergencia/bias              & 18--21   & 3:15 \\
 6 & F — \textcolor{tomasC}{\textbf{Tomás}}    & Curvas + matriz + distribución + cachetazo     & 22--26   & 3:30 \\
 7 & G — \textcolor{mateoC}{\textbf{Mateo}}    & Hipótesis Ej 3 + el dominó +10 puntos         & 28--29   & 1:55 \\
@@ -250,8 +250,9 @@ Y la última pregunta del Ejercicio uno: \emph{qué umbral le recomendamos al cl
 % ===================================================================
 \section{Bloque C \pausa\ \textcolor{nicoC}{Nicolás} \pausa\ Setup Ej 2 + sweeps arch/opt}\label{sec:bloqueC}
 
-\begin{personabox}{nicoC}{Habla: \textcolor{nicoC}{\textbf{Nicolás}} \pausa\ Slides 9--13 \pausa\ \timing{3:30}}
-\textbf{Foco:} arrancar el Ejercicio 2 (problema, fases, sweep arquitectura y optimizador). Tablas y gráficos hablan solos.
+\begin{personabox}{nicoC}{Habla: \textcolor{nicoC}{\textbf{Nicolás}} \pausa\ Slides 9--14 \pausa\ \timing{$\sim 4:00$ (con interjección de Tomás)}}
+\textbf{Foco:} arrancar el Ejercicio 2 (problema, fases, sweep arquitectura y optimizador). \\
+\textbf{Atención}: la \textbf{slide 13} (``Optimizador --- cuál y por qué'') la \emph{interjecta Tomás} entre el sweep de arquitectura (slide 12) y el sweep de optimizador (slide 14). \pausa\ Es para que la teoría preceda al sweep. Después del slide 13, Nicolás vuelve para mostrar los números.
 \end{personabox}
 
 \slidenum{9, divider Ej 2}\quad \bloque{C}
@@ -284,50 +285,53 @@ Empezamos por arquitectura. \Pausa\ Probamos cuatro variantes. \pausa\ La fila d
 
 \timing{2:30}
 
-\slidenum{13, Ej 2 — sweep de optimizador}
+\paso{Nicolás→Tomás (interjección)} \quad \pausa\ Antes de mostrar los resultados de optimizador, le doy un minuto a Tomás para que cuente qué optimizadores comparamos y por qué.
 
-Sweep de optimizador. \pausa\ \textbf{Adam} con learning rate 0.001: 96.74, \emph{best epoch} 7. Ganador. \pausa\ Momentum con $\beta = 0.9$: 96.34, converge más lento ---best epoch 18. \pausa\ SGD vanilla: 94.81, y la realidad es que \emph{no convergió en 50 epochs}, llegó al límite todavía mejorando. \Pausa\ Adam ganó por convergencia más rápida y resultado igual o mejor. Momentum quedó dentro del desvío, SGD sin aceleración no puede.
+\medskip
+\slidenum{13, Optimizador — cuál y por qué}\quad \bloque{C — interjección \textcolor{tomasC}{Tomás}}
 
-\paso{Nicolás→Tomás} \quad Le paso a Tomás para que cuente \emph{por qué} elegimos cada cosa --- las decisiones de diseño con backing teórico.
+\textcolor{tomasC}{\textbf{Tomás:}} \pausa\ Gracias. \Pausa\ \enunciado{La clase introduce gradiente descendente clásico}; Momentum y Adam son extensiones modernas que vimos en el PDF de optimizadores. \pausa\ Implementamos los tres y los comparamos. \Pausa\ \textbf{SGD vanilla}: la versión mínima, $w$ menos eta por gradiente. Funciona pero es lento, sobre todo en superficies con valles alargados. \pausa\ \textbf{Momentum} con $\beta = 0.9$: acumula \emph{velocidad} en la dirección del gradiente. Atraviesa valles sin oscilar. \pausa\ \textbf{Adam}, con sus tres hiperparámetros default ---$\beta_1 = 0.9$, $\beta_2 = 0.999$, $\varepsilon = 10^{-8}$---: combina \emph{momentum} con \emph{learning rate adaptativo por parámetro}. Cada peso se ajusta con su propia escala según cuánto varía históricamente.
+
+\paso{Tomás→Nicolás} \quad Te paso de vuelta para los números.
+
+\medskip
+\slidenum{14, Ej 2 — sweep de optimizador}
+
+\textcolor{nicoC}{\textbf{Nicolás:}} \pausa\ Gracias. \Pausa\ Y los números confirman lo que dijo Tomás. \pausa\ \textbf{Adam} con learning rate 0.001: 96.74, \emph{best epoch} 7. Ganador. \pausa\ Momentum con $\beta = 0.9$: 96.34, converge más lento ---best epoch 18. \pausa\ SGD vanilla: 94.81, y la realidad es que \emph{no convergió en 50 epochs}, llegó al límite todavía mejorando. \Pausa\ Adam ganó por convergencia más rápida y resultado igual o mejor. Momentum quedó dentro del desvío, SGD sin aceleración no puede.
+
+\paso{Nicolás→Tomás} \quad Le paso a Tomás para las decisiones de diseño que faltan.
 
 % ===================================================================
 \section{Bloque D \pausa\ \textcolor{tomasC}{Tomás} \pausa\ Decisiones de diseño}\label{sec:bloqueD}
 
-\begin{personabox}{tomasC}{Habla: \textcolor{tomasC}{\textbf{Tomás}} \pausa\ Slides 14--17 \pausa\ \timing{4:00}}
-\textbf{Foco:} las decisiones donde el Q\&A puede ir más profundo (activación, init, optimizador). Incluye una slide de visualización ReLU/softmax.
+\begin{personabox}{tomasC}{Habla: \textcolor{tomasC}{\textbf{Tomás}} \pausa\ Slides 15--17 \pausa\ \timing{3:15}}
+\textbf{Foco:} las decisiones donde el Q\&A puede ir más profundo (activación, ReLU/softmax visualizadas, inicialización). \\
+\emph{La slide de optimizador ya la cubrí en la interjección durante el bloque C.}
 \end{personabox}
 
-\slidenum{14, Función de activación}\quad \bloque{D}
+\slidenum{15, Función de activación}\quad \bloque{D}
 
-Buenas, soy Tomás. \pausa\ Nicolás mostró \emph{qué} elegimos en cada sweep, ahora me toca contar el \emph{por qué}. \Pausa\ Tres decisiones de diseño que aplican a todos los ejercicios: activación, inicialización y optimizador. \pausa\ El learning rate y la función de costo los retoma Nicolás cuando vuelva.
+Vuelvo. \pausa\ Después de la pasada por optimizador, me quedan tres decisiones más para cubrir: activación, su visualización, e inicialización. \pausa\ El learning rate y la función de costo los retoma Nicolás cuando vuelva.
 
 \Pausa\ Función de activación, caso por caso. \pausa\ En el Ejercicio uno usamos \textbf{sigmoide} porque el target es una probabilidad acotada en cero a uno. \pausa\ En Ejercicio dos y tres, las capas ocultas con \textbf{ReLU} y la salida con \textbf{softmax}. \Pausa\ ¿Por qué ReLU en las capas ocultas? Porque el gradiente es fuerte y constante en zona positiva. \emph{No satura} como tanh o sigmoide. \pausa\ ¿Qué quiere decir saturar? Sigmoide y tanh, en sus extremos, tienen pendiente cercana a cero. Cuando el gradiente vuelve hacia atrás por el backprop atravesando muchas capas con sigmoide, va multiplicando esos números chicos y termina llegando casi nulo a las primeras capas. La red deja de aprender. \pausa\ ReLU evita ese problema porque en su zona activa la pendiente es exactamente uno: el gradiente fluye sin atenuarse.
 
 \Pausa\ Y softmax en la salida es directo: para clasificar 10 clases, queremos una distribución de probabilidad sobre las diez. Softmax la devuelve normalizada.
 
-\timing{1:30}
+\timing{1:15}
 
-\slidenum{15, ReLU y Softmax — visualización}
+\slidenum{16, ReLU y Softmax — visualización}
 
 Acá los tienen graficados. \Pausa\ A la izquierda, ReLU. \pausa\ Es la función máximo entre cero y $z$: a partir de cero pasa por la diagonal, antes es plana. \pausa\ La derivada es uno en zona positiva y cero en negativa. Esa es la propiedad clave que evita la saturación.
 
-\Pausa\ A la derecha, softmax. \pausa\ Toma un vector de números cualquiera y los transforma en una distribución de probabilidad. \pausa\ El que tiene el score más alto se va cerca de uno; los demás se reparten el resto. La suma de los diez valores siempre da uno. \pausa\ Por eso encaja perfecto con cross-entropy como función de costo: queremos que la salida \emph{sea} una probabilidad sobre las diez clases.
+\Pausa\ A la derecha, softmax. \pausa\ Toma un vector de scores ---por ejemplo dos, uno y cero coma uno--- y los transforma en una distribución de probabilidad. \pausa\ El que tiene el score más alto se va cerca de uno; los demás se reparten el resto. La suma de los diez valores siempre da uno. \pausa\ Por eso encaja perfecto con cross-entropy como función de costo: queremos que la salida \emph{sea} una probabilidad sobre las diez clases.
 
-\timing{2:15}
+\timing{2:00}
 
-\slidenum{16, Inicialización de pesos}
+\slidenum{17, Inicialización de pesos}
 
 Inicialización. \Pausa\ \enunciado{La regla de la cátedra}, que sale del HTML que nos compartieron, es: \emph{valores chicos, no cero, no muy grandes}. \pausa\ ¿Por qué no cero? Por simetría. Si todas las neuronas arrancan iguales, hacen exactamente lo mismo en cada paso del gradiente y \emph{nunca se diferencian}. \pausa\ ¿Por qué chicos? Porque pesos grandes saturan las activaciones --- la salida queda en zonas planas, el gradiente es casi cero, la red no aprende.
 
-\Pausa\ Tres esquemas. \textbf{He}: distribución normal con desvío $\sqrt{2/\text{fan\_in}}$, para capas con ReLU. La intuición es que ReLU descarta la mitad del input ---todo lo negativo se va a cero---, así que doblamos la varianza para compensar. \pausa\ \textbf{Xavier}: $\sqrt{1/\text{fan\_in}}$, para tanh, sigmoide y softmax, que son simétricas alrededor de cero. \pausa\ \textbf{Uniforme} entre menos 0.1 y más 0.1, para el perceptrón simple del Ejercicio uno donde no hay propagación profunda.
-
-\timing{3:10}
-
-\slidenum{17, Optimizador}
-
-Optimizador. \Pausa\ \enunciado{La clase introduce gradiente descendente clásico}; Momentum y Adam son extensiones modernas. Comparamos los tres. \Pausa\ \textbf{SGD vanilla}: la versión mínima, $w$ menos eta por gradiente. Funciona pero es lento. \pausa\ \textbf{Momentum} con $\beta = 0.9$: acumula \emph{velocidad} en la dirección del gradiente. Atraviesa valles sin oscilar. \pausa\ \textbf{Adam}, con sus tres hiperparámetros default: combina \emph{momentum} con \emph{learning rate adaptativo por parámetro}.
-
-\Pausa\ Los números que vio Nicolás: Adam 96.74 con best epoch 7. Momentum 96.34 --- empate técnico pero converge más lento. SGD 94.81 --- no convergió en 50 epochs. \Pausa\ Elegimos Adam por convergencia más rápida y resultado igual o mejor.
+\Pausa\ Tres esquemas. \textbf{He}: distribución normal con desvío $\sqrt{2/n_{\text{inputs}}}$, donde $n_{\text{inputs}}$ es la cantidad de entradas de la capa. Lo usamos en capas con ReLU. La intuición es que ReLU descarta la mitad del input ---todo lo negativo se va a cero---, así que doblamos la varianza para compensar. \pausa\ \textbf{Xavier}: $\sqrt{1/n_{\text{inputs}}}$, para tanh, sigmoide y softmax, que son simétricas alrededor de cero. \pausa\ \textbf{Uniforme} entre menos 0.1 y más 0.1, para el perceptrón simple del Ejercicio uno donde no hay propagación profunda.
 
 \paso{Tomás→Nicolás} \quad Le paso a Nicolás para learning rate y los detalles de convergencia y bias.
 
