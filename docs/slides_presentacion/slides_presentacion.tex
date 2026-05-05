@@ -588,7 +588,41 @@ Early stopping detecta overfitting que $\varepsilon$ solo no detecta.
 \end{warning}
 \end{frame}
 
-% ============= Final eval (ok) =============
+% ============= NUEVA: Distribución de clases por dataset =============
+\begin{frame}{Ej 2 — Distribución de clases en train vs test}
+\begin{columns}[T]
+\column{0.38\linewidth}
+\centering\footnotesize
+\begin{tabular}{@{}crr@{}}
+\toprule
+\textbf{Clase} & \textbf{\file{digits.csv}} & \textbf{\file{digits\_test.csv}} \\
+\midrule
+0 & 1480 & 245 \\
+1 & 1685 & 283 \\
+2 & 1489 & 258 \\
+3 & 1532 & 252 \\
+4 & 1460 & 245 \\
+\rowcolor{warn!15}
+5 & \textbf{271}  & 223 \\
+6 & 1479 & 239 \\
+7 & 1566 & 257 \\
+\rowcolor{warn!30}
+8 & \textbf{0}    & 243 \\
+9 & 1487 & 252 \\
+\bottomrule
+\end{tabular}
+
+\column{0.62\linewidth}
+\textbf{Hallazgos}\\[0.3em]
+\begin{itemize}\setlength\itemsep{0.5em}\small
+  \item \textbf{\file{digits.csv} no contiene ningún 8.} Cero. El modelo \emph{literalmente nunca vio un 8} durante el entrenamiento del Ej 2 $\Rightarrow$ predice cero ochos en test (la columna 8 de la matriz colapsa).
+  \item \textbf{La clase 5 también está sub-representada} ($271$ vs $\sim 1500$ del resto). Es la clase con segundo peor desempeño en test ($\sim 86\%$ acc vs $\sim 95$–$99\%$ del resto).
+  \item \textbf{\file{digits\_test.csv} está balanceado} ($\sim 250$ por clase, los 8s incluidos). Por eso el drop es tan grande: $243/2497 \approx 9.7$ pp de error \emph{garantizado} solo por la clase ausente. Coincide con el drop observado ($96.22 \to 86.30 = 9.92$ pp).
+\end{itemize}
+\end{columns}
+\end{frame}
+
+% ============= Final eval (cachetazo) =============
 \begin{frame}{Ej 2 — Final eval: el cachetazo}
 \centering
 \vspace{0.3em}
@@ -596,11 +630,11 @@ Early stopping detecta overfitting que $\varepsilon$ solo no detecta.
 val K-fold=5: \textbf{96.22\%}\\[0.4em]
 \textcolor{muted}{$\downarrow$}\\[0.4em]
 test (digits\_test.csv): \textcolor{warn}{\textbf{86.30\%}}\\[0.8em]
-\Large \textbf{Drop de 10 puntos porcentuales.}\\[0.8em]
+\Large \textbf{Drop de 10 puntos porcentuales.}\\[0.6em]
 
 \normalsize
 \begin{warning}
-\textbf{Distribution shift, no underfitting.} Los datos no se parecen!
+\textbf{Distribution shift, no underfitting.} El val K-fold daba $96\%$ porque \file{digits.csv} \textbf{no contiene la clase 8} — el K-fold ni siquiera podía evaluar esa clase: el modelo aprendió 9 de 10 clases bien y el K-fold reportaba accuracy sobre esas 9. Cuando llega \file{digits\_test.csv} con 243 ochos ($\sim 10\%$ del set), el modelo falla los 243 $\Rightarrow$ drop de $\sim 10$ pp, casi exacto.
 \end{warning}
 \end{frame}
 

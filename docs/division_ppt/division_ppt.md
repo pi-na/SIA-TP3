@@ -3,19 +3,19 @@
 10 a 13
 14 a 17
 18 a 21
-22 a 25
-27 y 28
-29 a 31
-32 y 33
-34
+22 a 26
+28 y 29
+30 a 32
+33 y 34
+35
 
 
 ---
 
 # Análisis de dificultad, tiempo y distribución
 
-**Total**: 35 slides. Las slides 9 (divider Ej 2), 26 (divider Ej 3) y
-35 (Gracias) no están asignadas a ningún bloque — quien esté hablando
+**Total**: 36 slides. Las slides 9 (divider Ej 2), 27 (divider Ej 3) y
+36 (Gracias) no están asignadas a ningún bloque — quien esté hablando
 antes/después las cubre.
 
 > **Cambios desde la versión original (33 slides):**
@@ -26,8 +26,13 @@ antes/después las cubre.
 >   (dos gráficos representativos + mini-explicación) inmediatamente
 >   después de la slide de función de activación → bloque D pasa a
 >   4 slides (14–17). Asignada a **Tomas**.
+> - **+1 en bloque F**: nueva slide "Distribución de clases en train vs
+>   test" (tabla de conteos por clase + hallazgos) entre la matriz base
+>   y el cachetazo → bloque F pasa a 5 slides (22–26). Asignada a
+>   **Tomas**. Explica numéricamente por qué el drop val→test es de
+>   exactamente $\sim 10$ pp (clase 8 ausente en \file{digits.csv}).
 > - El resto de los bloques mantiene contenido pero queda corrido
->   +1 ó +2 slides según corresponda.
+>   según corresponda.
 
 **Tiempo objetivo**: 20 minutos de presentación + Q&A. Promedio ~1 min por slide.
 
@@ -40,11 +45,11 @@ antes/después las cubre.
 | **C** | 10–13  | 4 | Setup Ej 2 + fases + sweep arquitectura + sweep optimizador | Media | Medio | 3 min |
 | **D** | 14–17  | 4 | **Decisiones de diseño**: activación + visualización ReLU/softmax + inicialización + optimizador | **Alta** | **Alto** | 4 min |
 | **E** | 18–21  | 4 | Learning rate + dos tablas LR + convergencia y bias | Media | Medio | 3 min |
-| **F** | 22–25  | 4 | Curvas + matriz base + final eval (cachetazo) + matriz test | **Alta** | **Alto** | 3 min |
-| **G** | 27–28  | 2 | Hipótesis Ej 3 + el movimiento dominó (+10 pp) | Baja-Media | Bajo | 2 min |
-| **H** | 29–31  | 3 | Matriz ganador + tabla de resultados Pack C + comparación visual | Media | Medio | 3 min |
-| **I** | 32–33  | 2 | Curvas del ganador + qué ayudó / qué no | **Alta** | **Alto** | 3 min |
-| **J** | 34     | 1 | Por qué no llegamos al 98 % | Media | Medio | 2 min |
+| **F** | 22–26  | 5 | Curvas + matriz base + distribución de clases + final eval (cachetazo) + matrices val/test | **Alta** | **Alto** | 4 min |
+| **G** | 28–29  | 2 | Hipótesis Ej 3 + el movimiento dominó (+10 pp) | Baja-Media | Bajo | 2 min |
+| **H** | 30–32  | 3 | Matriz ganador + tabla de resultados Pack C + comparación visual | Media | Medio | 3 min |
+| **I** | 33–34  | 2 | Curvas del ganador + qué ayudó / qué no | **Alta** | **Alto** | 3 min |
+| **J** | 35     | 1 | Por qué no llegamos al 98 % | Media | Medio | 2 min |
 
 ### Por qué cada bloque tiene esa dificultad
 
@@ -72,9 +77,9 @@ Criterio: Tomas y Katia toman los bloques de **alta dificultad / alto Q&A risk**
 Nicolas toma bloques medios donde el guion lleva el peso. Mateo toma los bloques
 con más respaldo visual (gráficos / números grandes) y menor superficie técnica.
 
-### Tomas — 2 bloques, 8 slides (~8 min)
+### Tomas — 2 bloques, 9 slides (~9 min)
 - **Bloque D** (14–17): Decisiones de diseño (activación + viz ReLU/softmax + init + optimizador)
-- **Bloque F** (22–25): Curvas, matriz base, **cachetazo** y matriz final
+- **Bloque F** (22–26): Curvas, matriz base, distribución de clases, **cachetazo** y matrices val vs test
 
 > Le toca defender los dos puntos donde el Q&A puede ir más profundo
 > (matemática de las decisiones y distribution shift). La slide nueva
@@ -84,8 +89,8 @@ con más respaldo visual (gráficos / números grandes) y menor superficie técn
 
 ### Katia — 3 bloques, 7 slides (~7 min)
 - **Bloque B** (6–8): Lineal vs no-lineal + threshold sweep + recomendación
-- **Bloque H** (29–31): Matriz ganador + tabla resultados + comparación visual
-- **Bloque J** (34): Por qué no llegamos al 98 %
+- **Bloque H** (30–32): Matriz ganador + tabla resultados + comparación visual
+- **Bloque J** (35): Por qué no llegamos al 98 %
 
 > Cierra la presentación, que es donde hay que vender la historia. Maneja
 > threshold (Q&A: ROC/precision-recall) y la tabla de Pack C (Q&A: cómo se
@@ -103,8 +108,8 @@ con más respaldo visual (gráficos / números grandes) y menor superficie técn
 
 ### Mateo — 3 bloques, 9 slides (~7 min)
 - **Bloque A** (1–5): Portada + setup Ej 1 + análisis del dataset + intuición sigmoide
-- **Bloque G** (27–28): Hipótesis Ej 3 + el **dominó** del +10 pp
-- **Bloque I** (32–33): Curvas del modelo ganador + qué ayudó / qué no
+- **Bloque G** (28–29): Hipótesis Ej 3 + el **dominó** del +10 pp
+- **Bloque I** (33–34): Curvas del modelo ganador + qué ayudó / qué no
 
 > Le tocan el arranque (portada + setup), el punto alto visual del Ej 3
 > (el dominó del +10 pp se vende solo) y el cierre de Pack C donde sólo hay
@@ -139,7 +144,7 @@ con más respaldo visual (gráficos / números grandes) y menor superficie técn
 
 | Persona | # bloques | # slides | Tiempo aprox | Carga Q&A |
 |---|---|---|---|---|
-| Tomas    | 2 | 8 | ~8 min | Alta (la lleva) |
+| Tomas    | 2 | 9 | ~9 min | Alta (la lleva) |
 | Katia    | 3 | 7 | ~7 min | Alta (la lleva) |
 | Nicolas  | 2 | 8 | ~8 min | Media (con guion) |
 | Mateo    | 3 | 9 | ~7 min | Baja (visual / scripted, con rescate) |
