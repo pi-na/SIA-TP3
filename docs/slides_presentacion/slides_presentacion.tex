@@ -305,19 +305,18 @@ Búsqueda de hiperparámetros sólo sobre \code{digits.csv}.
 \centering\footnotesize
 \begin{tabular}{@{}lcl@{}}
 \toprule
-\textbf{Arquitectura} & \textbf{val\_acc} & \textbf{Comentario} \\
+\textbf{Arquitectura} & \textbf{Validation Acc.} & \textbf{Comentario} \\
 \midrule
+$[784, 128, 64, 10]$               & 96.86\% & Empate técnico ($\Delta = 0.12$ pp $<$ std $\approx 0.4$ pp) \\
 \rowcolor{accent2!15}
-\textbf{[784, 100, 50, 10]}        & \textbf{96.74\% / 96.22\%} & \textbf{Ganador} por parsimonia \\
-$[784, 128, 64, 10]$               & 96.86\% / —                 & Empate técnico ($\Delta < 0.4\%$) \\
-$[784, 200, 100, 10]$ (\emph{wider})  & — / 96.39\%              & \textcolor{warn}{$-$0.48 pp test}, $3.6\times$ más lento \\
-$[784, 100, 50, 25, 10]$ (\emph{deeper}) & — / 96.20\%           & Empate \\
-$[784, 30, 10]$ (\emph{shallow})      & — / 95.15\%              & Subajustado \\
+\textbf{[784, 100, 50, 10]}        & \textbf{96.74\%} & \textbf{Ganador} \\
+$[784, 100, 10]$                   & 96.70\% & Empate técnico, converge más lento (best\_ep 11) \\
+$[784, 50, 10]$                    & 95.78\% & Subajustado \\
 \bottomrule
 \end{tabular}\\[0.8em]
 
 \begin{takeaway}
-\textbf{Decisión por parsimonia (regla de Occam):} cuando dos arquitecturas rinden igual dentro del desvío, gana la más simple/rápida. \textbf{Wider} confirma empíricamente la curva U del PDF de regularización: aumentar capacidad sin más datos $\Rightarrow$ overfitting (mejor val, peor test).
+\textbf{Decisión por simplicidad de la arquitectura:} vemos que [784, 100, 50, 10] y [784, 128, 64, 10] rinden igual, elegimos la más simple y más rápida.
 \end{takeaway}
 \end{frame}
 
