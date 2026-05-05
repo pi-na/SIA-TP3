@@ -354,10 +354,6 @@ Ej 2 / Ej 3 — capa de salida & \textbf{softmax} & Clasificación multiclase: d
 \bottomrule
 \end{tabular}\\[0.6em]
 
-\begin{insight}
-\textbf{¿Qué es ``saturar''?} Una activación satura cuando la pendiente $f'(z)$ se aproxima a $0$ para entradas grandes en magnitud. Sigmoide y tanh saturan en sus extremos: el gradiente que llega a las capas previas se desvanece (\emph{vanishing gradient}) y la red deja de aprender.
-\end{insight}
-
 \begin{takeaway}
 \textbf{ReLU $= \max(0, z)$}: derivada $1$ en zona positiva, $0$ en negativa. Sin saturación en su lado activo $\Rightarrow$ el gradiente fluye sin atenuarse a través de muchas capas. Es la activación estándar moderna para capas ocultas.
 \end{takeaway}
