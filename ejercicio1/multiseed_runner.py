@@ -144,6 +144,9 @@ def aggregate(perceptron: str, runs: list[tuple[str, int, Path]]) -> pd.DataFram
     return pd.DataFrame(rows)
 
 
+METRIC_COLS = ["mse_test", "accuracy", "precision", "recall", "f1", "wnorm"]
+
+
 def summary_tables(df: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
     """Two views:
     - per_seed: average across folds for each (lr, seed) -> shape (lrs*seeds, *)
@@ -155,37 +158,45 @@ def summary_tables(df: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
                mse_train=("mse_train", "mean"),
                wnorm=("wnorm", "mean"),
                accuracy=("accuracy", "mean"),
+               precision=("precision", "mean"),
+               recall=("recall", "mean"),
                f1=("f1", "mean"))
           .reset_index()
     )
     # Across all (seed,fold) -- total spread
     agg_all = (
         df.groupby("lr")
-          .agg(mse_test_mean=("mse_test", "mean"),
-               mse_test_std=("mse_test", "std"),
-               wnorm_mean=("wnorm", "mean"),
-               wnorm_std=("wnorm", "std"),
-               f1_mean=("f1", "mean"),
-               f1_std=("f1", "std"))
+          .agg(**{
+              f"{m}_mean": (m, "mean") for m in METRIC_COLS
+          }, **{
+              f"{m}_std":  (m, "std")  for m in METRIC_COLS
+          })
     )
     # Across seeds only (using per-seed averages) -- inter-seed dispersion
     agg_seed = (
         per_seed.groupby("lr")
-                .agg(mse_test_seedmean=("mse_test", "mean"),
-                     mse_test_seedstd=("mse_test", "std"),
-                     wnorm_seedmean=("wnorm", "mean"),
-                     wnorm_seedstd=("wnorm", "std"),
-                     f1_seedmean=("f1", "mean"),
-                     f1_seedstd=("f1", "std"))
+                .agg(**{
+                    f"{m}_seedmean": (m, "mean") for m in METRIC_COLS
+                }, **{
+                    f"{m}_seedstd":  (m, "std")  for m in METRIC_COLS
+                })
     )
     summary = agg_all.join(agg_seed)
     return per_seed, summary
 
 
 def plot_dispersion(per_seed: pd.DataFrame, df: pd.DataFrame, out_path: Path, title: str) -> None:
-    metrics = [("mse_test", "MSE test"), ("wnorm", "||w||"), ("f1", "F1")]
+    metrics = [
+        ("mse_test",  "MSE test"),
+        ("accuracy",  "Accuracy"),
+        ("precision", "Precision"),
+        ("recall",    "Recall"),
+        ("f1",        "F1"),
+        ("wnorm",     "‖w‖ (L2)"),
+    ]
     lrs = sorted(df["lr"].unique(), key=lambda s: float(s))
-    fig, axes = plt.subplots(1, 3, figsize=(15, 4.5))
+    fig, axes = plt.subplots(2, 3, figsize=(15, 9))
+    axes = axes.flatten()
     for ax, (col, label) in zip(axes, metrics):
         # boxplot por lr usando todos los (seed, fold)
         data = [df[df["lr"] == lr][col].values for lr in lrs]
@@ -193,18 +204,22 @@ def plot_dispersion(per_seed: pd.DataFrame, df: pd.DataFrame, out_path: Path, ti
         for patch in bp["boxes"]:
             patch.set_facecolor("#cce5ff")
             patch.set_alpha(0.6)
-        # overlay per-seed averages
+        # overlay per-seed averages (mean sobre folds)
         for i, lr in enumerate(lrs, start=1):
             vals = per_seed[per_seed["lr"] == lr][col].values
             jitter = (np.random.RandomState(0).rand(len(vals)) - 0.5) * 0.15
             ax.scatter(np.full_like(vals, i, dtype=float) + jitter, vals,
-                       color="tab:red", s=30, zorder=3, label="mean por seed" if i == 1 else None)
+                       color="tab:red", s=30, zorder=3,
+                       label="mean por seed (sobre folds)" if i == 1 else None)
         ax.set_title(label)
         ax.set_xlabel("learning rate")
         ax.grid(True, alpha=0.3, axis="y")
         if col == "mse_test":
             ax.legend(loc="best", fontsize=8)
-    fig.suptitle(title)
+    fig.suptitle(
+        f"{title}\nBoxplot: distribución sobre 5 seeds × 5 folds (n=25). "
+        "Puntos rojos: media por seed sobre folds (n=5)."
+    )
     fig.tight_layout()
     fig.savefig(out_path, dpi=150)
     plt.close(fig)
@@ -215,7 +230,7 @@ def write_doc(perceptron: str, df: pd.DataFrame, per_seed: pd.DataFrame,
               summary: pd.DataFrame, out_dir: Path) -> None:
     n_seeds = df["seed"].nunique()
     n_folds = df["fold"].nunique()
-    seeds_list = sorted(df["seed"].unique())
+    seeds_list = sorted(int(s) for s in df["seed"].unique())
 
     lines = []
     lines.append(f"# Sweep LR multi-seed — perceptrón {perceptron}")
@@ -227,47 +242,73 @@ def write_doc(perceptron: str, df: pd.DataFrame, per_seed: pd.DataFrame,
         f"Seeds: {seeds_list}."
     )
     lines.append("")
+    lines.append(
+        "**Métricas reportadas** (regla del repo: error apropiado a la loss + Acc/Prec/Rec/F1):"
+    )
+    lines.append("")
+    lines.append("- **MSE test**: error de la loss usada para entrenar (objetivo de la knowledge distillation contra `big_model_fraud_probability`).")
+    lines.append("- **Accuracy / Precision / Recall / F1**: clasificación binaria contra `flagged_fraud`, con threshold de decisión = 0.5 sobre la salida del perceptrón.")
+    lines.append("- **‖w‖**: norma L2 del vector de pesos final (slide *L2 Penalty Norm / Weight Decay* de la clase de regularización), reportada como diagnóstico de capacidad efectiva, no como término de loss.")
+    lines.append("")
+    lines.append(
+        "**Convención de promedios** (regla del repo): cada celda aclara qué se promedia y sobre qué eje. "
+        "`mean ± std` total = sobre las 25 corridas (5 seeds × 5 folds). `seed-std` = std de los promedios por seed (cada uno ya promediado sobre 5 folds), aislando la dispersión inter-seed."
+    )
+    lines.append("")
     lines.append("![Dispersion](dispersion.png)")
     lines.append("")
-    lines.append("## Resumen agregado por LR")
+    lines.append("## Resumen agregado por LR — todas las métricas")
     lines.append("")
-    lines.append("**Total (todos los seeds × folds):**")
+    lines.append("**Total (mean ± std sobre 5 seeds × 5 folds = 25 corridas):**")
     lines.append("")
-    lines.append("| lr | MSE test (mean ± std) | ‖w‖ (mean ± std) | F1 (mean ± std) |")
-    lines.append("|---|---|---|---|")
+    lines.append("| lr | MSE test | Accuracy | Precision | Recall | F1 | ‖w‖ |")
+    lines.append("|---|---|---|---|---|---|---|")
     for lr, row in summary.iterrows():
         lines.append(
-            f"| {lr} | {row['mse_test_mean']:.5f} ± {row['mse_test_std']:.5f} "
-            f"| {row['wnorm_mean']:.4f} ± {row['wnorm_std']:.4f} "
-            f"| {row['f1_mean']:.4f} ± {row['f1_std']:.4f} |"
+            f"| {lr} "
+            f"| {row['mse_test_mean']:.5f} ± {row['mse_test_std']:.5f} "
+            f"| {row['accuracy_mean']:.4f} ± {row['accuracy_std']:.4f} "
+            f"| {row['precision_mean']:.4f} ± {row['precision_std']:.4f} "
+            f"| {row['recall_mean']:.4f} ± {row['recall_std']:.4f} "
+            f"| {row['f1_mean']:.4f} ± {row['f1_std']:.4f} "
+            f"| {row['wnorm_mean']:.4f} ± {row['wnorm_std']:.4f} |"
         )
     lines.append("")
-    lines.append("**Dispersion entre seeds** (cada celda usa el promedio sobre folds de cada seed):")
+    lines.append("**Dispersión entre seeds** (std de los promedios-por-seed; cada promedio-por-seed es media sobre los 5 folds):")
     lines.append("")
-    lines.append("| lr | MSE test seed-std | ‖w‖ seed-std | F1 seed-std |")
-    lines.append("|---|---|---|---|")
+    lines.append("| lr | MSE test seed-std | Acc seed-std | Prec seed-std | Rec seed-std | F1 seed-std | ‖w‖ seed-std |")
+    lines.append("|---|---|---|---|---|---|---|")
     for lr, row in summary.iterrows():
         lines.append(
-            f"| {lr} | {row['mse_test_seedstd']:.5f} "
-            f"| {row['wnorm_seedstd']:.4f} "
-            f"| {row['f1_seedstd']:.4f} |"
+            f"| {lr} "
+            f"| {row['mse_test_seedstd']:.5f} "
+            f"| {row['accuracy_seedstd']:.4f} "
+            f"| {row['precision_seedstd']:.4f} "
+            f"| {row['recall_seedstd']:.4f} "
+            f"| {row['f1_seedstd']:.4f} "
+            f"| {row['wnorm_seedstd']:.4f} |"
         )
     lines.append("")
-    lines.append("## Per-seed (mean sobre folds)")
+    lines.append("## Per-seed (cada celda = media sobre los 5 folds del CV)")
     lines.append("")
-    lines.append("| lr | seed | MSE test | ‖w‖ | F1 |")
-    lines.append("|---|---|---|---|---|")
+    lines.append("| lr | seed | MSE test | Accuracy | Precision | Recall | F1 | ‖w‖ |")
+    lines.append("|---|---|---|---|---|---|---|---|")
     for _, r in per_seed.sort_values(["lr", "seed"]).iterrows():
         lines.append(
-            f"| {r['lr']} | {int(r['seed'])} | {r['mse_test']:.5f} "
-            f"| {r['wnorm']:.4f} | {r['f1']:.4f} |"
+            f"| {r['lr']} | {int(r['seed'])} "
+            f"| {r['mse_test']:.5f} "
+            f"| {r['accuracy']:.4f} "
+            f"| {r['precision']:.4f} "
+            f"| {r['recall']:.4f} "
+            f"| {r['f1']:.4f} "
+            f"| {r['wnorm']:.4f} |"
         )
     lines.append("")
     lines.append("## Datos crudos")
     lines.append("")
-    lines.append("- `raw.csv` — una fila por (lr, seed, fold) con todas las metricas + ‖w‖.")
-    lines.append("- `per_seed.csv` — agregado por (lr, seed).")
-    lines.append("- `summary.csv` — agregado por lr.")
+    lines.append("- `raw.csv` — una fila por (lr, seed, fold) con todas las métricas + ‖w‖.")
+    lines.append("- `per_seed.csv` — agregado por (lr, seed) (mean sobre los 5 folds).")
+    lines.append("- `summary.csv` — agregado por lr (mean/std sobre los 25 (seed, fold), y seed-std sobre los 5 promedios-por-seed).")
     (out_dir / "analisis.md").write_text("\n".join(lines))
     print(f"  saved: {out_dir / 'analisis.md'}")
 
@@ -302,13 +343,29 @@ def run_perceptron(name: str, max_workers: int) -> None:
     df = aggregate(name, runs)
     df.to_csv(info["analisis"] / "raw.csv", index=False)
 
-    per_seed, summary = summary_tables(df)
-    per_seed.to_csv(info["analisis"] / "per_seed.csv", index=False)
-    summary.to_csv(info["analisis"] / "summary.csv")
+    _regenerate_outputs(name, df, info["analisis"])
 
-    plot_dispersion(per_seed, df, info["analisis"] / "dispersion.png",
+
+def _regenerate_outputs(name: str, df: pd.DataFrame, analisis_dir: Path) -> None:
+    per_seed, summary = summary_tables(df)
+    per_seed.to_csv(analisis_dir / "per_seed.csv", index=False)
+    summary.to_csv(analisis_dir / "summary.csv")
+    plot_dispersion(per_seed, df, analisis_dir / "dispersion.png",
                     f"Sweep LR multi-seed - {name}")
-    write_doc(name, df, per_seed, summary, info["analisis"])
+    write_doc(name, df, per_seed, summary, analisis_dir)
+
+
+def regenerate_only(name: str) -> None:
+    """Lee `raw.csv` existente y regenera per_seed/summary/plot/analisis.md
+    sin volver a entrenar. Útil cuando se cambia el formato de tablas/plots
+    o se agregan métricas nuevas que ya viven en raw.csv."""
+    info = PERCEPTRONS[name]
+    raw_path = info["analisis"] / "raw.csv"
+    if not raw_path.exists():
+        raise FileNotFoundError(f"No existe {raw_path} — corré el sweep antes (sin --regenerate-only).")
+    df = pd.read_csv(raw_path)
+    print(f"\n=== {name}: regenerando outputs desde {raw_path} ({len(df)} filas) ===")
+    _regenerate_outputs(name, df, info["analisis"])
 
 
 def main():
@@ -317,11 +374,16 @@ def main():
     # Cada subprocess usa ~5 cores internamente (folds en paralelo).
     # Default outer = cpu_count // 5 para no overcommit.
     p.add_argument("--workers", type=int, default=max(1, (os.cpu_count() or 4) // 5))
+    p.add_argument("--regenerate-only", action="store_true",
+                   help="Salta el entrenamiento; usa raw.csv existente para regenerar tablas y plots.")
     args = p.parse_args()
 
     targets = ["linear", "nonlinear"] if args.perceptron == "both" else [args.perceptron]
     for t in targets:
-        run_perceptron(t, args.workers)
+        if args.regenerate_only:
+            regenerate_only(t)
+        else:
+            run_perceptron(t, args.workers)
 
 
 if __name__ == "__main__":
