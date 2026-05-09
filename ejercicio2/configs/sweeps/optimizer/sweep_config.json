@@ -1,0 +1,11 @@
+{
+  "seeds": [42, 7, 13, 21, 99],
+  "epochs": 70,
+  "output_dir": "ejercicio2/analisis/optimizer",
+  "arch_config": "../arch/arch_base.json",
+  "optimizers": [
+    {"name": "momentum", "beta": 0.9},
+    {"name": "adam", "beta1": 0.9, "beta2": 0.999, "eps": 1e-8}
+  ],
+  "learning_rates": [0.0001, 0.0005, 0.001, 0.005, 0.01]
+}
