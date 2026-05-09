@@ -73,12 +73,6 @@ Con lr=5e-3 y lr=1e-2 las curvas caen rápido en las primeras épocas y se aplan
 
 La val loss con lr=1e-2 se aplana alrededor de 0.19–0.23 según la arquitectura. Con lr=5e-3 sucede algo similar. Son los mejores resultados en accuracy y F1 del experimento.
 
-### 3. La brecha train/val con LR altos muestra sobreajuste
-
-Con lr=1e-2 en arch_base: CE train = 0.006, CE val = 0.226 — ratio de ~35×. El modelo bajó mucho el error de entrenamiento pero el de validación se estabilizó bastante más arriba. Hay sobreajuste, aunque la val loss ya no baja más en las últimas épocas.
-
-Con lr=1e-4, en cambio, train y val loss son parecidas (0.68 y 0.72) — no hay sobreajuste porque el modelo ni siquiera convergió, está en la fase de underfitting.
-
 ### 4. Las 4 arquitecturas muestran el mismo patrón
 
 La forma de las curvas es consistente entre shallow, base, wider y deeper. La arquitectura no cambia el comportamiento respecto al LR — lo que mueve las curvas es el LR, no la capacidad del modelo. Esto confirma lo que vimos en el sweep de arquitecturas: para este dataset, la arquitectura no es el factor decisivo.

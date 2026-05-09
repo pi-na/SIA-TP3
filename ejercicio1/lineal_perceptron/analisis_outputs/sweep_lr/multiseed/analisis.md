@@ -92,7 +92,6 @@ Los resultados son **muy similares** al LR $10^-5$ pero converge mucho antes.
 LR = $10^-3$ sufre de SUBAJUSTE.
 
 
-
 ## Datos crudos
 
 - `raw.csv` — una fila por (lr, seed, fold) con todas las métricas + ‖w‖.

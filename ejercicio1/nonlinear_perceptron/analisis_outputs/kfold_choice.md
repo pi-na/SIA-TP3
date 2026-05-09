@@ -10,12 +10,12 @@ Para el perceptrón no-lineal esto es incluso más claro que para el lineal: el 
 
 El dataset tiene **7500 filas**, de las cuales **869 son positivos (fraude)** — 11.59% de la clase positiva. Cada configuración de K implica:
 
-| K | Filas de train | Filas de test | Positivos en test | Estimados para promediar |
-|---|---|---|---|---|
-| 2 | 3750 (50%) | 3750 | ~435 | 2 |
-| 3 | 5000 (67%) | 2500 | ~290 | 3 |
-| **5** | **6000 (80%)** | **1500** | **~174** | **5** |
-| 10 | 6750 (90%) | 750 | ~87 | 10 |
+| K     | Filas de train | Filas de test | Positivos en test | Estimados para promediar |
+| ----- | -------------- | ------------- | ----------------- | ------------------------ |
+| 2     | 3750 (50%)     | 3750          | ~435              | 2                        |
+| 3     | 5000 (67%)     | 2500          | ~290              | 3                        |
+| **5** | **6000 (80%)** | **1500**      | **~174**          | **5**                    |
+| 10    | 6750 (90%)     | 750           | ~87               | 10                       |
 
 Hay dos efectos que se compensan (clase de métricas/sobreajuste):
 

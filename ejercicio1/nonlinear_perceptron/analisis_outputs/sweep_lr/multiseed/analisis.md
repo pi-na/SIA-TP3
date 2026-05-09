@@ -1,7 +1,6 @@
 ## Sweep de threshold (post-training)
 
 El threshold de decisión vive **post-training**: no cambia los pesos del perceptrón, sólo decide cómo binarizar la salida continua. Por eso este sweep no requiere re-entrenar — se reconstruyen las predicciones de cada (lr, seed, fold) a partir de los pesos guardados y se evalúan métricas sobre una grilla densa de thresholds.
-
 ![Curvas threshold](threshold_curves.png)
 
 ![Curva Precision-Recall](pr_curve.png)

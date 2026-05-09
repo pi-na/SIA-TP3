@@ -14,6 +14,10 @@ La justificacion **probablemente** la consigamos por medio de experimentación, 
   - En el estratificado: se mezclan por separado los índices de fraude y los de no-fraude (rng.shuffle(pos_idx), rng.shuffle(neg_idx) — linear:126-127, nonlinear:131-132) antes de repartirlos en los K folds.                                  
   - En el simple: se mezclan todos los índices (rng.shuffle(idx) — linear:151, nonlinear:154).         
   - Usa el seed "raíz" del config: seed = config["random_seed"] (linear:340, nonlinear:403). 
+
+Para el lineal elegimos kfold = 5, ver [[ejercicio1/lineal_perceptron/analisis_outputs/kfold_choice#**Conclusión **|kfold_choice]]
+
+
 #### Estrategia de entrenamiento
 Hacemos entrenamiento **online**, no intentamos implementar batch o mini batch para el lineal.
 En clase vimos que el lineal se entrena con entrenamiento online.

@@ -41,12 +41,12 @@ Regla general de la literatura (citada también en el contexto de la clase): K=5
 
 ### Resultados (thr*=0.69)
 
-| K | n_train | n_test | Positivos en test | MSE test (mean ± std) | F1 (mean ± std) |
-|---|---|---|---|---|---|
-| 2 | 3750 | 3750 | 435 | 0.02686 ± 0.00127 | 0.8820 ± 0.0036 |
-| 3 | 5000 | 2500 | 290 | 0.02657 ± 0.00102 | 0.8825 ± 0.0089 |
-| **5** | **6000** | **1500** | **174** | **0.02658 ± 0.00076** | **0.8821 ± 0.0213** |
-| 10 | 6750 | 750 | 87 | 0.02665 ± 0.00206 | 0.8809 ± 0.0250 |
+| K     | n_train  | n_test   | Positivos en test | MSE test (mean ± std) | F1 (mean ± std)     |
+| ----- | -------- | -------- | ----------------- | --------------------- | ------------------- |
+| 2     | 3750     | 3750     | 435               | 0.02686 ± 0.00127     | 0.8820 ± 0.0036     |
+| 3     | 5000     | 2500     | 290               | 0.02657 ± 0.00102     | 0.8825 ± 0.0089     |
+| **5** | **6000** | **1500** | **174**           | **0.02658 ± 0.00076** | **0.8821 ± 0.0213** |
+| 10    | 6750     | 750      | 87                | 0.02665 ± 0.00206     | 0.8809 ± 0.0250     |
 
 ### Std entre folds — métrica de estabilidad del estimador
 
@@ -67,7 +67,8 @@ Regla general de la literatura (citada también en el contexto de la clase): K=5
 
 **Comparación crítica K=5 vs K=10:** F1 std pasa de 0.0213 a 0.0250 (diferencia de 0.0037, marginal) y MSE std empeora de 0.00076 a 0.00206. No hay ganancia medible en subir a K=10.
 
-**Conclusión empírica:** K=5 minimiza la varianza de estimación del MSE y no es superable por K=10 en F1. K=2 da F1 más estable por fold pero con sólo 2 estimados es demasiado sensible a la suerte de la partición. **K=5 es la elección correcta.**
+# **Conclusión:** 
+K=5 minimiza la varianza de estimación del MSE y no es superable por K=10 en F1. K=2 da F1 más estable por fold pero con sólo 2 estimados es demasiado sensible a la suerte de la partición. **K=5 es la elección correcta.**
 
 ## 5. Qué reportar en la presentación
 
