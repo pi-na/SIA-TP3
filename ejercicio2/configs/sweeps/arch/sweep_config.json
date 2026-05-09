@@ -1,0 +1,10 @@
+{
+  "seeds": [42, 7, 13, 21, 99],
+  "output_dir": "ejercicio2/analisis/arch",
+  "configs": [
+    "arch_shallow.json",
+    "arch_base.json",
+    "arch_wider.json",
+    "arch_deeper.json"
+  ]
+}

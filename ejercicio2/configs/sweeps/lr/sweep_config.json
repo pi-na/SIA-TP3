@@ -1,0 +1,11 @@
+{
+  "seeds": [42, 7, 13, 21, 99],
+  "output_dir": "ejercicio2/analisis/lr",
+  "learning_rates": [0.0001, 0.0005, 0.001, 0.005, 0.01],
+  "arch_configs": [
+    "../arch/arch_shallow.json",
+    "../arch/arch_base.json",
+    "../arch/arch_wider.json",
+    "../arch/arch_deeper.json"
+  ]
+}
