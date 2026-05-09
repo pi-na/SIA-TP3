@@ -1,5 +1,8 @@
 # Sweep LR — perceptrón lineal (revisado con std, pesos y métricas)
 
+>[!note] Que es este experimento?
+>Es lo que hicimos ANTES de la entrega para LR, super incompleto
+
 Re-análisis del sweep `lr ∈ {0.001, 0.0001, 1e-5}` (5 folds estratificados, `epochs=7500`, `epsilon=1e-4`, z-score fit-on-train) agregando std entre folds, normas de pesos y métricas de clasificación con threshold=0.5.
 
 ## Convergencia (mean ± std entre folds)

@@ -1,4 +1,7 @@
-## Decisiones de diseño, hiperparametros
+# Preguntas abiertas
+## Experimentacion, variables
+Por ejemplo, en el analisis de LR [[ejercicio1/nonlinear_perceptron/analisis_outputs/sweep_lr/multiseed/analisis|analisis multiseed non linear]]
+V## Decisiones de diseño, hiperparametros
 #### Normalización de la data
 Antes de hacer K-folding, normalizamos la informacion haciendo z-score.
 Para cada feature:
@@ -27,31 +30,21 @@ weights = rng.uniform(-0.1, 0.1, size=n + 1)
   - Tamaño n + 1 donde n = len(feature_cols). La componente weights[0] es el bias, las restantes son los pesos de cada feature.   
   - Seed viene del config (random_seed); cada fold usa seed + k_i (linear_perceptron.py:349, nonlinear_perceptron.py:417), así    
   dentro de una corrida los folds tienen inicializaciones distintas pero reproducibles.                   
-#### Hiperparametros
->[!warning] HAY QUE JUSTIFICAR LOS CUATRO HP!!
-
+#### Criterio de corte
+Usamos un epsilon, pero en todos los experimentos que hicimos (vease los analisis multiseed de LR para ambos perceptrones), encontramos que los perceptrones terminan por limite de epocas, y convergen (se nota por la pendiente en el grafico de convergencia) bastante antes del limite de epocas. 
+### Hiperparametros
 Los hiperparametros del perceptron lineal ADALINE y no-lineal son 
-  - learning rate
-	  - Justificar elección del learning rate con convergencia.
-  - epochs — más épocas para LRs pequeños (actualmente 7500, podría probar 15000)
-  - epsilon — criterio de parada anticipada         
-  - threshold
+#### Learning rate
+Experimentamos con 3 LR, el analisis de resultados para cada uno esta en 
+- [[ejercicio1/nonlinear_perceptron/analisis_outputs/sweep_lr/multiseed/analisis|analisis multiseed NO LINEAL]]
+- [[ejercicio1/lineal_perceptron/analisis_outputs/sweep_lr/multiseed/analisis|analisis multiseed LINEAL]]
+#### epochs
+Cuando hicimos los experimentos de LR vimos que dependiendo el LR, 150 epocas o 500 epocas sobra para que converge.
+#### epsilon — criterio de parada anticipada         
+#### threshold
+Lo que hacemoss para el threshold es medir precision recall accuracy F1 y encontrar el balance que no parezca. En los analisis de LR para el LINEAL lo explicamos:
 
-  >[!warning] evaluacion del threshold
-  > HAY QUE REHACER LA EVALUACION!! HACER MEJORES EXPERIMENTOS Y DAR UNA JUSTIFICACION LIMPIA SOBRE LA DECISION
-
-**Experimentacion para decisión del LEARNING RATE en el perceptron NO LINEAL:**
-Armé plots de convergencia para cada learning rate:
-
-![[lr_0_001.png|609]]
-![[lr_0_01.png|574]]
-![[lr_0_0001.png|672]]
-
-Las tres tasas (0.01, 0.001, 0.0001) producen resultados  prácticamente idénticos (MSE 0.0110-0.0113). La diferencia esta en la cantidad de epocas que les toma converger a cada una: lr=0.01 es más rápido (~30 épocas) que lr=0.001 (~100).
-
->[!warning] CAMBIOS EN ESTA EJECUCION
->DEJE EJECUTANDO OTRO SCRIPT Q PRUEBA MUCHOS SEED Y CALCULA POSTA PROMEDIO Y DESVIO DE MSE, JUNTO CON MAS METRICAS, PARA EVALUAR BIEN 
-
+> Criterio para elegir un threshold: nos interesa conseguir la mejor recall posible sin dejar de lado la precision; Notamos que con thresholds bajos la recall queda alta, pero con poca precision. Estamos flaggeando demasiadas compras como fraude, y asi es facil agarrar la mayor cantidad de fraudes posible. Entonces queremos un **balance** entre precision y recall -> usamos F1 para la decisión.
 
 --- 
 ## Resultados

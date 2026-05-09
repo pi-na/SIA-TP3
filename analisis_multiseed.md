@@ -1,3 +1,5 @@
+>[!note] Que es este analisis??
+>Analisis de AMBOS experimentos multi-seed de LR , [[ejercicio1/nonlinear_perceptron/analisis_outputs/sweep_lr/multiseed/analisis|analisis multiseed nonLinear]], [[ejercicio1/lineal_perceptron/analisis_outputs/sweep_lr/multiseed/analisis|analisis multiseed Linear]]
 # Análisis sweep LR multi-seed — Ej1
 
 ## 1. Intención del experimento
@@ -34,11 +36,11 @@ Toda la teoría que se usa es la de la clase de "Métricas, sobreajuste y normal
 
 ### 2.2 Perceptrón no-lineal (sigmoide)
 
-| lr    | MSE test (mean ± std) | seed-std | ‖w‖ (mean) | F1 (mean)  |
-| ----- | --------------------- | -------- | ---------- | ---------- |
-| 1e-04 | 0.01128 ± 0.00052     | 0.00000  | 1.7510     | **0.5097** |
-| 1e-03 | 0.01099 ± 0.00058     | 0.00000  | 1.9829     | 0.4996     |
-| 1e-02 | 0.01099 ± 0.00058     | 0.00000  | 1.9792     | 0.5011     |
+| lr      | MSE test (mean ± std) | seed-std | ‖w‖ (mean) | F1 (mean) |
+|---------|-----------------------|----------|------------|-----------|
+| 1e-04   | 0.01128 ± 0.00052     | 0.00000  | 1.7510     | **0.5097** |
+| 1e-03   | 0.01099 ± 0.00058     | 0.00000  | 1.9829     | 0.4996    |
+| 1e-02   | 0.01099 ± 0.00058     | 0.00000  | 1.9792     | 0.5011    |
 
 ## 3. Análisis simple (sólo teoría de la clase)
 
