@@ -1,4 +1,3 @@
-# Preguntas abiertas
 ## Experimentacion, variables
 Por ejemplo, en el analisis de LR [[ejercicio1/nonlinear_perceptron/analisis_outputs/sweep_lr/multiseed/analisis|analisis multiseed non linear]]
 V## Decisiones de diseño, hiperparametros
@@ -41,7 +40,7 @@ Los hiperparametros del perceptron lineal ADALINE y no-lineal son
 #### Learning rate
 Experimentamos con 3 LR, el analisis de resultados para cada uno esta en 
 - [[ejercicio1/nonlinear_perceptron/analisis_outputs/sweep_lr/multiseed/analisis|analisis multiseed NO LINEAL]]
-- [[ejercicio1/lineal_perceptron/analisis_outputs/sweep_lr/multiseed/analisis|analisis multiseed LINEAL]]
+- [[Notas/ejercicio 1/Experimentos y analisis/LINEAR perceptron/sweep_lr/multiseed/analisis|analisis multiseed LINEAL]]
 Para el perceptrton lineal elegimos LR = 10^-3
 Para el perceptrton no lineal elegimos LR = 10^-2
 #### epochs
@@ -72,7 +71,7 @@ Hola completame!
 ### Convergencia - subajuste?
 Como medimos si el modelo ajusta correctamente al problema? Tenemos el MSE. En clase dijeron MSE alto en training set -> underfitting. Pero como juzgamos si un MSE es alto? Cual es la referencia?
 
-Lo que hicimos fue analizar el dataset [[informe_analisis_dataset.pdf]]. Encontramos reglas básicas que dividen el dataset a partir de un umbral en 3 features, y calculamos métricas para el sistema que únicamente hace esta división por umbrales. Los resultados fueron precision=100% / recall=80% / acc=97.68%.
+Lo que hicimos fue analizar el dataset [[INFORME.pdf]]. Encontramos reglas básicas que dividen el dataset a partir de un umbral en 3 features, y calculamos métricas para el sistema que únicamente hace esta división por umbrales. Los resultados fueron precision=100% / recall=80% / acc=97.68%.
 
 Definimos que hay **underfitting** si el perceptrón en train no iguala (acc ≥ 97.68%, precision ≥ 100% sobre lo que predice, recall ≥  80%).
 
