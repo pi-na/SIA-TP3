@@ -40,7 +40,8 @@ METRIC_COLS = [
 def run_one(arch_cfg_path: Path, lr: float, seed: int, tmp_root: Path) -> tuple[pd.DataFrame, pd.DataFrame]:
     """Corre una arquitectura con un lr y seed dados. Devuelve (summary_df, history_df)."""
     cfg = json.loads(arch_cfg_path.read_text())
-    cfg["training"]["optimizer"]["lr"] = lr
+    cfg["training"]["optimizer"] = {"name": "sgd", "lr": lr}
+    cfg["training"]["early_stopping_patience"] = None
     cfg["split"]["random_seed"] = seed
 
     arch_name = arch_cfg_path.stem
