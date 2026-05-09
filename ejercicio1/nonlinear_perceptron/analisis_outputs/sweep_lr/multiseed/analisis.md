@@ -95,7 +95,9 @@ Implicancia práctica: si en una iteración futura quisiéramos un criterio de c
 | 0.01   | 21   | 0.01099  | 0.9705   | 0.8876    | 0.8539 | 0.8704 | 1.9793 |
 | 0.01   | 42   | 0.01099  | 0.9709   | 0.8872    | 0.8585 | 0.8724 | 1.9814 |
 | 0.01   | 99   | 0.01099  | 0.9703   | 0.8864    | 0.8527 | 0.8690 | 1.9802 |
-
+# Conclusiones
+LR = 10^-3 y LR = 10^-2 dan resultados practicamente equivalentes. LR = 10^-4 también excepto en MSE se queda levemente atrás. Elegimos LR = 10^-2 que converge mucho mas rapido.
+ 
 ## Datos crudos
 
 - `raw.csv` — una fila por (lr, seed, fold) con todas las métricas + ‖w‖ (clasificación a thr=0.5, sin re-evaluar a thr*).

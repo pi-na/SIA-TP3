@@ -38,6 +38,8 @@ Los hiperparametros del perceptron lineal ADALINE y no-lineal son
 Experimentamos con 3 LR, el analisis de resultados para cada uno esta en 
 - [[ejercicio1/nonlinear_perceptron/analisis_outputs/sweep_lr/multiseed/analisis|analisis multiseed NO LINEAL]]
 - [[ejercicio1/lineal_perceptron/analisis_outputs/sweep_lr/multiseed/analisis|analisis multiseed LINEAL]]
+Para el perceptrton lineal elegimos LR = 10^-3
+Para el perceptrton no lineal elegimos LR = 10^-2
 #### epochs
 Cuando hicimos los experimentos de LR vimos que dependiendo el LR, 150 epocas o 500 epocas sobra para que converge.
 #### epsilon — criterio de parada anticipada         
