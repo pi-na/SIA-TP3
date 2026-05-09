@@ -1,0 +1,8 @@
+{
+  "perceptron": "linear",
+  "base_config": "../../configs/lr_0001.json",
+  "k_values": [2, 3, 5, 10],
+  "epochs": 500,
+  "seed": 42,
+  "threshold": 0.69
+}

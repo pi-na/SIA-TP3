@@ -1,0 +1,15 @@
+{
+  "seeds": [42, 7, 13, 21, 99],
+  "epochs": 500,
+  "k_folds": 5,
+  "perceptrons": {
+    "linear": {
+      "base_config": "../lineal_perceptron/configs/lr_0001.json",
+      "lr": 0.0001
+    },
+    "nonlinear": {
+      "base_config": "../nonlinear_perceptron/configs/lr_01.json",
+      "lr": 0.01
+    }
+  }
+}

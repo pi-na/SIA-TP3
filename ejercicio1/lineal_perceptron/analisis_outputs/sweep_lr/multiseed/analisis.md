@@ -90,6 +90,9 @@ Implicancia práctica: si en una iteración futura quisiéramos un criterio de c
 Para el perceptron lineal, el LR optimo es $10^-4$ con threshold $0.69$.
 Los resultados son **muy similares** al LR $10^-5$ pero converge mucho antes.
 LR = $10^-3$ sufre de SUBAJUSTE.
+
+
+
 ## Datos crudos
 
 - `raw.csv` — una fila por (lr, seed, fold) con todas las métricas + ‖w‖.
