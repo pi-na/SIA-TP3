@@ -1,0 +1,234 @@
+{
+  "main": {
+    "id": "a880bb0e38f2286f",
+    "type": "split",
+    "children": [
+      {
+        "id": "b641b7c1f70fb79c",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "dcbd1adef6a2f2b4",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Notas/ejercicio 2/Experimentos y analisis/LR/analisis_lr.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "analisis_lr"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "05618c33bb31ecab",
+    "type": "split",
+    "children": [
+      {
+        "id": "703f359ecf97aa47",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "079a146fa554c74a",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "7c5c69d2bf5e6769",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "740746890b7c11b8",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "ea444375a53806a8",
+    "type": "split",
+    "children": [
+      {
+        "id": "1427adf84b9af62a",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "48317a4c0014eeab",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Notas/ejercicio 2/Experimentos y analisis/LR/analisis_lr.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for analisis_lr"
+            }
+          },
+          {
+            "id": "753c8e751018f794",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Notas/ejercicio 2/Experimentos y analisis/LR/analisis_lr.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from analisis_lr"
+            }
+          },
+          {
+            "id": "ff260b9983bf6ab0",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "50f4dffd1305f964",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "All properties"
+            }
+          },
+          {
+            "id": "a81d6f9a18b4f533",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Notas/ejercicio 2/Experimentos y analisis/LR/analisis_lr.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline of analisis_lr"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false
+    }
+  },
+  "active": "dcbd1adef6a2f2b4",
+  "lastOpenFiles": [
+    "ejercicio2_experimentacion/README.md",
+    "ejercicio2_experimentacion/scripts/runner_ejemplo_multiprocess.py",
+    "ejercicio2_experimentacion/scripts/run_optimizer_sweep.py",
+    "ejercicio2_experimentacion/scripts/run_lr_sweep.py",
+    "ejercicio2_experimentacion/scripts/run_arch_sweep.py",
+    "ejercicio2_experimentacion/scripts",
+    "ejercicio2_experimentacion/configs/sweeps/lr/sweep_config.json",
+    "ejercicio2_experimentacion/configs/sweeps/optimizer/sweep_config.json",
+    "ejercicio2_experimentacion/configs/sweeps/arch/sweep_config.json",
+    "ejercicio2_experimentacion/configs/sweeps/arch/arch_wider.json",
+    "ejercicio2_experimentacion/configs/sweeps/arch/arch_shallow.json",
+    "ejercicio2_experimentacion/analisis/optimizer/convergence_lr5e-4.png",
+    "ejercicio2_experimentacion/analisis/optimizer/convergence_lr5e-3.png",
+    "ejercicio2_experimentacion/analisis/optimizer/convergence_lr1e-4.png",
+    "ejercicio2_experimentacion/analisis/optimizer/convergence_lr1e-3.png",
+    "ejercicio2_experimentacion/analisis/optimizer/convergence_lr1e-2.png",
+    "ejercicio2_experimentacion/analisis/lr/final_metrics.png",
+    "ejercicio2_experimentacion/analisis/lr/convergence_val.png",
+    "ejercicio2_experimentacion/analisis/lr/convergence_train.png",
+    "ejercicio2_experimentacion/experimentacion/analisis/optimizer/convergence_lr1e-3.png",
+    "ejercicio2_experimentacion/experimentacion/analisis/lr/final_metrics.png",
+    "ejercicio2_experimentacion/analisis_dataset/preanalisis.md",
+    "Notas/ejercicio 2/Experimentos y analisis/Optimizer/analisis_optimizer.md",
+    "Notas/ejercicio 2/Experimentos y analisis/LR/analisis_lr.md",
+    "Notas/ejercicio 2/Ejercicio 2 - reintento.md",
+    "analisis_multiseed.md",
+    "Notas/ejercicio 1/Ejercicio 1 - Reintento.md",
+    "Notas/ejercicio 2/Experimentos y analisis/Untitled.md",
+    "ejercicio1/nonlinear_perceptron/analisis_outputs/sweep_lr/multiseed/analisis.md",
+    "ejercicio1/lineal_perceptron/analisis_outputs/kfold_choice.md",
+    "Notas/ejercicio 1/informe implementacion (generado por claude).md",
+    "Notas/ejercicio 1/analisis aprendizaje lineal vs no lineal.md",
+    "ejercicio1/lineal_perceptron/analisis_outputs/kfold_sweep/analisis.md",
+    "Notas/ejercicio 1/Experimentos y analisis/NON LINEAR perceptron/sweep_lr/singleseed/analisis.md",
+    "Notas/ejercicio 1/Experimentos y analisis/NON LINEAR perceptron/sweep_lr/multiseed/analisis.md",
+    "Notas/ejercicio 1/Experimentos y analisis/LINEAR perceptron/sweep_lr/singleseed/analisis.md",
+    "Notas/ejercicio 1/Experimentos y analisis/LINEAR perceptron/sweep_lr/multiseed/analisis.md",
+    "Notas/ejercicio 1/Experimentos y analisis/NON LINEAR perceptron/kfold_sweep/analisis.md",
+    "Notas/ejercicio 1/Experimentos y analisis/LINEAR perceptron/kfold_sweep/analisis.md",
+    "Notas/ejercicio 1/Experimentos y analisis/NON LINEAR perceptron/kfold_choice.md",
+    "Notas/ejercicio 1/Experimentos y analisis/LINEAR perceptron/kfold_choice.md",
+    "Notas/ejercicio 1/Generalizacion/analisis_generalizacion.md",
+    "Notas/NOTAS/Experimentos y analisis/NON LINEAR perceptron/sweep_lr/multiseed/analisis.md",
+    "Notas/NOTAS/Experimentos y analisis/NON LINEAR perceptron/sweep_lr/singleseed/analisis.md",
+    "Notas/NOTAS/Experimentos y analisis/LINEAR perceptron/sweep_lr/singleseed/analisis.md",
+    "Notas/NOTAS/Experimentos y analisis/LINEAR perceptron/sweep_lr/multiseed/analisis.md"
+  ]
+}

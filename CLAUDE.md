@@ -96,6 +96,17 @@ Si hay tensión entre "lo que está de moda en la industria" y "lo que enseñó 
 
 Workflow: **Fase 1** (k=1, exploratoria) → fijar `base.json` → **Fase 2** (k=5, one-at-a-time) → `final_eval.py` contra `digits_test.csv`.
 
+## Experimentación Ej2 — `ejercicio2_experimentacion/`
+
+Toda la experimentación del Ej2 (MLP) vive en `ejercicio2_experimentacion/` con esta convención:
+
+- **`scripts/`** — runners de experimentos. Cada nuevo runner se arma copiando la plantilla `ejercicio2_experimentacion/scripts/runner_ejemplo_multiprocess.py` (paralelismo outer con `ProcessPoolExecutor`, 8 workers, `OMP_NUM_THREADS=1`, `mlp.train.run_experiment` importado como función). Solo se adapta `_build_cfg_for_combo` y el armado de `jobs` al grid del sweep nuevo.
+- **`configs/`** — configs JSON (arquitecturas, sweeps, `base.json`). Toda variación de hiperparámetros se hace one-at-a-time sobre `base.json`.
+- **`output/`** — raw outputs de cada corrida (CSVs, `weights.npz`, `epoch_history.csv`). Una subcarpeta por experimento.
+- **`analisis/`** — análisis de los outputs. Una subcarpeta por experimento con plots, tablas y un `analisis.md` que interprete los resultados (hipótesis → experimento → interpretación, regla 2).
+
+Cuando se proponga un experimento nuevo del Ej2, seguir este flujo: config → script (basado en la plantilla) → output → análisis.
+
 ## Convenciones del repo
 
 - Commits directos a `main` (no feature branches salvo pedido explícito).
