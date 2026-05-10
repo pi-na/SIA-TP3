@@ -13,12 +13,24 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Notas/ejercicio 2/Segunda tanda de experimentos/Pre_LR_Batch_Opt/analisis.md",
+                "file": "Notas/ejercicio 2/Segunda tanda de experimentos/Cross_LR_Opt_Arch/analisis.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
               "title": "analisis"
+            }
+          },
+          {
+            "id": "9f7cc60c21e1379a",
+            "type": "leaf",
+            "state": {
+              "type": "image",
+              "state": {
+                "file": "Notas/ejercicio 2/Segunda tanda de experimentos/Cross_LR_Opt_Arch/stage2_val_acc_vs_lr_per_opt.png"
+              },
+              "icon": "lucide-image",
+              "title": "stage2_val_acc_vs_lr_per_opt"
             }
           }
         ]
@@ -186,17 +198,28 @@
   },
   "active": "a3900b7249e60765",
   "lastOpenFiles": [
+    "Notas/ejercicio 2/Segunda tanda de experimentos/Cross_LR_Opt_Arch/stage2_val_acc_vs_lr_per_opt.png",
+    "Notas/ejercicio 2/Segunda tanda de experimentos/Cross_LR_Opt_Arch/analisis.md",
+    "Notas/ejercicio 2/visualizacion arquitecturas/Arquitecturas.md",
+    "Notas/ejercicio 2/visualizacion arquitecturas/parametros_por_arch.png",
+    "Notas/ejercicio 2/visualizacion arquitecturas/comparacion_archs.png",
+    "Notas/ejercicio 2/visualizacion arquitecturas/arch_deeper.png",
+    "Notas/ejercicio 2/visualizacion arquitecturas/arch_wider.png",
+    "Notas/ejercicio 2/visualizacion arquitecturas/arch_base.png",
+    "Notas/ejercicio 2/visualizacion arquitecturas/arch_shallow.png",
+    "Notas/ejercicio 2/visualizacion arquitecturas/make_arch_diagrams.py",
+    "Notas/ejercicio 2/visualizacion arquitecturas",
+    "Notas/ejercicio 2/Segunda tanda de experimentos/IMPORTANTE_CORRELACIONES.md",
     "Notas/ejercicio 2/Segunda tanda de experimentos/Justificacion_metricas.md",
+    "Notas/ejercicio 2/Segunda tanda de experimentos/PLAN de todos los experimentos cruzados cross_v1.md",
+    "Notas/ejercicio 2/Segunda tanda de experimentos/Resumen, todos los experimentos.md",
+    "Notas/ejercicio 2/Segunda tanda de experimentos/Pre_LR_Batch_Opt/analisis.md",
     "Notas/ejercicio 2/Primera tanda de experimentos/Optimizer/analisis_optimizer.md",
     "Notas/ejercicio 2/Primera tanda de experimentos/LR/analisis_lr.md",
-    "Notas/ejercicio 2/Segunda tanda de experimentos/PLAN_cross_v1.md",
-    "Notas/ejercicio 2/Segunda tanda de experimentos/Cross_LR_Opt_Arch/analisis.md",
-    "Notas/ejercicio 2/Segunda tanda de experimentos/Pre_LR_Batch_Opt/analisis.md",
     "Notas/ejercicio 2/Ejercicio 2 - reintento.md",
     "apunte perceptron.md",
     "docs/clase_optimizadores/clase optimizadores.pdf",
     "Notas/ejercicio 2/analisis_dataset/preanalisis.md",
-    "Notas/ejercicio 2/Primera tanda de experimentos/Todos los experimentos.md",
     "ejercicio2_experimentacion/scripts/cross_v1/pipeline.py",
     "ejercicio2_experimentacion/output/lr_segundo_intento/phase2/arch_shallow_lr1e-3_seed13/arch_shallow_lr1e-3_seed13_20260509_225634/weights.npz",
     "ejercicio2_experimentacion/output/lr_segundo_intento/phase2/arch_shallow_lr1e-3_seed13/arch_shallow_lr1e-3_seed13_20260509_225634/confusion_matrix.csv",
@@ -204,19 +227,11 @@
     "ejercicio2_experimentacion/output/lr_segundo_intento/phase2/arch_shallow_lr1e-3_seed13/arch_shallow_lr1e-3_seed13_20260509_225634/epoch_history.csv",
     "ejercicio2_experimentacion/output/lr_segundo_intento/phase2/arch_shallow_lr1e-3_seed13/arch_shallow_lr1e-3_seed13_20260509_225634/run_summary.csv",
     "ejercicio2_experimentacion/output/lr_segundo_intento/phase2/arch_shallow_lr1e-3_seed7/arch_shallow_lr1e-3_seed7_20260509_225634/weights.npz",
-    "ejercicio2_experimentacion/output/lr_segundo_intento/phase2/arch_shallow_lr1e-3_seed7/arch_shallow_lr1e-3_seed7_20260509_225634/confusion_matrix.csv",
-    "ejercicio2_experimentacion/output/lr_segundo_intento/phase2/arch_shallow_lr1e-3_seed7/arch_shallow_lr1e-3_seed7_20260509_225634/predictions.csv",
     "ejercicio2_experimentacion/analisis/lr/convergence_train.png",
     "ejercicio2_experimentacion/README.md",
     "ejercicio2_experimentacion/analisis/optimizer/convergence_lr5e-4.png",
     "ejercicio2_experimentacion/analisis/optimizer/convergence_lr5e-3.png",
     "ejercicio2_experimentacion/analisis/optimizer/convergence_lr1e-4.png",
-    "ejercicio2_experimentacion/analisis/optimizer/convergence_lr1e-3.png",
-    "ejercicio2_experimentacion/analisis/optimizer/convergence_lr1e-2.png",
-    "ejercicio2_experimentacion/analisis/lr/final_metrics.png",
-    "ejercicio2_experimentacion/analisis/lr/convergence_val.png",
-    "ejercicio2_experimentacion/experimentacion/analisis/optimizer/convergence_lr1e-3.png",
-    "ejercicio2_experimentacion/experimentacion/analisis/lr/final_metrics.png",
     "analisis_multiseed.md",
     "Notas/ejercicio 1/Ejercicio 1 - Reintento.md",
     "Notas/ejercicio 2/Experimentos y analisis/Untitled.md",
@@ -228,9 +243,6 @@
     "Notas/ejercicio 1/Experimentos y analisis/NON LINEAR perceptron/sweep_lr/singleseed/analisis.md",
     "Notas/ejercicio 1/Experimentos y analisis/NON LINEAR perceptron/sweep_lr/multiseed/analisis.md",
     "Notas/ejercicio 1/Experimentos y analisis/LINEAR perceptron/sweep_lr/singleseed/analisis.md",
-    "Notas/ejercicio 1/Experimentos y analisis/LINEAR perceptron/sweep_lr/multiseed/analisis.md",
-    "Notas/ejercicio 1/Experimentos y analisis/NON LINEAR perceptron/kfold_sweep/analisis.md",
-    "Notas/ejercicio 1/Experimentos y analisis/LINEAR perceptron/kfold_sweep/analisis.md",
-    "Notas/ejercicio 1/Experimentos y analisis/NON LINEAR perceptron/kfold_choice.md"
+    "Notas/ejercicio 1/Experimentos y analisis/LINEAR perceptron/sweep_lr/multiseed/analisis.md"
   ]
 }

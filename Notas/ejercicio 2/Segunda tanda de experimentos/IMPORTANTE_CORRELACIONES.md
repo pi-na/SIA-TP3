@@ -5,7 +5,7 @@
 **Para defensa oral:** acá está la respuesta a la pregunta esperable *"¿probaste que tus hiperparámetros eran independientes? ¿qué hiciste cuando viste que no lo eran?"*.
 
 Datos fuente:
-- [Plan del cross-experiment](PLAN_cross_v1.md)
+- [Plan del cross-experiment](PLAN%20de%20todos%20los%20experimentos%20cruzados%20cross_v1.md)
 - [Pre-experimento LR×Batch×Opt](Notas/ejercicio%202/Segunda%20tanda%20de%20experimentos/Pre_LR_Batch_Opt/analisis.md) → `best_batch.json`
 - [Cross-experiment LR×Opt×Arch + estrella batch](Notas/ejercicio%202/Segunda%20tanda%20de%20experimentos/Cross_LR_Opt_Arch/analisis.md)
 - Sweeps previos tratados como independientes: [Arch](Arquitectura.md) · [LR (1er sweep)](analisis_lr.md) · [LR_segundo_intento](LR_segundo_intento/) · [Optimizer](analisis_optimizer.md)

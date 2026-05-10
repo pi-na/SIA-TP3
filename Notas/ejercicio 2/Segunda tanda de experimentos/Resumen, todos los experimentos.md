@@ -78,7 +78,7 @@ Resumen de **TODO** lo que se hizo en esta sesión, con links a los análisis co
 - Esto es coherente con el aprendizaje del optimizer sweep: Adam adapta internamente el tamaño de paso, así que un LR nominal alto rompe la trayectoria inmediatamente.
 - **Decisión:** capear a 30 ep. ES con patience=20 mata la celda rápido y los `best_weights` restaurados son los iniciales (sin entrenamiento). Reportar como "diverge desde init".
 
-**`max_epochs` celda a celda:** la tabla por (opt, LR) que terminó usándose en el cross-experiment está en [`PLAN_cross_v1.md`](PLAN_cross_v1.md). Cada valor está justificado por el `best_epoch` observado en los datos fuente arriba + margen para que ES (patience=20) tenga lugar de actuar antes del techo.
+**`max_epochs` celda a celda:** la tabla por (opt, LR) que terminó usándose en el cross-experiment está en [`PLAN_cross_v1.md`](PLAN%20de%20todos%20los%20experimentos%20cruzados%20cross_v1.md). Cada valor está justificado por el `best_epoch` observado en los datos fuente arriba + margen para que ES (patience=20) tenga lugar de actuar antes del techo.
 
 ### 4. Fix #4 — métricas finales consistentes entre celdas
 
@@ -97,7 +97,7 @@ Resumen de **TODO** lo que se hizo en esta sesión, con links a los análisis co
 - Etapa 2 (Cross LR×Opt×Arch): grid 3D principal con batch heredado.
 - Etapa 2b (Estrella batch): perturbar el centro en batch_size con resolución fina.
 
-**Plan documentado:** [`PLAN_cross_v1.md`](PLAN_cross_v1.md).
+**Plan documentado:** [`PLAN_cross_v1.md`](PLAN%20de%20todos%20los%20experimentos%20cruzados%20cross_v1.md).
 
 ### 6. Pipeline cross_v1 — ejecución unattended
 

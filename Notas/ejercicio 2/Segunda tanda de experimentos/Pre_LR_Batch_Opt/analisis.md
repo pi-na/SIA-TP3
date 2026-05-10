@@ -14,7 +14,7 @@ Todos los sweeps anteriores del Ej2 ([Arch](Arquitectura.md), [LR](analisis_lr.m
 
 **Diseño:** grid 3D pequeño 3 LR × 3 batch × 3 opt sobre `arch_shallow` (la "óptima" del Arch sweep, asumida estable como punto de anclaje), con 2 seeds × 5 folds = 10 corridas/cell. SEM ≈ 0.0019 — suficiente para decidir batch (no para reportar diferencias finas, eso lo hace el grid principal).
 
-**Selección de niveles** (justificación en el [PLAN](PLAN_cross_v1.md)):
+**Selección de niveles** (justificación en el [PLAN](PLAN%20de%20todos%20los%20experimentos%20cruzados%20cross_v1.md)):
 - LRs = {5e-4, 1e-3, 5e-3}: cubren la zona "óptima" de los 3 optimizadores según el optimizer sweep anterior. Excluimos 1e-4 (sub-entrenado en SGD) y 1e-2 (diverge en Adam) — no querríamos heredar sus batches a celdas centrales.
 - Batches = {16, 64, 256}: span 16×, suficiente para detectar la regla de escalado lineal LR↔batch del curso.
 
@@ -84,10 +84,10 @@ Total cells: 3 LR × 3 batch × 3 opt = 27. Con 2 seeds = **54 jobs × 5 folds =
 Criterio: máxima val_acc media sobre 10 corridas.
 
 | optimizer | LR=5e-4 | 1e-3 | 5e-3 |
-|---|---|---|---|
-| sgd | 16 | 16 | 16 |
-| momentum | 16 | 16 | 16 |
-| adam | 16 | 64 | 256 |
+| --------- | ------- | ---- | ---- |
+| sgd       | 16      | 16   | 16   |
+| momentum  | 16      | 16   | 16   |
+| adam      | 16      | 64   | 256  |
 
 *Para LR fuera del set de etapa 1 (1e-4, 1e-2), el grid principal hereda el batch del LR más cercano dentro del mismo optimizer.*
 
