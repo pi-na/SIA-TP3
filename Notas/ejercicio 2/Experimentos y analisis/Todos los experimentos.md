@@ -4,6 +4,25 @@ Resumen de **TODO** lo que se hizo en esta sesión, con links a los análisis co
 
 ---
 
+## ✅ Resultado final del Ej2
+
+**Configuración óptima:** `arch_shallow` (784→128→10) + Adam (β1=0.9, β2=0.999, ε=1e-8) + **LR = 1e-3** + **batch_size = 64**.
+
+- val_acc ≈ 0.957 ± 0.005 (sobre 75 corridas en el [tiebreaker](../Experimentos/Arch_tiebreaker/analisis.md))
+- macro F1 ≈ 0.852
+- best_epoch ≈ 5 (ES patience=20)
+
+**Cómo se llegó a esa decisión** (cadena de evidencias):
+
+1. [Arch sweep](Arch/Arquitectura.md) → `shallow` (con caveat: Adam@1e-3 fijo).
+2. [Cross-experiment LR×Opt×Arch](../Experimentos/Cross_LR_Opt_Arch/analisis.md) → confirmó Adam y reveló que `wider` aparenta ganar levemente a `shallow` en LR=1e-3.
+3. [Pre-experimento LR×Batch×Opt](../Experimentos/Pre_LR_Batch_Opt/analisis.md) → batch óptimo para Adam@1e-3 = **64** (no 32).
+4. [Tiebreaker arch (15 seeds × k=5)](../Experimentos/Arch_tiebreaker/analisis.md) → **z=0.65, wider vs shallow indistinguibles** al 95%. Por Occam, ganador = `shallow`.
+
+**Correlaciones HP×HP descubiertas:** ver [`IMPORTANTE_CORRELACIONES.md`](IMPORTANTE_CORRELACIONES.md) (LR×Opt, LR×Batch, Arch×LR, Arch×Opt + correlaciones ocultas en código).
+
+---
+
 ## Línea de tiempo de experimentos
 
 ### 1. Análisis del Arch sweep previo (one-at-a-time)
@@ -27,15 +46,39 @@ Resumen de **TODO** lo que se hizo en esta sesión, con links a los análisis co
 
 ### 3. Audit del sistema de early stopping y `max_epochs` (parallel agents)
 
-**Qué se hizo:** dos agentes en paralelo auditaron, sobre datos reales de los sweeps anteriores:
+**Qué se hizo:** dos agentes en paralelo auditaron, **sobre datos reales** de los sweeps anteriores:
 - ¿Es `patience=20` el valor correcto para ES?
 - ¿Son los `max_epochs` propuestos suficientes para no cortar antes de convergencia?
 
-**Conclusiones:**
-- `patience=20` está bien como valor único. Subida transitoria máxima observada = 6 épocas → 20 da margen ~3×.
-- `SGD@1e-4` no converge en ningún presupuesto razonable (a 500 ep todavía baja). Capeado a 200 ep como referencia explícita "LR demasiado bajo".
-- `Adam@1e-2` diverge desde init (val_loss mínimo en epoch 0). Capeado a 30 ep, ES lo mata rápido.
-- Se ajustaron `max_epochs` celda a celda según convergencia empírica.
+#### Datos fuente del audit (todos disponibles en el repo)
+
+| Archivo | Contenido | Cómo se usó |
+|---|---|---|
+| `ejercicio2_experimentacion/analisis/optimizer/epoch_history.csv` | Momentum + Adam × 5 LR × 5 seeds × 5 folds × 70 ep, arch_base | Curvas para detectar `best_epoch` por (opt, LR), longitud de subidas transitorias, y |Δval_loss| cerca del mínimo |
+| `ejercicio2_experimentacion/analisis/lr/epoch_history.csv` | SGD × 5 LR × 4 archs × 5 seeds × 5 folds × 50 ep | Confirmación de que SGD@LR-bajo seguía bajando al final del presupuesto (best_epoch=49 en 4 de los 5 LRs) |
+| `ejercicio2_experimentacion/output/lr_segundo_intento/epoch_history.csv` | Datos rescatados del crash anterior: SGD@1e-4 con 5 seeds y SGD@5e-4 con 3 seeds, arch_shallow, **500 ep** sin ES | Única fuente directa para juzgar si SGD@1e-4 converge dado tiempo suficiente. Es lo que justifica capear esa celda |
+
+#### Evidencias específicas detrás de cada conclusión
+
+**`patience=20` está bien como valor único:**
+- En el optimizer sweep, la subida transitoria máxima observada en val_loss (épocas que sube antes de bajar a un mínimo mejor) fue de **6 épocas** (Momentum@5e-4, p99 ≤ 5.2 en todos los regímenes que llegan a un mínimo interior).
+- `patience=20` deja margen ~3× sobre el peor caso real → no corta espuriamente.
+- Para Adam@LR alto (curvas que sólo suben tras el mínimo en ep 0-3), `patience=20` "gasta" 20 épocas inútiles tras el mínimo. Más eficiente sería `patience=10` (max run recuperada=5, p99≤4.9), pero la simplicidad del valor único pesa más.
+
+**`SGD@1e-4` no converge en presupuesto razonable:**
+- En el LR sweep extendido a 500 épocas (`output/lr_segundo_intento/epoch_history.csv`), SGD@1e-4 con arch_shallow:
+  - `best_epoch` = 499 (la última época) → la curva sigue bajando al final del presupuesto.
+  - `slope` ≈ −1.4e-4 / época (mejora real, pero del orden del ruido `std ≈ 2.3e-4`).
+  - `ep99%` (época en la que se alcanza el 99% del descenso final) ≈ 368.
+- Extrapolación: para que esa celda toque un mínimo claro habría que correr ≥1000 ep. Costo no se justifica para un LR que la teoría ya identifica como "demasiado bajo para SGD vanilla".
+- **Decisión:** capear a 200 ep y reportar explícitamente como "no convergida en presupuesto" en cada análisis donde aparezca. Es coherente con la [clase de optimizadores](../../docs/clase_optimizadores/clase%20optimizadores.pdf) (SGD vanilla con LR muy bajo necesita muchísimas épocas).
+
+**`Adam@1e-2` diverge desde init:**
+- En el optimizer sweep, Adam@1e-2 tiene `best_epoch = 0` en la curva promedio → val_loss mínimo está en la **inicialización**, antes del primer paso. Cualquier paso de Adam con ese LR empeora val_loss.
+- Esto es coherente con el aprendizaje del optimizer sweep: Adam adapta internamente el tamaño de paso, así que un LR nominal alto rompe la trayectoria inmediatamente.
+- **Decisión:** capear a 30 ep. ES con patience=20 mata la celda rápido y los `best_weights` restaurados son los iniciales (sin entrenamiento). Reportar como "diverge desde init".
+
+**`max_epochs` celda a celda:** la tabla por (opt, LR) que terminó usándose en el cross-experiment está en [`PLAN_cross_v1.md`](../Experimentos/PLAN_cross_v1.md). Cada valor está justificado por el `best_epoch` observado en los datos fuente arriba + margen para que ES (patience=20) tenga lugar de actuar antes del techo.
 
 ### 4. Fix #4 — métricas finales consistentes entre celdas
 
