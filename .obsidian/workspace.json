@@ -22,6 +22,30 @@
             }
           },
           {
+            "id": "d63f2a80aae88d68",
+            "type": "leaf",
+            "state": {
+              "type": "image",
+              "state": {
+                "file": "Notas/ejercicio 2/visualizacion arquitecturas/arch_base.png"
+              },
+              "icon": "lucide-image",
+              "title": "arch_base"
+            }
+          },
+          {
+            "id": "bb024afdf0dd23f0",
+            "type": "leaf",
+            "state": {
+              "type": "image",
+              "state": {
+                "file": "Notas/ejercicio 2/Segunda tanda de experimentos/Cross_LR_Opt_Arch/stage2_convergence_shallow.png"
+              },
+              "icon": "lucide-image",
+              "title": "stage2_convergence_shallow"
+            }
+          },
+          {
             "id": "9f7cc60c21e1379a",
             "type": "leaf",
             "state": {
@@ -90,8 +114,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "right": {
     "id": "ea444375a53806a8",
@@ -198,14 +221,15 @@
   },
   "active": "a3900b7249e60765",
   "lastOpenFiles": [
-    "Notas/ejercicio 2/Segunda tanda de experimentos/Cross_LR_Opt_Arch/stage2_val_acc_vs_lr_per_opt.png",
-    "Notas/ejercicio 2/Segunda tanda de experimentos/Cross_LR_Opt_Arch/analisis.md",
     "Notas/ejercicio 2/visualizacion arquitecturas/Arquitecturas.md",
+    "Notas/ejercicio 2/visualizacion arquitecturas/arch_base.png",
+    "Notas/ejercicio 2/Segunda tanda de experimentos/Cross_LR_Opt_Arch/analisis.md",
+    "Notas/ejercicio 2/Segunda tanda de experimentos/Cross_LR_Opt_Arch/stage2_convergence_shallow.png",
+    "Notas/ejercicio 2/Segunda tanda de experimentos/Cross_LR_Opt_Arch/stage2_val_acc_vs_lr_per_opt.png",
     "Notas/ejercicio 2/visualizacion arquitecturas/parametros_por_arch.png",
     "Notas/ejercicio 2/visualizacion arquitecturas/comparacion_archs.png",
     "Notas/ejercicio 2/visualizacion arquitecturas/arch_deeper.png",
     "Notas/ejercicio 2/visualizacion arquitecturas/arch_wider.png",
-    "Notas/ejercicio 2/visualizacion arquitecturas/arch_base.png",
     "Notas/ejercicio 2/visualizacion arquitecturas/arch_shallow.png",
     "Notas/ejercicio 2/visualizacion arquitecturas/make_arch_diagrams.py",
     "Notas/ejercicio 2/visualizacion arquitecturas",
@@ -230,8 +254,6 @@
     "ejercicio2_experimentacion/analisis/lr/convergence_train.png",
     "ejercicio2_experimentacion/README.md",
     "ejercicio2_experimentacion/analisis/optimizer/convergence_lr5e-4.png",
-    "ejercicio2_experimentacion/analisis/optimizer/convergence_lr5e-3.png",
-    "ejercicio2_experimentacion/analisis/optimizer/convergence_lr1e-4.png",
     "analisis_multiseed.md",
     "Notas/ejercicio 1/Ejercicio 1 - Reintento.md",
     "Notas/ejercicio 2/Experimentos y analisis/Untitled.md",
