@@ -1,6 +1,23 @@
 # Arch tiebreaker — alta resolución
 
-**Objetivo:** resolver el empate estadístico entre `arch_wider` y `arch_shallow` que apareció en `cross_v1` stage 2 (diferencia 0.0011 con SEM ~0.001).
+## Motivación
+
+En el cross-experiment [`cross_v1` stage 2](../Cross_LR_Opt_Arch/analisis.md), las 4 arquitecturas (`shallow`, `base`, `wider`, `deeper`) se probaron contra 5 LRs × 3 optimizers × 3 seeds × k=5 folds. Las dos cells del top fueron:
+
+| # | arch | opt | LR | val_acc (3 seeds × 5 folds = 15 corridas) |
+|---|---|---|---|---|
+| 1 | **arch_wider**   | adam | 1e-3 | 0.9583 ± 0.0036 |
+| 2 | **arch_shallow** | adam | 1e-3 | 0.9572 ± 0.0041 |
+
+**Problema:** la diferencia entre las dos top es de **0.0011**, comparable al SEM con 15 corridas (~0.0010). Con esa muestra **no podemos distinguir si `wider` realmente le gana a `shallow` o es ruido de muestreo**.
+
+**Por qué importa la decisión:** el [Arch sweep one-at-a-time](../../Experimentos%20y%20analisis/Arch/Arquitectura.md) original había concluido que `shallow` es óptima por Occam. El cross-experiment puso esa conclusión en duda al mostrar que `wider` la supera (al menos numéricamente) en el LR óptimo de Adam. Si la diferencia es real, la "configuración óptima del Ej2" deja de ser shallow + Adam@1e-3 y pasa a ser **wider** + Adam@1e-3. Si no es real, shallow gana por simplicidad. Esto cambia la conclusión final del trabajo.
+
+**Estrategia:** en vez de relanzar todo el cross-experiment con más seeds (caro), **ampliamos la muestra sólo en las 2 cells del top** (más sus equivalentes con LR=5e-4, que también estaban entre las top-4). Con **12 seeds nuevos** sumados a los 3 de cross_v1 → 15 seeds × k=5 = **75 corridas/cell**, SEM ≈ 0.0006. Eso permite distinguir diferencias ≥ 0.0012 al 95% — más fino que la diff observada.
+
+**Test estadístico planeado:** z-score de la diferencia (wider − shallow) en LR=1e-3 con SEM(diff) = √(SEM_w² + SEM_s²). Si |z| > 1.96 → distinguibles al 95%. Si no → empate, decide Occam (shallow).
+
+**Costo del experimento:** 4 archs × 2 LRs × 12 seeds × k=5 = 480 corridas, ~60 min wall-clock con 8 workers — barato comparado al cross_v1 completo (4h44min para 1245 corridas).
 
 ## Configuración
 
