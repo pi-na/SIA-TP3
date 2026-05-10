@@ -128,14 +128,24 @@ Antes de arreglar el bug, las métricas se computaban sobre los pesos del **últ
 
 ## 6. Cómo cambia esto las decisiones del Ej2
 
-| Decisión previa | Fundamento previo | Estado tras cross-experiment |
+| Decisión previa | Fundamento previo | Estado tras cross-experiment + tiebreaker |
 |---|---|---|
-| arch = shallow | Arch sweep con Adam@1e-3 fijo | **Empate con wider en Adam@1e-3.** Por Occam, shallow se sostiene; por max abs, wider gana. Tiebreaker en curso. |
+| arch = shallow | Arch sweep con Adam@1e-3 fijo | **Sostenido por Occam.** El [tiebreaker con 15 seeds × k=5](../Experimentos/Arch_tiebreaker/analisis.md) mostró que `wider` y `shallow` son **estadísticamente indistinguibles** (z=0.65, diff=0.0005). Misma performance, mitad de parámetros → shallow gana. |
 | optimizer = Adam | Optimizer sweep con arch_base | **Sostenido**. Top-10 de cross_v1 son todos Adam. |
 | LR = 1e-3 | Optimizer sweep | **Sostenido para Adam.** Para SGD/Momentum sería 1e-2. |
 | batch = 32 | (default, nunca medido) | **Sub-óptimo**. `best_batch` por (opt, LR) varía: Adam@1e-3=64, Adam@5e-3=256. |
 
-**Configuración actualizada propuesta:** `arch_shallow` (o `arch_wider` según resolución del tiebreaker) + Adam + LR=1e-3 + **batch=64** (no 32).
+**Configuración final del Ej2:** **`arch_shallow` + Adam + LR=1e-3 + batch=64**.
+
+### Detalle del tiebreaker
+
+El cross_v1 con 3 seeds dejó arch_wider (0.9583) levemente arriba de arch_shallow (0.9572) — **diff=0.0011 con SEM ~0.001**, indistinguible. El [tiebreaker dedicado](../Experimentos/Arch_tiebreaker/analisis.md) amplió la muestra a **15 seeds × k=5 = 75 corridas/cell** (3 seeds del cross_v1 + 12 seeds nuevos). Resultado:
+
+- arch_wider:   0.9581 ± 0.0049 (SEM=0.0006)
+- arch_shallow: 0.9576 ± 0.0046 (SEM=0.0006)
+- **diff = +0.0005, SEM(diff) = 0.0007, z = 0.65** → no distinguibles al 95% (necesitábamos |z|>1.96).
+
+**Lección:** la diferencia de 0.0011 que vimos con 3 seeds era **ruido de muestreo**. Al ampliar a 15 seeds, la diff bajó a 0.0005 — más cerca de 0, consistente con "no hay diferencia real entre las dos arquitecturas en este problema".
 
 ---
 

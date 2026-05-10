@@ -1,5 +1,21 @@
 # Cross-experimento: LR × Optimizer × Arquitectura
-**Objetivo:** validar la elección de hiperparámetros del Ej2 testeando el supuesto de independencia entre los factores LR, optimizer y arquitectura, y reportar la mejor configuración global con interacciones explícitas.
+
+## Motivación
+
+Las decisiones del Ej2 hasta este punto se tomaron one-at-a-time, cada una **condicionada al valor fijo de otro factor**:
+
+- El [Arch sweep](../../Experimentos%20y%20analisis/Arch/Arquitectura.md) se hizo con `Adam@1e-3` fijo → no sabíamos si `arch_shallow` ganaba también con SGD/Momentum.
+- El [Optimizer sweep](../../Experimentos%20y%20analisis/Optimizer/analisis_optimizer.md) se hizo con `arch_base` fijo → la decisión "Adam@1e-3" se tomó sobre la arquitectura que después descartamos.
+- El [LR sweep](../../Experimentos%20y%20analisis/LR/analisis_lr.md) se hizo con SGD only y arch_base, con 50 ep insuficientes para LRs bajos.
+- `batch_size=32` nunca se exploró: todo se hizo con ese default.
+
+**El problema:** si dos hiperparámetros interactúan (regla teórica del curso para LR×Batch, sospechado entre Arch×LR y Arch×Opt), la conclusión del sweep one-at-a-time **depende del valor que se eligió como fijo**. No es un resultado robusto.
+
+**Objetivo:** validar la elección de hiperparámetros **testeando el supuesto de independencia** entre LR, optimizer y arquitectura simultáneamente, y reportar la mejor configuración global junto con las interacciones explícitas.
+
+**Diseño elegido:** grid 3D **LR×Opt×Arch** con `batch_size` heredado de un pre-experimento dedicado ([Pre_LR_Batch_Opt](../Pre_LR_Batch_Opt/analisis.md)) + estrella batch alrededor del centro. Plan completo en [`PLAN_cross_v1.md`](../PLAN_cross_v1.md).
+
+**Por qué un grid 3D y no 2D:** las "slices 2D" (ej. Arch×Opt con LR fijo) **mienten cuando los factores no medidos están correlacionados** con los medidos — al fijar LR=1e-3 (óptimo de Adam), SGD entraría con LR sub-óptimo y la slice concluiría falsamente "Adam le gana a SGD en todas las archs". Discusión metodológica completa en [`IMPORTANTE_CORRELACIONES.md`](../../Experimentos%20y%20analisis/IMPORTANTE_CORRELACIONES.md).
 
 ## Configuración completa
 

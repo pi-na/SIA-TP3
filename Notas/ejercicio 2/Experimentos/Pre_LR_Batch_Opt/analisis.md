@@ -1,5 +1,25 @@
 # Pre-experimento: LR × Batch × Optimizer
-**Objetivo:** decidir el `batch_size` óptimo por (optimizer, learning rate) para usar como hiperparámetro heredado en el grid principal del Cross_LR_Opt_Arch.
+
+## Motivación
+
+Todos los sweeps anteriores del Ej2 ([Arch](../../Experimentos%20y%20analisis/Arch/Arquitectura.md), [LR](../../Experimentos%20y%20analisis/LR/analisis_lr.md), [Optimizer](../../Experimentos%20y%20analisis/Optimizer/analisis_optimizer.md)) usaron `batch_size=32` por default, sin justificarlo y sin medir si era óptimo. La regla teórica de la cátedra (clase de optimizadores) predice que **el LR óptimo escala con el batch_size** ("doblar el batch ≈ doblar el LR"), así que dejar batch fijo en 32 mientras barremos LR significa que para algunas combinaciones (opt, LR) estábamos midiendo configuraciones lejos del óptimo real.
+
+**El problema concreto:** si en el [cross-experiment principal](../Cross_LR_Opt_Arch/analisis.md) corremos `Adam@5e-3` con batch=32, podríamos concluir falsamente que "Adam@5e-3 funciona peor que Adam@1e-3" cuando en realidad el problema es batch demasiado chico para ese LR.
+
+**Dos opciones para resolverlo:**
+1. **Meter `batch_size` como cuarto factor en el cross-experiment** → grid 4D (LR×Opt×Arch×Batch). Multiplica el costo por ~5 (5 valores de batch). Inviable en el budget.
+2. **Decidir `batch_size` óptimo por (opt, LR) en un pre-experimento chico** y heredarlo al grid principal. Costo marginal: ~1h vs los ~5h del grid principal.
+
+**Decisión:** opción 2 — este pre-experimento. **Objetivo:** decidir el `batch_size` óptimo por (optimizer, learning rate) para usar como hiperparámetro heredado en el grid principal del [Cross_LR_Opt_Arch](../Cross_LR_Opt_Arch/analisis.md).
+
+**Diseño:** grid 3D pequeño 3 LR × 3 batch × 3 opt sobre `arch_shallow` (la "óptima" del Arch sweep, asumida estable como punto de anclaje), con 2 seeds × 5 folds = 10 corridas/cell. SEM ≈ 0.0019 — suficiente para decidir batch (no para reportar diferencias finas, eso lo hace el grid principal).
+
+**Selección de niveles** (justificación en el [PLAN](../PLAN_cross_v1.md)):
+- LRs = {5e-4, 1e-3, 5e-3}: cubren la zona "óptima" de los 3 optimizadores según el optimizer sweep anterior. Excluimos 1e-4 (sub-entrenado en SGD) y 1e-2 (diverge en Adam) — no querríamos heredar sus batches a celdas centrales.
+- Batches = {16, 64, 256}: span 16×, suficiente para detectar la regla de escalado lineal LR↔batch del curso.
+
+**Caveat asumido:** el batch óptimo no varía bruscamente entre arquitecturas. Si lo hiciera, esta herencia sería inválida. Se decidió aceptar el riesgo a cambio del ahorro de cómputo, y declararlo como limitación.
+
 ## Configuración completa
 Parámetros **explícitos** de la corrida (todos los que no se varían son fijos):
 | Parámetro | Valor |
