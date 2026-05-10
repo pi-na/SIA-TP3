@@ -1,0 +1,25 @@
+{
+  "model_name": "pack_c_v2_l2",
+  "dataset": {
+    "csv_path": "data and documentation/digits.csv",
+    "feature_col": "image",
+    "target_col": "label",
+    "num_classes": 10,
+    "extra_csv_paths": ["data and documentation/more_digits.csv"]
+  },
+  "split": {"k_folds": 5, "stratify": true, "val_fraction_if_k1": 0.2, "random_seed": 42},
+  "preprocessing": {"normalization": "zscore", "one_hot_targets": true},
+  "architecture": {
+    "layer_sizes": [784, 128, 10],
+    "activations": ["relu", "softmax"],
+    "initializer": "auto"
+  },
+  "training": {
+    "loss": "cross_entropy",
+    "optimizer": {"name": "adam", "lr": 0.001, "beta1": 0.9, "beta2": 0.999, "eps": 1e-8},
+    "epochs": 40,
+    "batch_size": 64,
+    "early_stopping_patience": 20
+  },
+  "regularization": {"l2": 0.0001, "dropout": 0.0, "lr_schedule": null, "augmentation": null}
+}
