@@ -163,14 +163,21 @@ def run_fold(
     y_val_for_metrics, val_pred_for_metrics = _normalize_labels(y_val_raw, val_pred)
     final = multiclass_metrics(y_val_for_metrics, val_pred_for_metrics, num_classes)
 
+    # Después del fix #4: mlp.fit() siempre restaura best_weights, así que
+    # las métricas computadas con mlp.predict() arriba son "at best epoch".
+    # train_loss/val_loss tomadas de history_compact[best_epoch] (no [-1])
+    # para mantener consistencia entre todas las celdas del sweep.
+    best_epoch_idx = int(np.argmin([h["val_loss"] for h in history_compact]))
     summary = {
         "fold": fold_idx,
         "n_train": len(X_train),
         "n_val": len(X_val),
-        "total_epochs": len(history_compact),
-        "best_epoch": int(np.argmin([h["val_loss"] for h in history_compact])),
-        "train_loss_final": history_compact[-1]["train_loss"],
-        "val_loss_final": history_compact[-1]["val_loss"],
+        "total_epochs_run": len(history_compact),
+        "best_epoch": best_epoch_idx,
+        "train_loss_final": history_compact[best_epoch_idx]["train_loss"],
+        "val_loss_final": history_compact[best_epoch_idx]["val_loss"],
+        "train_loss_last": history_compact[-1]["train_loss"],
+        "val_loss_last": history_compact[-1]["val_loss"],
         "train_acc_final": train_acc_final,
         "val_acc_final": final["accuracy"],
         "macro_precision": final["macro_precision"],

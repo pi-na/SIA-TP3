@@ -196,19 +196,26 @@ class MLP:
                 if every > 0 and (epoch + 1) % every == 0 and hasattr(self.optimizer, "lr"):
                     self.optimizer.lr = self.optimizer.lr * decay
 
-            # Early stopping
-            if early_stopping_patience is not None:
-                if val_loss < best_val_loss:
-                    best_val_loss = val_loss
-                    epochs_no_improvement = 0
-                    best_weights = [W.copy() for W in self.weights]
-                else:
-                    epochs_no_improvement += 1
-                    if epochs_no_improvement >= early_stopping_patience:
-                        if best_weights is not None:
-                            self.weights = best_weights
-                        break
+            # Track best weights ALWAYS (independiente de early stopping)
+            # — necesario para que las métricas finales en train.py se evalúen
+            # siempre sobre best_epoch, no last_epoch (issue #4 del audit).
+            if val_loss < best_val_loss:
+                best_val_loss = val_loss
+                epochs_no_improvement = 0
+                best_weights = [W.copy() for W in self.weights]
+            else:
+                epochs_no_improvement += 1
 
+            # Early stopping (si está activo)
+            if early_stopping_patience is not None:
+                if epochs_no_improvement >= early_stopping_patience:
+                    break
+
+        # Restaurar best_weights SIEMPRE al cerrar fit, así las métricas
+        # post-fit son siempre "at best epoch" — comparables entre celdas
+        # con y sin ES disparado.
+        if best_weights is not None:
+            self.weights = best_weights
         return history
 
     def predict_proba(self, X: np.ndarray) -> np.ndarray:

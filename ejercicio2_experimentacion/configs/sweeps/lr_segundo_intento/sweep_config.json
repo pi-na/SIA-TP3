@@ -1,0 +1,8 @@
+{
+  "seeds": [42, 7, 13, 21, 99],
+  "output_dir": "ejercicio2_experimentacion/output/lr_segundo_intento",
+  "learning_rates": [0.0001, 0.0005, 0.001, 0.005, 0.01],
+  "arch_configs": [
+    "arch_shallow.json"
+  ]
+}
