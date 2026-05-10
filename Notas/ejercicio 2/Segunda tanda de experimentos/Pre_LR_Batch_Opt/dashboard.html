@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Pre-experimento: LR × Batch × Optimizer</title>
+<script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f8f9fa; color: #222; }
+  header { background: #1a1a2e; color: white; padding: 24px 32px; }
+  header h1 { font-size: 1.4rem; font-weight: 600; }
+  header p  { font-size: 0.83rem; color: #aab; margin-top: 6px; }
+  .container { max-width: 1300px; margin: 0 auto; padding: 24px 32px; }
+  .card { background: white; border-radius: 10px; padding: 22px; margin-bottom: 26px; box-shadow: 0 1px 4px rgba(0,0,0,.08); }
+  .card h2 { font-size: 1rem; font-weight: 600; margin-bottom: 10px; color: #1a1a2e; }
+  .conclusion { background: #eef4ff; border-left: 4px solid #3b6fd4; border-radius: 0 8px 8px 0; padding: 11px 15px; margin-top: 14px; font-size: 0.87rem; line-height: 1.65; color: #334; }
+  .controls { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; margin-bottom: 12px; }
+  .controls label { font-size: 0.84rem; font-weight: 500; color: #555; }
+  select { border: 1px solid #ccc; border-radius: 6px; padding: 5px 10px; font-size: 0.84rem; background: white; cursor: pointer; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+  @media (max-width: 860px) { .grid2 { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Pre-experimento: LR × Batch × Optimizer</h1>
+  <p>arch_shallow &nbsp;·&nbsp; SGD / Momentum / Adam &nbsp;·&nbsp; LR ∈ {5e-4, 1e-3, 5e-3} &nbsp;·&nbsp; Batch ∈ {16, 64, 256} &nbsp;·&nbsp; 10 corridas por celda (2 seeds × 5 folds)</p>
+</header>
+
+<div class="container">
+
+<!-- ══════════════════════════════════════════════ CHART 1 -->
+<div class="card">
+  <h2>① Métrica vs batch_size por optimizer y LR</h2>
+  <div class="controls">
+    <label>Métrica:</label>
+    <select id="c1-metric">
+      <option value="val_acc">Accuracy val</option>
+      <option value="macro_f1">F1 macro</option>
+      <option value="val_loss">CE val</option>
+    </select>
+  </div>
+  <div id="chart1"></div>
+  <div class="conclusion">
+    <strong>Conclusión:</strong> Para Adam con lr=5e-3, aumentar el batch de 16 a 256 mejora drásticamente la CE val (0.550→0.191) y la val_acc (0.934→0.954) — el batch chico no puede sostener ese LR.
+    Para Adam con lr=5e-4 y 1e-3, el efecto del batch es menor y en sentido opuesto: batch pequeño es levemente mejor porque el LR ya es adecuado para pasos chicos.
+    SGD y Momentum son mucho menos sensibles al batch en toda su zona de LR.
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ CHART 2 -->
+<div class="grid2">
+
+<div class="card">
+  <h2>② Heatmap val_acc — LR × batch por optimizer</h2>
+  <div class="controls">
+    <label>Optimizer:</label>
+    <select id="c2-opt">
+      <option value="sgd">SGD</option>
+      <option value="momentum">Momentum</option>
+      <option value="adam" selected>Adam</option>
+    </select>
+  </div>
+  <div id="chart2"></div>
+  <div class="conclusion">
+    <strong>Conclusión:</strong> Con Adam el heatmap muestra que la celda lr=5e-3 × batch=16 es la peor (celda fría), mientras lr=5e-4 × batch=16 o lr=1e-3 × batch=64 son las mejores.
+    Con SGD y Momentum la variación entre celdas es mucho menor — paleta casi uniforme.
+  </div>
+</div>
+
+<div class="card">
+  <h2>③ Heatmap CE val — LR × batch por optimizer</h2>
+  <div class="controls">
+    <label>Optimizer:</label>
+    <select id="c3-opt">
+      <option value="sgd">SGD</option>
+      <option value="momentum">Momentum</option>
+      <option value="adam" selected>Adam</option>
+    </select>
+  </div>
+  <div id="chart3"></div>
+  <div class="conclusion">
+    <strong>Conclusión:</strong> La CE val revela el problema de Adam@5e-3×batch=16 más claramente que la val_acc (0.550 vs valores ~0.19–0.24 del resto). La val_acc "oculta" parte del problema porque el modelo puede acertar clases aunque sus probabilidades estén mal calibradas.
+  </div>
+</div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════ CHART 4 -->
+<div class="card">
+  <h2>④ val_acc vs CE val — todas las configuraciones</h2>
+  <div class="controls">
+    <label>Colorear por:</label>
+    <select id="c4-color">
+      <option value="opt">Optimizer</option>
+      <option value="lr">LR</option>
+      <option value="batch">Batch size</option>
+    </select>
+    <label>Filtrar optimizer:</label>
+    <select id="c4-opt">
+      <option value="all">Todos</option>
+      <option value="sgd">SGD</option>
+      <option value="momentum">Momentum</option>
+      <option value="adam">Adam</option>
+    </select>
+  </div>
+  <div id="chart4"></div>
+  <div class="conclusion">
+    <strong>Conclusión:</strong> Hay una correlación negativa entre CE val y val_acc — menor CE implica mayor val_acc, pero no perfectamente.
+    Los puntos de Adam se concentran en la esquina inferior derecha (baja CE, alta val_acc). La excepción es Adam@5e-3×batch=16, que queda aislado con CE=0.550 y val_acc=0.934.
+    SGD y Momentum se agrupan con CE ~0.19–0.35 y val_acc ~0.90–0.95.
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ CHART 5 -->
+<div class="card">
+  <h2>⑤ Ranking de todas las configuraciones</h2>
+  <div class="controls">
+    <label>Ordenar por:</label>
+    <select id="c5-metric">
+      <option value="val_acc">val_acc</option>
+      <option value="macro_f1">F1 macro</option>
+      <option value="val_loss">CE val (menor = mejor)</option>
+    </select>
+    <label>Colorear por:</label>
+    <select id="c5-color">
+      <option value="opt">Optimizer</option>
+      <option value="batch">Batch</option>
+    </select>
+  </div>
+  <div id="chart5"></div>
+  <div class="conclusion">
+    <strong>Conclusión:</strong> Adam domina el top del ranking. La peor configuración (Adam@5e-3×batch=16) queda en el fondo a pesar de ser Adam — confirma que el optimizador solo no alcanza; la relación LR×batch también importa.
+    SGD y Momentum son consistentes en la zona media del ranking, independientemente del LR o batch.
+  </div>
+</div>
+
+</div>
+
+<script>
+const RAW = [
+  {opt:"sgd",      lr:"5e-4", batch:16,  val_acc:0.9481, val_acc_std:0.0052, macro_f1:0.8416, macro_f1_std:0.0089, val_loss:0.1962},
+  {opt:"sgd",      lr:"5e-4", batch:64,  val_acc:0.9355, val_acc_std:0.0039, macro_f1:0.8283, macro_f1_std:0.0070, val_loss:0.2371},
+  {opt:"sgd",      lr:"5e-4", batch:256, val_acc:0.9025, val_acc_std:0.0032, macro_f1:0.7800, macro_f1_std:0.0076, val_loss:0.3533},
+  {opt:"sgd",      lr:"1e-3", batch:16,  val_acc:0.9495, val_acc_std:0.0057, macro_f1:0.8433, macro_f1_std:0.0095, val_loss:0.1946},
+  {opt:"sgd",      lr:"1e-3", batch:64,  val_acc:0.9394, val_acc_std:0.0044, macro_f1:0.8327, macro_f1_std:0.0084, val_loss:0.2237},
+  {opt:"sgd",      lr:"1e-3", batch:256, val_acc:0.9122, val_acc_std:0.0040, macro_f1:0.7961, macro_f1_std:0.0071, val_loss:0.3189},
+  {opt:"sgd",      lr:"5e-3", batch:16,  val_acc:0.9498, val_acc_std:0.0060, macro_f1:0.8435, macro_f1_std:0.0096, val_loss:0.1920},
+  {opt:"sgd",      lr:"5e-3", batch:64,  val_acc:0.9473, val_acc_std:0.0056, macro_f1:0.8410, macro_f1_std:0.0093, val_loss:0.1980},
+  {opt:"sgd",      lr:"5e-3", batch:256, val_acc:0.9322, val_acc_std:0.0045, macro_f1:0.8238, macro_f1_std:0.0078, val_loss:0.2469},
+  {opt:"momentum", lr:"5e-4", batch:16,  val_acc:0.9498, val_acc_std:0.0058, macro_f1:0.8435, macro_f1_std:0.0093, val_loss:0.1923},
+  {opt:"momentum", lr:"5e-4", batch:64,  val_acc:0.9491, val_acc_std:0.0057, macro_f1:0.8430, macro_f1_std:0.0094, val_loss:0.1947},
+  {opt:"momentum", lr:"5e-4", batch:256, val_acc:0.9387, val_acc_std:0.0046, macro_f1:0.8319, macro_f1_std:0.0083, val_loss:0.2267},
+  {opt:"momentum", lr:"1e-3", batch:16,  val_acc:0.9503, val_acc_std:0.0060, macro_f1:0.8441, macro_f1_std:0.0096, val_loss:0.1906},
+  {opt:"momentum", lr:"1e-3", batch:64,  val_acc:0.9490, val_acc_std:0.0056, macro_f1:0.8428, macro_f1_std:0.0093, val_loss:0.1939},
+  {opt:"momentum", lr:"1e-3", batch:256, val_acc:0.9393, val_acc_std:0.0044, macro_f1:0.8325, macro_f1_std:0.0085, val_loss:0.2240},
+  {opt:"momentum", lr:"5e-3", batch:16,  val_acc:0.9533, val_acc_std:0.0059, macro_f1:0.8476, macro_f1_std:0.0091, val_loss:0.1971},
+  {opt:"momentum", lr:"5e-3", batch:64,  val_acc:0.9507, val_acc_std:0.0053, macro_f1:0.8447, macro_f1_std:0.0085, val_loss:0.1901},
+  {opt:"momentum", lr:"5e-3", batch:256, val_acc:0.9473, val_acc_std:0.0055, macro_f1:0.8410, macro_f1_std:0.0088, val_loss:0.1971},
+  {opt:"adam",     lr:"5e-4", batch:16,  val_acc:0.9566, val_acc_std:0.0050, macro_f1:0.8517, macro_f1_std:0.0083, val_loss:0.1693},
+  {opt:"adam",     lr:"5e-4", batch:64,  val_acc:0.9551, val_acc_std:0.0052, macro_f1:0.8496, macro_f1_std:0.0079, val_loss:0.1704},
+  {opt:"adam",     lr:"5e-4", batch:256, val_acc:0.9536, val_acc_std:0.0055, macro_f1:0.8480, macro_f1_std:0.0089, val_loss:0.1761},
+  {opt:"adam",     lr:"1e-3", batch:16,  val_acc:0.9541, val_acc_std:0.0043, macro_f1:0.8474, macro_f1_std:0.0074, val_loss:0.1792},
+  {opt:"adam",     lr:"1e-3", batch:64,  val_acc:0.9563, val_acc_std:0.0042, macro_f1:0.8506, macro_f1_std:0.0074, val_loss:0.1697},
+  {opt:"adam",     lr:"1e-3", batch:256, val_acc:0.9538, val_acc_std:0.0049, macro_f1:0.8478, macro_f1_std:0.0084, val_loss:0.1746},
+  {opt:"adam",     lr:"5e-3", batch:16,  val_acc:0.9344, val_acc_std:0.0090, macro_f1:0.8310, macro_f1_std:0.0108, val_loss:0.5502},
+  {opt:"adam",     lr:"5e-3", batch:64,  val_acc:0.9431, val_acc_std:0.0099, macro_f1:0.8369, macro_f1_std:0.0110, val_loss:0.2578},
+  {opt:"adam",     lr:"5e-3", batch:256, val_acc:0.9541, val_acc_std:0.0053, macro_f1:0.8490, macro_f1_std:0.0082, val_loss:0.1909},
+];
+
+const OPT_COLORS  = {sgd:"#3b7dd8", momentum:"#e07b20", adam:"#28a745"};
+const OPT_NAMES   = {sgd:"SGD", momentum:"Momentum", adam:"Adam"};
+const LR_COLORS   = {"5e-4":"#6c8ebf", "1e-3":"#d6b656", "5e-3":"#ae4132"};
+const BATCH_COLORS= {16:"#9b59b6", 64:"#1abc9c", 256:"#e74c3c"};
+const BATCHES = [16, 64, 256];
+const LRS = ["5e-4","1e-3","5e-3"];
+const OPTS = ["sgd","momentum","adam"];
+
+function metricLabel(m){ return {val_acc:"Accuracy val", macro_f1:"F1 macro", val_loss:"CE val"}[m]||m; }
+function stdKey(m){ return m==="val_acc"?"val_acc_std":m==="macro_f1"?"macro_f1_std":null; }
+
+// ══════════════════════════════════════════════
+// CHART 1: métrica vs batch, 3 subplots (uno por opt)
+// ══════════════════════════════════════════════
+function drawChart1(){
+  const metric = document.getElementById("c1-metric").value;
+  const sk = stdKey(metric);
+  const traces = [];
+  const isLoss = metric==="val_loss";
+
+  OPTS.forEach((opt,oi)=>{
+    LRS.forEach(lr=>{
+      const sub = RAW.filter(d=>d.opt===opt&&d.lr===lr).sort((a,b)=>a.batch-b.batch);
+      traces.push({
+        x: sub.map(d=>d.batch), y: sub.map(d=>d[metric]),
+        error_y: sk ? {type:"data",array:sub.map(d=>d[sk]),visible:true,thickness:1.5,width:4} : undefined,
+        mode:"lines+markers", name:`lr=${lr}`,
+        line:{color:LR_COLORS[lr],width:2},
+        marker:{size:8},
+        xaxis: oi===0?"x":oi===1?"x2":"x3",
+        yaxis: oi===0?"y":oi===1?"y2":"y3",
+        legendgroup: lr,
+        showlegend: oi===0,
+        hovertemplate:`<b>lr=${lr}</b><br>batch: %{x}<br>${metricLabel(metric)}: %{y:.4f}<extra></extra>`,
+      });
+    });
+  });
+
+  const layout = {
+    height:380,
+    grid:{rows:1,columns:3,pattern:"independent"},
+    annotations: OPTS.map((opt,i)=>({
+      text: OPT_NAMES[opt], showarrow:false, font:{size:13,color:OPT_COLORS[opt],weight:700},
+      xref:`x${i===0?"":i+1} domain`, yref:`y${i===0?"":i+1} domain`, x:0.5, y:1.1,
+    })),
+    legend:{orientation:"h",y:-0.18},
+    margin:{t:55,b:55,l:55,r:10},
+    plot_bgcolor:"#fafafa",
+  };
+  OPTS.forEach((_,i)=>{
+    const ax = i===0?"":i+1;
+    layout[`xaxis${ax}`] = {title:"Batch size", type:"log", tickvals:[16,64,256], ticktext:["16","64","256"]};
+    layout[`yaxis${ax}`] = {title: i===0 ? metricLabel(metric) : ""};
+  });
+  Plotly.react("chart1", traces, layout, {responsive:true,displayModeBar:false});
+}
+document.getElementById("c1-metric").addEventListener("change",drawChart1);
+drawChart1();
+
+// ══════════════════════════════════════════════
+// HEATMAP helper
+// ══════════════════════════════════════════════
+function drawHeatmap(divId, optSel, metric){
+  const opt = document.getElementById(optSel).value;
+  const isLoss = metric==="val_loss";
+  const z = LRS.map(lr=> BATCHES.map(b=>{
+    const row = RAW.find(d=>d.opt===opt&&d.lr===lr&&d.batch===b);
+    return row ? row[metric] : null;
+  }));
+  const text = z.map(row=>row.map(v=>v!=null?v.toFixed(4):""));
+  Plotly.react(divId,[{
+    type:"heatmap", z, x:BATCHES.map(String), y:LRS,
+    colorscale: isLoss ? "RdYlGn_r":"RdYlGn",
+    showscale:true,
+    text, texttemplate:"%{text}",
+    hovertemplate:"LR: %{y}<br>Batch: %{x}<br>"+metricLabel(metric)+": %{z:.4f}<extra></extra>",
+    colorbar:{thickness:12,len:0.85},
+  }],{
+    height:260, margin:{t:15,b:45,l:55,r:20},
+    xaxis:{title:"Batch size"}, yaxis:{title:"LR"},
+    plot_bgcolor:"#fafafa",
+  },{responsive:true,displayModeBar:false});
+}
+
+function drawChart2(){ drawHeatmap("chart2","c2-opt","val_acc"); }
+function drawChart3(){ drawHeatmap("chart3","c3-opt","val_loss"); }
+document.getElementById("c2-opt").addEventListener("change",drawChart2);
+document.getElementById("c3-opt").addEventListener("change",drawChart3);
+drawChart2(); drawChart3();
+
+// ══════════════════════════════════════════════
+// CHART 4: scatter val_acc vs CE val
+// ══════════════════════════════════════════════
+function drawChart4(){
+  const colorBy = document.getElementById("c4-color").value;
+  const optFilter = document.getElementById("c4-opt").value;
+  const sub = optFilter==="all" ? RAW : RAW.filter(d=>d.opt===optFilter);
+
+  const groups = {};
+  sub.forEach(d=>{
+    const key = colorBy==="opt"?d.opt : colorBy==="lr"?d.lr : String(d.batch);
+    if(!groups[key]) groups[key]=[];
+    groups[key].push(d);
+  });
+
+  const colorMap = colorBy==="opt"?OPT_COLORS : colorBy==="lr"?LR_COLORS : BATCH_COLORS;
+  const nameMap  = colorBy==="opt"?OPT_NAMES : {};
+
+  const traces = Object.entries(groups).map(([key,rows])=>({
+    x: rows.map(d=>d.val_loss), y: rows.map(d=>d.val_acc),
+    error_y:{type:"data",array:rows.map(d=>d.val_acc_std),visible:true,thickness:1,width:3},
+    mode:"markers", type:"scatter",
+    name: nameMap[key]||key,
+    marker:{color:colorMap[key]||"#888",size:10,opacity:0.85,line:{color:"white",width:1}},
+    text: rows.map(d=>`${OPT_NAMES[d.opt]} | lr=${d.lr} | batch=${d.batch}`),
+    hovertemplate:"<b>%{text}</b><br>CE val: %{x:.4f}<br>val_acc: %{y:.4f}<extra></extra>",
+  }));
+
+  Plotly.react("chart4",traces,{
+    height:380, margin:{t:15,b:55,l:65,r:15},
+    xaxis:{title:"CE val (cross-entropy)"},
+    yaxis:{title:"Accuracy val"},
+    legend:{orientation:"h",y:-0.2},
+    plot_bgcolor:"#fafafa",
+  },{responsive:true,displayModeBar:false});
+}
+document.getElementById("c4-color").addEventListener("change",drawChart4);
+document.getElementById("c4-opt").addEventListener("change",drawChart4);
+drawChart4();
+
+// ══════════════════════════════════════════════
+// CHART 5: ranking barras
+// ══════════════════════════════════════════════
+function drawChart5(){
+  const metric = document.getElementById("c5-metric").value;
+  const colorBy = document.getElementById("c5-color").value;
+  const isLoss = metric==="val_loss";
+  const sorted = [...RAW].sort((a,b)=> isLoss ? a[metric]-b[metric] : b[metric]-a[metric]);
+  const labels = sorted.map(d=>`${OPT_NAMES[d.opt]} | lr=${d.lr} | b=${d.batch}`);
+  const sk = stdKey(metric);
+  const colorMap = colorBy==="opt"?OPT_COLORS:BATCH_COLORS;
+  const colors = sorted.map(d=>colorMap[colorBy==="opt"?d.opt:d.batch]||"#888");
+
+  Plotly.react("chart5",[{
+    x: sorted.map(d=>d[metric]), y:labels,
+    error_x: sk?{type:"data",array:sorted.map(d=>d[sk]),visible:true}:undefined,
+    type:"bar", orientation:"h",
+    marker:{color:colors,opacity:0.85},
+    hovertemplate:"%{y}<br>"+metricLabel(metric)+": %{x:.4f}<extra></extra>",
+  }],{
+    height:680, margin:{t:15,b:55,l:200,r:60},
+    xaxis:{title:metricLabel(metric)},
+    plot_bgcolor:"#fafafa",
+  },{responsive:true,displayModeBar:false});
+}
+document.getElementById("c5-metric").addEventListener("change",drawChart5);
+document.getElementById("c5-color").addEventListener("change",drawChart5);
+drawChart5();
+</script>
+</body>
+</html>
