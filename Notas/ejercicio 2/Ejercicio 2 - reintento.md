@@ -1,3 +1,7 @@
+**JUSTIFICACION DECISIONES DE VALORES DE MOMENTUM Y ADAM**
+[[clase optimizadores.pdf#page=13]]
+queda justificar CROSS ENTROPY y softmax
+
 **Arquitectura**                                                            
   - Número de capas ocultas                                               
   - Número de neuronas por capa                             

@@ -5,10 +5,10 @@
 **Para defensa oral:** acá está la respuesta a la pregunta esperable *"¿probaste que tus hiperparámetros eran independientes? ¿qué hiciste cuando viste que no lo eran?"*.
 
 Datos fuente:
-- [Plan del cross-experiment](../Experimentos/PLAN_cross_v1.md)
-- [Pre-experimento LR×Batch×Opt](../Experimentos/Pre_LR_Batch_Opt/analisis.md) → `best_batch.json`
-- [Cross-experiment LR×Opt×Arch + estrella batch](../Experimentos/Cross_LR_Opt_Arch/analisis.md)
-- Sweeps previos tratados como independientes: [Arch](Arch/Arquitectura.md) · [LR (1er sweep)](LR/analisis_lr.md) · [LR_segundo_intento](LR_segundo_intento/) · [Optimizer](Optimizer/analisis_optimizer.md)
+- [Plan del cross-experiment](PLAN_cross_v1.md)
+- [Pre-experimento LR×Batch×Opt](Notas/ejercicio%202/Segunda%20tanda%20de%20experimentos/Pre_LR_Batch_Opt/analisis.md) → `best_batch.json`
+- [Cross-experiment LR×Opt×Arch + estrella batch](Notas/ejercicio%202/Segunda%20tanda%20de%20experimentos/Cross_LR_Opt_Arch/analisis.md)
+- Sweeps previos tratados como independientes: [Arch](Arquitectura.md) · [LR (1er sweep)](analisis_lr.md) · [LR_segundo_intento](LR_segundo_intento/) · [Optimizer](analisis_optimizer.md)
 
 ---
 
@@ -30,7 +30,7 @@ Datos fuente:
 **Hipótesis previa:** "podemos elegir el LR óptimo y después el optimizer".
 **Lo que vimos:** los LRs óptimos por optimizer difieren por **un orden de magnitud**.
 
-Datos del cross-experiment ([stage 2](../Experimentos/Cross_LR_Opt_Arch/analisis.md), 15 corridas/cell):
+Datos del cross-experiment ([stage 2](Notas/ejercicio%202/Segunda%20tanda%20de%20experimentos/Cross_LR_Opt_Arch/analisis.md), 15 corridas/cell):
 
 | Optimizer | LR óptimo (todas las archs) | val_acc en óptimo |
 |---|---|---|
@@ -38,7 +38,7 @@ Datos del cross-experiment ([stage 2](../Experimentos/Cross_LR_Opt_Arch/analisis
 | Momentum | **5e-3 a 1e-2** | 0.9543 (shallow @ 1e-2) |
 | SGD | **1e-2** | 0.9509 (shallow @ 1e-2) |
 
-**Implicancia metodológica:** un "sweep de LR" sin especificar optimizer es un experimento mal diseñado. Lo que descubrimos en el [LR sweep original](LR/analisis_lr.md) ("LR=1e-3 da accuracy ~0.93 con SGD") es **falso para otros optimizadores**, porque ese sweep usó SGD only.
+**Implicancia metodológica:** un "sweep de LR" sin especificar optimizer es un experimento mal diseñado. Lo que descubrimos en el [LR sweep original](analisis_lr.md) ("LR=1e-3 da accuracy ~0.93 con SGD") es **falso para otros optimizadores**, porque ese sweep usó SGD only.
 
 **Por qué pasa:** Adam normaliza el gradiente por la varianza acumulada → el "paso efectivo" en el espacio de pesos es de tamaño ~lr (independiente de la magnitud del gradiente). SGD da pasos = lr · gradiente, así que para gradientes chicos en este problema, necesita LR mucho más alto. Esto sale de la [clase de optimizadores](../../../docs/clase_optimizadores/clase%20optimizadores.pdf).
 
@@ -48,7 +48,7 @@ Datos del cross-experiment ([stage 2](../Experimentos/Cross_LR_Opt_Arch/analisis
 
 **Regla teórica (de la cátedra):** "doblar el batch ≈ doblar el LR" (ó √2× según el régimen).
 
-**Lo que medimos** en el [pre-experimento LR×Batch×Opt](../Experimentos/Pre_LR_Batch_Opt/analisis.md), 10 corridas/cell, arch_shallow:
+**Lo que medimos** en el [pre-experimento LR×Batch×Opt](Notas/ejercicio%202/Segunda%20tanda%20de%20experimentos/Pre_LR_Batch_Opt/analisis.md), 10 corridas/cell, arch_shallow:
 
 | Optimizer | LR=5e-4 → best batch | LR=1e-3 → best batch | LR=5e-3 → best batch |
 |---|---|---|---|
@@ -66,7 +66,7 @@ Datos del cross-experiment ([stage 2](../Experimentos/Cross_LR_Opt_Arch/analisis
 
 ## 3. Arch × LR — el ranking de arquitecturas depende del LR
 
-**Hipótesis previa (del [Arch sweep](Arch/Arquitectura.md)):** "shallow es la arquitectura óptima".
+**Hipótesis previa (del [Arch sweep](Arquitectura.md)):** "shallow es la arquitectura óptima".
 **Lo que vimos:** shallow es óptima **sólo para algunos LRs**. Para Adam@1e-3, **wider la supera**.
 
 Datos del cross-experiment, optimizer=Adam, ranking de arquitecturas por LR (val_acc):
@@ -81,7 +81,7 @@ Datos del cross-experiment, optimizer=Adam, ranking de arquitecturas por LR (val
 
 **Patrón claro: a mayor LR, peor le va a `wider`.** En LR=1e-2 wider queda último. Esto es la regla teórica *"modelos con más parámetros prefieren LRs más chicos"*: con LR=1e-2 sobre wider (~235k params) los pasos son demasiado grandes en el espacio expandido y el modelo no estabiliza.
 
-**Implicancia metodológica:** el [Arch sweep original](Arch/Arquitectura.md) se hizo con **Adam@1e-3 fijo**, lo que casualmente es justo el LR donde shallow y wider están más cerca (0.0011 de diferencia). Si lo hubiéramos hecho con Adam@1e-2, **deeper o base habría parecido la óptima**, porque wider colapsa ahí. La conclusión "shallow es la arq óptima" del sweep one-at-a-time **estaba condicionada al LR específico que se usó como fijo**.
+**Implicancia metodológica:** el [Arch sweep original](Arquitectura.md) se hizo con **Adam@1e-3 fijo**, lo que casualmente es justo el LR donde shallow y wider están más cerca (0.0011 de diferencia). Si lo hubiéramos hecho con Adam@1e-2, **deeper o base habría parecido la óptima**, porque wider colapsa ahí. La conclusión "shallow es la arq óptima" del sweep one-at-a-time **estaba condicionada al LR específico que se usó como fijo**.
 
 → Esto es exactamente lo que motivó el cross-experiment y el [Arch tiebreaker](../Experimentos/Arch_tiebreaker/) con muchos seeds para definir entre shallow y wider con confianza estadística.
 
@@ -130,7 +130,7 @@ Antes de arreglar el bug, las métricas se computaban sobre los pesos del **últ
 
 | Decisión previa | Fundamento previo | Estado tras cross-experiment + tiebreaker |
 |---|---|---|
-| arch = shallow | Arch sweep con Adam@1e-3 fijo | **Sostenido por Occam.** El [tiebreaker con 15 seeds × k=5](../Experimentos/Arch_tiebreaker/analisis.md) mostró que `wider` y `shallow` son **estadísticamente indistinguibles** (z=0.65, diff=0.0005). Misma performance, mitad de parámetros → shallow gana. |
+| arch = shallow | Arch sweep con Adam@1e-3 fijo | **Sostenido por Occam.** El [tiebreaker con 15 seeds × k=5](Notas/ejercicio%202/Segunda%20tanda%20de%20experimentos/Arch_tiebreaker/analisis.md) mostró que `wider` y `shallow` son **estadísticamente indistinguibles** (z=0.65, diff=0.0005). Misma performance, mitad de parámetros → shallow gana. |
 | optimizer = Adam | Optimizer sweep con arch_base | **Sostenido**. Top-10 de cross_v1 son todos Adam. |
 | LR = 1e-3 | Optimizer sweep | **Sostenido para Adam.** Para SGD/Momentum sería 1e-2. |
 | batch = 32 | (default, nunca medido) | **Sub-óptimo**. `best_batch` por (opt, LR) varía: Adam@1e-3=64, Adam@5e-3=256. |
@@ -139,7 +139,7 @@ Antes de arreglar el bug, las métricas se computaban sobre los pesos del **últ
 
 ### Detalle del tiebreaker
 
-El cross_v1 con 3 seeds dejó arch_wider (0.9583) levemente arriba de arch_shallow (0.9572) — **diff=0.0011 con SEM ~0.001**, indistinguible. El [tiebreaker dedicado](../Experimentos/Arch_tiebreaker/analisis.md) amplió la muestra a **15 seeds × k=5 = 75 corridas/cell** (3 seeds del cross_v1 + 12 seeds nuevos). Resultado:
+El cross_v1 con 3 seeds dejó arch_wider (0.9583) levemente arriba de arch_shallow (0.9572) — **diff=0.0011 con SEM ~0.001**, indistinguible. El [tiebreaker dedicado](Notas/ejercicio%202/Segunda%20tanda%20de%20experimentos/Arch_tiebreaker/analisis.md) amplió la muestra a **15 seeds × k=5 = 75 corridas/cell** (3 seeds del cross_v1 + 12 seeds nuevos). Resultado:
 
 - arch_wider:   0.9581 ± 0.0049 (SEM=0.0006)
 - arch_shallow: 0.9576 ± 0.0046 (SEM=0.0006)

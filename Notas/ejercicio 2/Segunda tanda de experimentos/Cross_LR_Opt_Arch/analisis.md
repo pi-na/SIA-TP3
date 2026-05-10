@@ -4,18 +4,18 @@
 
 Las decisiones del Ej2 hasta este punto se tomaron one-at-a-time, cada una **condicionada al valor fijo de otro factor**:
 
-- El [Arch sweep](../../Experimentos%20y%20analisis/Arch/Arquitectura.md) se hizo con `Adam@1e-3` fijo → no sabíamos si `arch_shallow` ganaba también con SGD/Momentum.
-- El [Optimizer sweep](../../Experimentos%20y%20analisis/Optimizer/analisis_optimizer.md) se hizo con `arch_base` fijo → la decisión "Adam@1e-3" se tomó sobre la arquitectura que después descartamos.
-- El [LR sweep](../../Experimentos%20y%20analisis/LR/analisis_lr.md) se hizo con SGD only y arch_base, con 50 ep insuficientes para LRs bajos.
+- El [Arch sweep](Arquitectura.md) se hizo con `Adam@1e-3` fijo → no sabíamos si `arch_shallow` ganaba también con SGD/Momentum.
+- El [Optimizer sweep](analisis_optimizer.md) se hizo con `arch_base` fijo → la decisión "Adam@1e-3" se tomó sobre la arquitectura que después descartamos.
+- El [LR sweep](analisis_lr.md) se hizo con SGD only y arch_base, con 50 ep insuficientes para LRs bajos.
 - `batch_size=32` nunca se exploró: todo se hizo con ese default.
 
 **El problema:** si dos hiperparámetros interactúan (regla teórica del curso para LR×Batch, sospechado entre Arch×LR y Arch×Opt), la conclusión del sweep one-at-a-time **depende del valor que se eligió como fijo**. No es un resultado robusto.
 
 **Objetivo:** validar la elección de hiperparámetros **testeando el supuesto de independencia** entre LR, optimizer y arquitectura simultáneamente, y reportar la mejor configuración global junto con las interacciones explícitas.
 
-**Diseño elegido:** grid 3D **LR×Opt×Arch** con `batch_size` heredado de un pre-experimento dedicado ([Pre_LR_Batch_Opt](../Pre_LR_Batch_Opt/analisis.md)) + estrella batch alrededor del centro. Plan completo en [`PLAN_cross_v1.md`](../PLAN_cross_v1.md).
+**Diseño elegido:** grid 3D **LR×Opt×Arch** con `batch_size` heredado de un pre-experimento dedicado ([Pre_LR_Batch_Opt](Notas/ejercicio%202/Segunda%20tanda%20de%20experimentos/Pre_LR_Batch_Opt/analisis.md)) + estrella batch alrededor del centro. Plan completo en [`PLAN_cross_v1.md`](PLAN_cross_v1.md).
 
-**Por qué un grid 3D y no 2D:** las "slices 2D" (ej. Arch×Opt con LR fijo) **mienten cuando los factores no medidos están correlacionados** con los medidos — al fijar LR=1e-3 (óptimo de Adam), SGD entraría con LR sub-óptimo y la slice concluiría falsamente "Adam le gana a SGD en todas las archs". Discusión metodológica completa en [`IMPORTANTE_CORRELACIONES.md`](../../Experimentos%20y%20analisis/IMPORTANTE_CORRELACIONES.md).
+**Por qué un grid 3D y no 2D:** las "slices 2D" (ej. Arch×Opt con LR fijo) **mienten cuando los factores no medidos están correlacionados** con los medidos — al fijar LR=1e-3 (óptimo de Adam), SGD entraría con LR sub-óptimo y la slice concluiría falsamente "Adam le gana a SGD en todas las archs". Discusión metodológica completa en [`IMPORTANTE_CORRELACIONES.md`](IMPORTANTE_CORRELACIONES.md).
 
 ## Configuración completa
 
@@ -164,13 +164,13 @@ Centro: `arch_shallow` + `adam` + LR=`1e-3`. Batches probados: [16, 32, 64, 128,
 
 ## Plots
 
-![val_acc vs LR por (arch, opt)](stage2_val_acc_vs_lr_per_opt.png)
+![val_acc vs LR por (arch, opt)](Notas/ejercicio%202/Segunda%20tanda%20de%20experimentos/Cross_LR_Opt_Arch/stage2_val_acc_vs_lr_per_opt.png)
 
-![Heatmap val_acc por arch × LR para cada opt](stage2_heatmap_arch_lr.png)
+![Heatmap val_acc por arch × LR para cada opt](Notas/ejercicio%202/Segunda%20tanda%20de%20experimentos/Cross_LR_Opt_Arch/stage2_heatmap_arch_lr.png)
 
-![Convergencia val_loss por opt y LR (arch_shallow)](stage2_convergence_shallow.png)
+![Convergencia val_loss por opt y LR (arch_shallow)](Notas/ejercicio%202/Segunda%20tanda%20de%20experimentos/Cross_LR_Opt_Arch/stage2_convergence_shallow.png)
 
-![Estrella batch (centro: shallow + Adam@1e-3)](stage2b_val_acc_vs_batch.png)
+![Estrella batch (centro: shallow + Adam@1e-3)](Notas/ejercicio%202/Segunda%20tanda%20de%20experimentos/Cross_LR_Opt_Arch/stage2b_val_acc_vs_batch.png)
 
 ## Configuración óptima encontrada
 

@@ -98,13 +98,13 @@ La estrella **NO mide interacciones** del eje barrido con los demás factores. S
 
 #### Configuración
 
-| Factor | Niveles |
-|---|---|
-| Batch size | `16`, `32`, `64`, `128`, `256` |
-| Seeds | `42`, `7`, `13` |
-| Arch (fijo en el centro) | `arch_shallow` |
-| Opt (fijo en el centro) | `adam` |
-| LR (fijo en el centro) | `1e-3` |
+| Factor                   | Niveles                        |
+| ------------------------ | ------------------------------ |
+| Batch size               | `16`, `32`, `64`, `128`, `256` |
+| Seeds                    | `42`, `7`, `13`                |
+| Arch (fijo en el centro) | `arch_shallow`                 |
+| Opt (fijo en el centro)  | `adam`                         |
+| LR (fijo en el centro)   | `1e-3`                         |
 
 **Total:** 5 batches × 3 seeds = **15 jobs × 5 folds = 75 corridas internas**.
 
@@ -114,28 +114,31 @@ Notar que el punto `batch=64` solapa parcialmente con la celda `arch_shallow + a
 
 ## Hiperparámetros fijos en TODAS las celdas (las 3 etapas)
 
-| Parámetro | Valor |
-|---|---|
-| Loss | `cross_entropy` (combinada con `softmax` en última capa) |
-| Preprocessing | `zscore` (sobre features), `one_hot_targets=true` |
-| Split | k-folds = **5**, estratificado |
-| Inicialización | `auto` → He para ReLU |
-| Activaciones (todas las archs) | ocultas: `relu`; salida: `softmax` |
-| Regularización | l2=0, dropout=0, sin lr_schedule, sin augmentation |
-| Early stopping | **`patience=20`** sobre `val_loss` (cross-entropy), restaura `best_weights` al cortar |
-| Métricas reportadas en final | val_acc, macro_precision/recall/F1, val_loss CE, train_loss CE — todas evaluadas en `best_weights` (fix #4 aplicado al MLP) |
-| `momentum` β | 0.9 |
-| `adam` β1, β2, ε | 0.9, 0.999, 1e-8 |
-
+| Parámetro                      | Valor                                                                                                                       |
+| ------------------------------ | --------------------------------------------------------------------------------------------------------------------------- |
+| Loss                           | `cross_entropy` (combinada con `softmax` en última capa)                                                                    |
+| Preprocessing                  | `zscore` (sobre features), `one_hot_targets=true`                                                                           |
+| Split                          | k-folds = **5**, estratificado                                                                                              |
+| Inicialización                 | `auto` → He para ReLU                                                                                                       |
+| Activaciones (todas las archs) | ocultas: `relu`; salida: `softmax`                                                                                          |
+| Regularización                 | l2=0, dropout=0, sin lr_schedule, sin augmentation                                                                          |
+| Early stopping                 | **`patience=20`** sobre `val_loss` (cross-entropy), restaura `best_weights` al cortar                                       |
+| Métricas reportadas en final   | val_acc, macro_precision/recall/F1, val_loss CE, train_loss CE — todas evaluadas en `best_weights` (fix #4 aplicado al MLP) |
+| `momentum` β                   | 0.9                                                                                                                         |
+| `adam` β1, β2, ε               | 0.9, 0.999, 1e-8                                                                                                            |
+|                                |                                                                                                                             |
+**JUSTIFICACION DECISIONES DE VALORES DE MOMENTUM Y ADAM**
+[[clase optimizadores.pdf#page=13]]
+queda justificar CROSS ENTROPY y softmax
 ### `max_epochs` por (opt, LR)
 
 Auditado previamente con datos del optimizer sweep + LR sweep extendido. El corte real lo decide la curva (vía ES); `max_epochs` actúa sólo como cota dura.
 
-| optimizer | 1e-4 | 5e-4 | 1e-3 | 5e-3 | 1e-2 |
-|---|---|---|---|---|---|
-| sgd | **200*** | 300 | 200 | 100 | 80 |
-| momentum | 250 | 150 | 80 | 40 | 40 |
-| adam | 60 | 40 | 40 | 30 | 30 |
+| optimizer | 1e-4     | 5e-4 | 1e-3 | 5e-3 | 1e-2 |
+| --------- | -------- | ---- | ---- | ---- | ---- |
+| sgd       | **200*** | 300  | 200  | 100  | 80   |
+| momentum  | 250      | 150  | 80   | 40   | 40   |
+| adam      | 60       | 40   | 40   | 30   | 30   |
 
 \*`SGD@1e-4` capeado a 200: la auditoría mostró que no converge en 600 ep tampoco; se reporta como referencia "LR demasiado bajo para SGD" — **la celda no estará convergida y se documenta así explícitamente** en el análisis.
 
@@ -221,15 +224,15 @@ Un solo proceso (`pipeline.py`) corre todo bajo `caffeinate -dimsu` (la Mac no e
 
 Al despertar:
 
-| Archivo | Contenido |
-|---|---|
-| `Notas/ejercicio 2/Experimentos/PLAN_cross_v1.md` | (este archivo) |
-| `Notas/ejercicio 2/Experimentos/Pre_LR_Batch_Opt/analisis.md` | Tablas + plots de etapa 1, decisión `best_batch` |
-| `Notas/ejercicio 2/Experimentos/Cross_LR_Opt_Arch/analisis.md` | Tablas + plots etapas 2 + 2b, mejor config global, caveats |
-| `output/cross_v1/{stage1,stage2,stage2b}/raw.csv` | Datos crudos consolidados |
-| `output/cross_v1/{stage1,stage2,stage2b}/epoch_history.csv` | Curvas por época |
-| `output/cross_v1/best_batch.json` | Decisión de batch por (opt, LR) |
-| `ejercicio2_experimentacion/analisis/cross_v1/{stage1,stage2,stage2b}/*.png` | Plots |
+| Archivo                                                                      | Contenido                                                  |
+| ---------------------------------------------------------------------------- | ---------------------------------------------------------- |
+| `Notas/ejercicio 2/Experimentos/PLAN_cross_v1.md`                            | (este archivo)                                             |
+| `Notas/ejercicio 2/Experimentos/Pre_LR_Batch_Opt/analisis.md`                | Tablas + plots de etapa 1, decisión `best_batch`           |
+| `Notas/ejercicio 2/Experimentos/Cross_LR_Opt_Arch/analisis.md`               | Tablas + plots etapas 2 + 2b, mejor config global, caveats |
+| `output/cross_v1/{stage1,stage2,stage2b}/raw.csv`                            | Datos crudos consolidados                                  |
+| `output/cross_v1/{stage1,stage2,stage2b}/epoch_history.csv`                  | Curvas por época                                           |
+| `output/cross_v1/best_batch.json`                                            | Decisión de batch por (opt, LR)                            |
+| `ejercicio2_experimentacion/analisis/cross_v1/{stage1,stage2,stage2b}/*.png` | Plots                                                      |
 
 ---
 
