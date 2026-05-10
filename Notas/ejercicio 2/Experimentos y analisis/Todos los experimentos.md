@@ -52,11 +52,11 @@ Resumen de **TODO** lo que se hizo en esta sesión, con links a los análisis co
 
 #### Datos fuente del audit (todos disponibles en el repo)
 
-| Archivo | Contenido | Cómo se usó |
-|---|---|---|
-| `ejercicio2_experimentacion/analisis/optimizer/epoch_history.csv` | Momentum + Adam × 5 LR × 5 seeds × 5 folds × 70 ep, arch_base | Curvas para detectar `best_epoch` por (opt, LR), longitud de subidas transitorias, y |Δval_loss| cerca del mínimo |
-| `ejercicio2_experimentacion/analisis/lr/epoch_history.csv` | SGD × 5 LR × 4 archs × 5 seeds × 5 folds × 50 ep | Confirmación de que SGD@LR-bajo seguía bajando al final del presupuesto (best_epoch=49 en 4 de los 5 LRs) |
-| `ejercicio2_experimentacion/output/lr_segundo_intento/epoch_history.csv` | Datos rescatados del crash anterior: SGD@1e-4 con 5 seeds y SGD@5e-4 con 3 seeds, arch_shallow, **500 ep** sin ES | Única fuente directa para juzgar si SGD@1e-4 converge dado tiempo suficiente. Es lo que justifica capear esa celda |
+| Archivo                                                                  | Contenido                                                                                                         | Cómo se usó                                                                                                        |           |                  |
+| ------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | --------- | ---------------- |
+| `ejercicio2_experimentacion/analisis/optimizer/epoch_history.csv`        | Momentum + Adam × 5 LR × 5 seeds × 5 folds × 70 ep, arch_base                                                     | Curvas para detectar `best_epoch` por (opt, LR), longitud de subidas transitorias, y                               | Δval_loss | cerca del mínimo |
+| `ejercicio2_experimentacion/analisis/lr/epoch_history.csv`               | SGD × 5 LR × 4 archs × 5 seeds × 5 folds × 50 ep                                                                  | Confirmación de que SGD@LR-bajo seguía bajando al final del presupuesto (best_epoch=49 en 4 de los 5 LRs)          |           |                  |
+| `ejercicio2_experimentacion/output/lr_segundo_intento/epoch_history.csv` | Datos rescatados del crash anterior: SGD@1e-4 con 5 seeds y SGD@5e-4 con 3 seeds, arch_shallow, **500 ep** sin ES | Única fuente directa para juzgar si SGD@1e-4 converge dado tiempo suficiente. Es lo que justifica capear esa celda |           |                  |
 
 #### Evidencias específicas detrás de cada conclusión
 

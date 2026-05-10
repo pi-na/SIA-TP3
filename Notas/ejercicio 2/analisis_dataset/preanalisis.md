@@ -21,7 +21,7 @@ El dataset tiene **9 clases**, no 10. El dígito 8 está completamente ausente d
 
 ## 2. Distribución de clases
 
-![Distribución de clases](analisis_dataset/distribucion_clases.png)
+![Distribución de clases](distribucion_clases.png)
 
 | Clase | n | Proporción |
 |---|---|---|
@@ -49,7 +49,7 @@ La clase de métricas/sobreajuste establece que cuando el dataset está desbalan
 
 ## 3. Imágenes del dataset
 
-![Muestras por clase](analisis_dataset/muestras_por_clase.png)
+![Muestras por clase](muestras_por_clase.png)
 
 Se observa variabilidad de escritura dentro de cada clase (distintos estilos, inclinaciones, grosores de trazo). Esta variabilidad es la que el MLP tiene que aprender a ignorar para generalizar correctamente.
 
@@ -57,7 +57,7 @@ Se observa variabilidad de escritura dentro de cada clase (distintos estilos, in
 
 ## 4. Imagen media por clase (datos sin normalizar)
 
-![Media por clase](analisis_dataset/media_por_clase.png)
+![Media por clase](media_por_clase.png)
 
 La imagen media se obtiene promediando píxel a píxel todas las muestras de cada clase. Si las muestras de una clase están bien concentradas alrededor de una forma típica, la imagen media es nítida y reconocible. Si hay mucha variabilidad, la imagen queda borrosa.
 
@@ -67,7 +67,7 @@ La imagen media se obtiene promediando píxel a píxel todas las muestras de cad
 
 ## 5. Imagen media por clase tras normalización z-score
 
-![Media normalizada](analisis_dataset/media_normalizada.png)
+![Media normalizada](media_normalizada.png)
 
 La normalización z-score por píxel transforma cada feature restando la media del dataset y dividiendo por el desvío estándar:
 

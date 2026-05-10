@@ -27,14 +27,14 @@ Este experimento cruzado **valida** el conjunto de decisiones anteriores bajo pe
 
 **Por qué se hace primero:** si dejamos batch fijo en 32 en la etapa 2, repetimos el sesgo de los sweeps anteriores. Si lo metemos como factor adicional en la etapa 2, explota el compute. La solución es decidirlo "por debajo" en una etapa pequeña.
 
-| Factor | Niveles | Cantidad |
-|---|---|---|
-| Optimizer | `sgd`, `momentum`, `adam` | 3 |
-| LR | `5e-4`, `1e-3`, `5e-3` | 3 |
-| Batch size | `16`, `64`, `256` | 3 |
-| Seeds | `42`, `7` | 2 |
-| Arquitectura (fijo) | `arch_shallow` `[784, 128, 10]` | 1 |
-| k-folds | 5 | — |
+| Factor              | Niveles                         | Cantidad |
+| ------------------- | ------------------------------- | -------- |
+| Optimizer           | `sgd`, `momentum`, `adam`       | 3        |
+| LR                  | `5e-4`, `1e-3`, `5e-3`          | 3        |
+| Batch size          | `16`, `64`, `256`               | 3        |
+| Seeds               | `42`, `7`                       | 2        |
+| Arquitectura (fijo) | `arch_shallow` `[784, 128, 10]` | 1        |
+| k-folds             | 5                               | —        |
 
 **Total:** 3·3·3 = 27 cells × 2 seeds = **54 jobs × 5 folds = 270 corridas internas**.
 
@@ -51,14 +51,14 @@ Este experimento cruzado **valida** el conjunto de decisiones anteriores bajo pe
 
 **Objetivo:** medir interacciones entre los 3 factores principales sobre el `batch_size` óptimo de etapa 1.
 
-| Factor | Niveles | Cantidad |
-|---|---|---|
-| LR | `1e-4`, `5e-4`, `1e-3`, `5e-3`, `1e-2` | 5 |
-| Optimizer | `sgd`, `momentum`, `adam` | 3 |
-| Arquitectura | `arch_shallow`, `arch_base`, `arch_wider`, `arch_deeper` | 4 |
-| Batch size | (heredado de etapa 1 por celda) | — |
-| Seeds | `42`, `7`, `13` | 3 |
-| k-folds | 5 | — |
+| Factor       | Niveles                                                  | Cantidad |
+| ------------ | -------------------------------------------------------- | -------- |
+| LR           | `1e-4`, `5e-4`, `1e-3`, `5e-3`, `1e-2`                   | 5        |
+| Optimizer    | `sgd`, `momentum`, `adam`                                | 3        |
+| Arquitectura | `arch_shallow`, `arch_base`, `arch_wider`, `arch_deeper` | 4        |
+| Batch size   | (heredado de etapa 1 por celda)                          | —        |
+| Seeds        | `42`, `7`, `13`                                          | 3        |
+| k-folds      | 5                                                        | —        |
 
 **Total:** 5·3·4 = 60 cells × 3 seeds = **180 jobs × 5 folds = 900 corridas internas**.
 
@@ -72,17 +72,43 @@ Asunción explícita: el batch óptimo no varía bruscamente entre LRs adyacente
 
 ### Etapa 2b — Estrella batch alrededor del centro
 
-**Objetivo:** caracterizar el efecto del batch_size en el centro `shallow + Adam@1e-3` con resolución fina, ya que la etapa 1 sólo midió 3 batches.
+#### Qué es "centro" y qué es "estrella" en este contexto
+
+**Centro** = la mejor configuración conocida del Ej2 hasta el momento de planificar este experimento, que actúa como punto de anclaje para perturbaciones. En nuestro caso: `arch_shallow + Adam + LR=1e-3 + batch=64` (batch heredado de la etapa 1, donde Adam@1e-3 → batch=64). Es el resultado de los sweeps one-at-a-time previos (Arch + Optimizer + LR) y la cell que inicialmente esperábamos como ganadora final.
+
+**Estrella** = un patrón de muestreo 1D alrededor del centro: para **cada factor** que querés caracterizar, variás ese factor y dejás todos los demás fijos en el valor del centro. Si dibujás los puntos en el espacio multidimensional de hiperparámetros, te queda una "estrella": el centro en el medio y "rayos" en cada eje. Es la operación opuesta al grid (que cubre todos los cruces a costo exponencial); la estrella sólo recorre **rayos individuales** a costo lineal.
+
+En el `cross_v1` ya hicimos un grid 3D LR×Opt×Arch en la etapa 2, así que para esos 3 factores tenemos resolución alta. **El factor que quedó sub-medido es `batch_size`**: la etapa 1 sólo barrió 3 batches `{16, 64, 256}` y la etapa 2 heredó un solo valor por celda. Por eso esta etapa 2b es **una estrella en el eje batch_size** (5 niveles), centrada en `shallow + Adam + LR=1e-3`.
+
+#### Por qué se decide probar SOBRE el centro
+
+Tres razones, en orden de importancia:
+
+1. **Validación de robustez del centro.** Si el centro es genuinamente la "mejor config", entonces al perturbarlo en cualquier eje el rendimiento debería bajar (o quedarse igual cerca, no mejorar mucho). Si una perturbación **mejora claramente** la métrica, el "centro" estaba mal elegido y hay que actualizarlo. Probar en el centro es la prueba más informativa porque es el único punto donde una mejora pequeña en cualquier dirección invalida la decisión global.
+
+2. **Mejor resolución donde más importa.** Las decisiones finales se toman en el centro o muy cerca, así que la información cara (alta resolución) debe ir ahí. Gastar 5 batches × 3 seeds en un punto random del espacio (ej. `deeper + SGD@1e-2`) tendría el mismo costo y casi cero impacto en la decisión final — esa zona ya sabemos que no gana.
+
+3. **Compatibilidad con el grid 3D.** Como el centro es exactamente una celda del grid 3D de la etapa 2 (ya tenemos `shallow + Adam@1e-3` con batch heredado), los puntos de la estrella se pueden **comparar directamente con esa celda**. Si la cell del grid central a batch=64 da `val_acc=0.957` y el rayo a batch=128 da `val_acc=0.958 ± 0.005`, sabemos que el batch=64 elegido por la etapa 1 es razonable (el efecto del batch en este punto del espacio es chato).
+
+#### Limitación intrínseca de la estrella
+
+La estrella **NO mide interacciones** del eje barrido con los demás factores. Si batch=128 funcionara mejor sólo cuando arch=base, esta estrella no lo vería (porque arch está fijo en shallow). Para detectar esa interacción necesitaríamos un grid 2D batch×arch, que duplica el costo.
+
+**Asunción que hacemos:** el efecto del batch_size en el centro generaliza cualitativamente a las cells vecinas. Es razonable porque el rango "óptimo" de batch para Adam@1e-3 viene controlado por la regla de escalado lineal LR↔batch (clase de optimizadores), que depende del LR pero no fuertemente de la profundidad de la red. Lo declaramos como caveat explícito en el análisis final.
+
+#### Configuración
 
 | Factor | Niveles |
 |---|---|
 | Batch size | `16`, `32`, `64`, `128`, `256` |
 | Seeds | `42`, `7`, `13` |
-| Arch (fijo) | `arch_shallow` |
-| Opt (fijo) | `adam` |
-| LR (fijo) | `1e-3` |
+| Arch (fijo en el centro) | `arch_shallow` |
+| Opt (fijo en el centro) | `adam` |
+| LR (fijo en el centro) | `1e-3` |
 
 **Total:** 5 batches × 3 seeds = **15 jobs × 5 folds = 75 corridas internas**.
+
+Notar que el punto `batch=64` solapa parcialmente con la celda `arch_shallow + adam + lr=1e-3 + batch=64` del grid 3D etapa 2 — distintos seeds (los 3 de etapa 2 son los mismos que acá), pero distintos jobs. Esa redundancia es deliberada: confirma que el grid y la estrella son compatibles entre sí.
 
 ---
 
