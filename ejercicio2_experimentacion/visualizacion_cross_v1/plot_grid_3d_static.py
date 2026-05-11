@@ -105,43 +105,51 @@ def main() -> None:
     ax.view_init(elev=18, azim=-58)
 
     # Colorbar
-    cax = fig.add_subplot(gs[0, 2])
-    cax.set_facecolor(BG); cax.axis("off")
-    cb = fig.colorbar(sc, ax=cax, fraction=0.5, pad=0.02, aspect=22)
-    cb.set_label("val_acc (media seeds×folds)", color=TEXT, fontsize=11)
-    cb.ax.yaxis.set_tick_params(color=TEXT, labelsize=9)
+    # Columna derecha dividida en 3 zonas verticales: colorbar / top-3 / cómo-leer.
+    gs_right = gs[0, 2].subgridspec(3, 1, height_ratios=[1.2, 1.4, 1.0], hspace=0.35)
+
+    # --- Colorbar (zona superior) ---
+    cax_cb = fig.add_subplot(gs_right[0, 0])
+    cax_cb.set_facecolor(BG); cax_cb.axis("off")
+    cb = fig.colorbar(sc, ax=cax_cb, fraction=0.55, pad=0.02, aspect=14, location="left")
+    cb.set_label("val_acc (media seeds×folds)", color=TEXT, fontsize=10)
+    cb.ax.yaxis.set_tick_params(color=TEXT, labelsize=8.5)
     plt.setp(plt.getp(cb.ax.axes, 'yticklabels'), color=TEXT)
     cb.outline.set_edgecolor(GRID)
 
-    # Leyenda: top-3 configs
-    top3_lines = ["★  TOP-3 CONFIGS", ""]
+    # --- Top-3 legend (zona media) ---
+    cax_top3 = fig.add_subplot(gs_right[1, 0])
+    cax_top3.set_facecolor(BG); cax_top3.axis("off")
+    top3_lines = ["TOP-3 CONFIGS", ""]
     medals = ["#1", "#2", "#3"]
     for rank, (_, r) in enumerate(top.iterrows(), 1):
         top3_lines.append(
             f"{medals[rank-1]}  {r['arch'].replace('arch_','')} · "
-            f"{OPT_LABEL[int(r['yi'])]}  @  LR={LR_LABEL[int(r['xi'])]}"
+            f"{OPT_LABEL[int(r['yi'])]} @ LR={LR_LABEL[int(r['xi'])]}"
         )
         top3_lines.append(
-            f"     val_acc = {r['val_acc_final_mean']:.4f} ± {r['val_acc_final_std']:.4f}"
+            f"      val_acc = {r['val_acc_final_mean']:.4f} ± {r['val_acc_final_std']:.4f}"
         )
         top3_lines.append("")
-    cax.text(0.5, 0.36, "\n".join(top3_lines),
-             transform=cax.transAxes, color="#f9e64f", fontsize=9.5,
-             ha="center", va="top", linespacing=1.5, family="monospace",
-             bbox=dict(facecolor="#161b22", edgecolor="#f9e64f",
-                       boxstyle="round,pad=0.6", linewidth=1.2))
+    cax_top3.text(0.5, 0.5, "\n".join(top3_lines).strip(),
+                  transform=cax_top3.transAxes, color="#f9e64f", fontsize=9,
+                  ha="center", va="center", linespacing=1.5, family="monospace",
+                  bbox=dict(facecolor="#161b22", edgecolor="#f9e64f",
+                            boxstyle="round,pad=0.6", linewidth=1.2))
 
-    # Lectura sintética del cubo
-    cax.text(0.5, 0.04,
-             "Cómo leer el cubo\n"
-             "• Eje X = LR (de bajo a alto)\n"
-             "• Eje Y = Optimizer\n"
-             "• Eje Z = Arquitectura\n"
-             "• Tamaño y color de cada\n  esfera = val_acc\n"
-             "• ⊙ amarillo = top-3 cells",
-             transform=cax.transAxes, color=TEXT, fontsize=9,
-             ha="center", va="bottom", linespacing=1.5,
-             bbox=dict(facecolor="#161b22", edgecolor=GRID, boxstyle="round,pad=0.5"))
+    # --- "Cómo leer el cubo" (zona inferior) ---
+    cax_howto = fig.add_subplot(gs_right[2, 0])
+    cax_howto.set_facecolor(BG); cax_howto.axis("off")
+    cax_howto.text(0.5, 0.5,
+                   "Cómo leer el cubo\n"
+                   "• X = LR (de bajo a alto)\n"
+                   "• Y = Optimizer\n"
+                   "• Z = Arquitectura\n"
+                   "• Tamaño y color = val_acc\n"
+                   "• ⊙ amarillo = top-3 cells",
+                   transform=cax_howto.transAxes, color=TEXT, fontsize=8.5,
+                   ha="center", va="center", linespacing=1.5,
+                   bbox=dict(facecolor="#161b22", edgecolor=GRID, boxstyle="round,pad=0.5"))
 
     # ========== Panel inferior izquierdo: 3 heatmaps faceted por opt ==========
     gs_hm = gs[1, :2].subgridspec(1, 3, wspace=0.32)
