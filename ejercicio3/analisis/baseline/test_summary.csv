@@ -1,0 +1,2 @@
+n_seeds,test_acc_mean,test_acc_std,test_macro_precision_mean,test_macro_precision_std,test_macro_recall_mean,test_macro_recall_std,test_macro_f1_mean,test_macro_f1_std,test_weighted_f1_mean,test_weighted_f1_std
+3,0.961553864637565,0.0025010003998391884,0.9617863938805756,0.0025725238731149794,0.960642039800265,0.002574832615768889,0.9609164700448808,0.0026283888517966555,0.9614064938751442,0.0025636221938317946
