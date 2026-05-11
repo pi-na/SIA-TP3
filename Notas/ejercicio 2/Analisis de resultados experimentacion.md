@@ -22,8 +22,32 @@ El techo de Adam (lr < 5e-3 con batch=32) no es un límite del optimizador sino 
 
 # Stage 2
 ![[grid_3d_static.png]]
-sexyyy
 
 > [!warning] Que significan las métricas! Importante!!
 > Importantisimo tener visto [[Notas/ejercicio 2/Segunda tanda de experimentos/Cross_LR_Opt_Arch/analisis#Qué significa cada columna|explicación de métricas usadas en los experimentos]]
+## Metricas, accuracy, loss, F1
+Accuracy es la metrica principal -> Mas accuracy, acerté mas en la clasificación.
+Pero, la accuracy puede mentir cuando las clases están desbalanceadas. Y en digits.csv la clase 5 está fuertemente minoritaria (271 ejemplos vs ~1500 las otras).                                                      
 
+Imaginá un modelo que aprende perfectamente las 9 clases mayoritarias y nunca predice la clase 5:                                                                                                                                     
+  - Acertará ~97.8% de las imágenes (todo menos las del 5.                                                              
+  - val_acc ≈ 0.978 — número aparentemente excelente.                                                                    
+  - Pero la clase 5 tiene recall = 0 y por lo tanto F1_5 = 0.                                                                   
+  - macro_f1 = (suma de 9 F1s buenos + 1 F1 = 0) / 10 ≈ 0.85 — más bajo de lo que esperarías por la accuracy. 
+![[Pasted image 20260510234716.png]]
+## Resultados
+Ver e incluir en la presentación: [[Notas/ejercicio 2/Segunda tanda de experimentos/Cross_LR_Opt_Arch/analisis#Configuración completa|configuración e hiperparametros fijos y variados en el experimento]].
+
+Queriamos ver como interactuan:
+LR x OPT
+LR x ARCH
+ARCH x OPT
+LR x Batch_size (*quedó para stage 3*)
+
+Y encontrar configuración óptima ARCH x LR x OPT
+
+![[Pasted image 20260510235747.png]]
+
+### LR x OPT
+Voy a medir LR x OPT; O sea para cada ARCH, vario LR y OPT;
+Mido val_acc, val_loss, macro_f1
