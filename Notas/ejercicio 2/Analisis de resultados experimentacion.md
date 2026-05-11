@@ -407,6 +407,20 @@ Una vez congelada la configuración (`shallow + Adam@1e-3 + batch=64`), queda me
 
 **Lectura defensiva.** El early stopping con `patience=20` sobre val_loss es **suficientemente paciente** para no cortar artificialmente: en las 15 corridas, val_loss alcanzó su mínimo y se quedó 20 épocas chequeando si bajaba más. No bajó. La convergencia en 5-6 épocas no es un artefacto de cortar temprano; es la "velocidad real" de Adam@`1e-3` con este dataset.
 
+**Cuándo cortó early stopping y por qué el eje X termina cerca de la época 25.** Cada corrida del CV interno terminó cuando ES disparó, no por agotar `max_epochs`. ES corta cuando val_loss no mejora durante `patience=20` épocas consecutivas después del último mínimo, así que la **época de corte ≈ best_epoch + patience**. Con `best_epoch` distribuido en `[3, 9]` (min/max) y media `5.7 ± 1.6` sobre las 15 corridas, la **época de corte** quedó distribuida en `[23, 29]` con media **25.7 ± 1.6** — exactamente `best_epoch + 20`. Resumen numérico:
+
+| Estadístico                | best_epoch (sobre 15 corridas) | stop_epoch (corte por ES, sobre 15 corridas) |
+| -------------------------- | ------------------------------ | -------------------------------------------- |
+| mean                       | 5.7                            | 25.7                                         |
+| std                        | 1.6                            | 1.6                                          |
+| min                        | 3                              | 23                                           |
+| max                        | 9                              | 29                                           |
+| Llegaron a max_epochs=40   | —                              | 0 / 15                                       |
+
+**Ninguna** corrida llegó al límite duro `max_epochs=40` (configurado en el stage 2 para Adam@`1e-3`). El plot se trunca alrededor del epoch 25 porque a partir de ahí **menos de 8 de las 15 series siguen vivas** (algunas cortaron antes en epoch 23-24), y el promedio + banda de std deja de ser estable con tan pocas muestras — por eso recortamos visualmente ahí. La parte después de la época 25 existe en algunas curvas individuales pero promediar 2-3 contra 15 sería engañoso a nivel de bandas.
+
+**Implicancia metodológica:** el `patience=20` auditado en el plan de cross_v1 está bien calibrado para este problema. Si lo hubiéramos puesto en 10, algunas corridas con `best_epoch=9` habrían cortado prematuramente (9 + 10 = epoch 19, con el riesgo de tirar a la basura mejoras tardías). Si lo hubiéramos puesto en 50, no cambiaría nada: ya verificamos que después del epoch ~6 val_loss sólo sube, así que más paciencia sería puro desperdicio de compute (~30 épocas extras por corrida × 15 corridas).
+
 ## B. Generalización interna (CV sobre `digits.csv`)
 
 El CV interno usa **k-folds estratificado con k=5** sobre `digits.csv`: cada corrida entrena con 4 folds (~9956 samples) y valida sobre el 5° (~2493 samples). Reportamos las 4 métricas + CE del **fold de validación**, promediadas sobre las 15 corridas. Para train, sólo se almacenó accuracy y CE (las 4 métricas no se guardan en el `summary.csv` durante stage 2 — diseño del runner). El gap de accuracy y CE alcanza para diagnosticar overfit.
@@ -434,7 +448,7 @@ El CV interno usa **k-folds estratificado con k=5** sobre `digits.csv`: cada cor
 
 **Procedimiento.** Tomamos la config congelada (`final_config_ej2.json`: arch=[784, 128, 10], Adam@`1e-3`, batch=64, epochs=40, patience=20, sin regularización), y la corrimos **3 veces** con seeds 42, 7, 13 usando `ejercicio3/final_eval.py`. Cada corrida:
 
-1. Entrena con todo `digits.csv` (12 449 samples) usando un split 90/10 para early stopping (no k-folds — esto es producción, no CV).
+1. Entrena con todo `digits.csv` (12 449 samples) usando un split 90/10 para early stopping (no k-folds — esto es producción, no validacion). Usamos 90/10 para maximizar training. Hacemos split estratificado (y le afecta el seed)
 2. Predice sobre `digits_test.csv` (2497 samples) **una sola vez** con los `best_weights` restaurados.
 3. Reporta accuracy, macro precision/recall/F1, weighted F1, y matriz de confusión.
 
@@ -450,7 +464,7 @@ El CV interno usa **k-folds estratificado con k=5** sobre `digits.csv`: cada cor
 
 **Esto es una caída enorme en accuracy: 10 puntos.** Antes de interpretarla, hay que entender por qué ocurre.
 
-### Por qué cae 10 puntos: distribución de clases incompatible
+### MALA Distribución de clases 
 
 Conteo de clases en cada CSV:
 
@@ -493,7 +507,7 @@ Cada celda muestra `recall normalizado por fila` (cuenta absoluta entre parénte
 
 → La clase 8 mete un **0 en cada una de las tres métricas macro**. Como el macro promedia las 10 clases con peso igual, un 0 puro arrastra el macro_F1 macro hacia abajo de forma agresiva. Pero hay un detalle más fino: **precision** cae más que **recall** porque, además de no poder predecir 8, el modelo "vomita" otros dígitos (típicamente 3 y 9) sobre los 8s reales — eso infla los falsos positivos de las clases 3 y 9 y baja sus precisions también.
 
-### Aritmética del gap
+### Que pasa si exlcuimos la clase 8?? La que no tiene representación
 
 Si **excluimos del test los casos donde el ground truth es clase 8** (242–243 ejemplos por corrida, ≈ 9.7% del set), la accuracy sube a:
 

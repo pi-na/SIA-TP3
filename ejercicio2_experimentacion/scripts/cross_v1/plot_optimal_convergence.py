@@ -54,14 +54,29 @@ def aggregate_by_epoch(df: pd.DataFrame) -> pd.DataFrame:
     return agg
 
 
-def best_epoch_mean(df: pd.DataFrame) -> float:
-    """argmin de val_loss por (seed, fold); media sobre las 15 series."""
+def best_epoch_stats(df: pd.DataFrame) -> dict:
+    """argmin de val_loss por (seed, fold); mean/std/min/max sobre las 15 series."""
     best = df.groupby(["seed","fold"])["val_loss"].idxmin()
     epochs = df.loc[best, "epoch"].to_numpy()
-    return float(np.mean(epochs))
+    return {"mean": float(np.mean(epochs)),
+            "std":  float(np.std(epochs)),
+            "min":  int(np.min(epochs)),
+            "max":  int(np.max(epochs))}
 
 
-def plot_convergence(agg: pd.DataFrame, best_ep: float) -> None:
+def stop_epoch_stats(df: pd.DataFrame) -> dict:
+    """Ultima epoca registrada por (seed, fold) = donde corto el training
+    (sea por early stopping o max_epochs)."""
+    stops = df.groupby(["seed","fold"])["epoch"].max().to_numpy()
+    return {"mean": float(np.mean(stops)),
+            "std":  float(np.std(stops)),
+            "min":  int(np.min(stops)),
+            "max":  int(np.max(stops))}
+
+
+def plot_convergence(agg: pd.DataFrame, best_stats: dict) -> None:
+    best_ep = best_stats["mean"]
+    best_std = best_stats["std"]
     # cortar a las épocas donde aún hay >= 8 series vivas (>=50% del total)
     keep = agg[agg["train_loss_count"] >= 8].copy()
     epochs = keep["epoch"].to_numpy()
@@ -77,8 +92,9 @@ def plot_convergence(agg: pd.DataFrame, best_ep: float) -> None:
     axL.plot(epochs, tl_m, color=COLOR_TRAIN, linewidth=2, label="train_loss CE", marker="o", markersize=3.5)
     axL.plot(epochs, vl_m, color=COLOR_VAL,   linewidth=2, label="val_loss CE",   marker="s", markersize=3.5)
     axL.axvline(best_ep, color="#555555", linestyle="--", linewidth=1.2, alpha=0.7)
-    axL.text(best_ep + 0.4, axL.get_ylim()[1]*0.93, f"best_epoch promedio = {best_ep:.1f}",
-              color="#333", fontsize=10)
+    axL.text(best_ep + 0.4, axL.get_ylim()[1]*0.93,
+              f"best_epoch promedio = {best_ep:.1f}\n(std = {best_std:.1f} sobre 15 corridas)",
+              color="#333", fontsize=9.5, linespacing=1.2)
     axL.set_xlabel("epoch", color=TEXT, fontsize=11)
     axL.set_ylabel("cross-entropy", color=TEXT, fontsize=11)
     axL.set_title("Loss de entrenamiento vs validación", color=TEXT, fontsize=12, fontweight="bold")
@@ -130,9 +146,16 @@ def main():
     agg = aggregate_by_epoch(df)
     agg.to_csv(OUT / "optimal_convergence_table.csv", index=False)
     print(f"saved {OUT/'optimal_convergence_table.csv'}")
-    best_ep = best_epoch_mean(df)
-    print(f"best_epoch mean over 15 runs = {best_ep:.2f}")
-    plot_convergence(agg, best_ep)
+    best_stats = best_epoch_stats(df)
+    stop_stats = stop_epoch_stats(df)
+    print(f"best_epoch: mean={best_stats['mean']:.2f} std={best_stats['std']:.2f} "
+          f"min={best_stats['min']} max={best_stats['max']}")
+    print(f"stop_epoch (ultima registrada): mean={stop_stats['mean']:.2f} "
+          f"std={stop_stats['std']:.2f} min={stop_stats['min']} max={stop_stats['max']}")
+    print(f"max_epochs config = 40, patience = 20")
+    print(f"Cuantas llegaron al max_epochs? "
+          f"{(df.groupby(['seed','fold'])['epoch'].max() >= 39).sum()} / 15")
+    plot_convergence(agg, best_stats)
 
 
 if __name__ == "__main__":
