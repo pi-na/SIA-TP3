@@ -264,7 +264,7 @@ Lectura en el lenguaje de esta sección: dentro del especialista (Adam), shallow
 
 Las secciones anteriores miraron interacciones (LR×OPT, LR×ARCH, ARCH×OPT). Esta cierra el análisis del optimizer con una vista **head-to-head**: ¿cuál es la mejor configuración de cada familia (SGD, Momentum, Adam) en el grid del stage 2, y qué se gana o pierde con cada una?
 
-Para cada familia tomamos su **best-of-family** sobre el stage 2 (mejor (arch, LR) por val_acc media). Es la misma operación de "best-over-LR" que en ARCH×OPT, pero llevada un nivel más arriba: aquí marginalizamos también sobre arch. Sólo nos quedan 3 filas, una por familia, para comparar lado a lado.
+Para cada familia tomamos su mejor version sobre el stage 2 (mejor (arch, LR) por val_acc media). Es la misma operación de "best-over-LR" que en ARCH×OPT, pero llevada un nivel más arriba: aquí marginalizamos también sobre arch. Sólo nos quedan 3 filas, una por familia, para comparar lado a lado.
 
 ![[Segunda tanda de experimentos/Cross_LR_Opt_Arch/family_comparison_bars.png]]
 
@@ -295,18 +295,18 @@ Las secciones anteriores midieron las interacciones; esta consolida la decisión
 
 Las 10 mejores celdas del stage 2 ordenadas por val_acc media (sobre 15 corridas = 3 seeds × 5 folds). Tabla extraída del [stage 2 completo](Segunda%20tanda%20de%20experimentos/Cross_LR_Opt_Arch/analisis.md#Top%20configs):
 
-| #   | arch         | opt      | LR   | val_acc           | macro_f1 | best_epoch |
-| --- | ------------ | -------- | ---- | ----------------- | -------- | ---------- |
-| 1   | arch_wider   | adam     | 1e-3 | 0.9583 ± 0.0036   | 0.8537   | 3.4        |
-| 2   | arch_shallow | adam     | 1e-3 | 0.9572 ± 0.0041   | 0.8521   | 5.7        |
-| 3   | arch_shallow | adam     | 5e-4 | 0.9567 ± 0.0049   | 0.8518   | 4.8        |
-| 4   | arch_wider   | adam     | 5e-4 | 0.9553 ± 0.0050   | 0.8503   | 2.2        |
-| 5   | arch_base    | adam     | 1e-3 | 0.9548 ± 0.0044   | 0.8493   | 3.5        |
-| 6   | arch_wider   | adam     | 1e-4 | 0.9547 ± 0.0047   | 0.8500   | 7.9        |
-| 7   | arch_shallow | adam     | 1e-4 | 0.9546 ± 0.0044   | 0.8491   | 15.9       |
-| 8   | arch_shallow | adam     | 5e-3 | 0.9546 ± 0.0046   | 0.8493   | 3.2        |
-| 9   | arch_shallow | momentum | 1e-2 | 0.9543 ± 0.0062   | 0.8499   | 4.7        |
-| 10  | arch_base    | adam     | 5e-4 | 0.9541 ± 0.0050   | 0.8483   | 2.9        |
+| #   | arch    | opt      | LR   | val_acc (±std)  | macro_f1 (±std) | val_loss CE | train_loss | gap (val−train) | best_epoch |
+| --- | ------- | -------- | ---- | --------------- | --------------- | ----------- | ---------- | --------------- | ---------- |
+| 1   | wider   | Adam     | 1e-3 | 0.9583 ± 0.0036 | 0.8537 ± 0.0050 | 0.1701      | 0.0148     | 0.1553          | 3.4        |
+| 2   | shallow | Adam     | 1e-3 | 0.9572 ± 0.0041 | 0.8521 ± 0.0067 | 0.1701      | 0.0180     | 0.1521          | 5.7        |
+| 3   | shallow | Adam     | 5e-4 | 0.9567 ± 0.0049 | 0.8518 ± 0.0075 | 0.1695      | 0.0203     | 0.1493          | 4.8        |
+| 4   | wider   | Adam     | 5e-4 | 0.9553 ± 0.0050 | 0.8503 ± 0.0071 | 0.1775      | 0.0318     | 0.1457          | 2.2        |
+| 5   | base    | Adam     | 1e-3 | 0.9548 ± 0.0044 | 0.8493 ± 0.0050 | 0.1751      | 0.0229     | 0.1521          | 3.5        |
+| 6   | wider   | Adam     | 1e-4 | 0.9547 ± 0.0047 | 0.8500 ± 0.0060 | 0.1761      | 0.0187     | 0.1574          | 7.9        |
+| 7   | shallow | Adam     | 1e-4 | 0.9546 ± 0.0044 | 0.8491 ± 0.0073 | 0.1746      | 0.0252     | 0.1494          | 15.9       |
+| 8   | shallow | Adam     | 5e-3 | 0.9546 ± 0.0046 | 0.8493 ± 0.0069 | 0.1926      | 0.0242     | 0.1684          | 3.2        |
+| 9   | shallow | Momentum | 1e-2 | 0.9543 ± 0.0062 | 0.8499 ± 0.0081 | 0.2341      | 0.0196     | 0.2146          | 4.7        |
+| 10  | base    | Adam     | 5e-4 | 0.9541 ± 0.0050 | 0.8483 ± 0.0072 | 0.1741      | 0.0266     | 0.1475          | 2.9        |
 
 **Observaciones:** 9 de las 10 son Adam; la única excepción es `shallow + momentum @ 1e-2` en la posición 9. Las primeras 4 están dentro de 0.003 puntos de val_acc — todas dentro de ~3·SEM, prácticamente empatadas.
 
@@ -353,7 +353,7 @@ Resumen del recorrido de la decisión:
 
 Esta es la **decisión-con-criterios-explícitos** que faltaba documentar como tal en una sola sección del .md. La configuración misma ya estaba en `IMPORTANTE_CORRELACIONES.md` y en `Cross_LR_Opt_Arch/analisis.md`, pero el árbol que llega a ella estaba disperso.
 
-### Stage 2b — Estrella batch sobre el centro
+## Stage 2b — Estrella batch sobre el centro
 
 **Intención.** El batch_size óptimo para Adam@`1e-3` se decidió en el [pre-experimento LR×Batch×Opt](Segunda%20tanda%20de%20experimentos/Pre_LR_Batch_Opt/analisis.md) con sólo 3 puntos (16, 64, 256). Acá queremos confirmar que ese batch=64 es realmente el óptimo (y no un máximo entre puntos demasiado espaciados) **sobre el centro decidido** (`shallow + Adam + 1e-3`). Una "estrella" es eso: dejar todo fijo en el centro y variar **un solo factor** con resolución alta.
 
