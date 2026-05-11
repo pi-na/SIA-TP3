@@ -54,23 +54,22 @@ def aggregate_test() -> tuple[pd.DataFrame, np.ndarray, list[np.ndarray]]:
 
 
 def plot_confusion_matrix(cm_mean: np.ndarray) -> None:
-    fig, ax = plt.subplots(figsize=(8.2, 7.0), facecolor=BG)
+    fig, ax = plt.subplots(figsize=(9.5, 8.2), facecolor=BG)
     ax.set_facecolor(BG)
-    norm_cm = cm_mean / cm_mean.sum(axis=1, keepdims=True)
-    norm_cm = np.nan_to_num(norm_cm)
+    row_totals = cm_mean.sum(axis=1, keepdims=True)
+    safe_totals = np.where(row_totals == 0, 1, row_totals)
+    norm_cm = cm_mean / safe_totals
     im = ax.imshow(norm_cm, cmap="Blues", vmin=0, vmax=1, aspect="equal")
     for i in range(10):
         for j in range(10):
             v_norm = norm_cm[i, j]
-            v_abs = cm_mean[i, j]
-            if v_norm < 0.001 and v_abs < 0.5:
-                continue
+            v_abs  = cm_mean[i, j]
             color = "white" if v_norm > 0.55 else TEXT
-            txt = f"{v_norm:.2f}\n({v_abs:.0f})" if v_abs >= 1 else ""
-            if txt:
-                ax.text(j, i, txt, ha="center", va="center",
-                        color=color, fontsize=8, linespacing=1.0,
-                        fontweight="bold" if i == j else "normal")
+            # Mostrar TODAS las celdas (incluidas las de valor 0)
+            txt = f"{v_norm:.2f}\n({v_abs:.1f})"
+            ax.text(j, i, txt, ha="center", va="center",
+                    color=color, fontsize=7.5, linespacing=1.05,
+                    fontweight="bold" if i == j else "normal")
     ax.set_xticks(range(10)); ax.set_xticklabels(range(10), color=TEXT)
     ax.set_yticks(range(10)); ax.set_yticklabels(range(10), color=TEXT)
     ax.set_xlabel("Predicted label", color=TEXT, fontsize=11)
