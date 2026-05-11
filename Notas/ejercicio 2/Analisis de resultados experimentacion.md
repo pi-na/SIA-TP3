@@ -1,3 +1,4 @@
+# Stage 1
 Analisis de los resultados obtenidos en la etapa de "Pre_LR_Batch_Opt", resultados mas finos explicados en [[Notas/ejercicio 2/Segunda tanda de experimentos/Pre_LR_Batch_Opt/analisis|analisis]]
 
 En nuestros primeros experimentos del ejercicio 2, fuimos modificando los hiperparametros 1 a la vez. Comenzamos definiendo 4 arquitecturas y variando el lr -> vemos que ENTRE las arquitecturas no hay variacion en cuanto a los lr. Ambas curvas de convergencia (train loss y val loss) muestran el mismo comportamiento.
@@ -18,3 +19,11 @@ El techo de Adam (lr < 5e-3 con batch=32) no es un límite del optimizador sino 
   Ese comportamiento exagerado de Adam no es un defecto — es consecuencia de su mecanismo de adaptación por parámetro. Adam ajusta internamente el tamaño de paso, lo que lo hace muy sensible al producto LR×batch. Si ese producto está fuera de rango, los pasos efectivos son demasiado grandes y el modelo no converge.
   El gráfico muestra los dos efectos en simultáneo. Para Adam con lr=5e-3 (inestable a batch=32), aumentar el batch de 16 a 256 baja la CE de 0.55 a 0.19 y sube la val_acc de 0.934 a 0.954 — las dos métricas mejoran juntas a medida que la relación LR×batch se acerca al rango adecuado. Para lr=5e-4 y lr=1e-3 (ya estables), las curvas son planas: el batch no mueve la aguja porque el LR ya era el correcto para esos valores. SGD y Momentum no requieren este análisis porque su sensibilidad al batch es mucho menor — para ellos, fijar batch=32 no introduce el mismo sesgo en la comparación.
 ![[ejercicio2_experimentacion/analisis/cross_v1/stage2/stage2_val_acc_vs_lr_per_opt.png]]
+
+# Stage 2
+![[grid_3d_static.png]]
+sexyyy
+
+> [!warning] Que significan las métricas! Importante!!
+> Importantisimo tener visto [[Notas/ejercicio 2/Segunda tanda de experimentos/Cross_LR_Opt_Arch/analisis#Qué significa cada columna|explicación de métricas usadas en los experimentos]]
+
