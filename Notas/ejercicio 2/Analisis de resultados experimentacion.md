@@ -50,4 +50,56 @@ Y encontrar configuración óptima ARCH x LR x OPT
 
 ### LR x OPT
 Voy a medir LR x OPT; O sea para cada ARCH, vario LR y OPT;
-Mido val_acc, val_loss, macro_f1
+Mido val_acc, val_loss, macro_f1.
+
+![[Segunda tanda de experimentos/Cross_LR_Opt_Arch/lr_opt_val_acc_4panels.png]]
+
+#### Observaciones por optimizer
+
+**SGD:** patrón idéntico en las 4 archs. Salto grande de `1e-4` a `5e-4` (~+0.02), después plateau. **Sin interacción con arch.**
+
+| arch | val_acc 1e-4 | salto a 5e-4 | plateau (5e-4 → 1e-2) |
+|---|---|---|---|
+| shallow | 0.9244 | +0.024 | +0.002 |
+| base | 0.9263 | +0.020 | +0.001 |
+| wider | 0.9293 | +0.019 | +0.001 |
+| deeper | 0.9286 | +0.015 | +0.002 |
+
+---
+
+**Momentum:** interacción **CLARA con arch**. `shallow` y `wider` toleran LR=`1e-2` (siguen mejorando); `base` y `deeper` se rompen ahí.
+
+| arch | mejor LR | val_acc en 5e-3 | val_acc en 1e-2 | Δ(5e-3 → 1e-2) |
+|---|---|---|---|---|
+| shallow | 1e-2 | 0.9526 | **0.9543** | **+0.0017** (sigue mejorando) |
+| wider | 1e-2 | 0.9531 | **0.9540** | **+0.0009** (sigue mejorando) |
+| base | 5e-3 | 0.9506 | 0.9467 | **−0.0039** (cae) |
+| deeper | 5e-3 | 0.9500 | 0.9425 | **−0.0075** (cae más fuerte) |
+
+**Hipótesis estructural:** las archs que toleran LR=`1e-2` con Momentum son las que tienen la **última capa oculta más ancha** (128 neuronas). Las que se rompen tienen la última capa más estrecha (64, 32).
+
+| arch | última capa hidden | tolera LR=1e-2 con Momentum |
+|---|---|---|
+| shallow | 128 | ✅ sí |
+| wider | 128 | ✅ sí |
+| base | 64 | ❌ no |
+| deeper | 32 | ❌ no |
+
+La última capa oculta antes del softmax actúa como "buffer". Con más neuronas, cada peso individual pesa menos en la salida final → el modelo es más estable ante pasos de gradiente grandes. Con la última capa estrecha (deeper tiene sólo 32), cada peso afecta más al output → LR alto desestabiliza.
+
+→ **Hallazgo no trivial que no se habría visto sin medir las 4 archs** — era exactamente la sospecha que motivó el cross-experiment.
+
+---
+
+**Adam:** las **shapes** son idénticas en las 4 archs (pico en `1e-3`, caída después). Lo que cambia es la **magnitud** del pico y de la caída.
+
+| arch | val_acc pico (1e-3) | val_acc en 1e-2 | caída pico → 1e-2 |
+|---|---|---|---|
+| shallow | 0.9572 | 0.9472 | **−0.0100** |
+| base | 0.9548 | 0.9465 | **−0.0083** |
+| wider | 0.9583 | 0.9450 | **−0.0133** (la más grande) |
+| deeper | 0.9535 | 0.9455 | **−0.0080** |
+
+- **Wider** tiene el pico más alto **Y** la caída más profunda. Más capacidad (235k params vs 101k de shallow) = más sensibilidad al LR alto. Coherente con la regla teórica "más parámetros → menor LR óptimo".
+- **Deeper** tiene el pico más bajo (0.9535). No por mayor caída sino por menor pico — coincide con la observación del Arch sweep: deeper sufre por la profundidad (gradientes peor propagados sin batch-norm).
+- **Shallow** y **Base** están en el medio, con curvas casi idénticas.
