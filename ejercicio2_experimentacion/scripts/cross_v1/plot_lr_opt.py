@@ -146,9 +146,8 @@ def plot_4heatmaps(df: pd.DataFrame) -> None:
     print(f"saved {OUT/'lr_opt_heatmaps_4archs.png'}")
 
 
-def plot_val_loss_4panels(df: pd.DataFrame) -> None:
-    """val_loss CE vs LR, 4 paneles (uno por arch), 3 curvas por opt.
-    Capta la inestabilidad de Adam@LR alto que la accuracy oculta."""
+def _plot_val_loss_panels(df: pd.DataFrame, y_log: bool, out_name: str,
+                            scale_desc: str) -> None:
     fig, axes = plt.subplots(1, 4, figsize=(18, 5.2), facecolor=BG, sharey=True)
     for ax, arch in zip(axes, ARCH_ORDER):
         ax.set_facecolor(BG)
@@ -162,35 +161,50 @@ def plot_val_loss_4panels(df: pd.DataFrame) -> None:
                          markersize=8, capsize=4, capthick=1.2,
                          markeredgecolor="black", markeredgewidth=0.6)
         ax.set_xscale("log")
-        ax.set_yscale("log")
+        if y_log:
+            ax.set_yscale("log")
         ax.set_xticks(LR_ORDER); ax.set_xticklabels(LR_LABEL,
                                                        color=TEXT, fontsize=9)
         ax.set_xlabel("Learning rate", color=TEXT, fontsize=10)
         ax.set_title(arch.replace("arch_", "").upper(),
                       color=TEXT, fontsize=12, fontweight="bold", pad=8)
-        ax.grid(True, alpha=0.25, color=LABEL, linewidth=0.5, which="both")
+        ax.grid(True, alpha=0.25, color=LABEL, linewidth=0.5,
+                 which="both" if y_log else "major")
         for spine in ax.spines.values():
             spine.set_color(GRID)
         ax.tick_params(colors=LABEL, labelsize=9)
 
-    axes[0].set_ylabel("val_loss CE (escala log)", color=TEXT, fontsize=10)
+    axes[0].set_ylabel(f"val_loss CE ({scale_desc})", color=TEXT, fontsize=10)
     axes[0].legend(loc="upper left", facecolor=BG, edgecolor=GRID,
                     labelcolor=TEXT, fontsize=10, framealpha=0.9)
 
     fig.suptitle("val_loss CE vs Learning Rate, por arquitectura y optimizer · stage 2 del cross_v1",
                   color=TEXT, fontsize=15, fontweight="bold", y=1.02)
-    fig.text(0.5, -0.03,
-              "val_loss = cross-entropy en validación (escala log). Capta el 'quiebre' de Adam@LR alto "
-              "más dramáticamente que la accuracy: cuando un modelo se desestabiliza, asigna probabilidades "
-              "erradas con alta confianza → CE explota.",
+    caption = ("val_loss = cross-entropy en validación. Capta el 'quiebre' de Adam@LR alto "
+                "más fielmente que la accuracy: cuando un modelo se desestabiliza, asigna "
+                "probabilidades erradas con alta confianza → CE sube.")
+    if y_log:
+        caption += " Escala log: enfatiza la proporción del cambio, no la magnitud absoluta."
+    else:
+        caption += " Escala lineal: muestra la magnitud real de las diferencias."
+    fig.text(0.5, -0.03, caption,
               color=LABEL, ha="center", fontsize=10, style="italic")
     fig.tight_layout()
-    fig.savefig(OUT / "lr_opt_val_loss_4panels.png", dpi=160,
-                 facecolor=BG, bbox_inches="tight")
-    fig.savefig(NOTES / "lr_opt_val_loss_4panels.png", dpi=160,
-                 facecolor=BG, bbox_inches="tight")
+    fig.savefig(OUT / out_name, dpi=160, facecolor=BG, bbox_inches="tight")
+    fig.savefig(NOTES / out_name, dpi=160, facecolor=BG, bbox_inches="tight")
     plt.close(fig)
-    print(f"saved {OUT/'lr_opt_val_loss_4panels.png'}")
+    print(f"saved {OUT/out_name}")
+
+
+def plot_val_loss_4panels(df: pd.DataFrame) -> None:
+    """Genera ambas versiones: log y lineal. Lineal es más honesta dado el
+    rango chico de val_loss (~0.17 a 0.28); log queda como referencia visual."""
+    _plot_val_loss_panels(df, y_log=False,
+                            out_name="lr_opt_val_loss_4panels.png",
+                            scale_desc="escala lineal")
+    _plot_val_loss_panels(df, y_log=True,
+                            out_name="lr_opt_val_loss_4panels_log.png",
+                            scale_desc="escala log")
 
 
 def plot_overfit_gap_4panels(df: pd.DataFrame) -> None:
