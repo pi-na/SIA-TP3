@@ -353,7 +353,7 @@ Resumen del recorrido de la decisión:
 
 Esta es la **decisión-con-criterios-explícitos** que faltaba documentar como tal en una sola sección del .md. La configuración misma ya estaba en `IMPORTANTE_CORRELACIONES.md` y en `Cross_LR_Opt_Arch/analisis.md`, pero el árbol que llega a ella estaba disperso.
 
-## Stage 2b — Estrella batch sobre el centro
+## Stage 2b -- Comparación de batch size con la mejor combinacion del stage 2
 
 **Intención.** El batch_size óptimo para Adam@`1e-3` se decidió en el [pre-experimento LR×Batch×Opt](Segunda%20tanda%20de%20experimentos/Pre_LR_Batch_Opt/analisis.md) con sólo 3 puntos (16, 64, 256). Acá queremos confirmar que ese batch=64 es realmente el óptimo (y no un máximo entre puntos demasiado espaciados) **sobre el centro decidido** (`shallow + Adam + 1e-3`). Una "estrella" es eso: dejar todo fijo en el centro y variar **un solo factor** con resolución alta.
 
@@ -375,3 +375,140 @@ Esta es la **decisión-con-criterios-explícitos** que faltaba documentar como t
 - **Batches grandes (256):** val_acc cae 0.002 y `best_epoch` sube a 11.2 (vs 5.7 en batch=64). Hipótesis: gradiente menos ruidoso pero más sesgado al óptimo de train → necesita más épocas para alcanzar val óptimo. Coherente con la regla LR×batch de la cátedra (con LR=`1e-3` fijo, batch=256 deja el producto LR×batch en un régimen sub-óptimo en el extremo "demasiado promediado").
 
 **Conclusión.** `batch=64` es robustamente el óptimo del centro: gana en val_acc, val_loss y macro_f1 simultáneamente. La diferencia con batch=32 está dentro del SEM (Δ=0.0004), así que ambos serían defendibles, pero 64 es lo que ya teníamos decidido del pre-experimento y la estrella lo confirma. **Decisión final del Ej2 sostenida:** `shallow + Adam + 1e-3 + batch=64`.
+
+---
+
+# Convergencia y generalización de la configuración óptima
+
+Una vez congelada la configuración (`shallow + Adam@1e-3 + batch=64`), queda medir **cómo aprende** y **qué tan bien generaliza**. Esta sección reporta tres cosas, en orden:
+
+1. **Convergencia** sobre el CV interno: cómo bajan `train_loss` y `val_loss` por época, y a partir de qué época `val_loss` deja de bajar (overfit).
+2. **Generalización interna** (CV sobre `digits.csv`): las 4 métricas (accuracy, precision macro, recall macro, F1 macro) + CE en val vs train del fold, promediadas sobre las 15 corridas (3 seeds × 5 folds) del stage 2.
+3. **Generalización externa** sobre `digits_test.csv`: corremos `ejercicio3/final_eval.py` con la config congelada y 3 seeds, evaluando una sola vez sobre el set de producción que no se tocó durante HP search.
+
+**Datos fuente:**
+- Convergencia (15 epoch_history.csv): `ejercicio2_experimentacion/output/cross_v1/stage2/stage2_arch_shallow_adam_lr1e-3_bs64_seed{42,7,13}/.../epoch_history.csv`. Agregados en `ejercicio2_experimentacion/analisis/cross_v1/optimal_config/optimal_convergence_table.csv`.
+- CV interno (3 summary.csv): `ejercicio2_experimentacion/output/cross_v1/stage2/stage2_arch_shallow_adam_lr1e-3_bs64_seed{42,7,13}/summary.csv`. Agregado en `ejercicio2_experimentacion/analisis/cross_v1/optimal_config/cv_internal_summary.csv`.
+- Test (3 corridas): `ejercicio2_experimentacion/output/final_eval_ej2/final_eval_final_ej2_seed{42,7,13}_*/test_metrics.csv` + `test_confusion_matrix.csv`. Config: `ejercicio2_experimentacion/configs/final_config_ej2.json`. Agregado en `optimal_config/test_summary.csv` y `test_per_class.csv`.
+- Scripts: `ejercicio2_experimentacion/scripts/cross_v1/plot_optimal_convergence.py` y `analyze_optimal_generalization.py`.
+
+## A. Convergencia (sobre CV interno)
+
+![[Segunda tanda de experimentos/Cross_LR_Opt_Arch/optimal_convergence.png]]
+
+**Cómo se construyó:** para cada una de las 15 corridas del CV interno (3 seeds × 5 folds) cargamos su `epoch_history.csv` y, **para cada época**, promediamos las 4 series (`train_loss`, `val_loss`, `train_acc`, `val_acc`) sobre todas las corridas que llegaron a esa época. Las bandas son ± 1 std a nivel de época. El plot se corta donde menos de 8 de las 15 corridas siguen vivas (las demás ya cortó early stopping con `patience=20`).
+
+**Lo que se ve:**
+
+- **train_loss** baja muy rápido: de 0.17 (epoch 0) a ≈ 0.02 en epoch 10. En la última época con cobertura, está ≈ 0.005 (modelo memorizando train completo).
+- **val_loss** baja a su mínimo de ≈ 0.170 alrededor del **epoch 5.7** (`best_epoch` promedio sobre las 15 corridas, std ± 1.6) y a partir de ahí sube ligeramente — el modelo sigue ajustando train pero deja de mejorar en val.
+- La separación clara entre train_loss y val_loss arranca alrededor del epoch 4-5: a partir de ese punto, lo que aprende sobre train **ya no transfiere a val**. Es el "techo" del modelo en este dataset sin regularización.
+- **train_acc** llega a 1.0 (memoria perfecta) alrededor del epoch 10; **val_acc** se estabiliza en ≈ 0.957.
+
+**Lectura defensiva.** El early stopping con `patience=20` sobre val_loss es **suficientemente paciente** para no cortar artificialmente: en las 15 corridas, val_loss alcanzó su mínimo y se quedó 20 épocas chequeando si bajaba más. No bajó. La convergencia en 5-6 épocas no es un artefacto de cortar temprano; es la "velocidad real" de Adam@`1e-3` con este dataset.
+
+## B. Generalización interna (CV sobre `digits.csv`)
+
+El CV interno usa **k-folds estratificado con k=5** sobre `digits.csv`: cada corrida entrena con 4 folds (~9956 samples) y valida sobre el 5° (~2493 samples). Reportamos las 4 métricas + CE del **fold de validación**, promediadas sobre las 15 corridas. Para train, sólo se almacenó accuracy y CE (las 4 métricas no se guardan en el `summary.csv` durante stage 2 — diseño del runner). El gap de accuracy y CE alcanza para diagnosticar overfit.
+
+| Métrica                  | Train (CV, 15 corridas) | Val (CV, 15 corridas) | Gap val − train         |
+| ------------------------ | ----------------------- | --------------------- | ----------------------- |
+| **accuracy**             | 0.9979 ± 0.0023         | 0.9572 ± 0.0041       | −0.041                  |
+| **macro_precision**      | (no almacenada)         | 0.8546 ± 0.0062       | —                       |
+| **macro_recall**         | (no almacenada)         | 0.8502 ± 0.0078       | —                       |
+| **macro_F1**             | (no almacenada)         | 0.8521 ± 0.0067       | —                       |
+| **CE loss**              | 0.0180 ± 0.0104         | 0.1701 ± 0.0170       | +0.152                  |
+| **best_epoch**           | —                       | 5.7 ± 1.6             | —                       |
+
+> **Promedios:** todos los valores son media sobre **15 corridas = 3 seeds (42, 7, 13) × 5 folds estratificados**. El ± reportado es desviación estándar sobre esas 15 corridas (no SEM). El SEM correspondiente sería std/√15 ≈ std/3.87.
+
+**Interpretación.**
+
+- El modelo **memoriza train casi perfectamente** (train_acc = 0.9979): tiene capacidad de sobra para este dataset.
+- En val baja a **0.957 accuracy** con 0.852 macro_F1. La brecha entre accuracy y macro_F1 (~10 puntos) es **estructural** del dataset: la clase 5 está fuertemente sub-representada en `digits.csv` (271 ejemplos vs ~1500 las otras), por lo que su precision/recall son bajos y arrastran el macro_F1 hacia abajo aunque la accuracy se vea bien (ya lo discutimos en el bloque de Métricas al inicio del Stage 2).
+- El **gap train→val** es **+0.041 en accuracy** y **+0.152 en CE**: overfit moderado. Es lo esperado para un MLP con ~101k parámetros entrenando sobre ~10k samples sin regularización.
+
+**Diagnóstico defensivo.** El val_acc de 0.957 **no es el techo de Adam ni del LR** — es el techo de este dataset sin regularización. Lo confirman tres números: train_acc=0.9979 (capacidad de sobra), CE gap=+0.152 (memoriza), best_epoch=5.7 con patience=20 (no es corte temprano artificial).
+
+## C. Generalización externa (sobre `digits_test.csv`)
+
+**Procedimiento.** Tomamos la config congelada (`final_config_ej2.json`: arch=[784, 128, 10], Adam@`1e-3`, batch=64, epochs=40, patience=20, sin regularización), y la corrimos **3 veces** con seeds 42, 7, 13 usando `ejercicio3/final_eval.py`. Cada corrida:
+
+1. Entrena con todo `digits.csv` (12 449 samples) usando un split 90/10 para early stopping (no k-folds — esto es producción, no CV).
+2. Predice sobre `digits_test.csv` (2497 samples) **una sola vez** con los `best_weights` restaurados.
+3. Reporta accuracy, macro precision/recall/F1, weighted F1, y matriz de confusión.
+
+**Resultado agregado** (mean ± std sobre 3 seeds):
+
+| Métrica              | Val CV (referencia interna) | **Test** (digits_test.csv)   | Δ (val CV − test) |
+| -------------------- | --------------------------- | ---------------------------- | ----------------- |
+| **accuracy**         | 0.9572 ± 0.0041             | **0.8529 ± 0.0034**          | **+0.1043**       |
+| **macro_precision**  | 0.8546 ± 0.0062             | **0.7706 ± 0.0039**          | +0.0840           |
+| **macro_recall**     | 0.8502 ± 0.0078             | **0.8485 ± 0.0034**          | +0.0017           |
+| **macro_F1**         | 0.8521 ± 0.0067             | **0.8062 ± 0.0034**          | +0.0459           |
+| **weighted_F1**      | —                           | **0.8103 ± 0.0033**          | —                 |
+
+**Esto es una caída enorme en accuracy: 10 puntos.** Antes de interpretarla, hay que entender por qué ocurre.
+
+### Por qué cae 10 puntos: distribución de clases incompatible
+
+Conteo de clases en cada CSV:
+
+| clase | `digits.csv` (train) | `digits_test.csv` (test) | `more_digits.csv` (Ej3, no usado acá) |
+| ----- | -------------------- | ------------------------ | ------------------------------------- |
+| 0     | 1480                 | 245                      | 1776                                  |
+| 1     | 1685                 | 283                      | 2022                                  |
+| 2     | 1489                 | 258                      | 1787                                  |
+| 3     | 1532                 | 252                      | 1839                                  |
+| 4     | 1460                 | 245                      | 1752                                  |
+| 5     | **271** (sub-repr)   | 223                      | 542                                   |
+| 6     | 1479                 | 239                      | 1775                                  |
+| 7     | 1566                 | 257                      | 1879                                  |
+| **8** | **0 (ausente!)**     | 243 (9.7% del test)      | 585                                   |
+| 9     | 1487                 | 252                      | 1784                                  |
+| **N** | **12 449**           | **2497**                 | 15 741                                |
+
+**Hallazgo clave: `digits.csv` no contiene ningún ejemplo de la clase 8.** El modelo nunca vio un 8 durante entrenamiento. Pero `digits_test.csv` tiene **243 ejemplos de clase 8 (9.7% del test)**. Esos 243 ejemplos son necesariamente mal clasificados: precision=0, recall=0, F1=0 para la clase 8 (verificado en la tabla per-clase de abajo).
+
+### Confusion matrix sobre test
+
+![[Segunda tanda de experimentos/Cross_LR_Opt_Arch/optimal_test_confusion_matrix.png]]
+
+Cada celda muestra `recall normalizado por fila` (cuenta absoluta entre paréntesis), promediada sobre las 3 seeds. La fila 8 está enmarcada en rojo: todos los 8s reales se reparten entre las clases que el modelo SÍ vio (sobre todo 3 y 9, los visualmente más parecidos a un 8). La diagonal de la fila 8 es 0.
+
+### Métricas por clase en test (mean sobre 3 seeds)
+
+| clase | precision         | recall            | F1                | support (test) |
+| ----- | ----------------- | ----------------- | ----------------- | -------------- |
+| 0     | 0.884             | 0.995             | 0.936             | 245            |
+| 1     | 0.942             | 0.988             | 0.964             | 283            |
+| 2     | 0.862             | 0.943             | 0.900             | 258            |
+| 3     | 0.727             | 0.983             | 0.835             | 252            |
+| 4     | 0.885             | 0.961             | 0.921             | 245            |
+| 5     | 0.789             | 0.803             | 0.796             | 223            |
+| 6     | 0.897             | 0.960             | 0.927             | 239            |
+| 7     | 0.934             | 0.938             | 0.936             | 257            |
+| **8** | **0.000**         | **0.000**         | **0.000**         | 243            |
+| 9     | 0.786             | 0.915             | 0.845             | 252            |
+
+→ La clase 8 mete un **0 en cada una de las tres métricas macro**. Como el macro promedia las 10 clases con peso igual, un 0 puro arrastra el macro_F1 macro hacia abajo de forma agresiva. Pero hay un detalle más fino: **precision** cae más que **recall** porque, además de no poder predecir 8, el modelo "vomita" otros dígitos (típicamente 3 y 9) sobre los 8s reales — eso infla los falsos positivos de las clases 3 y 9 y baja sus precisions también.
+
+### Aritmética del gap
+
+Si **excluimos del test los casos donde el ground truth es clase 8** (242–243 ejemplos por corrida, ≈ 9.7% del set), la accuracy sube a:
+
+> **Test acc excluyendo clase 8 = 0.9448 ± 0.0030** (sobre las 9 clases que sí están en train)
+
+Comparado con val_acc CV = 0.9572 ± 0.0041, el **gap residual real es sólo +0.0124** (~1.2 puntos), perfectamente consistente con un ligero shift de distribución entre `digits.csv` y `digits_test.csv` en las clases que **sí** están en ambos (la clase 5, por ejemplo, está al 2.2% en train y 8.9% en test — el modelo entrenó con ese desbalance y al evaluarse en una distribución más balanceada pierde un poco).
+
+### Lectura defensiva
+
+- El CV interno **no mintió** sobre lo que medía: predijo bien la generalización **dentro de la distribución de `digits.csv`** (~0.957). El gap residual al test (excluyendo la clase ausente) es de sólo 1.2 puntos, completamente razonable.
+- Lo que falla **no es el modelo ni la metodología de HP search** — es que `digits.csv` está **incompleto** respecto al universo que `digits_test.csv` representa. Sin clase 8 en train, ese 9.7% del test es **imposible** de acertar.
+- Esto es exactamente lo que **motiva el Ej3**: `more_digits.csv` tiene 585 ejemplos de clase 8 (y refuerza la 5 con 542 más). Sumarlo al entrenamiento debería cerrar la mayor parte de la caída.
+
+**Pronóstico para Ej3** (testeable en la próxima corrida):
+- Si la única causa del gap fuera la clase 8 ausente, sumar `more_digits.csv` debería llevar el test_acc a ~0.94–0.95.
+- Si hay además un shift residual de distribución (clase 5 sub-representada en train, clases más difíciles, etc.), podríamos quedar en 0.92–0.94 incluso con la clase 8 cubierta. La diferencia entre estos dos escenarios es lo que cuantifica el Ej3.
+
+**Síntesis:** la convergencia es sana (5-6 épocas, no es corte prematuro). La generalización **dentro de la distribución de digits.csv es del 95.7%**, consistente con el techo esperable de un MLP sin regularización sobre 12.5k samples. La generalización **fuera de la distribución de digits.csv** cae a 85.3% por una razón **estructural del dataset** (falta una clase), no del modelo. La intervención correcta no es "más HP search" ni "más optimizador", es **más datos** — exactamente la motivación de Ej3.
