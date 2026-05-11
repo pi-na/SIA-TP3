@@ -53,7 +53,7 @@ Mido val_acc, val_loss, macro_f1.
 
 #### Interacción LR x OPT con ARCH
 ![[Segunda tanda de experimentos/Cross_LR_Opt_Arch/lr_opt_val_acc_4panels.png]]
-![[Notas/ejercicio 2/Segunda tanda de experimentos/Cross_LR_Opt_Arch/lr_opt_val_loss_4panels.png]]
+![[ejercicio2_experimentacion/analisis/cross_v1/lr_opt/lr_opt_val_loss_4panels.png]]
 ![[ejercicio2_experimentacion/analisis/cross_v1/lr_opt/lr_opt_heatmaps_4archs.png]]
 
 **SGD:** patrón idéntico en las 4 archs. Salto grande de `1e-4` a `5e-4` (~+0.02), después plateau. **Sin interacción con arch.**
@@ -100,10 +100,9 @@ La última capa oculta antes del softmax actúa como "buffer". Con más neuronas
 - **Shallow** y **Base** están en el medio, con curvas casi idénticas.
 
 #### val_loss CE — lo que la accuracy esconde
+![[Notas/ejercicio 2/Segunda tanda de experimentos/Cross_LR_Opt_Arch/lr_opt_val_loss_4panels.png]]
 
-![[Segunda tanda de experimentos/Cross_LR_Opt_Arch/lr_opt_val_loss_4panels.png]]
-
-El plot de val_loss en escala log captura algo que la accuracy diluye: el **quiebre de Adam@1e-2 es vertical**. Adam pasa de val_loss ≈ 0.17 (en su óptimo en 1e-3) a ≈ 0.25 (en 1e-2), un **50% peor** en sólo un orden de magnitud de LR. La accuracy del mismo punto sólo cae de 0.957 a 0.947 (~1 pp).
+El plot de val_loss captura algo que la accuracy diluye: el **quiebre de Adam@1e-2 es vertical**. Adam pasa de val_loss ≈ 0.17 (en su óptimo en 1e-3) a ≈ 0.25 (en 1e-2), un **50% peor** en sólo un orden de magnitud de LR. La accuracy del mismo punto sólo cae de 0.957 a 0.947 (~1 pp).
 
 | arch    | val_loss CE Adam@1e-3 | val_loss CE Adam@1e-2 | empeoramiento relativo |
 | ------- | --------------------- | --------------------- | ---------------------- |
@@ -134,20 +133,83 @@ Gap = `val_loss CE − train_loss CE`. Cuanto más alto, más memoriza train sin
 
 **Implicancia para el siguiente paso:** un futuro experimento de regularización (Pack C) tiene **menos margen para mejorar Adam** que Mom/SGD, porque Adam ya overfittea poco. La regularización movería más la aguja en Momentum o SGD si decidiéramos usarlos.
 
-#### Conclusiones cualitativas — más allá de la interacción
+#### Conclusiones cualitativas
 
-Ordenadas por relevancia para la defensa oral:
+1. El factor definitorio es la arquitectura. Las 4 archs llegan a un techo ≈ **0.957–0.958** con la combinación correcta. **Más capacidad no es lo que falta.**
 
-1. **El cuello de botella NO es la arquitectura.** Las 4 archs llegan a un techo ≈ **0.957–0.958** con la combinación correcta. Más capacidad no es lo que falta — este problema está saturado en parámetros con 100k+.
-
-2. **El cuello de botella ES la combinación opt–LR.** Diff entre la mejor cell (`wider+Adam@1e-3` = 0.9583) y la peor (`shallow+SGD@1e-4` = 0.9244) ≈ **3.4 pp**. Casi todo eso es atribuible a HP, no a arch. **Elegir bien LR y opt importa 4× más que elegir bien la arquitectura** en este problema.
+2. **El factor definitorio SI es la combinacion LR x OPT**. Diferencia entre la mejor cell (`wider+Adam@1e-3` = 0.9583) y la peor (`shallow+SGD@1e-4` = 0.9244) ≈ **3.4 pp**. Casi todo eso es atribuible a HP, no a arch. **Elegir bien LR y opt importa 4× más que elegir bien la arquitectura** en este problema.
 
 3. **Adam domina pero es frágil.** Tiene el techo más alto (0.958) pero el rango operativo más estrecho (LR ∈ [5e-4, 1e-3]). SGD tolera LR ∈ [5e-4, 1e-2] sin romperse, pero su techo es ~0.951. Trade-off: *Adam es para cuando sabés el LR; SGD/Momentum perdonan errores en HP*.
 
-4. **Adam overfittea MENOS, no más** (contraintuitivo, ver tabla de gap arriba). Esto refuerza que Adam@1e-3 sea el ganador: combina mejor accuracy, mejor calibración y menor sobreajuste.
+4. **Adam overfittea MENOS, no más**. Esto refuerza que Adam@1e-3 sea el ganador: combina mejor accuracy, mejor calibración y menor sobreajuste.
 
-5. **Hay un "ceiling" de ~0.96 sin regularización.** Ningún modelo del grid supera 0.96 val_acc. Para subir eso necesitás **más datos (Ej3)** o **Pack C** (L2, dropout, data augmentation). Esa es la motivación natural del siguiente experimento.
+5. **Hay un "ceiling" de ~0.96 sin regularización.** Ningún modelo del grid supera 0.96 val_acc. Para subir eso necesitás **más datos (Ej3)** o augmentation. Esa es la motivación natural del siguiente experimento.
 
 6. **val_loss y accuracy NO son redundantes.** La accuracy mide aciertos del argmax; CE mide calibración de probabilidades. En este grid hay configuraciones con accuracy casi igual pero CE muy distinta (Adam@1e-2 acc=0.947 vs Adam@1e-3 acc=0.957, pero CE=0.25 vs 0.17 — caída de accuracy de 1pp esconde quiebre de CE de 50%).
 
 7. **Top-10 dominado por Adam.** Sólo una celda no-Adam aparece en el top-10 (`shallow+momentum+lr=1e-2` en posición 9). **El optimizer importa más que la arch para llegar al top.** SGD no llega al top-10 con ninguna combinación.
+
+### LR x ARCH
+
+Misma data del stage 2 (60 cells = 5 LR × 3 opt × 4 arch) que la sección LR×OPT, rotada para responder una pregunta distinta: **dentro de cada optimizer, ¿el LR óptimo es el mismo en las 4 arquitecturas, o se desplaza?**
+
+En la vista anterior fijábamos arch y comparábamos opts (4 paneles × 3 curvas). Acá fijamos opt y comparamos archs (3 paneles × 4 curvas). Si dentro de un panel las 4 curvas pican en la misma columna de LR, no hay interacción LR×ARCH para ese optimizer.
+
+![[Segunda tanda de experimentos/Cross_LR_Opt_Arch/lr_arch_val_acc_3panels.png]]
+
+![[Segunda tanda de experimentos/Cross_LR_Opt_Arch/lr_arch_heatmaps_3opts.png]]
+
+**Best LR por (opt, arch)** — extraído de la tabla completa del stage 2. val_acc reportado como media ± std sobre **3 seeds × 5 folds = 15 corridas/celda**. val_loss CE = media sobre las mismas 15 corridas.
+
+| opt          | arch    | best LR  | val_acc (15 corridas) | macro_f1 (15 corridas) | val_loss CE | best_epoch |
+| ------------ | ------- | -------- | --------------------- | ---------------------- | ----------- | ---------- |
+| **SGD**      | shallow | **1e-2** | 0.9509 ± 0.0053       | 0.8444                 | 0.1942      | 18.6       |
+| **SGD**      | base    | **1e-2** | 0.9476 ± 0.0047       | 0.8407                 | 0.2061      | 9.1        |
+| **SGD**      | wider   | **1e-2** | 0.9498 ± 0.0053       | 0.8445                 | 0.2019      | 8.9        |
+| **SGD**      | deeper  | **1e-2** | 0.9463 ± 0.0036       | 0.8394                 | 0.2153      | 5.9        |
+| **Momentum** | shallow | **1e-2** | 0.9543 ± 0.0062       | 0.8499                 | 0.2341      | 4.7        |
+| **Momentum** | base    | **5e-3** | 0.9506 ± 0.0039       | 0.8437                 | 0.2121      | 3.0        |
+| **Momentum** | wider   | **1e-2** | 0.9540 ± 0.0061       | 0.8478                 | 0.2191      | 3.2        |
+| **Momentum** | deeper  | **5e-3** | 0.9500 ± 0.0072       | 0.8429                 | 0.2154      | 2.8        |
+| **Adam**     | shallow | **1e-3** | 0.9572 ± 0.0041       | 0.8521                 | 0.1701      | 5.7        |
+| **Adam**     | base    | **1e-3** | 0.9548 ± 0.0044       | 0.8493                 | 0.1751      | 3.5        |
+| **Adam**     | wider   | **1e-3** | 0.9583 ± 0.0036       | 0.8537                 | 0.1701      | 3.4        |
+| **Adam**     | deeper  | **1e-3** | 0.9535 ± 0.0078       | 0.8476                 | 0.1821      | 3.3        |
+
+> **CSV fuente:** [`ejercicio2_experimentacion/analisis/cross_v1/lr_arch/best_lr_per_opt_arch.csv`](../../ejercicio2_experimentacion/analisis/cross_v1/lr_arch/best_lr_per_opt_arch.csv) — es la tabla reducida (12 filas) que sale de tomar, por cada (opt, arch), la celda con val_acc media más alta dentro de las 5 que varían LR. Incluye `best_lr`, `val_acc_mean_seeds_folds`, `val_acc_std_seeds_folds`, `macro_f1_mean_seeds_folds`, `val_loss_CE_mean_seeds_folds` y `best_epoch_mean`. Se genera con `scripts/cross_v1/plot_lr_arch.py` y es lo que usé para escribir la tabla de arriba.
+
+#### Lectura por optimizer
+
+**Adam — sin interacción LR×ARCH.** Las 4 archs pican en `1e-3`. La columna del óptimo es la misma; lo único que cambia es la **altura** del pico (wider 0.9583 > shallow 0.9572 > base 0.9548 > deeper 0.9535). Esto es coherente con lo que vimos en LR×OPT: las shapes de Adam son idénticas en las 4 archs, sólo cambia magnitud. La hipótesis previa de "Adam pica en 1e-3 en las 4 archs" se confirma.
+
+**SGD — sin interacción LR×ARCH (pero con caveat).** Las 4 archs pican formalmente en `1e-2`, pero la curva es prácticamente plana desde `5e-4` en adelante (Δ entre `5e-4` y `1e-2` ≈ 0.002 en las 4 archs). El "óptimo en 1e-2" es real pero **marginal**: la diferencia con `5e-3` está dentro del SEM. SGD muestra el mismo plateau alto en las 4 arquitecturas. No hay shift del LR óptimo entre archs, y la única celda claramente sub-óptima es `1e-4` (no convergida en presupuesto).
+
+**Momentum — interacción CLARA con arch.** Acá sí se desplaza el óptimo:
+
+| arch    | best LR | val_acc en 5e-3 | val_acc en 1e-2 | Δ(5e-3 → 1e-2)                |
+| ------- | ------- | --------------- | --------------- | ----------------------------- |
+| shallow | **1e-2** | 0.9526 | **0.9543** | **+0.0017** (sigue mejorando) |
+| wider   | **1e-2** | 0.9531 | **0.9540** | **+0.0009** (sigue mejorando) |
+| base    | **5e-3** | **0.9506** | 0.9467 | **−0.0039** (cae)             |
+| deeper  | **5e-3** | **0.9500** | 0.9425 | **−0.0075** (cae más fuerte)  |
+
+El shift de `1e-2` a `5e-3` separa exactamente las archs por **última capa oculta**: `shallow` y `wider` (128 neuronas antes del softmax) toleran `1e-2`; `base` (64) y `deeper` (32) se rompen ahí. Es la misma observación de "última capa oculta como buffer" descrita en LR×OPT — acá lo confirma desde el ángulo "best LR per (opt, arch)".
+
+#### Conexión con `IMPORTANTE_CORRELACIONES.md` (sección 3)
+
+En la sección "Arch × LR" de [[IMPORTANTE_CORRELACIONES]] reportamos que **el ranking de archs cambia con el LR para Adam**: en `1e-3` wider es 1° y wider está 4° en `1e-2`. Eso no se contradice con lo de acá. Son dos cortes distintos de la misma grilla:
+
+- **Acá** (LR×ARCH) preguntamos "fijo opt, ¿se mueve el **LR óptimo** al cambiar de arch?" → respuesta: no para Adam ni SGD, sí para Momentum.
+- **Ahí** (IMPORTANTE_CORRELACIONES §3) preguntamos "fijo opt, ¿se mueve el **ranking de archs** al cambiar de LR?" → respuesta: sí para Adam (wider colapsa con LR alto).
+
+Las dos cosas son consistentes: aunque el LR óptimo de Adam sea `1e-3` en las 4 archs, **fuera** de ese óptimo la pendiente de caída es distinta por arch (wider cae más fuerte, ver tabla de LR×OPT panel Adam). Es interacción de **magnitudes**, no de **ubicación del óptimo**.
+
+#### Conclusiones de LR x ARCH
+
+1. **El LR óptimo es estable entre archs para Adam (`1e-3`) y SGD (`1e-2`).** Esto es buena noticia metodológica: para esos dos optimizers se podría haber hecho un "sweep LR sobre una sola arch" y la decisión hubiera generalizado. El sweep LR original (que se hizo SGD-only) era válido en ese sentido, aunque por otra razón (LR×OPT) no generalizaba a Adam.
+
+2. **Momentum sí tiene interacción.** Para Momentum, "el LR óptimo es 1e-2" depende de la arch. En `base` y `deeper` el óptimo cae a `5e-3`. Para Momentum **no se puede separar el sweep de LR del de arch**.
+
+3. **El shift de Momentum está estructuralmente explicado.** Las archs que toleran `1e-2` con Momentum son las que tienen la última capa oculta más ancha (128). Las que se rompen tienen la última capa más estrecha (64, 32). El mecanismo (cada peso pesa más en la salida cuando la capa es estrecha → LR alto desestabiliza) es el mismo que ya identificamos en LR×OPT, sólo que ahora lo vemos también desde "best LR per arch".
+
+4. **La configuración decidida (`shallow + Adam + 1e-3`) sigue justificada.** Adam@`1e-3` es óptimo en las 4 archs, así que la elección del LR no quedaría condicionada al ARCH específico que terminamos eligiendo. Eso refuerza que el centro es robusto al swap de arch dentro del rango medido.
