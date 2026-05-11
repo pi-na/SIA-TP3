@@ -405,7 +405,7 @@ Una vez congelada la configuración (`shallow + Adam@1e-3 + batch=64`), queda me
 - La separación clara entre train_loss y val_loss arranca alrededor del epoch 4-5: a partir de ese punto, lo que aprende sobre train **ya no transfiere a val**. Es el "techo" del modelo en este dataset sin regularización.
 - **train_acc** llega a 1.0 (memoria perfecta) alrededor del epoch 10; **val_acc** se estabiliza en ≈ 0.957.
 
-**Lectura defensiva.** El early stopping con `patience=20` sobre val_loss es **suficientemente paciente** para no cortar artificialmente: en las 15 corridas, val_loss alcanzó su mínimo y se quedó 20 épocas chequeando si bajaba más. No bajó. La convergencia en 5-6 épocas no es un artefacto de cortar temprano; es la "velocidad real" de Adam@`1e-3` con este dataset.
+El early stopping con `patience=20` sobre val_loss es **suficientemente paciente** para no cortar artificialmente: en las 15 corridas, val_loss alcanzó su mínimo y se quedó 20 épocas chequeando si bajaba más. No bajó. La convergencia en 5-6 épocas no es un artefacto de cortar temprano; es la "velocidad real" de Adam@`1e-3` con este dataset.
 
 **Cuándo cortó early stopping y por qué el eje X termina cerca de la época 25.** Cada corrida del CV interno terminó cuando ES disparó, no por agotar `max_epochs`. ES corta cuando val_loss no mejora durante `patience=20` épocas consecutivas después del último mínimo, así que la **época de corte ≈ best_epoch + patience**. Con `best_epoch` distribuido en `[3, 9]` (min/max) y media `5.7 ± 1.6` sobre las 15 corridas, la **época de corte** quedó distribuida en `[23, 29]` con media **25.7 ± 1.6** — exactamente `best_epoch + 20`. Resumen numérico:
 
@@ -521,8 +521,6 @@ Comparado con val_acc CV = 0.9572 ± 0.0041, el **gap residual real es sólo +0.
 - Lo que falla **no es el modelo ni la metodología de HP search** — es que `digits.csv` está **incompleto** respecto al universo que `digits_test.csv` representa. Sin clase 8 en train, ese 9.7% del test es **imposible** de acertar.
 - Esto es exactamente lo que **motiva el Ej3**: `more_digits.csv` tiene 585 ejemplos de clase 8 (y refuerza la 5 con 542 más). Sumarlo al entrenamiento debería cerrar la mayor parte de la caída.
 
-**Pronóstico para Ej3** (testeable en la próxima corrida):
-- Si la única causa del gap fuera la clase 8 ausente, sumar `more_digits.csv` debería llevar el test_acc a ~0.94–0.95.
-- Si hay además un shift residual de distribución (clase 5 sub-representada en train, clases más difíciles, etc.), podríamos quedar en 0.92–0.94 incluso con la clase 8 cubierta. La diferencia entre estos dos escenarios es lo que cuantifica el Ej3.
+**Pronóstico para Ej3** (testeable en la próxima corrida): Si la única causa del gap fuera la clase 8 ausente, sumar `more_digits.csv` debería llevar el test_acc a ~0.94–0.95.
 
 **Síntesis:** la convergencia es sana (5-6 épocas, no es corte prematuro). La generalización **dentro de la distribución de digits.csv es del 95.7%**, consistente con el techo esperable de un MLP sin regularización sobre 12.5k samples. La generalización **fuera de la distribución de digits.csv** cae a 85.3% por una razón **estructural del dataset** (falta una clase), no del modelo. La intervención correcta no es "más HP search" ni "más optimizador", es **más datos** — exactamente la motivación de Ej3.
