@@ -25,11 +25,11 @@ NOTES = ROOT / "Notas" / "ejercicio 2" / "Segunda tanda de experimentos" / "Cros
 OUT.mkdir(parents=True, exist_ok=True)
 NOTES.mkdir(parents=True, exist_ok=True)
 
-# --- estilo (consistente con resto del proyecto) ---
-BG       = "#0d1117"
-TEXT     = "#e6edf3"
-LABEL    = "#8b949e"
-GRID     = "#30363d"
+# --- estilo light (fondo blanco) ---
+BG       = "#ffffff"
+TEXT     = "#1a1a1a"
+LABEL    = "#555555"
+GRID     = "#cccccc"
 
 ARCH_ORDER = ["arch_shallow", "arch_base", "arch_wider", "arch_deeper"]
 OPT_ORDER  = ["sgd", "momentum", "adam"]
@@ -52,7 +52,7 @@ def plot_4panels(df: pd.DataFrame) -> None:
                          marker=OPT_MARKERS[opt], color=OPT_COLORS[opt],
                          label=OPT_LABEL[opt], linewidth=2,
                          markersize=8, capsize=4, capthick=1.2,
-                         markeredgecolor="white", markeredgewidth=0.7)
+                         markeredgecolor="black", markeredgewidth=0.6)
         ax.set_xscale("log")
         ax.set_xticks(LR_ORDER); ax.set_xticklabels(LR_LABEL,
                                                        color=TEXT, fontsize=9)
@@ -108,7 +108,7 @@ def plot_4heatmaps(df: pd.DataFrame) -> None:
             for j in range(len(LR_ORDER)):
                 v = mat[i, j]
                 if not np.isnan(v):
-                    txt_color = "white" if v < (vmin + vmax)/2 + 0.005 else "#0d1117"
+                    txt_color = "white" if v < (vmin + vmax)/2 + 0.005 else "black"
                     ax.text(j, i, f"{v:.3f}"[1:], ha="center", va="center",
                             color=txt_color, fontsize=10, fontweight="bold")
         ax.set_xticks(range(len(LR_ORDER)))

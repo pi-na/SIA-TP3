@@ -112,3 +112,4 @@ Cuando se proponga un experimento nuevo del Ej2, seguir este flujo: config → s
 - Commits directos a `main` (no feature branches salvo pedido explícito).
 - Nunca incluir co-author de Claude/AI en commits ni archivos.
 - `digits.csv` / `digits_test.csv` / `more_digits.csv`: columna `image` es string `"[0.1, 0.2, ...]"` parseado por `mlp/data.py:parse_features`.
+- **Plots con fondo blanco por default.** Todo plot que se genere para análisis o presentación debe usar `facecolor="white"` (o equivalente) y texto/ejes oscuros. Los plots con tema dark del proyecto (`#0d1117`) se mantienen sólo en archivos puntuales ya commiteados; cualquier plot nuevo es light.
