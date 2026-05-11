@@ -213,3 +213,49 @@ Las dos cosas son consistentes: aunque el LR óptimo de Adam sea `1e-3` en las 4
 3. **El shift de Momentum está estructuralmente explicado.** Las archs que toleran `1e-2` con Momentum son las que tienen la última capa oculta más ancha (128). Las que se rompen tienen la última capa más estrecha (64, 32). El mecanismo (cada peso pesa más en la salida cuando la capa es estrecha → LR alto desestabiliza) es el mismo que ya identificamos en LR×OPT, sólo que ahora lo vemos también desde "best LR per arch".
 
 4. **La configuración decidida (`shallow + Adam + 1e-3`) sigue justificada.** Adam@`1e-3` es óptimo en las 4 archs, así que la elección del LR no quedaría condicionada al ARCH específico que terminamos eligiendo. Eso refuerza que el centro es robusto al swap de arch dentro del rango medido.
+
+### ARCH x OPT (marginalizado sobre LR)
+
+Hasta acá miramos slices con la dimensión LR explícita (LR×OPT con arch fijo en cada panel; LR×ARCH con opt fijo en cada panel). Esta vista colapsa LR para responder una pregunta más simple: **dada una (arch, opt), si elegís el LR óptimo para esa combinación, ¿cuánto da?** Y de ahí: ¿hay arquitecturas que sean **especialistas** de un optimizer?
+
+#### Por qué "best-over-LR" y no "mean-over-LR"
+
+Marginalizar = colapsar la dimensión LR para tener un solo número por celda (arch, opt). Hay dos formas, y sólo una es honesta acá:
+
+| Forma | Qué responde | Honesto? |
+| ----- | ------------ | -------- |
+| **Best-over-LR** (lo que usamos) | "Si elegís el LR óptimo para esta (arch, opt), cuánto da" | ✅ refleja el potencial real |
+| Mean-over-LR | "Promedio sobre los 5 LRs medidos" | ❌ contaminado por LRs sub-óptimos; depende de qué LRs incluí en el barrido |
+
+Esto también evita la trampa de las "slices 2D con LR fijo" descrita en [[IMPORTANTE_CORRELACIONES]] §7: si fijás LR=`1e-3` (óptimo de Adam), SGD entra con LR sub-óptimo y la comparación queda sesgada. Tomando best-over-LR cada combo entra con su mejor chance.
+
+#### Heatmap
+
+![[Segunda tanda de experimentos/Cross_LR_Opt_Arch/arch_opt_best_lr_heatmap.png]]
+
+Cada celda = val_acc del mejor LR para esa combinación (arch, opt), reportada como media ± std sobre **15 corridas** (3 seeds × 5 folds). ★ marca la mejor arch dentro de cada columna (opt fijo); recuadro rojo marca el máximo global. La columna Adam es visiblemente la más amarilla — los 4 valores de Adam (0.9535 a 0.9583) están por encima de los 4 mejores de Momentum (0.9500 a 0.9543) y de SGD (0.9463 a 0.9509).
+
+#### Lectura
+
+**1. Adam domina las 4 filas.** Para las 4 arquitecturas, el mejor optimizer es Adam por entre +0.0029 (shallow: 0.9572 vs 0.9543) y +0.0042 (deeper: 0.9535 vs 0.9500). No hay arquitectura que prefiera Momentum o SGD sobre Adam. Esto sostiene la decisión "Adam" hecha en el optimizer sweep previo, ahora con la diferencia de que el optimizer sweep usó arch_base fijo y acá lo vemos en las 4 archs.
+
+**2. Shallow es robusta entre optimizers; wider es especialista de Adam.**
+
+| arch    | best opt | val_acc                             | comportamiento                                                                                                                            |
+| ------- | -------- | ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| shallow | Adam     | 0.9572 (★ con Mom 0.9543, ★ con SGD 0.9509) | gana en SGD y Momentum; muy cerca de wider con Adam (diff 0.0011, indistinguible — ver tiebreaker)                                       |
+| base    | Adam     | 0.9548                              | sin podio en ningún opt — siempre 3°                                                                                                      |
+| wider   | Adam     | **0.9583** (máx global)             | gana con Adam, **pero queda 2°/3° con SGD y Momentum**. Su rendimiento depende del optimizer                                              |
+| deeper  | Adam     | 0.9535                              | última en las 3 columnas                                                                                                                  |
+
+→ Shallow se comporta como una **arquitectura "todo terreno"**: ★ en SGD y ★ en Momentum, y segunda por 0.0011 en Adam. Wider tiene el techo absoluto más alto pero **sólo cuando combina con Adam**. Esta es exactamente la lectura de [[IMPORTANTE_CORRELACIONES]] §4, ahora visualizada en una sola figura.
+
+**3. Deeper es la única arch consistentemente peor.** Última en las 3 columnas. Coherente con la observación de los sweeps previos: tener 3 capas ocultas sin batch-norm penaliza la propagación de gradientes y no la compensa la mayor profundidad. Es la única evidencia clara contra una arquitectura.
+
+#### Conexión con la decisión final
+
+El máximo global del grid es `wider + Adam@1e-3` con val_acc=0.9583. La configuración que terminamos eligiendo es `shallow + Adam@1e-3` con val_acc=0.9572. La diferencia (+0.0011) **no es estadísticamente significativa** según el [Arch tiebreaker](Segunda%20tanda%20de%20experimentos/Arch_tiebreaker/analisis.md) hecho con 15 seeds × k=5 (z=0.65). Con dos archs estadísticamente empatadas, **Occam decide shallow** (~101k params vs ~235k de wider).
+
+Lectura en el lenguaje de esta sección: dentro del especialista (Adam), shallow y wider están empatadas; cambiando a Mom/SGD shallow gana sólo. Eso refuerza la elección de shallow desde dos ángulos: paridad con wider bajo el opt elegido, y dominancia bajo cualquier otro opt.
+
+> **CSV fuente:** misma tabla que en LR×ARCH ([`best_lr_per_opt_arch.csv`](../../ejercicio2_experimentacion/analisis/cross_v1/lr_arch/best_lr_per_opt_arch.csv)) — el heatmap no es más que esa tabla reorganizada en matriz 4×3.
