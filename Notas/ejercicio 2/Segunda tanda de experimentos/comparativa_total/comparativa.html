@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Comparativa total — stage 2 cross_v1</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --fg: #1a1a1a;
+    --muted: #5b6b7a;
+    --border: #d8e0e8;
+    --row-alt: #f7fafd;
+    --hover: #eef5fc;
+    --pill: #f0f4f9;
+    --pill-fg: #1a1a1a;
+    --pill-border: #c8d4e0;
+    --pill-active: #2f7be3;
+    --pill-active-fg: #ffffff;
+    --good: #2f9e44;
+    --mid: #f08c00;
+    --bad: #c92a2a;
+    --chip-bg: #eef5fc;
+    --chip-fg: #1c3d63;
+  }
+  * { box-sizing: border-box; }
+  html, body { background: var(--bg); color: var(--fg); margin: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    padding: 32px 28px 60px;
+    max-width: 1280px;
+    margin: 0 auto;
+    line-height: 1.45;
+  }
+  h1 { font-size: 22px; margin: 0 0 6px; }
+  .subtitle { color: var(--muted); font-size: 13px; margin-bottom: 22px; }
+  .subtitle code { background: var(--pill); padding: 1px 6px; border-radius: 4px; }
+
+  .pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 18px 0 14px;
+    align-items: center;
+  }
+  .pills .label {
+    color: var(--muted);
+    font-size: 12px;
+    margin-right: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .pill {
+    border: 1px solid var(--pill-border);
+    background: var(--pill);
+    color: var(--pill-fg);
+    border-radius: 999px;
+    padding: 6px 14px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.12s ease;
+    user-select: none;
+    font-weight: 500;
+  }
+  .pill:hover { background: var(--hover); }
+  .pill.active {
+    background: var(--pill-active);
+    color: var(--pill-active-fg);
+    border-color: var(--pill-active);
+    box-shadow: 0 1px 3px rgba(47, 123, 227, 0.3);
+  }
+
+  .filters {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin: 0 0 12px;
+    flex-wrap: wrap;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .filters .filt-group { display: inline-flex; gap: 4px; }
+  .chip {
+    display: inline-block;
+    padding: 3px 9px;
+    border-radius: 999px;
+    background: var(--chip-bg);
+    color: var(--chip-fg);
+    font-size: 11px;
+    font-weight: 600;
+    border: 1px solid transparent;
+    cursor: pointer;
+  }
+  .chip.off { opacity: 0.35; background: var(--pill); color: var(--muted); }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  thead th {
+    background: #f3f7fb;
+    color: var(--fg);
+    font-weight: 600;
+    text-align: right;
+    padding: 9px 10px;
+    border-bottom: 2px solid var(--border);
+    cursor: pointer;
+    user-select: none;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    white-space: nowrap;
+  }
+  thead th:first-child, thead th.txt { text-align: left; }
+  thead th .arrow {
+    color: var(--muted);
+    font-size: 11px;
+    margin-left: 2px;
+  }
+  thead th.sorted .arrow { color: var(--pill-active); }
+  thead th:hover { background: #e9eff5; }
+  tbody td {
+    padding: 7px 10px;
+    text-align: right;
+    border-bottom: 1px solid var(--border);
+    font-variant-numeric: tabular-nums;
+  }
+  tbody td:first-child, tbody td.txt { text-align: left; }
+  tbody tr:nth-child(even) { background: var(--row-alt); }
+  tbody tr:hover { background: var(--hover); }
+  tbody tr.highlight {
+    background: #fff7d6 !important;
+    font-weight: 600;
+  }
+  .small { color: var(--muted); font-size: 11px; }
+  .meta {
+    margin-top: 22px;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.6;
+  }
+  .meta b { color: var(--fg); }
+  .badge {
+    display: inline-block;
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .badge.adam { background: #e6f7ec; color: #1a7a3a; }
+  .badge.momentum { background: #fdebe1; color: #b4521e; }
+  .badge.sgd { background: #e6f0fb; color: #1c4e8f; }
+  .badge.arch { background: #f1ecfb; color: #5a3aa3; }
+</style>
+</head>
+<body>
+
+<h1>Comparativa total — stage 2 del cross_v1</h1>
+<div class="subtitle">
+  60 celdas = 5 LR × 3 opt × 4 arch. Cada fila = una celda con métricas promediadas sobre <b>3 seeds × 5 folds = 15 corridas</b>.
+  <code>val_acc</code> y <code>macro_f1</code> reportan <b>media ± std</b> sobre esas 15 corridas; <code>val_loss</code>, <code>train_loss</code>, <code>gap</code> y <code>best_epoch</code> reportan media.
+  Datos fuente: <code>ejercicio2_experimentacion/analisis/cross_v1/stage2/stage2_summary.csv</code>.
+</div>
+
+<div class="pills">
+  <span class="label">Sort rápido:</span>
+  <button class="pill" data-sort="best-val-acc">🏆 Mejor val_acc</button>
+  <button class="pill" data-sort="best-f1">⚖️ Mejor macro_f1</button>
+  <button class="pill" data-sort="best-loss">🎯 Menor val_loss CE</button>
+  <button class="pill" data-sort="fastest">⚡ Más rápido (best_epoch)</button>
+  <button class="pill" data-sort="least-overfit">🚫 Menos sobreajuste (gap)</button>
+  <button class="pill" data-sort="group-arch">🧩 Agrupar por arch</button>
+  <button class="pill" data-sort="group-opt">🧪 Agrupar por opt</button>
+  <button class="pill" data-sort="original">🔄 Orden original</button>
+</div>
+
+<div class="filters">
+  <span class="filt-group">
+    <span>opt:</span>
+    <span class="chip" data-filter="opt" data-value="SGD">SGD</span>
+    <span class="chip" data-filter="opt" data-value="Momentum">Momentum</span>
+    <span class="chip" data-filter="opt" data-value="Adam">Adam</span>
+  </span>
+  <span class="filt-group">
+    <span>arch:</span>
+    <span class="chip" data-filter="arch" data-value="shallow">shallow</span>
+    <span class="chip" data-filter="arch" data-value="base">base</span>
+    <span class="chip" data-filter="arch" data-value="wider">wider</span>
+    <span class="chip" data-filter="arch" data-value="deeper">deeper</span>
+  </span>
+  <span class="filt-group">
+    <span>LR:</span>
+    <span class="chip" data-filter="lr_label" data-value="1e-4">1e-4</span>
+    <span class="chip" data-filter="lr_label" data-value="5e-4">5e-4</span>
+    <span class="chip" data-filter="lr_label" data-value="1e-3">1e-3</span>
+    <span class="chip" data-filter="lr_label" data-value="5e-3">5e-3</span>
+    <span class="chip" data-filter="lr_label" data-value="1e-2">1e-2</span>
+  </span>
+  <span class="small">Tip: chip apagado = filtro excluido. Click para alternar.</span>
+</div>
+
+<table id="tbl">
+  <thead>
+    <tr>
+      <th class="txt" data-col="rank">#</th>
+      <th class="txt" data-col="arch">arch</th>
+      <th class="txt" data-col="opt">opt</th>
+      <th data-col="lr">LR</th>
+      <th data-col="val_acc">val_acc <span class="small">(±std)</span></th>
+      <th data-col="macro_f1">macro_f1 <span class="small">(±std)</span></th>
+      <th data-col="val_loss">val_loss CE</th>
+      <th data-col="train_loss">train_loss</th>
+      <th data-col="gap">gap (val−train)</th>
+      <th data-col="best_epoch">best_epoch</th>
+    </tr>
+  </thead>
+  <tbody id="tbody"></tbody>
+</table>
+
+<div class="meta">
+  <p><b>Cómo leer:</b> click en una columna para sortear por esa columna (toggle asc/desc). Los chips de arriba filtran (apagado = excluido). Los pills aplican sorts útiles preconfigurados.</p>
+  <p><b>Definiciones rápidas:</b>
+    <code>val_acc</code> = accuracy promedio sobre validación (15 corridas).
+    <code>macro_f1</code> = F1 macro (media aritmética sobre las 10 clases, sin pesar por frecuencia).
+    <code>val_loss CE</code> = cross-entropy sobre validación con <code>best_weights</code>.
+    <code>train_loss</code> = idem sobre el set de entrenamiento.
+    <code>gap</code> = <code>val_loss − train_loss</code> (más alto → más memoriza train).
+    <code>best_epoch</code> = época en la que se alcanzó el mínimo de val_loss (con ES patience=20).
+  </p>
+  <p><b>Caveat:</b> las 4 celdas <code>sgd@1e-4</code> tienen <code>best_epoch=199</code> y no convergieron en presupuesto razonable (cap auditado de 200 ep). Se incluyen como referencia de "LR demasiado bajo para SGD"; no se las debe usar para decisiones.</p>
+</div>
+
+<script>
+const DATA = [{"arch_short": "base", "opt_label": "Adam", "lr": 0.0001, "lr_label": "1e-4", "val_acc": 0.9528209869480752, "val_acc_std": 0.0028681276511258, "macro_f1": 0.8469365900209012, "macro_f1_std": 0.0043510098319206, "val_loss": 0.1847920768145664, "train_loss": 0.0279665136997914, "overfit_gap": 0.156825563114775, "best_epoch": 10.466666666666669}, {"arch_short": "base", "opt_label": "Adam", "lr": 0.0005, "lr_label": "5e-4", "val_acc": 0.9541055269927852, "val_acc_std": 0.0049516788092666, "macro_f1": 0.8483116237154155, "macro_f1_std": 0.007236806812525, "val_loss": 0.1741100797993453, "train_loss": 0.0265605924241981, "overfit_gap": 0.14754948737514723, "best_epoch": 2.933333333333333}, {"arch_short": "base", "opt_label": "Adam", "lr": 0.001, "lr_label": "1e-3", "val_acc": 0.9547759126527294, "val_acc_std": 0.0043717109715242, "macro_f1": 0.8493065057424674, "macro_f1_std": 0.0049715203893574, "val_loss": 0.175050052518617, "train_loss": 0.0229409210536844, "overfit_gap": 0.1521091314649326, "best_epoch": 3.466666666666667}, {"arch_short": "base", "opt_label": "Adam", "lr": 0.005, "lr_label": "5e-3", "val_acc": 0.9532781516934448, "val_acc_std": 0.0057529567788174, "macro_f1": 0.8472123027648214, "macro_f1_std": 0.0076547375115502, "val_loss": 0.1888782629162217, "train_loss": 0.0302946020478393, "overfit_gap": 0.1585836608683824, "best_epoch": 2.533333333333333}, {"arch_short": "base", "opt_label": "Adam", "lr": 0.01, "lr_label": "1e-2", "val_acc": 0.9465037951490132, "val_acc_std": 0.0078341353144812, "macro_f1": 0.8405580430455794, "macro_f1_std": 0.0073881421145764, "val_loss": 0.2153420959975158, "train_loss": 0.0643402313524761, "overfit_gap": 0.1510018646450397, "best_epoch": 1.6}, {"arch_short": "base", "opt_label": "Momentum", "lr": 0.0001, "lr_label": "1e-4", "val_acc": 0.9464485045680454, "val_acc_std": 0.0036645072021636, "macro_f1": 0.8395518127908396, "macro_f1_std": 0.0051587655724088, "val_loss": 0.2129669007990856, "train_loss": 0.0398354029186753, "overfit_gap": 0.1731314978804103, "best_epoch": 92.33333333333331}, {"arch_short": "base", "opt_label": "Momentum", "lr": 0.0005, "lr_label": "5e-4", "val_acc": 0.9465019011845778, "val_acc_std": 0.0037923943615235, "macro_f1": 0.8393754597336877, "macro_f1_std": 0.0055221941926849, "val_loss": 0.208367909065767, "train_loss": 0.0405038631671495, "overfit_gap": 0.1678640458986175, "best_epoch": 17.6}, {"arch_short": "base", "opt_label": "Momentum", "lr": 0.001, "lr_label": "1e-3", "val_acc": 0.9477877313941624, "val_acc_std": 0.0042149088475581, "macro_f1": 0.8415525439590695, "macro_f1_std": 0.005913807545749, "val_loss": 0.2053567986971431, "train_loss": 0.0352784650766415, "overfit_gap": 0.1700783336205016, "best_epoch": 9.6}, {"arch_short": "base", "opt_label": "Momentum", "lr": 0.005, "lr_label": "5e-3", "val_acc": 0.9505968177109784, "val_acc_std": 0.0038792164148739, "macro_f1": 0.843673021529621, "macro_f1_std": 0.0063122687911552, "val_loss": 0.2121152336184152, "train_loss": 0.0292231635389619, "overfit_gap": 0.1828920700794533, "best_epoch": 3.0}, {"arch_short": "base", "opt_label": "Momentum", "lr": 0.01, "lr_label": "1e-2", "val_acc": 0.9466637292201844, "val_acc_std": 0.0077320009004584, "macro_f1": 0.8407596337841402, "macro_f1_std": 0.010037668708134, "val_loss": 0.2278051788621498, "train_loss": 0.0573806210223525, "overfit_gap": 0.1704245578397973, "best_epoch": 2.4}, {"arch_short": "base", "opt_label": "SGD", "lr": 0.0001, "lr_label": "1e-4", "val_acc": 0.9262587951511978, "val_acc_std": 0.0033530195588628, "macro_f1": 0.8144272063331226, "macro_f1_std": 0.0054113280755766, "val_loss": 0.2683964776150337, "train_loss": 0.1756262098761213, "overfit_gap": 0.09277026773891242, "best_epoch": 199.0}, {"arch_short": "base", "opt_label": "SGD", "lr": 0.0005, "lr_label": "5e-4", "val_acc": 0.9461270901726098, "val_acc_std": 0.0037662580982258, "macro_f1": 0.8393247182910277, "macro_f1_std": 0.0050946222026888, "val_loss": 0.2136062969543982, "train_loss": 0.0399235868051629, "overfit_gap": 0.1736827101492353, "best_epoch": 185.93333333333337}, {"arch_short": "base", "opt_label": "SGD", "lr": 0.001, "lr_label": "1e-3", "val_acc": 0.9463414094694136, "val_acc_std": 0.0036177039994968, "macro_f1": 0.8395305540715204, "macro_f1_std": 0.0049578399864733, "val_loss": 0.2130284047164324, "train_loss": 0.0394552026979452, "overfit_gap": 0.1735732020184872, "best_epoch": 92.73333333333332}, {"arch_short": "base", "opt_label": "SGD", "lr": 0.005, "lr_label": "5e-3", "val_acc": 0.9465826849795664, "val_acc_std": 0.0036571218389133, "macro_f1": 0.8397959389716166, "macro_f1_std": 0.0055113566198073, "val_loss": 0.2090024112262138, "train_loss": 0.0396517624313049, "overfit_gap": 0.1693506487949089, "best_epoch": 18.0}, {"arch_short": "base", "opt_label": "SGD", "lr": 0.01, "lr_label": "1e-2", "val_acc": 0.9475737346386812, "val_acc_std": 0.0047270415876189, "macro_f1": 0.8407287490895005, "macro_f1_std": 0.006245074148912, "val_loss": 0.2061108225071259, "train_loss": 0.0379020734384576, "overfit_gap": 0.16820874906866828, "best_epoch": 9.133333333333333}, {"arch_short": "deeper", "opt_label": "Adam", "lr": 0.0001, "lr_label": "1e-4", "val_acc": 0.9510539391358234, "val_acc_std": 0.0048804497211032, "macro_f1": 0.8448842281099957, "macro_f1_std": 0.0065963571351433, "val_loss": 0.1919387448549698, "train_loss": 0.0261321938907658, "overfit_gap": 0.16580655096420402, "best_epoch": 9.466666666666669}, {"arch_short": "deeper", "opt_label": "Adam", "lr": 0.0005, "lr_label": "5e-4", "val_acc": 0.9520714286105432, "val_acc_std": 0.0060883372717315, "macro_f1": 0.8454603106837113, "macro_f1_std": 0.0077658815069356, "val_loss": 0.1847276996515438, "train_loss": 0.0346777485937528, "overfit_gap": 0.15004995105779098, "best_epoch": 2.6}, {"arch_short": "deeper", "opt_label": "Adam", "lr": 0.001, "lr_label": "1e-3", "val_acc": 0.9534910742681716, "val_acc_std": 0.0078077853672539, "macro_f1": 0.8475592598247909, "macro_f1_std": 0.009708062477374, "val_loss": 0.1820984877582457, "train_loss": 0.0274354971199291, "overfit_gap": 0.1546629906383166, "best_epoch": 3.3333333333333335}, {"arch_short": "deeper", "opt_label": "Adam", "lr": 0.005, "lr_label": "5e-3", "val_acc": 0.9513212680272428, "val_acc_std": 0.005032970104131, "macro_f1": 0.8462752086156851, "macro_f1_std": 0.0075931762493956, "val_loss": 0.194792867950259, "train_loss": 0.0447670681149289, "overfit_gap": 0.1500257998353301, "best_epoch": 2.066666666666667}, {"arch_short": "deeper", "opt_label": "Adam", "lr": 0.01, "lr_label": "1e-2", "val_acc": 0.9454843688727316, "val_acc_std": 0.0045425794281538, "macro_f1": 0.8376276981392382, "macro_f1_std": 0.0063452099916451, "val_loss": 0.2209262271030681, "train_loss": 0.0710965630141917, "overfit_gap": 0.1498296640888764, "best_epoch": 1.8666666666666667}, {"arch_short": "deeper", "opt_label": "Momentum", "lr": 0.0001, "lr_label": "1e-4", "val_acc": 0.9434223256317876, "val_acc_std": 0.004755247414374, "macro_f1": 0.8356231513975086, "macro_f1_std": 0.0067188185193374, "val_loss": 0.2261167760761356, "train_loss": 0.0469997532297285, "overfit_gap": 0.1791170228464071, "best_epoch": 59.13333333333333}, {"arch_short": "deeper", "opt_label": "Momentum", "lr": 0.0005, "lr_label": "5e-4", "val_acc": 0.9456711302636576, "val_acc_std": 0.0047184999521302, "macro_f1": 0.8385248704700581, "macro_f1_std": 0.006069462714197, "val_loss": 0.2203402180078589, "train_loss": 0.0418321548120428, "overfit_gap": 0.1785080631958161, "best_epoch": 12.266666666666667}, {"arch_short": "deeper", "opt_label": "Momentum", "lr": 0.001, "lr_label": "1e-3", "val_acc": 0.9464210969560322, "val_acc_std": 0.0041380740748415, "macro_f1": 0.8397988075969849, "macro_f1_std": 0.0057766339591938, "val_loss": 0.2163957548264666, "train_loss": 0.0396852288386149, "overfit_gap": 0.1767105259878517, "best_epoch": 6.2}, {"arch_short": "deeper", "opt_label": "Momentum", "lr": 0.005, "lr_label": "5e-3", "val_acc": 0.9499539026237714, "val_acc_std": 0.0071643612366253, "macro_f1": 0.8428871321602993, "macro_f1_std": 0.0100629874665443, "val_loss": 0.2153502875211957, "train_loss": 0.0375835502849649, "overfit_gap": 0.1777667372362308, "best_epoch": 2.8}, {"arch_short": "deeper", "opt_label": "Momentum", "lr": 0.01, "lr_label": "1e-2", "val_acc": 0.942513049138195, "val_acc_std": 0.0054506524964166, "macro_f1": 0.833900693159012, "macro_f1_std": 0.0082129822848552, "val_loss": 0.2425362801635141, "train_loss": 0.0781123663899214, "overfit_gap": 0.16442391377359272, "best_epoch": 2.466666666666667}, {"arch_short": "deeper", "opt_label": "SGD", "lr": 0.0001, "lr_label": "1e-4", "val_acc": 0.9286160928836964, "val_acc_std": 0.0041558601530365, "macro_f1": 0.8156880425288277, "macro_f1_std": 0.0062435120940119, "val_loss": 0.2655561931664217, "train_loss": 0.1515824489670615, "overfit_gap": 0.11397374419936021, "best_epoch": 199.0}, {"arch_short": "deeper", "opt_label": "SGD", "lr": 0.0005, "lr_label": "5e-4", "val_acc": 0.944011112205162, "val_acc_std": 0.0048023493794936, "macro_f1": 0.8361406060029816, "macro_f1_std": 0.0066303992836894, "val_loss": 0.2272947336049798, "train_loss": 0.0434297349440113, "overfit_gap": 0.1838649986609685, "best_epoch": 123.13333333333334}, {"arch_short": "deeper", "opt_label": "SGD", "lr": 0.001, "lr_label": "1e-3", "val_acc": 0.9435291413029264, "val_acc_std": 0.0050887501330526, "macro_f1": 0.8355891546221706, "macro_f1_std": 0.0068850800620919, "val_loss": 0.2262341304325562, "train_loss": 0.047262968851582, "overfit_gap": 0.1789711615809742, "best_epoch": 58.666666666666664}, {"arch_short": "deeper", "opt_label": "SGD", "lr": 0.005, "lr_label": "5e-3", "val_acc": 0.9454842619693166, "val_acc_std": 0.0045748936872811, "macro_f1": 0.8379088655655138, "macro_f1_std": 0.0055960605203971, "val_loss": 0.2205785285165962, "train_loss": 0.0423380291275195, "overfit_gap": 0.1782404993890767, "best_epoch": 12.0}, {"arch_short": "deeper", "opt_label": "SGD", "lr": 0.01, "lr_label": "1e-2", "val_acc": 0.9462870663541452, "val_acc_std": 0.0036107173402987, "macro_f1": 0.8394293772094269, "macro_f1_std": 0.0053237123884537, "val_loss": 0.2152608677063322, "train_loss": 0.0419078531072713, "overfit_gap": 0.1733530145990609, "best_epoch": 5.933333333333334}, {"arch_short": "shallow", "opt_label": "Adam", "lr": 0.0001, "lr_label": "1e-4", "val_acc": 0.9545620031963004, "val_acc_std": 0.004350466941676, "macro_f1": 0.8490743477610858, "macro_f1_std": 0.0072669014388585, "val_loss": 0.1745804882391995, "train_loss": 0.0252163601598563, "overfit_gap": 0.1493641280793432, "best_epoch": 15.866666666666667}, {"arch_short": "shallow", "opt_label": "Adam", "lr": 0.0005, "lr_label": "5e-4", "val_acc": 0.956651304654179, "val_acc_std": 0.0049182304041544, "macro_f1": 0.8518243227732517, "macro_f1_std": 0.0075297546928213, "val_loss": 0.169546693702591, "train_loss": 0.0202514301237582, "overfit_gap": 0.14929526357883283, "best_epoch": 4.8}, {"arch_short": "shallow", "opt_label": "Adam", "lr": 0.001, "lr_label": "1e-3", "val_acc": 0.957239596231495, "val_acc_std": 0.0041214043959872, "macro_f1": 0.8521225844066442, "macro_f1_std": 0.0066657845583852, "val_loss": 0.1700749247233624, "train_loss": 0.0180194344214553, "overfit_gap": 0.1520554903019071, "best_epoch": 5.733333333333333}, {"arch_short": "shallow", "opt_label": "Adam", "lr": 0.005, "lr_label": "5e-3", "val_acc": 0.9545607341905796, "val_acc_std": 0.0045728848343713, "macro_f1": 0.849251984380053, "macro_f1_std": 0.0068659070414037, "val_loss": 0.1925549806628813, "train_loss": 0.0241703278121355, "overfit_gap": 0.1683846528507458, "best_epoch": 3.2}, {"arch_short": "shallow", "opt_label": "Adam", "lr": 0.01, "lr_label": "1e-2", "val_acc": 0.9472239445239492, "val_acc_std": 0.0063015348416125, "macro_f1": 0.8420739254838143, "macro_f1_std": 0.0086586209630885, "val_loss": 0.2492594308251072, "train_loss": 0.0531322229113237, "overfit_gap": 0.19612720791378352, "best_epoch": 2.1333333333333333}, {"arch_short": "shallow", "opt_label": "Momentum", "lr": 0.0001, "lr_label": "1e-4", "val_acc": 0.9500376532529392, "val_acc_std": 0.0049683843902255, "macro_f1": 0.8436985801288622, "macro_f1_std": 0.0075730464095298, "val_loss": 0.1978909259695838, "train_loss": 0.0302094851565712, "overfit_gap": 0.1676814408130126, "best_epoch": 197.8}, {"arch_short": "shallow", "opt_label": "Momentum", "lr": 0.0005, "lr_label": "5e-4", "val_acc": 0.950546516371744, "val_acc_std": 0.0050208165371198, "macro_f1": 0.8442619468480331, "macro_f1_std": 0.0076021264744541, "val_loss": 0.1958602859591854, "train_loss": 0.0302000786857837, "overfit_gap": 0.1656602072734017, "best_epoch": 39.06666666666667}, {"arch_short": "shallow", "opt_label": "Momentum", "lr": 0.001, "lr_label": "1e-3", "val_acc": 0.950813781024518, "val_acc_std": 0.0050832006517493, "macro_f1": 0.8444595255198274, "macro_f1_std": 0.0077811476442752, "val_loss": 0.1941189842220365, "train_loss": 0.0301040133064464, "overfit_gap": 0.16401497091559009, "best_epoch": 18.933333333333337}, {"arch_short": "shallow", "opt_label": "Momentum", "lr": 0.005, "lr_label": "5e-3", "val_acc": 0.952581172780194, "val_acc_std": 0.0053242303266679, "macro_f1": 0.8465964366123936, "macro_f1_std": 0.0078204433005627, "val_loss": 0.1999574252663981, "train_loss": 0.0268224024331854, "overfit_gap": 0.1731350228332127, "best_epoch": 4.2}, {"arch_short": "shallow", "opt_label": "Momentum", "lr": 0.01, "lr_label": "1e-2", "val_acc": 0.954349316797718, "val_acc_std": 0.0062272360755554, "macro_f1": 0.8498996253065031, "macro_f1_std": 0.0080929176313479, "val_loss": 0.2341394028869553, "train_loss": 0.0195860343422916, "overfit_gap": 0.21455336854466373, "best_epoch": 4.733333333333333}, {"arch_short": "shallow", "opt_label": "SGD", "lr": 0.0001, "lr_label": "1e-4", "val_acc": 0.9243866520374376, "val_acc_std": 0.0051927640392834, "macro_f1": 0.8130816073332691, "macro_f1_std": 0.0073223603584294, "val_loss": 0.2798466581278613, "train_loss": 0.2084153859916976, "overfit_gap": 0.07143127213616371, "best_epoch": 199.0}, {"arch_short": "shallow", "opt_label": "SGD", "lr": 0.0005, "lr_label": "5e-4", "val_acc": 0.9486724595840068, "val_acc_std": 0.0045892076941197, "macro_f1": 0.8423272427971255, "macro_f1_std": 0.0072678666903238, "val_loss": 0.1997026702383232, "train_loss": 0.0430574804910288, "overfit_gap": 0.15664518974729438, "best_epoch": 296.8666666666667}, {"arch_short": "shallow", "opt_label": "SGD", "lr": 0.001, "lr_label": "1e-3", "val_acc": 0.950091179521752, "val_acc_std": 0.0049005149662287, "macro_f1": 0.8438536897630488, "macro_f1_std": 0.0076672842732602, "val_loss": 0.1981351722518905, "train_loss": 0.0317079835485789, "overfit_gap": 0.1664271887033116, "best_epoch": 187.4}, {"arch_short": "shallow", "opt_label": "SGD", "lr": 0.005, "lr_label": "5e-3", "val_acc": 0.9505463445040035, "val_acc_std": 0.0051226295219357, "macro_f1": 0.8442319269139801, "macro_f1_std": 0.0078369230481739, "val_loss": 0.195677760648404, "train_loss": 0.0310826983699022, "overfit_gap": 0.1645950622785018, "best_epoch": 37.8}, {"arch_short": "shallow", "opt_label": "SGD", "lr": 0.01, "lr_label": "1e-2", "val_acc": 0.950867479402937, "val_acc_std": 0.0052790113826305, "macro_f1": 0.8444185792559156, "macro_f1_std": 0.0081181937519943, "val_loss": 0.1942455387533003, "train_loss": 0.0311130560873095, "overfit_gap": 0.1631324826659908, "best_epoch": 18.6}, {"arch_short": "wider", "opt_label": "Adam", "lr": 0.0001, "lr_label": "1e-4", "val_acc": 0.95466838776423, "val_acc_std": 0.0047315490361222, "macro_f1": 0.8500183392719184, "macro_f1_std": 0.0059876744523911, "val_loss": 0.1761222990013481, "train_loss": 0.018731290492813, "overfit_gap": 0.1573910085085351, "best_epoch": 7.933333333333334}, {"arch_short": "wider", "opt_label": "Adam", "lr": 0.0005, "lr_label": "5e-4", "val_acc": 0.9552848201642008, "val_acc_std": 0.0049679591180999, "macro_f1": 0.8503392687548018, "macro_f1_std": 0.0070843245791284, "val_loss": 0.1775384616154894, "train_loss": 0.0318477100235486, "overfit_gap": 0.14569075159194078, "best_epoch": 2.2}, {"arch_short": "wider", "opt_label": "Adam", "lr": 0.001, "lr_label": "1e-3", "val_acc": 0.9583116871240774, "val_acc_std": 0.0035959532557052, "macro_f1": 0.8536635869158157, "macro_f1_std": 0.0050280443733794, "val_loss": 0.1700948379990134, "train_loss": 0.014795608578114, "overfit_gap": 0.1552992294208994, "best_epoch": 3.4}, {"arch_short": "wider", "opt_label": "Adam", "lr": 0.005, "lr_label": "5e-3", "val_acc": 0.9531436272353184, "val_acc_std": 0.0047832222818844, "macro_f1": 0.8478234050657437, "macro_f1_std": 0.0059797153462173, "val_loss": 0.1916675564176171, "train_loss": 0.0383505134961185, "overfit_gap": 0.1533170429214986, "best_epoch": 2.0}, {"arch_short": "wider", "opt_label": "Adam", "lr": 0.01, "lr_label": "1e-2", "val_acc": 0.944974475307836, "val_acc_std": 0.005382845282068, "macro_f1": 0.8382942427914313, "macro_f1_std": 0.0075263461128434, "val_loss": 0.2283058342335341, "train_loss": 0.0839923111663447, "overfit_gap": 0.1443135230671894, "best_epoch": 1.0666666666666669}, {"arch_short": "wider", "opt_label": "Momentum", "lr": 0.0001, "lr_label": "1e-4", "val_acc": 0.9480018348113592, "val_acc_std": 0.0054464651414415, "macro_f1": 0.8424328705304203, "macro_f1_std": 0.0071940556910242, "val_loss": 0.2091603510670112, "train_loss": 0.0330705046212314, "overfit_gap": 0.1760898464457798, "best_epoch": 89.6}, {"arch_short": "wider", "opt_label": "Momentum", "lr": 0.0005, "lr_label": "5e-4", "val_acc": 0.9491269573566636, "val_acc_std": 0.0050496512535174, "macro_f1": 0.8436069500063934, "macro_f1_std": 0.0066307373006663, "val_loss": 0.2057174705608107, "train_loss": 0.0320130562032047, "overfit_gap": 0.17370441435760597, "best_epoch": 17.733333333333334}, {"arch_short": "wider", "opt_label": "Momentum", "lr": 0.001, "lr_label": "1e-3", "val_acc": 0.9499835677487564, "val_acc_std": 0.0051317606607514, "macro_f1": 0.8448328389909003, "macro_f1_std": 0.0066190118055551, "val_loss": 0.201767260187874, "train_loss": 0.0298809683327775, "overfit_gap": 0.1718862918550965, "best_epoch": 8.933333333333334}, {"arch_short": "wider", "opt_label": "Momentum", "lr": 0.005, "lr_label": "5e-3", "val_acc": 0.9531154447503608, "val_acc_std": 0.0054122868876867, "macro_f1": 0.8481332907191134, "macro_f1_std": 0.0082798343448955, "val_loss": 0.2026097833789172, "train_loss": 0.0215707314789863, "overfit_gap": 0.1810390518999309, "best_epoch": 2.8666666666666667}, {"arch_short": "wider", "opt_label": "Momentum", "lr": 0.01, "lr_label": "1e-2", "val_acc": 0.9540006903748371, "val_acc_std": 0.0060654097026059, "macro_f1": 0.8478161740519238, "macro_f1_std": 0.0078674917853747, "val_loss": 0.2190735493267795, "train_loss": 0.0275799026115251, "overfit_gap": 0.1914936467152544, "best_epoch": 3.2}, {"arch_short": "wider", "opt_label": "SGD", "lr": 0.0001, "lr_label": "1e-4", "val_acc": 0.9292590498410664, "val_acc_std": 0.0047763720412962, "macro_f1": 0.8195319258239132, "macro_f1_std": 0.0065655856005016, "val_loss": 0.2610017057814485, "train_loss": 0.1593606760322564, "overfit_gap": 0.10164102974919209, "best_epoch": 199.0}, {"arch_short": "wider", "opt_label": "SGD", "lr": 0.0005, "lr_label": "5e-4", "val_acc": 0.9482696157236088, "val_acc_std": 0.0055783311571207, "macro_f1": 0.842648095681697, "macro_f1_std": 0.0073822720126115, "val_loss": 0.209690069094038, "train_loss": 0.0321358718421089, "overfit_gap": 0.1775541972519291, "best_epoch": 183.06666666666663}, {"arch_short": "wider", "opt_label": "SGD", "lr": 0.001, "lr_label": "1e-3", "val_acc": 0.9481891115289696, "val_acc_std": 0.0056046427651686, "macro_f1": 0.8425867346955189, "macro_f1_std": 0.0073375129653419, "val_loss": 0.2091317937259953, "train_loss": 0.0326572740614959, "overfit_gap": 0.1764745196644994, "best_epoch": 90.26666666666668}, {"arch_short": "wider", "opt_label": "SGD", "lr": 0.005, "lr_label": "5e-3", "val_acc": 0.9488317899571332, "val_acc_std": 0.0053037873439423, "macro_f1": 0.8435324997562945, "macro_f1_std": 0.0069842412534909, "val_loss": 0.2055922560458988, "train_loss": 0.0312893867486374, "overfit_gap": 0.1743028692972614, "best_epoch": 17.733333333333334}, {"arch_short": "wider", "opt_label": "SGD", "lr": 0.01, "lr_label": "1e-2", "val_acc": 0.94984934443085, "val_acc_std": 0.0052597054125661, "macro_f1": 0.8444900650997135, "macro_f1_std": 0.0072336406123306, "val_loss": 0.2018515932253273, "train_loss": 0.0298612796466103, "overfit_gap": 0.171990313578717, "best_epoch": 8.933333333333334}];
+
+const tbody = document.getElementById("tbody");
+const pills = document.querySelectorAll(".pill");
+const chips = document.querySelectorAll(".chip");
+const headers = document.querySelectorAll("thead th");
+
+// estado
+let currentSort = { col: "val_acc", dir: "desc" };
+const activeFilters = { opt: new Set(), arch: new Set(), lr_label: new Set() };
+chips.forEach(c => activeFilters[c.dataset.filter].add(c.dataset.value));
+
+// helpers
+const fmt = (v, d = 4) => (v == null || Number.isNaN(v) ? "" : Number(v).toFixed(d));
+const fmtAcc = (v, std) => `${fmt(v, 4)} <span class="small">± ${fmt(std, 4)}</span>`;
+
+function applyFilters(rows) {
+  return rows.filter(r =>
+    activeFilters.opt.has(r.opt_label) &&
+    activeFilters.arch.has(r.arch_short) &&
+    activeFilters.lr_label.has(r.lr_label)
+  );
+}
+
+function sortRows(rows) {
+  const { col, dir } = currentSort;
+  const sign = dir === "asc" ? 1 : -1;
+  const out = [...rows];
+  if (col === "arch") {
+    const ord = ["shallow", "base", "wider", "deeper"];
+    out.sort((a, b) => sign * (ord.indexOf(a.arch_short) - ord.indexOf(b.arch_short)));
+  } else if (col === "opt") {
+    const ord = ["SGD", "Momentum", "Adam"];
+    out.sort((a, b) => sign * (ord.indexOf(a.opt_label) - ord.indexOf(b.opt_label)));
+  } else if (col === "lr") {
+    out.sort((a, b) => sign * (a.lr - b.lr));
+  } else if (col === "macro_f1") {
+    out.sort((a, b) => sign * (a.macro_f1 - b.macro_f1));
+  } else if (col === "val_acc") {
+    out.sort((a, b) => sign * (a.val_acc - b.val_acc));
+  } else if (col === "val_loss") {
+    out.sort((a, b) => sign * (a.val_loss - b.val_loss));
+  } else if (col === "train_loss") {
+    out.sort((a, b) => sign * (a.train_loss - b.train_loss));
+  } else if (col === "gap") {
+    out.sort((a, b) => sign * (a.overfit_gap - b.overfit_gap));
+  } else if (col === "best_epoch") {
+    out.sort((a, b) => sign * (a.best_epoch - b.best_epoch));
+  } else if (col === "rank") {
+    out.sort((a, b) => sign * (a._orig - b._orig));
+  }
+  return out;
+}
+
+function badgeFor(label, kind) {
+  const cls = (label || "").toLowerCase();
+  return `<span class="badge ${kind} ${cls}">${label}</span>`;
+}
+
+function render() {
+  // marca columna sorteada
+  headers.forEach(h => {
+    h.classList.remove("sorted");
+    const arr = h.querySelector(".arrow");
+    if (arr) arr.remove();
+    if (h.dataset.col === currentSort.col) {
+      h.classList.add("sorted");
+      const span = document.createElement("span");
+      span.className = "arrow";
+      span.textContent = currentSort.dir === "asc" ? "▲" : "▼";
+      h.appendChild(span);
+    }
+  });
+  // chips visuales
+  chips.forEach(c => {
+    const on = activeFilters[c.dataset.filter].has(c.dataset.value);
+    c.classList.toggle("off", !on);
+  });
+
+  const rows = sortRows(applyFilters(DATA));
+  const peak = rows.length ? Math.max(...rows.map(r => r.val_acc)) : 0;
+  tbody.innerHTML = rows.map((r, idx) => {
+    const isPeak = Math.abs(r.val_acc - peak) < 1e-9 && currentSort.col === "val_acc" && currentSort.dir === "desc";
+    return `<tr class="${isPeak ? "highlight" : ""}">
+      <td class="txt">${idx + 1}</td>
+      <td class="txt">${badgeFor(r.arch_short, "arch")}</td>
+      <td class="txt">${badgeFor(r.opt_label, r.opt_label.toLowerCase())}</td>
+      <td>${r.lr_label}</td>
+      <td>${fmtAcc(r.val_acc, r.val_acc_std)}</td>
+      <td>${fmtAcc(r.macro_f1, r.macro_f1_std)}</td>
+      <td>${fmt(r.val_loss, 4)}</td>
+      <td>${fmt(r.train_loss, 4)}</td>
+      <td>${fmt(r.overfit_gap, 4)}</td>
+      <td>${fmt(r.best_epoch, 1)}</td>
+    </tr>`;
+  }).join("");
+}
+
+// pill presets
+const PRESETS = {
+  "best-val-acc":   { col: "val_acc",   dir: "desc" },
+  "best-f1":        { col: "macro_f1",  dir: "desc" },
+  "best-loss":      { col: "val_loss",  dir: "asc"  },
+  "fastest":        { col: "best_epoch", dir: "asc" },
+  "least-overfit":  { col: "gap",       dir: "asc"  },
+  "group-arch":     { col: "arch",      dir: "asc"  },
+  "group-opt":      { col: "opt",       dir: "asc"  },
+  "original":       { col: "rank",      dir: "asc"  },
+};
+
+pills.forEach(p => {
+  p.addEventListener("click", () => {
+    pills.forEach(x => x.classList.remove("active"));
+    p.classList.add("active");
+    currentSort = { ...PRESETS[p.dataset.sort] };
+    render();
+  });
+});
+
+headers.forEach(h => {
+  h.addEventListener("click", () => {
+    const col = h.dataset.col;
+    if (!col) return;
+    if (currentSort.col === col) {
+      currentSort.dir = currentSort.dir === "asc" ? "desc" : "asc";
+    } else {
+      currentSort.col = col;
+      currentSort.dir = (col === "val_acc" || col === "macro_f1") ? "desc" : "asc";
+    }
+    pills.forEach(x => x.classList.remove("active"));
+    render();
+  });
+});
+
+chips.forEach(c => {
+  c.addEventListener("click", () => {
+    const set = activeFilters[c.dataset.filter];
+    if (set.has(c.dataset.value)) set.delete(c.dataset.value);
+    else set.add(c.dataset.value);
+    render();
+  });
+});
+
+// indice original para "Orden original"
+DATA.forEach((r, i) => r._orig = i);
+
+// default activo
+document.querySelector('.pill[data-sort="best-val-acc"]').classList.add("active");
+render();
+</script>
+
+</body>
+</html>

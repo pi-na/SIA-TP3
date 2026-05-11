@@ -259,3 +259,119 @@ El máximo global del grid es `wider + Adam@1e-3` con val_acc=0.9583. La configu
 Lectura en el lenguaje de esta sección: dentro del especialista (Adam), shallow y wider están empatadas; cambiando a Mom/SGD shallow gana sólo. Eso refuerza la elección de shallow desde dos ángulos: paridad con wider bajo el opt elegido, y dominancia bajo cualquier otro opt.
 
 > **CSV fuente:** misma tabla que en LR×ARCH ([`best_lr_per_opt_arch.csv`](../../ejercicio2_experimentacion/analisis/cross_v1/lr_arch/best_lr_per_opt_arch.csv)) — el heatmap no es más que esa tabla reorganizada en matriz 4×3.
+
+### Comparativa de Optimizadores
+
+Las secciones anteriores miraron interacciones (LR×OPT, LR×ARCH, ARCH×OPT). Esta cierra el análisis del optimizer con una vista **head-to-head**: ¿cuál es la mejor configuración de cada familia (SGD, Momentum, Adam) en el grid del stage 2, y qué se gana o pierde con cada una?
+
+Para cada familia tomamos su **best-of-family** sobre el stage 2 (mejor (arch, LR) por val_acc media). Es la misma operación de "best-over-LR" que en ARCH×OPT, pero llevada un nivel más arriba: aquí marginalizamos también sobre arch. Sólo nos quedan 3 filas, una por familia, para comparar lado a lado.
+
+![[Segunda tanda de experimentos/Cross_LR_Opt_Arch/family_comparison_bars.png]]
+
+| Familia      | best (arch @ LR)        | val_acc (15 corridas) | val_loss CE | best_epoch | gap (val−train) | sensibilidad al LR                               |
+| ------------ | ----------------------- | --------------------- | ----------- | ---------- | --------------- | ------------------------------------------------ |
+| **SGD**      | `shallow @ 1e-2`        | 0.9509 ± 0.0053       | 0.194       | 18.6       | 0.163           | plana (tolera LR ∈ [5e-4, 1e-2] sin romper)      |
+| **Momentum** | `shallow @ 1e-2`        | 0.9543 ± 0.0062       | 0.234       | 4.7        | 0.215           | media (rompe en base/deeper @ 1e-2)              |
+| **Adam**     | `wider   @ 1e-3`        | 0.9583 ± 0.0036       | 0.170       | 3.4        | 0.155           | aguda (ventana óptima estrecha en LR ∈ [5e-4, 1e-3]) |
+
+**Lectura por métrica:**
+
+- **val_acc** — Adam gana (+0.004 sobre Momentum, +0.007 sobre SGD). Su error estándar (SEM = std/√15 ≈ 0.0009) hace que la diferencia con SGD sea estadísticamente sólida; con Momentum es más justa pero igual a favor de Adam.
+- **val_loss CE** — Adam también gana (0.170 vs 0.194 SGD vs 0.234 Mom). Acá el ranking cambia: Momentum @1e-2 calibra peor que SGD, porque a LR alto Momentum entrega probabilidades menos confiables aunque acierte el argmax. Ya lo vimos en LR×OPT: cuando un modelo "se rompe" el CE lo capta antes que la accuracy.
+- **best_epoch** — Adam y Momentum convergen en 3–5 ép, SGD necesita 18.6. Es ~4× más lento que Adam en wall-clock.
+- **gap (val−train)** — Adam tiene el gap más bajo (0.155), SGD intermedio (0.163), Momentum el más alto (0.215). El gap alto de Momentum en su mejor punto es coherente con la observación de LR×OPT: a `1e-2` Momentum llega rápido al óptimo de val pero sigue empujando train hacia 0 → memoriza más.
+
+**Conclusión de la sección:** Adam gana en las 3 métricas que importan para decisión (accuracy, calibración, sobreajuste) **y** además es más rápido que SGD. La única ventaja real de Mom/SGD sería **robustez al HP** (toleran rangos más anchos de LR) — útil si no se hizo HP search, pero acá ese costo ya está pagado.
+
+> **CSVs fuente:**
+> - [`ejercicio2_experimentacion/analisis/cross_v1/family_comparison/best_of_family.csv`](../../ejercicio2_experimentacion/analisis/cross_v1/family_comparison/best_of_family.csv) — 3 filas, una por familia, con la mejor (arch, LR) y todas las métricas del head-to-head de arriba (incluye `overfit_gap`, `train_loss` y el LR ganador).
+> - Generado por [`scripts/cross_v1/plot_family_comparison.py`](../../ejercicio2_experimentacion/scripts/cross_v1/plot_family_comparison.py), que también produce el plot de barras.
+
+### Configuración óptima para este análisis
+
+Las secciones anteriores midieron las interacciones; esta consolida la decisión. El método tiene 4 pasos: top-N → test estadístico → criterios de desempate → ganador.
+
+#### Paso 1 — Top 10 del grid
+
+Las 10 mejores celdas del stage 2 ordenadas por val_acc media (sobre 15 corridas = 3 seeds × 5 folds). Tabla extraída del [stage 2 completo](Segunda%20tanda%20de%20experimentos/Cross_LR_Opt_Arch/analisis.md#Top%20configs):
+
+| #   | arch         | opt      | LR   | val_acc           | macro_f1 | best_epoch |
+| --- | ------------ | -------- | ---- | ----------------- | -------- | ---------- |
+| 1   | arch_wider   | adam     | 1e-3 | 0.9583 ± 0.0036   | 0.8537   | 3.4        |
+| 2   | arch_shallow | adam     | 1e-3 | 0.9572 ± 0.0041   | 0.8521   | 5.7        |
+| 3   | arch_shallow | adam     | 5e-4 | 0.9567 ± 0.0049   | 0.8518   | 4.8        |
+| 4   | arch_wider   | adam     | 5e-4 | 0.9553 ± 0.0050   | 0.8503   | 2.2        |
+| 5   | arch_base    | adam     | 1e-3 | 0.9548 ± 0.0044   | 0.8493   | 3.5        |
+| 6   | arch_wider   | adam     | 1e-4 | 0.9547 ± 0.0047   | 0.8500   | 7.9        |
+| 7   | arch_shallow | adam     | 1e-4 | 0.9546 ± 0.0044   | 0.8491   | 15.9       |
+| 8   | arch_shallow | adam     | 5e-3 | 0.9546 ± 0.0046   | 0.8493   | 3.2        |
+| 9   | arch_shallow | momentum | 1e-2 | 0.9543 ± 0.0062   | 0.8499   | 4.7        |
+| 10  | arch_base    | adam     | 5e-4 | 0.9541 ± 0.0050   | 0.8483   | 2.9        |
+
+**Observaciones:** 9 de las 10 son Adam; la única excepción es `shallow + momentum @ 1e-2` en la posición 9. Las primeras 4 están dentro de 0.003 puntos de val_acc — todas dentro de ~3·SEM, prácticamente empatadas.
+
+> **Comparativa interactiva (60 celdas, sorteable y filtrable):** [`comparativa.html`](../../Notas/ejercicio%202/Segunda%20tanda%20de%20experimentos/comparativa_total/comparativa.html) (también accesible localmente en `Notas/ejercicio 2/Segunda tanda de experimentos/comparativa_total/comparativa.html`). El HTML tiene las 60 filas del stage 2 con todas las columnas (arch, opt, LR, val_acc±std, macro_f1±std, val_loss CE, train_loss, gap, best_epoch). Click en cualquier columna para sortear; pills preconfigurados arriba (🏆 mejor val_acc · ⚖️ mejor macro_f1 · 🎯 menor val_loss CE · ⚡ más rápido · 🚫 menos sobreajuste · 🧩 agrupar por arch · 🧪 agrupar por opt · 🔄 orden original); chips de abajo filtran por opt / arch / LR.
+
+#### Paso 2 — ¿Las top-N son estadísticamente distinguibles?
+
+Con `n = 15` corridas por celda, el error estándar de la media (SEM) sobre val_acc es ≈ `std / √15 ≈ 0.001`. Para distinguir dos celdas al 95% se necesita |z| > 1.96 con `z = (μ₁ − μ₂) / √(SEM₁² + SEM₂²) ≈ Δ/0.0014`. Concretamente: **diferencias < 0.003 son indistinguibles**.
+
+Las dos primeras celdas — `wider+Adam@1e-3 = 0.9583` y `shallow+Adam@1e-3 = 0.9572` — están en Δ = 0.0011, claramente dentro de ese margen. Por eso lanzamos el [Arch tiebreaker](Segunda%20tanda%20de%20experimentos/Arch_tiebreaker/analisis.md) con **15 seeds × k=5 = 75 corridas/celda**, que amplió el N por 5 y permitía distinguir Δ ≥ 0.0014. Resultado:
+
+- `arch_wider`:   0.9581 ± 0.0049  (SEM = 0.0006)
+- `arch_shallow`: 0.9576 ± 0.0046  (SEM = 0.0006)
+- **Δ = +0.0005, z = 0.65** → no distinguibles al 95% (necesitábamos |z| > 1.96).
+
+La diferencia de 0.0011 que se veía con 3 seeds **era ruido de muestreo**. Conclusión: con la mejor evidencia disponible, las top-2 son **estadísticamente equivalentes**. Hay que recurrir a criterios de desempate.
+
+#### Paso 3 — Criterios de desempate
+
+Cuando hay empate estadístico, se elige por criterios secundarios. Estos son los disponibles y a quién favorece cada uno:
+
+| criterio                       | favorece a                  | razón                                                                            |
+| ------------------------------ | --------------------------- | -------------------------------------------------------------------------------- |
+| **Occam** (cantidad de params) | shallow (~101k) sobre wider (~235k) | menos params → menos riesgo de overfitting; defensa oral simple; menor compute   |
+| **velocidad** (best_epoch)     | Adam (3.4 ep) sobre Mom (4.7) / SGD (18.6) | menor wall-clock, menor compute                                                  |
+| **calibración** (val_loss CE)  | Adam (0.170)                | val_loss más baja en su óptimo → probabilidades mejor calibradas                 |
+| **sobreajuste** (gap)          | Adam (0.155)                | gap más bajo → mejor generalización                                              |
+| **robustez al HP**             | SGD / Momentum              | toleran rangos más anchos de LR; valor sólo si no se hizo HP search              |
+| **robustez al swap de arch**   | shallow                     | ★ en SGD y Momentum, empatada con wider en Adam → "todo terreno"                  |
+
+#### Paso 4 — Decisión
+
+**Para nuestro caso: Occam (params) + las 3 ventajas internas de Adam (calibración, velocidad, sobreajuste bajo) + robustez de shallow → la configuración elegida es:**
+
+> **`arch_shallow` + Adam + LR=`1e-3` + batch=`64`**
+
+Resumen del recorrido de la decisión:
+
+1. Del grid 3D (LR × Opt × Arch), Adam domina las 4 archs → el optimizer es Adam.
+2. Dentro de Adam, las top-2 (wider, shallow) están estadísticamente empatadas según el tiebreaker (z=0.65, n=75).
+3. Entre dos archs empatadas, Occam elige la de menor capacidad → shallow.
+4. El LR óptimo de Adam es `1e-3` en las 4 archs (LR×ARCH) → LR fijo en `1e-3`.
+5. El batch óptimo para Adam@`1e-3` viene del [pre-experimento LR×Batch×Opt](Segunda%20tanda%20de%20experimentos/Pre_LR_Batch_Opt/analisis.md) → 64 (confirmado por la estrella batch del stage 2b, ver siguiente sección).
+
+Esta es la **decisión-con-criterios-explícitos** que faltaba documentar como tal en una sola sección del .md. La configuración misma ya estaba en `IMPORTANTE_CORRELACIONES.md` y en `Cross_LR_Opt_Arch/analisis.md`, pero el árbol que llega a ella estaba disperso.
+
+### Stage 2b — Estrella batch sobre el centro
+
+**Intención.** El batch_size óptimo para Adam@`1e-3` se decidió en el [pre-experimento LR×Batch×Opt](Segunda%20tanda%20de%20experimentos/Pre_LR_Batch_Opt/analisis.md) con sólo 3 puntos (16, 64, 256). Acá queremos confirmar que ese batch=64 es realmente el óptimo (y no un máximo entre puntos demasiado espaciados) **sobre el centro decidido** (`shallow + Adam + 1e-3`). Una "estrella" es eso: dejar todo fijo en el centro y variar **un solo factor** con resolución alta.
+
+**Configuración.** 5 valores de batch (16, 32, 64, 128, 256), 3 seeds (42, 7, 13), k-folds=5 → 15 corridas/celda. Resto fijo en el centro.
+
+![[Segunda tanda de experimentos/Cross_LR_Opt_Arch/stage2b_val_acc_vs_batch.png]]
+
+| batch | val_acc (15 corridas) | macro_f1        | val_loss CE | best_epoch |
+| ----- | --------------------- | --------------- | ----------- | ---------- |
+| 16    | 0.9540 ± 0.0036       | 0.8477 ± 0.0061 | 0.1785      | 2.3        |
+| 32    | 0.9568 ± 0.0054       | 0.8510 ± 0.0079 | 0.1700      | 3.9        |
+| **64**    | **0.9572 ± 0.0041**       | **0.8521 ± 0.0067** | **0.1701**      | 5.7        |
+| 128   | 0.9556 ± 0.0045       | 0.8502 ± 0.0069 | 0.1742      | 7.8        |
+| 256   | 0.9548 ± 0.0045       | 0.8493 ± 0.0073 | 0.1771      | 11.2       |
+
+**Análisis.** La curva es **unimodal con pico claro en batch=64**. A los costados:
+
+- **Batches chicos (16):** val_acc cae 0.003 y val_loss sube 0.5%. Hipótesis: el ruido SGD es alto por minibatch (sólo 16 muestras), las direcciones de gradiente son más erráticas y el modelo no termina de afinar.
+- **Batches grandes (256):** val_acc cae 0.002 y `best_epoch` sube a 11.2 (vs 5.7 en batch=64). Hipótesis: gradiente menos ruidoso pero más sesgado al óptimo de train → necesita más épocas para alcanzar val óptimo. Coherente con la regla LR×batch de la cátedra (con LR=`1e-3` fijo, batch=256 deja el producto LR×batch en un régimen sub-óptimo en el extremo "demasiado promediado").
+
+**Conclusión.** `batch=64` es robustamente el óptimo del centro: gana en val_acc, val_loss y macro_f1 simultáneamente. La diferencia con batch=32 está dentro del SEM (Δ=0.0004), así que ambos serían defendibles, pero 64 es lo que ya teníamos decidido del pre-experimento y la estrella lo confirma. **Decisión final del Ej2 sostenida:** `shallow + Adam + 1e-3 + batch=64`.
