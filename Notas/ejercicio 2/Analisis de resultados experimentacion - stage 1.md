@@ -1,3 +1,5 @@
+Analisis de los resultados obtenidos en la etapa de "Pre_LR_Batch_Opt", resultados mas finos explicados en [[Notas/ejercicio 2/Segunda tanda de experimentos/Pre_LR_Batch_Opt/analisis|analisis]]
+
 En nuestros primeros experimentos del ejercicio 2, fuimos modificando los hiperparametros 1 a la vez. Comenzamos definiendo 4 arquitecturas y variando el lr -> vemos que ENTRE las arquitecturas no hay variacion en cuanto a los lr. Ambas curvas de convergencia (train loss y val loss) muestran el mismo comportamiento.
 ![convergence_train](convergence_train.png)
 Continuando con el experimento, fijamos el batch-size en 32, pero fuimos variando el optimizer y lr, empezamos a ver como a medida que fuimos agrandando el lr, iban empeorando los resultados para cada optimizer. Todas las corridas fueron con 5 seeds y 5 folds.
