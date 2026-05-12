@@ -1,85 +1,120 @@
-# Estrategias de training
+# Estrategias de training: online vs mini-batch vs batch
 
-Cómo se recorre el dataset durante el entrenamiento. Tres modos según el **tamaño del batch** (cuántas muestras se usan para calcular cada update de pesos).
+Cómo se recorre el dataset durante el entrenamiento. Tres modos según **cuántas muestras se usan para calcular cada update de pesos**. Esto sale tal cual de la clase: el tema se introduce en *Perceptrón Simple* (online) y se completa en *Perceptrón Multicapa* (las tres variantes).
 
 ---
 
-## Aclaración clave: época ≠ iteración
+## 0. Aclaración previa: época ≠ iteración
 
 - **Época**: una pasada completa por TODO el dataset de entrenamiento.
 - **Iteración / step**: un update de pesos (un forward + backward + step del optimizador).
 
-El batch size determina **cuántas iteraciones entran en una época**.
+El batch size es lo que **determina cuántas iteraciones entran en una época**. Es el único parámetro que distingue los tres modos.
 
 ---
 
-## Mini-batch (ej. batch=32)
+## 1. La intuición (explicación de la clase)
 
-En UNA época recorrés **TODO el dataset**, pero lo partís en pedazos de 32. Si tenés 1000 filas:
+La pregunta de fondo es muy simple: **¿después de cuántos ejemplos actualizo los pesos?**
 
-1. Shuffleás las 1000 filas.
-2. Tomás filas 1–32 → forward → loss promediada sobre esas 32 → backward → **1 update de pesos**.
-3. Tomás filas 33–64 → otro update.
-4. … y así hasta agotar las 1000.
-5. Eso fue **1 época** = ~31 updates (1000/32, redondeando).
-6. Próxima época: volvés a shufflear las **mismas 1000 filas** y repetís.
+### Online / incremental (lo que vimos primero, en Perceptrón Simple)
 
-**No es que en la época 2 leas "otras 32 nuevas"** — el dataset es fijo, lo recorrés entero cada época. El batch size sólo dice de a cuántas muestras procesás por update.
+> *"cuando yo hago esta actualización fíjense que la estoy haciendo cada vez que veo un dato nuevo, o sea yo arranco una época, veo un dato, me fijo si al perceptron lo hizo bien y si no lo hizo bien, actualizo los pesos. Y así con el siguiente dato. (...) No es que estoy acumulando datos. Fíjense que el dato número 2 que yo veo ya está basándose o agarrando el perceptron original."* — Perceptrón Simple, [01:24:32 – 01:25:12]
 
----
+Es decir: **veo un ejemplo → calculo el error → actualizo los pesos → paso al siguiente**. Es el esquema más natural si uno piensa "estoy aprendiendo de a un caso". Es un caso particular de **SGD (Stochastic Gradient Descent)**.
 
-## Online (batch = 1, SGD puro)
+Analogía: un profesor que corrige cada ejercicio del alumno apenas lo termina, y le da feedback inmediato. El alumno cambia su forma de pensar después de cada ejercicio. Va a ser muy "errático" — un ejercicio raro lo manda al pasto.
 
-- 1 muestra → 1 update. En una época hacés **N updates** (N = tamaño dataset).
-- Gradiente **muy ruidoso** (cada paso usa info de 1 sola fila → estimación pésima del gradiente verdadero).
-- Ventaja: muchísimos updates por época; el ruido puede ayudar a escapar mínimos locales.
-- Desventaja: no aprovecha vectorización (lento en wall-clock), oscila mucho, difícil de estabilizar.
+### Batch / lote (el extremo opuesto)
 
----
+> *"Lote o Batch vienen a ser el extremo opuesto de incremental u online. (...) cuando calcule los delta W, la fórmula de actualizar los pesos para todos los elementos del conjunto de datos y los unifico y hago una actualización de los pesos de la red. En lugar de constantemente estar actualizando todos los pesos, que eso es una operación que tiene su costo a medida que la red se vuelve más grande."* — Perceptrón Multicapa, [00:47:49 – 00:48:24]
 
-## Full-batch (batch = N)
+Es decir: **paso TODOS los ejemplos del dataset → promedio el gradiente sobre todos → un solo update por época**.
 
-- Usás **las N filas completas** para calcular UN gradiente promediado → **1 update por época**.
-- Gradiente **súper estable** (estimación "verdadera" del gradiente sobre todo el train set).
-- Desventaja: 1 sólo update por época → converge lentísimo en wall-clock, y hay que meter todo el dataset en memoria.
-- Riesgo: se queda más fácil en mínimos locales / saddle points porque no hay ruido que lo saque.
+Analogía: el profesor espera a que el alumno termine los 1.000 ejercicios del libro, los corrige todos, y recién al final le dice "en promedio fallás acá, cambiá esto". El feedback es súper confiable (está basado en 1.000 casos), pero el alumno tarda muchísimo en mejorar porque sólo lo recibe una vez por libro.
 
----
+### Mini-batch / mini-lote (el del medio, el que se usa)
 
-## Comparación rápida
+> *"Hay otras 2 variantes que en realidad se usan más, particularmente la del medio (...) lo que se suele hacer se llama mini lote o mini batch, donde yo tengo de todo mi conjunto de datos, supongo que tengo 10.000, digo, bueno, voy a separar estos 10.000 en chunks de 1.000 datos. Y para cada uno de esos 1.000 datos es que hago la actualización de los pesos y el bias. O sea, calculo el gradiente para esos 1.000, actualizo y después paso al siguiente batch."* — Perceptrón Multicapa, [00:47:40 – 00:48:58]
 
-| Modo | Batch | Updates/época | Ruido del gradiente | Vectorización | Memoria |
-|---|---|---|---|---|---|
-| Online | 1 | N | Alto | Mala | Mínima |
-| Mini-batch | 32–256 (típico) | N / batch | Medio | Buena (BLAS/GPU) | Media |
-| Full-batch | N | 1 | Nulo | Máxima | Alta |
+Es decir: parto el dataset en pedazos chicos (32, 64, 128 muestras), y para cada pedazo hago un update. **Es un compromiso explícito entre los dos extremos.**
+
+Analogía: el profesor corrige tandas de 32 ejercicios y al final de cada tanda da feedback. El alumno mejora rápido (recibe feedback muchas veces por libro) y cada feedback está basado en suficientes ejemplos como para no ser disparatado.
+
+> Nota del profe en la clase: *"Hay otras 2 variantes que en realidad se usan más"*. La cátedra recomienda explícitamente apartarse del esquema online del Perceptrón Simple cuando se pasa a redes más grandes.
 
 ---
 
-## Por qué mini-batch ganó en la práctica
+## 2. Cómo se ve cada modo en una época
 
-Combina lo mejor de los dos extremos:
+Imaginemos un dataset de 1.000 filas.
 
-- Gradiente razonablemente estable (promediado sobre 32–256 muestras, no sobre 1).
-- Muchos updates por época (no 1 solo como full-batch).
-- Aprovecha operaciones matriciales vectorizadas → mucho más rápido en wall-clock que online sample-por-sample.
+| Modo | Batch | Updates por época | Qué hace en 1 época |
+|---|---|---|---|
+| Online | 1 | 1.000 | Mira 1 fila → update. Mira la siguiente → update. ... 1.000 updates |
+| Mini-batch | 32 | ~31 | Shuffle. Toma filas 1–32 → 1 update. Toma 33–64 → 1 update. ... 31 updates |
+| Full-batch | 1.000 | 1 | Mira las 1.000 filas → promedia el gradiente → 1 solo update |
 
----
-
-## Conexión con la clase de optimizadores
-
-Cuando hablamos de **SGD / Momentum / Adam** en el TP, en la práctica siempre es **mini-batch SGD**:
-
-- La "S" (stochastic) viene de que el gradiente de cada update es una **estimación ruidosa** del gradiente verdadero (que sería el full-batch).
-- Ese ruido **no es un bug, es una feature**: ayuda a escapar zonas malas del paisaje de loss (mínimos locales chatos, saddle points).
-- Momentum y Adam justamente intentan **suavizar ese ruido** acumulando información de gradientes pasados, sin perder la ventaja de hacer muchos updates por época.
+**Detalle importante** que tiende a confundir: en mini-batch, en la época 2 NO se leen "32 datos nuevos". El dataset es fijo. Lo que cambia es que se vuelve a shufflear las mismas 1.000 filas y se recorre entero otra vez en chunks de 32. El batch size sólo dice "de a cuántas muestras proceso por update", no "cuántas muestras conoce el modelo".
 
 ---
 
-## Implicancias prácticas para el Ej2
+## 3. Trade-offs (qué se gana y qué se pierde)
 
-- El batch size es un **hiperparámetro a barrer**, igual que el LR. No es algo "que viene fijo".
-- Batch chico → más updates por época → puede converger en menos épocas, pero cada época es más lenta en wall-clock y el loss oscila más.
-- Batch grande → menos updates por época → loss más suave pero puede necesitar más épocas (o un LR más alto para compensar).
-- **Regla heurística**: si subís el batch size, normalmente conviene subir el LR (porque el gradiente es menos ruidoso, podés dar pasos más grandes con seguridad). Esto hay que verificarlo empíricamente en el sweep, no asumirlo.
-- En el reporte: aclarar siempre **batch size usado** y, si se compara entre experimentos con distintos batch sizes, tener cuidado de no confundir "convergió más rápido en épocas" con "convergió más rápido en tiempo real".
+| Aspecto | Online (b=1) | Mini-batch (b=32–256) | Full-batch (b=N) |
+|---|---|---|---|
+| Ruido del gradiente | Altísimo | Medio | Nulo |
+| Updates por época | Muchos (N) | Bastantes (N/b) | Uno solo |
+| Vectorización (BLAS/NumPy) | Mala — operaciones sobre vectores 1×d | Buena — matrices b×d | Máxima, pero subutilizada |
+| Wall-clock por época | Lento (loop Python) | Rápido | Rápido por época, pero épocas que rinden poco |
+| Memoria | Mínima | Media | Alta (todo el dataset en RAM como matriz) |
+| Riesgo de mínimos locales | Bajo (el ruido lo saca) | Bajo-medio | Alto (no hay nada que lo saque de un punto de gradiente cero) |
+| Estabilidad de la curva de loss | Oscila feo | Suave con ruido fino | Súper suave |
+
+**El ruido del gradiente NO es un bug, es una feature**: ayuda a escapar zonas planas del paisaje de loss (mínimos locales chatos, saddle points). Por eso full-batch, a pesar de tener el gradiente "verdadero", suele converger peor en redes profundas.
+
+---
+
+## 4. Conexión con la clase de optimizadores
+
+Cuando en el TP usamos **SGD / Momentum / Adam**, en la práctica siempre estamos hablando de **mini-batch SGD** (online y full-batch son casos límite de la misma fórmula, con b=1 y b=N respectivamente):
+
+- La "S" (stochastic) de SGD viene precisamente de que el gradiente de cada mini-batch es una **estimación ruidosa** del gradiente verdadero (el full-batch).
+- Momentum y Adam acumulan estadísticas de gradientes pasados (media móvil de g y de g²). Eso tiene sentido **porque hay ruido para promediar**. Si usás full-batch, el "ruido" desaparece y Adam pierde gran parte de su gracia: se vuelve casi un gradient descent con LR adaptativo por parámetro.
+
+Es decir: la elección de mini-batch no es independiente del optimizador. Adam, que es nuestro default en Ej2, **asume implícitamente mini-batch**.
+
+---
+
+## 5. Por qué en Ej2 fuimos DIRECTO a mini-batch
+
+Tres razones, todas justificables desde la clase:
+
+### (a) Recomendación explícita de la cátedra
+
+En Perceptrón Multicapa el profe dice literalmente *"Hay otras 2 variantes que en realidad se usan más, particularmente la del medio"*. Online se mostró sólo como punto de partida pedagógico en Perceptrón Simple, no como esquema a usar en la práctica con redes multicapa. Probar online en Ej2 sería retroceder a un esquema que la clase ya marcó como inferior cuando la red crece.
+
+### (b) Costo computacional del Ej2 lo hace inviable de otra forma
+
+Nuestro dataset es `digits.csv` con ~12.450 muestras × 784 features, red `[784, 100, 50, 10]`. Lo que dice la clase sobre el costo de updates aplicaba a redes "grandes" — la nuestra ya entra en esa categoría:
+
+- **Online (b=1)**: 12.450 forward+backward por época, cada uno con matrices microscópicas (1×784, 1×100, …). NumPy/BLAS funcionan bien con matrices grandes, pésimo con vectores chicos en loop Python. Una sola corrida tardaría minutos o más; multiplicalo por 5 folds × N seeds × M configs del sweep y se vuelve impagable.
+- **Full-batch (b=12.450)**: cabe en RAM, pero te da **1 update por época**. Adam con 1 update por época necesitaría cientos/miles de épocas para converger en problemas de esta complejidad. Además, como dije en §4, Adam pierde sentido sin ruido.
+- **Mini-batch (b=16 en `base.json`)**: ~780 updates por época. Cada update es un matmul `16×784 → 16×100`, que NumPy hace en microsegundos. Wall-clock razonable, vectorización aprovechada, ruido en la cantidad justa para que Adam tenga algo que suavizar.
+
+### (c) El TP exige experimentación con muchos hiperparámetros
+
+CLAUDE.md y la consigna piden barrer LR, arquitectura, optimizador, etc. Para que un sweep one-at-a-time con 5 folds × varias seeds sea viable en un horizonte humano, **cada corrida individual tiene que ser barata**. Mini-batch es la única de las tres opciones que cumple eso sin sacrificar calidad de convergencia.
+
+> Implicancia: el batch size en sí **sigue siendo un hiperparámetro a barrer** (16 vs 32 vs 64 vs 128, p. ej.), pero el barrido se hace dentro de la familia mini-batch, no comparándola contra online ni full-batch.
+
+---
+
+## 6. Implicancias prácticas para el reporte / defensa oral
+
+- **Aclarar siempre el batch size usado** en cada experimento. No es un detalle: cambia la cantidad de updates por época, el ruido del gradiente y la interacción con el optimizador.
+- Batch chico → más updates por época → puede converger en menos épocas, pero cada época es más lenta en wall-clock y la curva de loss oscila más.
+- Batch grande → menos updates por época → curva de loss más suave, pero puede necesitar más épocas (o un LR más alto para compensar).
+- **Regla heurística** (la clase la insinúa, hay que verificarla empíricamente): si subís el batch, conviene subir el LR — el gradiente es menos ruidoso, podés dar pasos más grandes con seguridad. NO asumirlo, **medirlo en el sweep**.
+- Si comparamos entre experimentos con distinto batch size, hay que distinguir entre "convergió más rápido en épocas" y "convergió más rápido en wall-clock" — son métricas distintas y se pueden contradecir.
+- Aplicando la regla de promedios del CLAUDE.md: cuando se reporte algo como "loss media en la época 20", aclarar que es **promedio sobre los mini-batches de esa época** — no es lo mismo que "loss en el dataset completo evaluada en el estado de los pesos al final de la época 20".
