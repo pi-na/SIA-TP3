@@ -1,5 +1,5 @@
 ## Experimentacion, variables
-Por ejemplo, en el analisis de LR [[ejercicio1/nonlinear_perceptron/analisis_outputs/sweep_lr/multiseed/analisis|analisis multiseed non linear]]
+Por ejemplo, en el analisis de LR [[Notas/ejercicio 1/Experimentos y analisis/NON LINEAR perceptron/LR eleccion + experimentacion|analisis multiseed non linear]]
 ### Decisiones de diseño, hiperparametros
 #### Normalización de la data
 Antes de hacer K-folding, normalizamos la informacion haciendo z-score.
@@ -14,7 +14,7 @@ La justificacion **probablemente** la consigamos por medio de experimentación, 
   - En el simple: se mezclan todos los índices (rng.shuffle(idx) — linear:151, nonlinear:154).         
   - Usa el seed "raíz" del config: seed = config["random_seed"] (linear:340, nonlinear:403). 
 
-Para el lineal elegimos kfold = 5, ver [[ejercicio1/lineal_perceptron/analisis_outputs/kfold_choice#**Conclusión **|kfold_choice]]
+Para el lineal elegimos kfold = 5, ver [[Notas/ejercicio 1/Experimentos y analisis/LINEAR perceptron/K fold eleccion + experimentacionK fold eleccion + experimentacion#Conclusión|kfold_choice]]
 
 #### Estrategia de entrenamiento
 Hacemos entrenamiento **online**, no intentamos implementar batch o mini batch para el lineal.
@@ -38,8 +38,8 @@ Usamos un epsilon, pero en todos los experimentos que hicimos (vease los analisi
 Los hiperparametros del perceptron lineal ADALINE y no-lineal son 
 #### Learning rate
 Experimentamos con 3 LR, el analisis de resultados para cada uno esta en 
-- [[ejercicio1/nonlinear_perceptron/analisis_outputs/sweep_lr/multiseed/analisis|analisis multiseed NO LINEAL]]
-- [[Notas/ejercicio 1/Experimentos y analisis/LINEAR perceptron/sweep_lr/multiseed/analisis|analisis multiseed LINEAL]]
+- [[Notas/ejercicio 1/Experimentos y analisis/NON LINEAR perceptron/LR eleccion + experimentacion|analisis multiseed NO LINEAL]]
+- [[Notas/ejercicio 1/Experimentos y analisis/LINEAR perceptron/LR eleccion + experimentacion|analisis multiseed LINEAL]]
 Para el perceptrton lineal elegimos LR = 10^-3
 Para el perceptrton no lineal elegimos LR = 10^-2
 #### epochs
@@ -51,47 +51,8 @@ Lo que hacemoss para el threshold es medir precision recall accuracy F1 y encont
 > Criterio para elegir un threshold: nos interesa conseguir la mejor recall posible sin dejar de lado la precision; Notamos que con thresholds bajos la recall queda alta, pero con poca precision. Estamos flaggeando demasiadas compras como fraude, y asi es facil agarrar la mayor cantidad de fraudes posible. Entonces queremos un **balance** entre precision y recall -> usamos F1 para la decisión.
 
 --- 
-## Resultados
-Una vez definidos los hiperparametros, pasamos a analizar los resultados del modelo.
-### Aprendizaje
-> Evaluar si el modelo **aprende** datos que le mostras; Que tan bien el modelo predice al mostrarle datos con los que fue entrenado.
+# Aprendizaje
+Ver [[Aprendizaje perceptron Lineal]] y [[Aprendizaje Perceptron No Lineal]]
 
-Para aprendizaje, entrenamos al lineal y al no lineal con todo el dataset, y evaluamos MSE y R^2.
-
-Para el perceptrón simple se puede variar learning rate, epochs, epsilon. Dejamos epsilon = 0 en aprendizaje para ver la curva completa.
-
-**Perceptron lineal**
-Propongo 4 learning rate (10^-1,10^-2, 10^-3, 10^-4), 250 epochs.
-
-**Perceptron no lineal**
-Propongo 4 learning rate (10^-1,10^-2, 10^-3, 10^-4), 250 epochs.
-
-Tanto para perceptron lineal como no lineal, se ejecutan las 4 combinaciones con tres seeds, se  evalua MSE y R^2. Se presentan plots de convergencia para cada combinacion; Para todo se hacen tablas con todos los datos; Se hace una tabla con todos los parametros utilizados en cada experimento.
-
-### Generalizacion
-> Generalización = qué tan bien el modelo predice en datos que no vio durante el entrenamiento.
-
-Evaluar como se comporta el modelo para predecir datos **que nunca vio**
-Para esto dividimos en *training set* y *validation set*; El modelo se entrena con el training set sin nunca ver el validation, y luego se prueban sus predicciones sobre el validation.
-
-Un modelo que memoriza el train set (overfitting) tiene MSE train bajo pero MSE test alto. Un modelo que generaliza tiene MSE similares en ambos.                                            
-
-Para medirlo usamos K-fold cross-validation: entrenamos K veces en particiones distintas y promediamos las métricas de test, así la estimación no depende de una sola división suerte/mala suerte.
-
-Hay que mostrar generalización para el perceptron lineal Y TAMBIÉN para el no lineal.
-#### **Perceptron lineal**
-Hola completame!
-#### **Perceptron no lineal**
-**No se observa overfitting**, vemos que la linea de error para el training set y para el test set estan pisadas. ACA FALTA UN GRAFICO.
-### Convergencia - subajuste?
-Como medimos si el modelo ajusta correctamente al problema? Tenemos el MSE. En clase dijeron MSE alto en training set -> underfitting. Pero como juzgamos si un MSE es alto? Cual es la referencia?
-
-Lo que hicimos fue analizar el dataset [[Informe con fotos leeme.pdf]]. Encontramos reglas básicas que dividen el dataset a partir de un umbral en 3 features, y calculamos métricas para el sistema que únicamente hace esta división por umbrales. Los resultados fueron precision=100% / recall=80% / acc=97.68%.
-
-Definimos que hay **underfitting** si el perceptrón en train no iguala (acc ≥ 97.68%, precision ≥ 100% sobre lo que predice, recall ≥  80%).
-
-Al menos, queremos que iguale o mejore el **recall** para considerar que vale la pena usar el perceptron.
-
-Predicción teórica para el lineal: las 3 reglas son discontinuidades (salto ~6% → 100% en un entero). Geométricamente imposibles para una recta + sigmoide saturada → el lineal debería underfittear estructuralmente, y el no-lineal acercarse más.
-
-Tenemos que calcular estas metricas para el lineal y el no lineal con los hiperparametros que elegimos antes, y compararlas con el baseline.
+# Generalización
+Ver [[Analisis Generalizacion]]

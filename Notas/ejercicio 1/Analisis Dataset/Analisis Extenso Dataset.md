@@ -62,7 +62,7 @@ Es decir, hay un **umbral duro en \$500**: ninguna transacción legítima en el 
 
 La distribución del fraude **dentro de** `amount < 750` (donde está el 88% del fraude) sigue siendo informativa porque ahí también hay no-fraude — esa es la zona donde el modelo tiene que diferenciar. La parte interesante es esa: la mediana del dataset está en \$63, así que la mayor parte del análisis tiene que pasar bajo \$500.
 
-![amount_usd <750 por clase](image/analisis/amount_usd_lt750.png)
+![amount_usd <750 por clase](../../../ejercicio1/analisis_dataset/image/analisis/amount_usd_lt750.png)
 
 **Lectura:** la cola superior del histograma (entre 500 y 750) es **toda fraude**, mientras que en el rango bajo (<200) ambas clases conviven y el fraude está más diluido pero presente.
 
@@ -101,7 +101,7 @@ Distribución detallada por valor de quantity:
 
 Patrón claro: con 1–2 unidades **casi no hay fraude** (<1%); entre 3 y 9 la tasa de fraude oscila alrededor del 5–8%; y al pasar a 10 o más se vuelve **fraude garantizado**.
 
-![quantity <10 por clase](image/analisis/quantity_lt10.png)
+![quantity <10 por clase](../../../ejercicio1/analisis_dataset/image/analisis/quantity_lt10.png)
 
 **Lectura:** en el rango `<10` la clase azul (no-fraude) domina ampliamente y el fraude aparece como una capa fina y plana. La transición de 9 a 10 es una **discontinuidad** en el espacio de features: cualquier modelo lineal en quantity va a tener problemas para representar ese salto a menos que se ayude con activación no-lineal o con feature engineering (por ejemplo, una indicadora `quantity >= 10`).
 
@@ -142,7 +142,7 @@ Distribución del `big_model_fraud_probability` para fraudes con `session < 150`
 
 **Lectura importante:** cuando hay fraude **y** la sesión es corta, el BigModel está casi siempre **muy confiado** (probabilidad > 0.85, mediana 0.997). Es decir, una sesión muy corta es una señal **fuerte** de fraude que el BigModel ya internalizó. El TinyModel debería poder reproducir esto.
 
-![session_duration_seconds por clase](image/analisis/session_duration.png)
+![session_duration_seconds por clase](../../../ejercicio1/analisis_dataset/image/analisis/session_duration.png)
 
 ---
 
@@ -175,7 +175,7 @@ Confirmado.
 
 - Esto sugiere que el comportamiento "compré algo recientemente y ahora vuelvo a comprar" correlaciona fuerte con fraude — patrón típico de uso de tarjeta robada (testeo + cargo grande en pocas horas/días).
 
-![days_since_last_purchase por clase](image/analisis/days_since_last_purchase.png)
+![days_since_last_purchase por clase](../../../ejercicio1/analisis_dataset/image/analisis/days_since_last_purchase.png)
 
 ---
 
@@ -198,7 +198,7 @@ Ambas hipótesis confirmadas con números fuertes.
 
 **Lectura:** las cuentas **nuevas (<250 días)** son el ~88% del fraude pero solo el ~6% de las legítimas. Y las cuentas **viejas (>1500 días)** son ~60% de las legítimas y casi nada de fraude. `account_age_days` es probablemente la **feature individual más informativa** del dataset (junto con la combinación `amount_usd` × `quantity`).
 
-![account_age_days por clase](image/analisis/account_age_days.png)
+![account_age_days por clase](../../../ejercicio1/analisis_dataset/image/analisis/account_age_days.png)
 
 **Lectura:** dos modos casi disjuntos — el fraude se concentra a la izquierda, el no-fraude a la derecha, con poca superposición. Idealmente cualquier modelo va a explotar fuerte esta señal.
 
@@ -225,7 +225,7 @@ Posiblemente esta columna existe en el dataset original como una pista falsa o c
 
 **También ruido.** No correlaciona ni con el target ni con la clase real. La distribución de fraude y no-fraude se superpone casi perfectamente, como muestra el gráfico:
 
-![time_since_last_login_s por clase](image/analisis/time_since_last_login.png)
+![time_since_last_login_s por clase](../../../ejercicio1/analisis_dataset/image/analisis/time_since_last_login.png)
 
 **Recomendación:** descartar junto con `timestamp` y `device_screen_resolution`.
 
@@ -257,7 +257,7 @@ La segunda hipótesis (concentración del fraude entre 8 y 14 dentro del rango `
 
 La tasa de fraude oscila entre 7% y 10% sin un pico claro en ese rango. Es una zona de **base rate elevado pero plano**. El salto se da en la frontera 14 → 15 (de ~10% a 100%), igual que con `quantity` en 9 → 10.
 
-![items_viewed (<15) por clase](image/analisis/items_lt15.png)
+![items_viewed (<15) por clase](../../../ejercicio1/analisis_dataset/image/analisis/items_lt15.png)
 
 ---
 

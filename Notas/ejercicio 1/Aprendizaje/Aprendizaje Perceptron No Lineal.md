@@ -45,9 +45,9 @@ Tabla con todos los datos: `output/aprendizaje_20260511_224304/summary.csv` (res
 
 ### Plots de convergencia
 
-![[output/aprendizaje_20260511_224304/plots/mse_convergence.png]] — MSE(epoch) por LR, banda ± std sobre seeds, eje Y lineal.
+![MSE convergence](../../../ejercicio1/nonlinear_perceptron/output/aprendizaje_20260511_224304/plots/mse_convergence.png) — MSE(epoch) por LR, banda ± std sobre seeds, eje Y lineal.
 
-![[output/aprendizaje_20260511_224304/plots/final_metrics.png]] — bar chart MSE final por LR, eje Y lineal, error bar sólo si std>0.
+![Final metrics](../../../ejercicio1/nonlinear_perceptron/output/aprendizaje_20260511_224304/plots/final_metrics.png) — bar chart MSE final por LR, eje Y lineal, error bar sólo si std>0.
 
 ## Observación clave: std ≈ 0 entre seeds (con un asterisco)
 

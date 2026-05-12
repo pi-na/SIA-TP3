@@ -1,9 +1,9 @@
 ## Sweep de threshold (post-training)
 
 El threshold de decisión vive **post-training**: no cambia los pesos del perceptrón, sólo decide cómo binarizar la salida continua. Por eso este sweep no requiere re-entrenar — se reconstruyen las predicciones de cada (lr, seed, fold) a partir de los pesos guardados y se evalúan métricas sobre una grilla densa de thresholds.
-![Curvas threshold](threshold_curves.png)
+![Curvas threshold](../../../../ejercicio1/nonlinear_perceptron/output/sweep_lr/multiseed/threshold_curves.png)
 
-![Curva Precision-Recall](pr_curve.png)
+![Curva Precision-Recall](../../../../ejercicio1/nonlinear_perceptron/output/sweep_lr/multiseed/pr_curve.png)
 
 ### Threshold óptimo por LR (max F1 promedio sobre 5 seeds × 5 folds)
 
@@ -28,7 +28,7 @@ Experimento: 5 seeds × 3 LRs × 5 folds = 75 entrenamientos. `epochs=500` (sufi
 
 ## Convergencia del MSE
 
-![Convergencia](convergence.png)
+![Convergencia](../../../../ejercicio1/nonlinear_perceptron/output/sweep_lr/multiseed/convergence.png)
 
 Cada curva es la **media del MSE de train por época sobre 25 corridas** (5 seeds × 5 folds) de un mismo LR. La banda alrededor es **±1 std sobre las 25 corridas**. El panel izquierdo muestra eje X lineal; el derecho, log para ver mejor la convergencia temprana.
 
@@ -55,7 +55,7 @@ Convergencia, según la clase de optimizadores, es que la actualización **deja 
 
 Implicancia práctica: si en una iteración futura quisiéramos un criterio de corte que se dispare antes del techo, no debería ser `mse < epsilon` sino algo basado en variación, p.ej. `abs(mean(mse[-50:]) - mean(mse[-100:-50])) < delta`.
 
-![Dispersion](dispersion.png)
+![Dispersion](../../../../ejercicio1/nonlinear_perceptron/output/sweep_lr/multiseed/dispersion.png)
 
 ## Resumen agregado por LR — todas las métricas (cada LR a su `thr*`)
 

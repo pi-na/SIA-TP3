@@ -2,9 +2,9 @@
 
 El threshold de decisión vive **post-training**: no cambia los pesos del perceptrón, sólo decide cómo binarizar la salida continua. Por eso este sweep no requiere re-entrenar — se reconstruyen las predicciones de cada (lr, seed, fold) a partir de los pesos guardados y se evalúan métricas sobre una grilla densa de thresholds.
 
-![Curvas threshold](threshold_curves.png)
+![Curvas threshold](../../../imagenes/threshold_curves.png)
 
-![Curva Precision-Recall](pr_curve.png)
+![Curva Precision-Recall](../../../imagenes/pr_curve.png)
 
 Criterio para elegir un threshold: nos interesa conseguir la mejor recall posible sin dejar de lado la precision; Notamos que con thresholds bajos la recall queda alta, pero con poca precision. Estamos flaggeando demasiadas compras como fraude, y asi es facil agarrar la mayor cantidad de fraudes posible. Entonces queremos un **balance** entre precision y recall -> usamos F1 para la decisión.
 # Sweep LR multi-seed — perceptrón linear
@@ -21,7 +21,7 @@ Experimento: 5 seeds × 3 LRs × 5 folds = 75 entrenamientos. `epochs=500` (sufi
 
 ## Convergencia del MSE
 
-![Convergencia](convergence.png)
+![Convergencia](../../../imagenes/convergence.png)
 
 Cada curva es la **media del MSE de train por época sobre 25 corridas** (5 seeds × 5 folds) de un mismo LR. La banda alrededor es **±1 std sobre las 25 corridas**. El panel izquierdo muestra eje X lineal; el derecho, log para ver mejor la convergencia temprana.
 
@@ -47,7 +47,7 @@ Convergencia, según la clase de optimizadores, es que la actualización **deja 
 
 Implicancia práctica: si en una iteración futura quisiéramos un criterio de corte que se dispare antes del techo, no debería ser `mse < epsilon` sino algo basado en variación, p.ej. `abs(mean(mse[-50:]) - mean(mse[-100:-50])) < delta`.
 
-![Dispersion](dispersion.png)
+![Dispersion](../../../imagenes/dispersion.png)
 
 ## Resumen agregado por LR — todas las métricas (cada LR a su `thr*`)
 

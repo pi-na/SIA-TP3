@@ -1,6 +1,6 @@
 # Evaluación sobre `digits_test.csv` + comparación contra Ej2 final
 
-**Fecha:** 2026-05-11 · **Continuación de:** [`analisis.md`](analisis.md). · **Replicación:** 1 seed (limitación heredada del experimento anterior — declarado abajo).
+**Fecha:** 2026-05-11 · **Continuación de:** [`analisis.md`](Notas/testing_datasets_inventados/analisis.md). · **Replicación:** 1 seed (limitación heredada del experimento anterior — declarado abajo).
 
 ---
 
