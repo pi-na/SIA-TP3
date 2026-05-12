@@ -1,0 +1,1389 @@
+[00:00:00] Ahora lo que vamos a arrancar ya tiene un poco más de hilo conductor
+[00:00:07] con respecto a lo que es temas de inteligencia artificial.
+[00:00:11] El TP3 va a ser básicamente lo que son las bases de lo que es redes neuronales.
+[00:00:16] Van a ver que uno se queda un poco corto en realidad porque
+[00:00:19] está la expectativa de lo que hoy son las redes neuronales
+[00:00:22] o lo que uno ve que pueden hacer cierto tipo de redes neuronales.
+[00:00:26] Bueno, nos vamos a quedar un poco cortos en el TP3. La idea es que sobre este TP se vayan construyendo un poco en el 4, en el 5 más que nada, para llegar a lo que son las arquitecturas más modernas.
+[00:00:39] Un poco disclaimer
+[00:00:42] Esto es como que ahora resulta súper obvio
+[00:00:46] Por ahí hace un par de años
+[00:00:49] Dos, tres años
+[00:00:51] La pregunta de, bueno, che, ¿por qué debería importarme estudiar redes neuronales?
+[00:00:55] Tenía un poco más de sentido
+[00:00:56] Ahora quizás ya parece muy mainstream
+[00:00:58] Todas las herramientas que hay
+[00:01:00] Todas las empresas que se están construyendo sobre
+[00:01:03] Modelos generativos de lenguaje
+[00:01:05] Pero bueno, inclusive sin eso
+[00:01:07] O sea, sin todo lo que es esto nuevo, que ya todos estamos archi familiarizados, el área de redes neuronales no se usa solamente en lo que es inteligencia artificial generativa, que es el nombre de lo que tiene, lo que es el boom de hoy, sino que también es una herramienta muy fuerte para tareas de clasificación, de predicción.
+[00:01:30] Por ejemplo, empresas que se dedican a hacer reconocimiento facial se podrían hacer con esto, no necesariamente generativo. O sea, tienen muchas más aplicaciones que las que uno ve o que uno usa hoy por el día de hoy, que están más relacionadas con la herramienta de generación.
+[00:01:55] hoy antes de arrancar con toda esta
+[00:01:59] seguidilla de TPs
+[00:02:00] que es T3, 4, 5, ¿qué idea tienen ustedes?
+[00:02:03] que es una red neuronal
+[00:02:04] o algo que también me interesa saber
+[00:02:06] es, ¿hay alguno de ustedes que
+[00:02:08] no sabía que los modelos como
+[00:02:10] Cloud
+[00:02:11] GPD
+[00:02:13] Nombre Gemini
+[00:02:16] etcétera, etcétera
+[00:02:17] que no supiera que por detrás tienen redes neuronales
+[00:02:20] y que recién ahora
+[00:02:22] se está enterando?
+[00:02:25] Estaban todos al tanto, me imagino entonces.
+[00:02:35] ¿Y qué entienden por red neuronal?
+[00:02:49] Sabía, pero todavía no sé muy bien las diferencias entre los modelos.
+[00:02:52] Ok, perfecto. Pero más allá de que eso ya es como una cuestión más avanzada, distintos modelos para que se usa cada uno, ¿alguno había leído antes sobre lo que son las redes neuronales en el contexto más de la informática y no necesariamente lo que es del campo de neurociencia o biología?
+[00:03:22] Ninguno tiene ni un input para dar.
+[00:03:38] Sí, esto...
+[00:04:05] Bien.
+[00:04:08] Entonces, a lo que venía con el tema de qué entienden por red neuronal, lo pregunto un poco porque a veces, qué sé yo, contestan que tienen cierta noción de que son ciertos nodos interconectados, de que hay una noción de pesos que disparan, bueno, no sé.
+[00:04:26] Esto me interesaba más o menos para saber dónde estaban parados, quizás ninguno se encontró todavía con esta temática antes, entonces, bueno, tiene sentido que estén en la clase, pero para darles como una definición muy alto nivel de qué es lo que son las redes neuronales, bueno, tenemos que una red neuronal es un tipo de algoritmo aprendizaje automático modelado según la estructura y función del cerebro humano.
+[00:04:51] Y acá me quiero detener un cachito, o sea, toda esta definición es como muy alto nivel, como que no dice mucho ni de cómo, ni por qué, ni nada, pero sí hay ciertos detalles a los cuales está bueno prestarle atención, porque se van conectando con cosas que por ahí Rodri ya presentó, como por ejemplo esto de la biomimesis, de sacar ideas del campo, ya sea de la neurociencia o de la biología,
+[00:05:20] fíjense, algoritmos genéticos, como que ya el nombre te indica un poco que tienes cierta conexión con lo que es el área de la genética, o sea, conexión hasta ahí, pero bueno, que está un poco inspirado en eso,
+[00:05:32] lo mismo redes neuronales, o sea, es como que se siguen sacando ideas o se trata de formalizar matemáticamente cosas que se ven en la naturaleza, en el cerebro, etc.
+[00:05:42] Un poco más concreto, tenemos esta cuestión que consiste en una gran cantidad de nodos de procesamiento interconectados, ya vamos a ver un poco más qué quiere decir esto, todos esos nodos los vamos a llamar neuronas y todas esas neuronas van a trabajar juntas para procesar y analizar los datos.
+[00:06:00] Ahí vamos a ver cómo.
+[00:06:01] Y por último, que esto ahí ya es un poquito más específico,
+[00:06:05] está esta cuestión de qué es lo que recibe y qué es lo que da,
+[00:06:10] entre comillas, o termina como sacando como salida una neurona,
+[00:06:14] que un poco abstracto, vamos a decir que la neurona recibe uno más inputs,
+[00:06:19] que también se denominan estímulos,
+[00:06:21] y que esos estímulos se van a procesar de alguna forma produciendo una salida.
+[00:06:26] Que esa salida puede ser a su vez otro estímulo que esa misma neurona da a neuronas con las que está conectada. Esto es un poco como a grandes rasgos.
+[00:06:38] Y acá lo que me interesa un poco contarles es qué eventos son los que modelan este campo, como para que se ubiquen un poco en la historia, en dónde es que estamos parados, qué es lo que estamos viendo hoy y de cuándo es, que es bastante viejo.
+[00:06:53] Bueno, sé que consideran viejo, pero básicamente esto arranca en la década del 40 un poquito más, donde hay dos investigadores, que son McCulloch y Pitts, que son los que introducen las bases de este campo.
+[00:07:06] Y son los que van a introducir la formalización de lo que es una neurona sola.
+[00:07:10] Más adelante aparece Frank Rosenblatt, que es el que va a modelar cómo estas neuronas aprenden lo que sea que estemos tratando de modelar.
+[00:07:19] Y yo no sé si se acuerdan de la primera clase, y seguro hubo alguna otra mención al respecto, de esta cuestión de los AI winters, donde de repente la investigación se frena un poco, ya sea por o limitaciones o por falta de interés, etc.
+[00:07:38] Bueno, en la época del 70 más o menos, viene uno de estos AI Winters, más que nada por las restricciones de hardware, que por hoy, si bien no es que está resuelto, porque igual todavía no es suficiente, se llegó a otro tipo de escala que permite otro tipo de capacidades.
+[00:07:56] Pero bueno, en la década del 70 aparecen estos AI Winters y luego de eso se desarrollan algunos algoritmos que reviven bastante lo que es el área de redes neuronales y ya en estas décadas ya estamos hablando de redes neuronales un poco más como uno las entendería de muchos nodos interconectados y de distintas capas, una red un poco más formada.
+[00:08:20] ¿Sí? El algoritmo que es el que se desarrolla y es el que, inclusive, hoy es la base para todos los modelos de redes neuronales, se denomina backpropagation, ¿sí? Si ven algo de redes neuronales, este algoritmo va a estar ahí presente.
+[00:08:36] Y bueno, empiezan a aparecer un montón de distintos tipos de redes. Reds convolucionales, autoencoders, hotfield, todas estas las vamos a ir viendo a medida que pasa la materia.
+[00:08:46] Y por último, ya entrando en lo que es más la década del 2000, 2010, empiezan a aparecer las arquitecturas más conocidas hoy, algunas ya quedaron un poquito como fuera de estado del arte, como por ejemplo las redes GAN.
+[00:09:02] Hay otro tipo de redes que quizás las reemplaza, pero empiezan a aparecer estas redes veganas, empiezan a aparecer los transformers. Yo no sé si alguno vio ese documental de AlphaGo que logran armar un modelo que le gana al juego de Go, ¿no?
+[00:09:23] es este
+[00:09:25] la verdad que está bastante bueno
+[00:09:31] si a alguno le interesa verlo
+[00:09:33] está en YouTube
+[00:09:34] creo que debe ser este
+[00:09:37] sí, es muy bueno
+[00:09:39] y como que
+[00:09:41] te muestra bastante como
+[00:09:43] nada, uno se siente
+[00:09:45] un poquito como esa cuestión de la humanidad
+[00:09:47] que de repente
+[00:09:49] te gana la computadora
+[00:09:50] bueno, no sé, está muy bueno como está
+[00:09:52] armado, cómo está presentado
+[00:09:54] y ese momento en el que le gana
+[00:09:56] la verdad que uno se siente extraño
+[00:09:58] pero bueno, se los recomiendo
+[00:10:00] para que lo miren si les interesa
+[00:10:02] y bueno, ya
+[00:10:04] en toda esta época llegamos
+[00:10:06] a lo que viene a ser
+[00:10:07] el boom de los modelos
+[00:10:10] de lenguaje, que nosotros vamos a estar muy lejos
+[00:10:12] de esto en el TP3
+[00:10:13] pero que básicamente
+[00:10:16] toda esta historia
+[00:10:18] lleva a un
+[00:10:20] ecosistema de empresas
+[00:10:21] de startups, de todo, que están virando hacia, nada,
+[00:10:28] meterse en lo que es el campo de transformers.
+[00:10:31] Viene a ser como la red neuronal más famosa ahora.
+[00:10:34] Y si bien hay un montón de chamuyo,
+[00:10:35] también hay un montón de cosas muy piolas que están surgiendo
+[00:10:38] de esta, más o menos.
+[00:10:41] Pero, nada, si a alguno le interesa,
+[00:10:43] puede seguir especificando, o sea,
+[00:10:45] especializándose por ese lado.
+[00:10:48] ¿Alguna pregunta hasta acá de algo de todo esto?
+[00:10:51] es lo que vamos a ver nosotros Solo lo que ocurri hace muchos a que va a ser bueno las bases el algoritmo de aprendizaje y despu este algoritmo que les estaba comentando que es s importante que se llama algoritmo de retropropagaci Bueno esas son las tres cosas en las que nos vamos a concentrar durante el TP3 No s si lo han escuchado este t de deep learning que deep learning en general
+[00:11:27] con algunas salvedades que después Rodri las va a profundizar, se refiere a las redes que tienen
+[00:11:33] muchas capas, por eso se llaman deep, pero nosotros no nos vamos a meter en lo que es deep learning.
+[00:11:39] O sea, una red neuronal puede ser una red neuronal sin ser deep y eso es con lo que vamos a trabajar nosotros. ¿Y cuál es el objetivo y por qué seguimos como trabajando con esto que es un poco más, un poco más, no, es mucho más introductorio y simple con respecto a lo que los modelos pueden hacer hoy en día?
+[00:11:57] Bueno, tenemos la creencia de que para entender un poco más en profundidad los modelos siguientes, ciertas cuestiones teóricas como el algoritmo de bad propagation, es necesario sentarse bastante tiempo y mirarlo y tratar de implementarlo.
+[00:12:17] Si no es como que queda un poco en el aire qué es realmente lo que está pasando y por qué entrena.
+[00:12:23] No tenemos TPE Deep Learning, sí, pero es el TPE 5. Ya falta.
+[00:12:27] para lo que es Deep Learning.
+[00:12:31] Bien.
+[00:12:34] Perfecto.
+[00:12:35] ¿Cómo se dividen las clases?
+[00:12:36] Es un poco como logística para que lo tengan presente.
+[00:12:38] Hoy vemos lo que es modelo básico de la neurona.
+[00:12:41] Clase 2, ahí vemos lo que es Backward Apparition.
+[00:12:43] Clase 3 es medio popurrí de cosas que necesitan para el TP,
+[00:12:48] que va a ser métricas de evaluación y sobreajuste.
+[00:12:52] Después, cómo van a optimizar los algoritmos que vemos.
+[00:12:55] Después, consultas.
+[00:12:57] En el medio hay una clase de 3.5, en realidad, que es cuando está el recuperatorio del TP2.
+[00:13:02] Y, bueno, en la clase 4 la idea es hacer un ejemplo numérico de backpropagation un poco más concreto y a modo de refuerzo de lo que es la clase 2.
+[00:13:11] Porque, en general, es con la parte con la que hay más dificultades el algoritmo de backpropagation.
+[00:13:16] Así que, bueno, esta clase está a modo de refuerzo y también para que hagan consultas.
+[00:13:21] ¿Alguna pregunta hasta acá?
+[00:13:23] ¿Algo?
+[00:13:24] Si no, sigo.
+[00:13:27] Bien. Bueno, esto de la clase de optimización, que lamentablemente este cuadro como ya no estuve, no sé si estaba incluido o no. Espero que sí, pero si no, no importa. Bien. En teoría, esto ya está presentado qué es lo que se conoce o a qué es lo que se le llama aprendizaje automático o machine learning.
+[00:13:49] Y básicamente hay dos grandes características, que es que las herramientas de aprendizaje automático sirven para identificar relaciones entre datos o armar mapeos, es decir, una función que te lleve tus datos de X a Y.
+[00:14:02] Y algo que lo recalco, si ya debe haber sido recalcado, es esta cuestión de que los algoritmos son libres de parámetros. Perdón, que los algoritmos son libres de modelo. Es decir, que no tenemos en principio ninguna condición sobre qué es lo que están modelando estos algoritmos, más allá de que nosotros sabemos que la función te lleva estos valores X a un cierto conjunto de valores Y.
+[00:14:30] ¿Sí? Pero, por ejemplo, si ustedes tienen que agarrar datos de posición y los pueden transformar en datos de velocidad, saben cuál es la fórmula, entonces saben perfectamente cómo yo estoy pasando de X a Y.
+[00:14:45] En este caso, nosotros vamos a tener una red neuronal que juega un poco la de ser una fórmula, pero ¿qué significan las operaciones que estamos haciendo? En principio no se sabe y tampoco tenemos restricciones sobre qué es lo que puede estar modelando esa red neuronal.
+[00:15:03] Y bueno, esto es para aclarar que redes neuronales es un área dentro de lo que es aprendizaje automático
+[00:15:11] Y última aclaración de lo que es ya como introductorio
+[00:15:15] Teníamos esta distinción entre aprendizaje supervisado y no supervisado
+[00:15:19] ¿Alguno se acuerda o quiere compartir cuál es la diferencia entre ambos?
+[00:15:23] En el supervisado conoces las clases en las cuales estás agrupando, digamos, tus X, en este caso, y los asociás con la Y.
+[00:15:37] Y en el no supervisado lo único que te interesa es identificar clusters o conjuntos de datos sin necesidad de ponerles una etiqueta.
+[00:15:44] Bien, perfecto. Esto lo traigo acá a la mesa como para que estén ubicados en que nosotros vamos a estar trabajando todo el TP3 con lo que es aprendizaje supervisado. No supervisado, ya va a ser más TP4, pero en este nos mantenemos hacia la izquierda.
+[00:16:02] Así que bueno, todo este preámbulo para arrancar efectivamente con lo que es la clase de perceptron simple, donde lo primero que les voy a mostrar es este modelo de neurona, que es un modelo bastante viejo, 1943, y un poco el entendimiento que quizás se tenía en esa época.
+[00:16:23] acá la gente que es de bio me va a disculpar cuando diga alguna pavada, pero me corrigen y aportan su parte si es necesario.
+[00:16:32] Pero básicamente, si se aclara porque sé que hay algunos presentes.
+[00:16:37] Bueno, básicamente tenemos este modelo de neurona donde la idea básica va a ser que yo tengo la neurona base, va a ser la de color negro,
+[00:16:45] y las ramificaciones que están denotadas por estos W1, W2, W3, son lo que antes se entendía como las dendritas, que van a recibir los estímulos de otras neuronas, en este caso la de color verde.
+[00:16:59] Después la idea es que toda esa información o los estímulos que recibe la neurona se procesen de alguna forma en el cuerpo de la neurona o el soma, y de acuerdo a si yo supero cierto umbral, es que la neurona en la cual estoy parada va a disparar o no.
+[00:17:19] Es decir, va a ser un estímulo para alguna otra neurona con la que esté conectada después.
+[00:17:25] Y por último, lo que tenemos como componente importante
+[00:17:31] y que va a ser relevante para esta formulación del perceptrón
+[00:17:34] es la cuestión de la sinapsis,
+[00:17:36] donde la neurona verde va a liberar ciertas sustancias químicas
+[00:17:40] que se denominan neurotransmisores
+[00:17:41] y la idea es que va a depender un poco de la fuerza de la conexión
+[00:17:48] que hay entre esas dos neuronas, cuántos de esos neurotransmisores
+[00:17:51] efectivamente se terminan recibiendo, porque, bueno,
+[00:17:54] la neurona negra va a tener o receptores o inhibidores
+[00:17:56] que van a permitir recibir esos neurotransmisores
+[00:18:00] y eso va a ser parte de la información que recibe.
+[00:18:03] Y ahí aparece una conjetura que hace este señor,
+[00:18:07] que se llama Donald Hebb, que dice que neurons that fire together
+[00:18:10] wire together.
+[00:18:12] Y acá medio como que, o sea, está la conjetura en palabras
+[00:18:16] y después está lo que termina como pasando en lo que es la implementación de redes neuronales,
+[00:18:23] un poco como que la idea es tomar esta frase como diciendo, bueno,
+[00:18:29] si yo puedo representar numéricamente la conexión entre las neuronas de color negro
+[00:18:33] y las de color verde, y esa conexión numérica es más intensa,
+[00:18:38] es como que modelo de alguna manera esta conjetura diciendo que,
+[00:18:43] como que wire together, como que si una dispara, la otra también.
+[00:18:49] Es un poco eso como la idea, qué sé yo, un poco más alto nivel.
+[00:18:55] Bien, y acá aparecen los dos primeros personajes, que son McCulloch y Pitts,
+[00:19:00] que agarran este modelo de neurona en ese momento y deciden formalizarlo
+[00:19:04] en alguna fórmula matemática y un esquema.
+[00:19:09] Esto en realidad va a ser una fórmula, está dibujada así como para que sea similar a lo que vimos en el dibujo anterior, pero fíjense que, ah, si yo dibujo no ven, ¿no? O sea, si yo estoy acá, ¿se ve cuando dibujo? O más o menos.
+[00:19:27] Sí, sí, sí.
+[00:19:57] esta fuerza de la conexión entre las distintas neuronas,
+[00:20:03] van a ser estos doble Bs, ¿sí?
+[00:20:05] Que los vamos a llamar pesos sinápticos y que en general son
+[00:20:09] los que se denominan parámetros libres del modelo.
+[00:20:14] Y lo que vamos a definir como procesamiento de la
+[00:20:19] información va a ser el producto entre las entradas o los
+[00:20:25] estímulos y los pesos sinápticos.
+[00:20:28] Y a eso lo vamos a llamar el estado de excitación de la
+[00:20:30] neurona.
+[00:20:32] Y lo último, que esto creo que lo estoy tomando.
+[00:20:35] Siempre me anda muy terrible esto,
+[00:20:37] lo tengo que cambiar en algún momento.
+[00:20:38] Y lo último va a ser, bueno, yo dije que se producía esta
+[00:20:43] integración de la información en el cuerpo de la neurona y que
+[00:20:47] si superaba cierto umbral, entonces la neurona disparaba.
+[00:20:50] Y si no, no.
+[00:20:51] ¿Cómo voy a representar esto?
+[00:20:52] Bueno, yo voy a tener definido un umbral, mi idea, 4, va a ser este umbral, que si el estado de excitación de mi neurona es superior al umbral, entonces esta función de activación me tiene que definir que la neurona o dispara o no dispara.
+[00:21:09] dispara. Y eso yo lo puedo modelar como si fuera un 1 que dispara o un 0 que no dispara. Tiene que ser un valor binario. Podría ser también 1 o menos 1. Pero bueno, mientras sea, dos valores binarios. ¿Hasta acá alguna pregunta?
+[00:21:25] ¿No? Ok, bien.
+[00:21:34] Pasemos entonces cómo se resume todo esto.
+[00:21:36] Bueno, básicamente se resume, esto lo voy a tirar porque me molesta.
+[00:21:41] Básicamente se resume en esta fórmula matemática que es en una línea lo que acabo de explicar.
+[00:21:49] Hago el producto interno entre los estímulos y los pesos.
+[00:21:52] si eso supera el umbral, esta función tita me dice si disparo o no.
+[00:21:57] Fin.
+[00:21:58] Entonces, acá terminamos con lo que es la formulación matemática.
+[00:22:05] Y la idea es un poco como que, joya, Maculow y Pitts desarrollaron esto.
+[00:22:11] ¿Para qué sirve? Todavía no sé.
+[00:22:13] O sea, no charlamos nada de para qué sirve ni no,
+[00:22:15] solo fue todo el cuento y la historia de que, bueno, en 1943
+[00:22:19] ellos decidieron formular el percentrón de esta manera.
+[00:22:22] Buen Ahora nos vamos a olvidar un poco de eso qu la f por ah y la idea es que vayamos a un problema del mundo actual y despu un poco m adelante
+[00:22:36] veremos cómo es que se conectan estas cosas.
+[00:22:39] Pero bueno, esto me quedó viejo del 4 de pasado,
+[00:22:42] en general siempre cambio el ejemplo, pero no llegué.
+[00:22:45] Básicamente, supongamos que es todavía marzo del 4 de pasado,
+[00:22:50] donde estaban las elecciones, no sé si alguno se enteró,
+[00:22:53] para primer ministro de Canadá.
+[00:22:55] Entonces, nos vamos a imaginar un escenario ficticio
+[00:22:57] donde yo tengo un cliente que está expandiendo su negocio a Canadá
+[00:23:01] y tampoco sé si se enteraron,
+[00:23:04] pero cuando cambió el gobierno de Estados Unidos,
+[00:23:06] hubo un quilombo con las tarifas entre Estados Unidos
+[00:23:09] y los países limítrofes.
+[00:23:11] Nada, cuestión que fue un problema que tuvo bastante impacto
+[00:23:15] en la comercialización.
+[00:23:17] Y a este cliente que viene a ustedes y les dice,
+[00:23:19] che, necesito una herramienta, les dice, bueno,
+[00:23:21] Me interesa mucho saber qué candidato está más favorecido y cuál es el más probable que salga entre Carney y Polyar, que nunca se pronunciará el nombre, porque eso va a generar impacto en el negocio que yo estoy tratando de poner en Canadá.
+[00:23:36] Perfecto. Y viene y te dice, yo tengo esta base de datos donde tengo un grupo de ciudadanos con edad, ingreso económico y sé a qué partido van a votar. Pero solo tengo ese subconjunto.
+[00:23:47] conjunto, ¿sí? Entonces, eso se vería más o menos algo como este estilo, donde tengo los que son los
+[00:23:55] conservativos y los liberales, que son los dos partidos. Y, bueno, tenemos acá la edad y el
+[00:24:01] income normalizado para que sean valores entre 0 y 1. Fin. Fíjense, detalle, que acá en la
+[00:24:08] cuestionaria puse 1 son los conservadores y menos 1 los liberales. Entonces, ¿qué se les ocurre que
+[00:24:15] yo puedo hacer o qué herramienta a mí me gustaría tener para darle al cliente lo que
+[00:24:22] me pidió? ¿Quién ganó al final? Creo que fue Carney. Me parece que fue Carney. Sí,
+[00:24:34] sí, McCarney fue el que ganó. Nunca me fijé después de eso. Bien, ¿qué se les ocurre
+[00:24:40] que yo pueda hacer si yo le quiero dar al cliente algo? Porque él después dice, yo
+[00:24:45] tengo por fuera o
+[00:24:47] puedo conseguir una base de datos
+[00:24:49] de un buen porcentaje de la
+[00:24:51] población que me diga edad e ingreso
+[00:24:53] económico, pero no sé a quién
+[00:24:55] van a votar. Entonces, ¿qué se
+[00:24:57] les ocurre que pueda hacer?
+[00:25:01] Mientras tomo agua
+[00:25:02] porque si no me muero.
+[00:25:06] Y en este caso establecer alguna
+[00:25:07] frontera que
+[00:25:09] separe los dos grupos, ¿no?
+[00:25:11] Como para darle una idea de a partir
+[00:25:13] de qué rango y qué edad
+[00:25:15] no, perdón, y que
+[00:25:17] sí, de qué plata, puede esperar
+[00:25:19] que el candidato sea
+[00:25:20] de un partido o de otro.
+[00:25:24] Bien, o sea, te referís a
+[00:25:25] hacer algo así.
+[00:25:27] Por ejemplo. Claro, sí.
+[00:25:30] Ok.
+[00:25:31] ¿Qué más?
+[00:25:38] Me pueden tirar de los tres puntitos
+[00:25:39] si están pensando.
+[00:25:40] O
+[00:25:41] ni idea.
+[00:25:44] También es válida.
+[00:25:45] Sí, la verdad que era re fácil el ejercicio
+[00:25:54] ahora que estamos en septiembre
+[00:25:56] Bien, bueno
+[00:26:01] tiempo ahí de finalizado
+[00:26:04] me voy a agarrar de la idea que dice Facundo
+[00:26:08] y en lugar de una frontera que puede tener cualquier forma
+[00:26:11] y que es más que muy válido
+[00:26:13] lo que vamos a hacer es trazar una recta que me dé una especie de límite de decisión, cosa de decir, bueno, todos los que están arriba de la recta, esta que yo encontré de alguna manera, digo que van a votar a los que son los conservadores y los que están por debajo van a votar a los que son liberales, al partido liberal.
+[00:26:35] entonces, ¿cómo vamos a llamarle a esta recta
+[00:26:39] que me da este límite de decisión?
+[00:26:42] se va a llamar, bueno porque acá es recta
+[00:26:44] después en R3 va a ser un plano
+[00:26:46] el nombre genérico es hiperplano de separación
+[00:26:49] y acá les pregunto si creen que
+[00:26:52] es una buena herramienta para lo que estamos planteando
+[00:26:57] y en qué escenarios les parece que por ahí podría no funcionar
+[00:27:05] Y se les ocurre.
+[00:27:13] Y lo que pasa es que ahí ya tenías los datos
+[00:27:15] como bastante bien separados, ¿no?
+[00:27:18] Digamos, tenés como dos clusters,
+[00:27:20] o dos agrupaciones.
+[00:27:22] Si tengo un dataset más complejo,
+[00:27:24] no sé,
+[00:27:25] la recta esa que estamos trazando
+[00:27:28] pasa por el origen,
+[00:27:30] separa justo las dos cosas.
+[00:27:33] Siento que en un caso más complejo,
+[00:27:34] no sé si me sirve tanto
+[00:27:36] bien, perfecto
+[00:27:38] vos decís que si yo de repente tengo
+[00:27:40] no sé, todos estos datos
+[00:27:42] como estos que son rojos
+[00:27:45] los tengo todos por acá
+[00:27:46] me veo que estoy
+[00:27:48] en problemas
+[00:27:49] bien, ese es un punto
+[00:27:53] muy válido
+[00:27:54] y si yo te digo que vos tenés un millón de datos
+[00:27:56] pero tenés este dato acá
+[00:27:58] y el resto están todos separados
+[00:28:04] ¿Ese solo lo tengo ahí?
+[00:28:06] Sí, ese solo.
+[00:28:08] No, dejarte.
+[00:28:10] Bien.
+[00:28:11] Bueno, entonces, es un punto muy válido el que traes
+[00:28:14] y precisamente este tipo de estrategias,
+[00:28:18] el encontrar un hiperplano de separación
+[00:28:20] y no necesariamente quizás una frontera un poco más compleja
+[00:28:24] como la que planteaba Facundo,
+[00:28:26] es lo que se denomina,
+[00:28:27] no es lo que se denomina,
+[00:28:29] sino que nos sirve para resolver problemas
+[00:28:31] que se conocen como linealmente separables.
+[00:28:33] ¿Por qué? Por lo que decís vos. Yo miro los datos y medio que, o sea, ya están súper separados por un margen muy amplio, entonces parece ser muy sencillo, mando la recta y ya estamos. Pero si yo empiezo a tener un conjunto de datos más complejos, medio que esta herramienta me flaquea un poco.
+[00:28:54] Por suerte, nosotros ahora estamos asumiendo que, bueno, los problemas que tenemos van a ser linealmente separables. Y detalles, si hay algunos que no lo son, no importa. Pero fíjense que igual esto, que uno lo pudo como determinar tan sencillo, en general en el mundo real vos ni podés ver los datos ni estás muy seguro de si son linealmente o no separables. Así que es una restricción a tener en cuenta sobre lo que yo puedo hacer con este hiperplano.
+[00:29:21] sacando esa
+[00:29:23] cuestión, esa olvidada
+[00:29:26] lo que vamos a hacer acá ahora
+[00:29:28] es
+[00:29:29] nosotros tenemos este tipo en plano que todos
+[00:29:32] ya vimos en algún momento
+[00:29:34] espero, a esta altura de la carrera
+[00:29:36] la ecuación de la recta
+[00:29:38] y fíjense que yo esto
+[00:29:39] en realidad lo puedo escribir de otra manera
+[00:29:42] yo podría hacer directamente
+[00:29:43] y menos un medio de x
+[00:29:46] igual a cero
+[00:29:47] y a lo que a mí me va a interesar
+[00:29:49] porque tengo ganas ahora
+[00:29:52] es escribir esto en función de
+[00:29:54] esto es un más uno
+[00:29:56] si no aparece pero no importa
+[00:29:57] esto es un más uno por
+[00:29:59] W2 más
+[00:30:01] menos un medio por W1
+[00:30:04] es igual a cero
+[00:30:05] es básicamente reescribir
+[00:30:08] lo que ya tenía en función de W
+[00:30:10] en lugar de XY
+[00:30:11] y esta sería la fórmula para
+[00:30:14] este hiperplano que pasa por el origen
+[00:30:16] si no yo tendría ahí un tercer término
+[00:30:18] que sería por el D, que ahora no lo tengo.
+[00:30:22] Entonces, lo que yo podría decir es, si sigo,
+[00:30:27] es que, bueno, yo me puedo fijar si los datos,
+[00:30:31] si la proyección del dato sobre este hiperplano que yo estoy
+[00:30:35] modelando, si cae por encima o por debajo de la recta, ¿sí?
+[00:30:39] Si es positivo o negativo.
+[00:30:42] Y de acuerdo a esa proyección es que yo le voy a asignar alguna
+[00:30:48] clase va a ser tanto menos 1
+[00:30:50] o 1. ¿Y cómo es que
+[00:30:52] le asigno esa clase? Bueno, no es nada
+[00:30:54] muy extraño,
+[00:30:56] sino que define una función, como
+[00:30:58] a mí me pinta, que
+[00:30:59] cuando la
+[00:31:01] proyección que en la fórmula de
+[00:31:04] abajo, acá justo me quedó x y x,
+[00:31:06] pero bueno, este x tendría
+[00:31:08] a ser esto de acá,
+[00:31:10] que cuando esto es mayor o igual a 0
+[00:31:12] le doy un valor
+[00:31:13] y que cuando es menor a 0 le adjudico
+[00:31:16] el otro.
+[00:31:16] Y así es como obtengo las clases de mis puntos,
+[00:31:22] del conjunto de datos que yo ya tengo.
+[00:31:24] ¿Hasta acá alguna duda?
+[00:31:29] Si la duda es por qué carajo estamos haciendo esto,
+[00:31:32] es apropiada.
+[00:31:34] Pero la pueden preguntar.
+[00:31:36] No sé si alguno como que viene siguiendo el hilo o más o
+[00:31:38] menos.
+[00:31:38] O ya los perdí.
+[00:31:44] Seguimos.
+[00:31:45] Bien.
+[00:31:46] Perfecto. Bueno, entonces, tenemos esta forma, o sea, yo ya dije, para esta herramienta, trazo la recta, ¿cómo puedo escribir esa recta? Bueno, puedo escribir la proyección sobre la recta, después puedo aplicar esta función, tita, sobre la proyección, que me da, en fin, lo que yo quiero, conservadores versus liberales.
+[00:32:06] ¿Qué pasa ahora si yo en lugar de tener el conjunto que tenía, tengo otro conjunto de datos?
+[00:32:13] Que es este conjunto de datos
+[00:32:14] Fíjense que lo que me va a terminar pasando acá es que este conjunto sí es linealmente separable
+[00:32:21] O sea, yo tranquilamente puedo hacer esto y listo, fin, lo separé linealmente
+[00:32:26] Pero a la fórmula anterior le tengo que hacer como un pequeño ajuste
+[00:32:31] porque es la fórmula que se corresponde con estar pasando por el origen,
+[00:32:37] así que la recta pase por el origen.
+[00:32:39] Entonces, lo que voy a hacer,
+[00:32:41] si yo, por ejemplo, quisiera tener este tipo de rectas,
+[00:32:44] bueno, voy a agregarle un término que va a ser el W sub cero,
+[00:32:49] que en el caso anterior va a ser cero,
+[00:32:51] pero lo pongo para tener esta libertad de que la recta
+[00:32:55] no necesariamente esté atada a cortar por el origen.
+[00:32:58] entonces nada, reformulo lo anterior de esta manera
+[00:33:03] no mucho más
+[00:33:05] ¿y a qué se parece esto?
+[00:33:08] sorpresa
+[00:33:09] ¿alguien le recuerda de algo?
+[00:33:19] algo en el pasado reciente, gracias Pau
+[00:33:29] muy reciente
+[00:33:34] y todos lo vivieron al mismo tiempo
+[00:33:44] no hay ideas Bien
+[00:33:50] Bueno, básicamente esto es igual, y esto me quedó acá,
+[00:33:55] a la formalización del perceptrón que vimos recién.
+[00:33:57] Nosotros hicimos toda la perorata de que Macbeth y Pitch agarraron esa neurona
+[00:34:01] con los dibujitos y hicieron esta fórmula matemática.
+[00:34:06] Foya.
+[00:34:06] Y por otro lado, nosotros estuvimos analizando,
+[00:34:09] Ok, este problema, si yo quisiera resolverlo, ¿cómo lo hago?
+[00:34:13] Bueno, puedo trazar esta recta, que tengo estas dos clases,
+[00:34:16] y yo puedo tener la clase de puntos nuevos si yo tengo esta fórmula, ¿sí?
+[00:34:24] Que, sorprendentemente o no sorprendentemente,
+[00:34:28] pero se conecta con la misma fórmula que vimos del perceptron.
+[00:34:32] Fíjense, la única diferencia es esto de que es menos umbral,
+[00:34:35] que es un detalle, o sea, el más doble de sub cero,
+[00:34:38] si el valor es 4 va a ser menos 4
+[00:34:40] pero nada más
+[00:34:41] esto
+[00:34:43] quedó claro
+[00:34:46] les
+[00:34:46] o sea, ¿entienden por qué es
+[00:34:50] importante
+[00:34:52] que ambas ideas se conecten?
+[00:34:54] o más o menos
+[00:34:56] o eso quedó
+[00:34:57] confuso
+[00:35:08] ¿Sí? ¿No?
+[00:35:15] ¿Me convence?
+[00:35:17] ¿Quedó claro? ¿Qué pasa si tengo tres clases?
+[00:35:20] No lo puedes resolver.
+[00:35:22] Con esto que estamos viendo hoy.
+[00:35:25] O sea, básicamente como la fórmula del perceptrón
+[00:35:27] te modela una clasificación binaria,
+[00:35:31] este perceptrón que introdujimos nosotros
+[00:35:34] te sirve para la clasificación binaria
+[00:35:38] y rogar que los datos sean linealmente separables
+[00:35:42] o más o menos.
+[00:35:44] Si no, es cualquier cosa.
+[00:35:45] Si tenés tres clases, eso ya va a ser la clase que viene.
+[00:35:50] Se me ocurre que podrías partir quizás,
+[00:35:53] darle a dos clases la misma clase y a una a otra
+[00:35:57] y tratar de separarlo así, ¿no?
+[00:35:59] Claro, pero ahí ya estás combinando cosas.
+[00:36:01] ¿Qué? Está perfecto.
+[00:36:03] Recontra.
+[00:36:03] Eso un poco va a ser el espíritu cuando empieces a conectar los distintos perceptrones, por así decirlo.
+[00:36:11] Este solo, por sí solo, bueno, se te queda medio puesto.
+[00:36:15] Claro, el problema final tendría que tener una combinación de perceptrones.
+[00:36:19] Claro.
+[00:36:20] Ah, ok.
+[00:36:21] Claro.
+[00:36:23] Bien.
+[00:36:24] Bueno, asumo que estamos todos en la misma página, espero,
+[00:36:27] Pero para recapitular, fíjense que si yo quiero resolver un problema y estoy diciendo, che, si yo tuviera esta herramienta que se puede modelar con esta fórmula, lo resuelvo y después tengo este perceptrón que viene acompañado de un algoritmo como para definir todos estos Ws y qué sé yo, y ese algoritmo tiene la misma capacidad de expresión que el problema que yo estoy tratando de modelar, bueno, entonces ahí es donde está el puente entre esta herramienta.
+[00:36:57] me puede servir para este tipo de problemas.
+[00:37:00] Ese es un poco el espíritu de las dos historias que se encuentran.
+[00:37:04] Pero bueno, nada, cuestión, llegamos a este punto,
+[00:37:08] nos da el pie de que el perceptrón nos va a servir
+[00:37:11] para resolver nuestro problema de
+[00:37:14] quién va a terminar siendo el primer ministro.
+[00:37:18] ¿Qué tenemos hasta ahora?
+[00:37:19] Dos cosas, el modelo matemático de la neurona biológica,
+[00:37:23] más que muy, muy, muy simplificado, o sea, hasta ahí.
+[00:37:27] Y por otro lado, vimos que esta herramienta nos va a servir para resolver problemas linealmente separables o casi linealmente separables.
+[00:37:34] ¿Qué nos falta? O sea, de todo lo que yo introduje y charlé cuando estuvimos hablando de lo que es el modelo de neurona.
+[00:37:45] ¿Qué es lo que todavía no tiene una solución?
+[00:37:52] O sea, yo les digo, ok, yo quiero encontrar esta recta que me resuelve la separación entre las clases que me interesan. ¿Qué es lo que me está faltando definir o encontrar?
+[00:38:07] Muy bien, me falta toda la parte de la sinapsis
+[00:38:24] ¿Cómo yo voy a definir
+[00:38:26] los doble Bs
+[00:38:29] que me terminan dando la recta?
+[00:38:32] Porque yo puedo tratar de calcular la mano
+[00:38:34] pero lo ideal sería no hacerlo más, ¿no?
+[00:38:40] Y si no, tener alguna especie de mecanismo que iterativamente lo pueda encontrar.
+[00:38:45] Porque a partir del TP2, todo lo que queremos hacer, va a ser iterativamente.
+[00:38:49] Bien, entonces, mini repaso de lo que es notación para ver un poco después los ejemplos.
+[00:38:56] P va a ser la cantidad de datos que yo voy a tener de mi conjunto.
+[00:38:59] Mu va a ser un dato en particular, va entre 0 y P-1.
+[00:39:02] después tengo
+[00:39:04] el dato supra el número
+[00:39:06] me representa todo el dato y después tengo
+[00:39:08] x supra 10 sub 1
+[00:39:10] va a ser el x
+[00:39:12] x supra 10 sub 2 va a ser el i
+[00:39:14] sería el income
+[00:39:16] y
+[00:39:17] ¿sabés que me olvidé el nombre?
+[00:39:20] z es la letra esa, se me fue
+[00:39:22] mal, z, ¿alguien que me
+[00:39:24] confirme?
+[00:39:27] creo que sí, ¿no?
+[00:39:29] sí, sí
+[00:39:30] bien, perfecto
+[00:39:32] Sí, sí, Z, bien, como para estar segura que lo que estoy diciendo está bien.
+[00:39:39] Entonces Z supra 10 va a ser el valor esperado que yo tengo de ese dato,
+[00:39:44] y el O supra 10 va a ser la salida de la neurona.
+[00:39:47] Entonces yo voy a querer matchar el O supra 10 con el Z supra 10.
+[00:39:52] Bien, tenemos la anotación y ahora aparece nuestro segundo amigo,
+[00:39:58] tercero, los otros eran dos, Rosenblatt, que en 1957
+[00:40:01] es quien propone, OK, ¿cómo yo voy a encontrar esos doble Bs que
+[00:40:06] a mí me permiten encontrar el hiperplano en separación?
+[00:40:09] Etcétera.
+[00:40:09] Y la otra es, sí.
+[00:40:11] Ay, hola, Rodri, ¿cómo andás?
+[00:40:13] Bien.
+[00:40:15] Hola.
+[00:40:17] Genial.
+[00:40:17] Bueno, entonces, tenemos a Frank Rosenblatt que nos va a dar
+[00:40:21] esta regla de actualización y nos va a decir, bueno,
+[00:40:23] ¿cuándo vos tenés oportunidad de actualizar?
+[00:40:26] Cada vez que recibís un estímulo,
+[00:40:27] tenés información que vas a poder usar para decir, bueno,
+[00:40:31] bueno, che, estoy haciendo las cosas de manera correcta
+[00:40:34] o puedo ajustar de alguna forma los pesos como para el límite de decisión,
+[00:40:39] moverlo en la dirección que me termine dando un boundary,
+[00:40:45] sí, un límite un poco más apropiado.
+[00:40:48] Y fíjense que acá nosotros vamos a tener,
+[00:40:52] este van a ser los W nuevos.
+[00:40:55] Lo único que hago es ir sumándole cada iteración este delta W
+[00:40:59] que él propone la siguiente regla, ¿sí?
+[00:41:02] Que va a ser 2 por una variable eta,
+[00:41:05] que la llamamos tasa de aprendizaje,
+[00:41:07] por el dato o la entrada, ¿sí?
+[00:41:10] Esto va a ser el par age income, ¿sí?
+[00:41:18] Por la salida esperada, que en nuestro caso va a ser 1 o menos
+[00:41:22] 1.
+[00:41:23] Y lo que él dice, bueno, yo voy a aplicar esta regla cuando me
+[00:41:26] pase esta condición.
+[00:41:27] Que la salida va a ser distinta de lo que yo estoy esperando.
+[00:41:31] Entonces, si hacemos un paso más,
+[00:41:34] yo esto lo puedo reescribir de esta manera.
+[00:41:37] Fíjense que en realidad lo reescribo porque si estos son
+[00:41:41] iguales, se me va a cero.
+[00:41:42] Si son distintos, me termina dando toda esta parte.
+[00:41:47] Pero nada, se lo pueden hacer como ejercicio.
+[00:41:49] Es una pavada fijarse cuando son iguales y cuando son
+[00:41:52] distintos.
+[00:41:52] Entonces, el delta W me va a quedar con esta fórmula.
+[00:41:55] La tasa de aprendizaje que me va a ir moderando el tamaño de los pasos que yo doy en la dirección en la que me indica la actualización.
+[00:42:07] Después tenemos la diferencia entre salida esperada y la obtenida.
+[00:42:11] Y por último, el dato.
+[00:42:13] Y recordemos cómo está representada la salida de la neurona.
+[00:42:16] Es esto de la integración de la información.
+[00:42:18] Uy, me dejó andar esto.
+[00:42:20] Es esto de la integración de la información más el chequear si yo supero o no el umbral.
+[00:42:25] y ahí obtengo la salida.
+[00:42:27] Acá me faltó, me acabo de dar cuenta,
+[00:42:30] un tita.
+[00:42:31] A esto le falta un tita acá,
+[00:42:33] que es el que me dice 1 menos 1.
+[00:42:37] Bueno, me dejó escribir.
+[00:42:40] Pero esto vendría a ser así.
+[00:42:42] Tita, tuki, tuki.
+[00:42:44] ¿Bien?
+[00:42:45] ¿Hasta acá alguna pregunta?
+[00:42:51] No sé si me está quedando.
+[00:42:53] Bueno, no entiendo muy bien eso de la salida esperada
+[00:43:04] Bueno
+[00:43:05] ¿Qué cosa particularmente?
+[00:43:11] ¿Qué es?
+[00:43:12] O sea, esa es siempre uno menos uno, ¿no?
+[00:43:15] Según
+[00:43:15] Sí
+[00:43:17] O sea, ese
+[00:43:19] Claro, el MOO en realidad
+[00:43:22] es lo que te indica el dato particular en el cual vos estás parado.
+[00:43:26] Por ejemplo, acá, el mu supra 10, en realidad, quiere decir, bueno,
+[00:43:33] el dato 10 en tu conjunto de datos, qué salida esperada tenía,
+[00:43:37] en este caso va a ser menos uno.
+[00:43:41] Ah, está.
+[00:43:43] Ok, ok, va, bien.
+[00:43:46] Bien. ¿Hay más alguna pregunta?
+[00:43:48] No, no, no, no, ya me lo quito, sí, gracias.
+[00:43:49] Ah, ok. Esto sí.
+[00:43:50] Y la salida esperada, fíjate que siempre debería coincidir un poco en rango
+[00:43:56] y en lo que vos estás esperando que salga de tu neurona.
+[00:43:59] O sea, la O y la Z deberían ser datos del mismo estilo.
+[00:44:04] Si no, no tiene mucho sentido.
+[00:44:06] ¿Cómo está pintado en el gráfico? ¿Si azul o rojo?
+[00:44:09] Claro.
+[00:44:11] Claro, exactamente. Si azul o rojo. Sería la Z.
+[00:44:16] Bien.
+[00:44:17] Bueno, entonces, tenemos esta regla de actualización que va a ser iterativa y lo que tiene de muy bueno que sea iterativo y que converja hacia una solución es que uno puede arrancar en principio con doble Bs que no sabemos si son buenos o malos.
+[00:44:35] Y esta regla de actualización es lo que nos va a permitir ir iterando hacia una solución que, de existir, va a darnos relativamente lo que queremos.
+[00:44:46] Y después voy a aclarar a qué me refiero con él relativamente, ¿sí?
+[00:44:51] Bien, vamos a ver un ejemplo numérico de qué es lo que termina pasando cuando yo aplico esta regla, ¿sí?
+[00:45:00] que yo me voy moviendo en dirección a lo que quiero obtener de mi límite de decisión.
+[00:45:05] Entonces, para eso vamos a agarrar el dato, el 10.
+[00:45:10] A ver si ahora me anda. Sí, ahora me anda. Bien.
+[00:45:12] El número 10 que tiene en principio estos valores de age y de income y que la salida esperada es menos 1.
+[00:45:22] ¿Sí? Pero, ¿qué pasa? Cuando yo, voy a leer esto, cuando yo me fijo cuánto es que este dato me da evaluado, fui muy rápido, ahora voy a la evaluación del dato, estas son todas las especificaciones, cuáles son los valores de los X, fíjense que estos son mis pesos actuales y este es mi umbral actual y esta caracterización me da este límite de decisión.
+[00:45:47] que fíjense que por ahora es
+[00:45:50] malísimo
+[00:45:51] y acá pregunta que por ahí es medio bruda
+[00:45:54] pero ¿qué esperarían
+[00:45:56] del límite de decisión?
+[00:45:58] o del hiperplano
+[00:46:00] de separación, no sé por qué le empecé
+[00:46:01] límite de decisión, se le dice hiperplano de separación
+[00:46:04] ¿qué esperarían del
+[00:46:05] hiperplano de separación?
+[00:46:10] que suba por favor
+[00:46:11] sí, esperarían que suba por favor
+[00:46:14] o si no les recomiendo revisar su implementación
+[00:46:16] Perfecto, entonces
+[00:46:18] Tenemos ese hiperplano, queremos que suba
+[00:46:20] Tenemos la tasa de aprendizaje
+[00:46:22] Todos los valores que necesitamos, joya
+[00:46:24] Entonces, fíjense que cuando yo arranco
+[00:46:28] Y hago la evaluación de la salida de mi neurona
+[00:46:31] Con estos pesos
+[00:46:32] El valor me termina dando 1
+[00:46:34] Que es la clase opuesta a la que yo estoy buscando
+[00:46:36] Y que tiene sentido por el gráfico que acabamos de ver
+[00:46:38] Entonces, como es menos 1
+[00:46:41] Voy a actualizar
+[00:46:42] Y lo que hago es agarrar la fórmula
+[00:46:45] Que les estoy tapando
+[00:46:46] pero que es la que está ahí arriba.
+[00:46:48] Y reemplazo con los valores que ya tengo.
+[00:46:51] Tengo absolutamente toda la información que necesito.
+[00:46:53] Y me fijo, ¿cuál va a ser?
+[00:46:55] El delta W para actualizar los pesos y el delta B para
+[00:46:59] actualizar el umbral.
+[00:47:01] ¿Por qué se llama B?
+[00:47:03] Que nadie me preguntó cuando digo umbral.
+[00:47:06] Es porque a este término se le suele llamar el bias, ¿sí?
+[00:47:11] En general no se usa el término umbral, sino que, bueno,
+[00:47:14] Eso medio que quedó de lo que es la formulación de McFullock y Pitts,
+[00:47:18] pero en realidad a este término que me da esta cuestión de la ordenada al origen en este caso,
+[00:47:24] o que me permite, no es que es la ordenada al origen,
+[00:47:26] pero que me permite que la recta no esté atada al origen,
+[00:47:31] bueno, esto se denomina bias.
+[00:47:34] Entonces, calculo cómo actualizar y se lo sumo tanto a los dobleves nuevos como al bias nuevo
+[00:47:41] y me fijo qué es lo que me da después de la actualización.
+[00:47:46] Y fíjense que precisamente lo que termina pasando es lo que
+[00:47:50] nosotros queremos, ¿sí?
+[00:47:52] El hiperplano de separación se mueve un cachito hacia arriba,
+[00:47:56] siguiente todavía no funciona bien porque la clase me sigue
+[00:47:58] dando 1.
+[00:47:59] Fíjense que la magnitud del valor que yo tengo acá dentro es
+[00:48:05] más chico que lo que yo tenía antes, que lo perdí.
+[00:48:10] Acá, que antes era 0, 7, 4, 2 y ahora es 0, 4, 7, 7.
+[00:48:15] Entonces, al menos para este dato en particular,
+[00:48:18] yo me estoy moviendo con este hiperplano de separación en la
+[00:48:21] dirección correcta.
+[00:48:22] ¿Sí?
+[00:48:23] ¿Y a qué voy con que la solución que nos va a dar es una
+[00:48:30] solución potencial, pero quizás no es la mejor?
+[00:48:35] O sea, ¿qué les parece que podría?
+[00:48:40] ¿Qué característica les parece que podría ser indicativo de una buena o mala solución cuando yo busco un hiperplano de separación?
+[00:48:52] No sé si a alguno se le ocurre.
+[00:49:08] ¿O están pensando o están perdidos?
+[00:49:10] ¿Alguno se perdió y no sabe muy bien qué es lo que pasó en los últimos cinco minutos?
+[00:49:24] Cri cri.
+[00:49:26] Sí, sí, Rodri y Pau están para hacerme los sonidos de...
+[00:49:31] Tienen que sacar los carteles que les sacan a la audiencia.
+[00:49:36] Eso, habría que tener una plataforma mejor, ¿no?
+[00:49:38] de Blackboard Campus que permita hacer esas cosas.
+[00:49:42] Sí.
+[00:49:45] La reformulo para el que,
+[00:49:48] o sea, lo que acabamos de hacer hasta ahora es tomar
+[00:49:50] un paso de actualización para un dato,
+[00:49:53] que me mueve en la dirección que yo quiero,
+[00:49:57] pero yo estoy buscando un hiperplano de separación.
+[00:50:00] Un hiperplano.
+[00:50:02] No voy a tener un millón.
+[00:50:04] ¿Qué les parece que puede ser
+[00:50:05] beneficioso
+[00:50:09] del hiperplano que estoy buscando.
+[00:50:11] ¿Cualquier hiperplano
+[00:50:12] me convence? O sea,
+[00:50:15] ¿este hiperplano me convence?
+[00:50:17] ¿Este hiperplano me convence? ¿Este me convence?
+[00:50:19] ¿Este me convence? ¿Este me convence?
+[00:50:20] ¿Qué les parece que puede
+[00:50:23] ser mejor o peor?
+[00:50:26] Podría ser como
+[00:50:27] definir un margen
+[00:50:29] que querés dejar a ambos lados
+[00:50:30] de los conjuntos de datos, de los datos más cercanos.
+[00:50:35] Bien.
+[00:50:35] ¿Vos ya viste SBM?
+[00:50:38] Puede ser
+[00:50:39] Bien
+[00:50:41] Bien, perfecto
+[00:50:45] En general lo pregunto porque encima
+[00:50:47] Machine Learning es una materia
+[00:50:50] Que se suele hacer después
+[00:50:51] Y que justo nosotros no vemos SBM
+[00:50:53] Por eso me río
+[00:50:54] Pero bueno, cuestión
+[00:50:57] Lo que acaba de decir Facundo
+[00:50:59] Es importante, o sea
+[00:51:01] Este, si yo hago esta recta
+[00:51:04] Acá
+[00:51:04] que está al borde de todos los datos rojos,
+[00:51:08] y digo, listo, ya está, lo separé.
+[00:51:11] Estoy contenta y nos vamos.
+[00:51:13] Y yo no sé si eso es lo que mejor modela los datos.
+[00:51:16] Quizás esta recta era un poquito mejor.
+[00:51:19] Entonces, eso es algo a tener en cuenta,
+[00:51:21] de que este algoritmo iterativo yo lo puedo cortar.
+[00:51:25] O sea, el algoritmo tal cual está,
+[00:51:27] yo puedo cortar y tener una recta que me lo separe,
+[00:51:29] pero quizás es una recta malísima.
+[00:51:31] O, no malísima, pero ya sabía rectas mejores,
+[00:51:34] o hiperplanos de separación mejores para los conjuntos de datos con los que estoy lidiando.
+[00:51:38] Así que bueno, a eso es a lo que iba la pregunta.
+[00:51:43] Ya tenemos nuestro ejemplo y algo que les recomiendo que hagan cuando están armando el algoritmo
+[00:51:52] es que hagan este gráfico de cómo se van actualizando los pesos sinápticos
+[00:51:56] y cómo es que se va moviendo el límite de decisión a medida que ustedes avanzan.
+[00:51:59] Como para entender un poco si tienen fallas o no, qué es lo que está pasando
+[00:52:04] nada, siempre es beneficioso tener esto a modo de chequeo
+[00:52:08] y ver con los valores de los doblebes si se corresponde con lo que están viendo en el gráfico.
+[00:52:15] 
+[00:52:16] Así que nada, esto como recomendación.
+[00:52:20] Y ahora llegamos a lo que es el algoritmo.
+[00:52:23] Es súper corto, es súper fácil de implementar.
+[00:52:27] Todo este TP3 arranca como muy suave y después la clase que viene ahí ya
+[00:52:31] aparecen un millón de subíndices, pero por ahora tenemos este algoritmo que es bastante concreto,
+[00:52:39] donde lo que yo voy a hacer es, si yo tengo este perceptron, ¿cuáles son los elementos que necesito?
+[00:52:48] Bueno, necesito mis Ws, el W0, que también lo vamos a llamar bias. Entonces, inicializo esos
+[00:52:55] Ws con valores random pequeños.
+[00:52:59] Después charlamos por qué.
+[00:53:01] Inicializo mi bias B o W sub 0 con valores random pequeños
+[00:53:07] también.
+[00:53:09] Elijo un learning rate.
+[00:53:10] La idea es que experimenten con este learning rate.
+[00:53:16] ¿Cómo se imaginan que es el learning rate?
+[00:53:18] Grande, chico, fijo, variable.
+[00:53:22] igual por ahí es una pregunta, no, no me contesten,
+[00:53:27] lo vamos a charlar ahora cuando veamos lineal y no lineal.
+[00:53:31] CTO, un learning rate, ¿sí?
+[00:53:33] Que pueden experimentar con distintas magnitudes,
+[00:53:36] 1 a la menos 1, a la menos 2.
+[00:53:40] Pueden probar con 10 a ver qué les pasa.
+[00:53:42] Bueno, nada, o sea, es ridículamente grande,
+[00:53:45] pero si quisieran experimentar, pueden experimentar con las
+[00:53:48] magnitudes, total, no cuesta nada en este tipo de algoritmos.
+[00:53:51] Bien, eligen un learning rate y después lo que van a hacer es, eligen la cantidad de epochs o épocas que una época va a representar toda una pasada del dataset. Entonces, en cada época yo voy a recorrer los ejemplos de entrenamiento, que acuérdense, cada dato mu es parte de un conjunto de datos de tamaño de minúscula.
+[00:54:14] minúscula. Y lo que voy a hacer es hacer lo que hicimos en ese cálculo numérico. Esos pasos que
+[00:54:20] tomamos es exactamente lo que hace el algoritmo. Calculo la excitación de la neurona, que es H.
+[00:54:26] Calculo la activación de la neurona, que es lo que me da la O grande, es decir, 1 o menos 1. Me fijo
+[00:54:32] si los tengo que actualizar, ¿sí? Haciendo el cálculo del delta W y delta B. Voy allá. Y fíjense
+[00:54:39] que sí necesito una condición de corte. O sea, cuando yo encontré el hiperplano que quiero,
+[00:54:46] quizás listo, ya estoy satisfecha. Entonces, lo que vamos a hacer es calcular el error del
+[00:54:51] perceptrón y fijarme si ya pude clasificar todos los datos bien o, en su defecto, termina la cantidad
+[00:54:58] de épocas que tenía disponibles. Y acá una aclaración importante, que el error del perceptrón
+[00:55:07] se refiere al error para todo el conjunto de datos.
+[00:55:12] Fíjense que esta f, esta función,
+[00:55:15] está evaluada en todos los datos
+[00:55:17] donde n es igual a t menos 1.
+[00:55:21] Bueno, t en realidad porque arranca desde el 1.
+[00:55:24] ¿Alguno se le ocurre por qué me fijo en todos los datos
+[00:55:27] para calcular el error y no en uno solo?
+[00:55:32] Es una pregunta muy simple,
+[00:55:33] pero para asegurarme de que eso quedó claro.
+[00:55:37] porque por ahí los confundí un poco.
+[00:55:53] O alguna pregunta del algoritmo un poco más arriba,
+[00:55:56] por ahí fui muy rápido.
+[00:55:58] Si tienen algunas consultas más de arriba.
+[00:56:07] ¿Todo bien?
+[00:56:08] Ok.
+[00:56:09] Bueno, básicamente, por si a alguno no le quedó claro,
+[00:56:14] yo calculo el error para todos los datos porque tiene sentido de que si quiero ver si alcanc la convergencia eso implica que funciona bien para todo el conjunto de datos y no para el dato con el
+[00:56:29] cual yo estoy tratando en ese momento. Vamos de aclaración por las dudas.
+[00:56:35] Bien. Hoy me quedó acá y lo quería sacar. Puse ahí como ejercicio, que después lo voy a volver
+[00:56:44] a repetir de por qué yo inicializo
+[00:56:46] los doble Bs en valores
+[00:56:48] con cierta distribución
+[00:56:51] y no en cero. O sea, ¿por qué
+[00:56:52] son valores o random pequeños o con
+[00:56:54] alguna distribución pequeños y no son
+[00:56:56] cero? ¿Sí? Y esto
+[00:56:58] quiero que sea algo que lo piensen no solamente
+[00:57:00] para el perceptron simple, sino más específicamente
+[00:57:03] para el que vemos
+[00:57:04] ahora después y para el multicapa.
+[00:57:06] ¿Sí? Es una pregunta que voy a dejar abierta y después
+[00:57:08] en la clase del multicapa la discutimos.
+[00:57:12] Bien.
+[00:57:14] Cuestión administrativa, detalle de implementación de cómo por ahí agregar el umbral o bias y que el algoritmo se le simplifique.
+[00:57:25] Ustedes lo que podrían hacer es agregar una columna. Fíjense que el bias se considera como el término independiente, ¿sí? O sea, para todos los datos. O sea, no depende del valor del dato el bias que yo obtengo.
+[00:57:38] Entonces, lo que podrían hacer es agarrar su conjunto, agregarle una columna que sea todos unos o todos menos uno, si quieren, pero todos unos ya está.
+[00:57:50] Y cuando pasan al algoritmo, fíjense que acá el bias está implícitamente metido adentro de lo que son los pesos.
+[00:58:01] ¿Sí? Porque si ustedes se fijan acá, el X sub 0, que son todos unos, si yo lo multiplico por el W sub 0, es como que esté tratando con el bias que es independiente. Esto es una cuestión de si lo quieren hacer todo junto, la implementación, y que sea una única cuenta. Si no, lo hacen por separado. Como les sea más cómodo a ustedes y más fácil de interpretar, nada, son libres.
+[00:58:25] Por otro lado, ¿cómo pueden calcular el error del perceptron?
+[00:58:28] Bueno, esto pueden hacer de distintas formas
+[00:58:31] Acá la verdad que no es muy relevante
+[00:58:32] O sea, me digo que no sea relevante en general
+[00:58:34] Pero este es un ejercicio muy simple como para que se vayan familiarizando
+[00:58:38] Les recomendaría no volverse muy locos
+[00:58:40] O sea, elegir alguna métrica para calcular el error
+[00:58:44] Teniendo en cuenta que es una salida binaria
+[00:58:46] Y fin, pueden hacer la suma del valor absoluto
+[00:58:49] Pueden hacer accuracy, que es para problemas de clasificación
+[00:58:53] Nada, eligen algo para ver si el error del parceptrón llegó a
+[00:58:57] cero o no y siguen con sus vidas.
+[00:59:01] Bien.
+[00:59:02] ¿Para qué nos sirve esta herramienta?
+[00:59:04] Y acá quiero hacer una distinción entre lo que es
+[00:59:06] aprendizaje y generalización.
+[00:59:08] Fíjense que todo lo que vimos nosotros refiere a esta etapa
+[00:59:12] de el aprendizaje.
+[00:59:14] Todo ese ir ajustando los pesos es lo que a mí me termina
+[00:59:18] dando el hiperplano de separación.
+[00:59:20] Pero yo ahí, cuando estoy, no sé, por ejemplo, observando cómo es que mi hiperplano de separación separa los datos que yo conozco y conozco el valor de verdad, lo que estoy haciendo ahí es aprendiendo, ¿sí? A mí la herramienta no tiene ningún valor si sabe separar los datos que yo ya conozco.
+[00:59:41] Porque ya lo conozco, o sea, ya tengo los valores.
+[00:59:44] Entonces, está esta otra pata que en el ejercicio 1 no va a aplicar,
+[00:59:49] pero va a aplicar después, que es la cuestión de la generalización, ¿sí?
+[00:59:53] Que se refiere a la habilidad que tiene.
+[00:59:55] Acá puse perceptron, pero esto aplica para cualquier modelo, ¿sí?
+[00:59:59] Va a ser la habilidad que tiene el modelo de desempeñarse correctamente
+[01:00:03] con datos para los cuales no fue entrenado, ¿sí?
+[01:00:06] Y es importante que tengan presente esta distinción.
+[01:00:11] ¿Alguna duda con esto?
+[01:00:24] Bien.
+[01:00:25] Asumo que no.
+[01:00:27] Miren, resumen.
+[01:00:30] Maculock y Pitts son los que modelan las bases.
+[01:00:33] Se llaman perceptron simple.
+[01:00:34] Esta neurona que vimos, que es como la más primitiva.
+[01:00:38] ¿Qué tipo de problemas podemos resolver?
+[01:00:39] Los que son linealmente separables.
+[01:00:41] o casi linealmente separables.
+[01:00:44] Si tenemos algún dato por fuera, no pasa nada.
+[01:00:47] Después tenemos Rosenblatt, que es el que propone el algoritmo
+[01:00:49] para efectivamente encontrar ese hiperplano de separación
+[01:00:52] a partir de algún punto inicial aleatorio.
+[01:00:57] Y que no es lo mismo, y esto es súper importante para este TPP,
+[01:01:00] para el que viene, para todos,
+[01:01:02] no es lo mismo aprendizaje que generalización.
+[01:01:05] ¿Y para qué quiero yo la herramienta?
+[01:01:07] Precisamente para la parte de generalización.
+[01:01:09] fin por ahora
+[01:01:13] no es la clase, no se ilusionen
+[01:01:15] sino que
+[01:01:17] vamos a hacer un mini break
+[01:01:19] y después pasamos
+[01:01:21] al otro tipo de perceptron
+[01:01:23] ¿alguien tiene alguna pregunta de algo
+[01:01:25] de esta primera parte?
+[01:01:28] o estamos
+[01:01:29] relativamente ok
+[01:01:30] Maru, el algoritmo hay que cortarlo
+[01:01:36] si no
+[01:01:38] si se queda iterando para siempre
+[01:01:40] porque el problema, digamos, está mal?
+[01:01:45] Digamos, no es linealmente separable.
+[01:01:48] Claro, ahí se te va a cortar
+[01:01:50] por matanza de...
+[01:01:50] O sea, si converge, es que sirve.
+[01:01:52] O sea, el problema.
+[01:01:53] Sí, sí.
+[01:01:54] O sea, vos podrías tener, por ejemplo,
+[01:01:56] acá, viste que dice, bueno,
+[01:01:59] convergencia es igual a verdad
+[01:02:02] si el error es menor que un epsilon.
+[01:02:04] Vos ahí podrías elegir, por ejemplo,
+[01:02:06] para el ejercicio que van a tener que hacer ustedes,
+[01:02:08] que es full simple, deberían esperar que el error llegue a cero.
+[01:02:13] Después charlamos un poquito más de eso.
+[01:02:16] Que es, por ahí, una expectativa realista
+[01:02:19] si vos estás haciendo clasificación binaria, ¿no?
+[01:02:22] Porque decir, bueno, que estén todos correctamente clasificados.
+[01:02:25] Si vos estás esperando cero en un conjunto de datos
+[01:02:27] por ahí más grande que eso, si quieren, lo podrían probar.
+[01:02:31] Y hay alguno que te queda del otro lado,
+[01:02:33] pero la mayoría está bien.
+[01:02:35] Esto no te va a terminar nunca.
+[01:02:38] A no ser que le pongas por ahí, bueno, que el error sea, no sé, muy chiquito.
+[01:02:45] Si vos querés 100% de aquí horas y le pongo 98, no sé, algo así.
+[01:02:50] Y si no, lo que va a terminar pasando es que te corta por cantidad de épocas.
+[01:02:55] Ah, claro.
+[01:02:58] Pero bueno, te corta por una cosa o la otra.
+[01:03:01] Justo lo que vamos a ver en el TP es súper simple.
+[01:03:05] entonces les recomendaría que le pongan
+[01:03:08] que el error sea cero
+[01:03:09] no va a ser el caso para todos los perceptrones
+[01:03:12] que sea cero
+[01:03:13] pero
+[01:03:15] si llega con emergencia corta
+[01:03:18] y si no va a seguir oscilando
+[01:03:20] entre hiperplanos
+[01:03:21] hasta que terminan las épocas
+[01:03:23] perfecto
+[01:03:26] gracias
+[01:03:26] bueno
+[01:03:27] vamos si quieren hacer hasta 2 y
+[01:03:32] 25
+[01:03:32] y hacemos la otra parte que es full cortita y ya pueden ir a ser felices.
+[01:03:41] Así que bueno, reto.
+[01:03:45] Bueno, esta parte es bastante más corta, en realidad es una especie de adaptación
+[01:03:51] de lo que vimos antes y cómo por ahí extenderlo para usarlo a otro tipo de problemas
+[01:03:57] y para cualquiera que haya hecho probabilidad y estadística o cualquier cosa de Machine Learning,
+[01:04:05] le va a parecer muy conocido en cuanto al objetivo de la herramienta y a lo que modela.
+[01:04:14] Pero voy a pasar porque en realidad es porque antes estaban separadas las clases.
+[01:04:17] Bien.
+[01:04:18] Lo que vamos a hacer ahora es cambiar un poquito el tipo de problema, ¿sí?
+[01:04:22] en lugar de querer hacer una clasificación binaria,
+[01:04:26] supongamos que, no sé, a mí lo que me gustaría estimar,
+[01:04:28] si viene alguien y me pide, che,
+[01:04:30] me gustaría saber qué salario le tengo que pagar a alguien
+[01:04:33] en base a sus años de experiencia.
+[01:04:38] Que, bueno, claro, no es muy realista en el mundo,
+[01:04:40] pero supongamos que es esta la relación que yo quiero modelar,
+[01:04:44] lo que podría hacer, o sea, ¿qué les parece que,
+[01:04:48] si esto es lo que yo quiero modelar, no?
+[01:04:50] ¿qué les parece que va a ser nuestra salida ahora?
+[01:04:53] nuestro Z
+[01:04:53] antes yo estaba tratando de modelar el partido político
+[01:04:56] al cual iban a votar
+[01:04:58] los ciudadanos y ahora estoy tratando
+[01:05:01] de modelar el salario en función
+[01:05:03] de los años de experiencia
+[01:05:04] ¿cuál va a ser la salida?
+[01:05:06] o el valor esperado
+[01:05:13] para este tipo de problemas
+[01:05:14] el valor del salario, perfecto
+[01:05:25] entonces ahora lo que yo voy a pasar a
+[01:05:27] querer modelar es una variable
+[01:05:28] que no está restringida a
+[01:05:31] una clasificación
+[01:05:33] minera, sino que puede tomar en principio cualquier
+[01:05:35] valor entre los reales, esperemos
+[01:05:37] mayor o cero
+[01:05:38] si no sería todo muy terrible, bien
+[01:05:41] entonces lo que quiero hacer es
+[01:05:43] encontrar una función de este estilo.
+[01:05:44] Aunque si yo paso los años de experiencia,
+[01:05:46] me devuelve algún A por años de experiencia más B.
+[01:05:51] Y fíjense que esto, oh, sorpresa,
+[01:05:54] lo puedo empezar a expresar de manera muy similar a lo que yo
+[01:05:57] había hecho en la parte anterior con el perceptrón simple.
+[01:06:02] Lo mismo pasa si yo quisiera, en lugar de hacerlo en base a años
+[01:06:05] de experiencia, por ahí tengo más variables,
+[01:06:07] quiero hacerlo en base a años de experiencia y edad.
+[01:06:10] Bueno, lo que puedo hacer es modelarlo con la misma ecuación que habíamos visto antes y encontrar los doble Bs, ¿sí? Que me representen o esta recta o este plano que ajusten al conjunto de datos que yo tengo, ¿sí?
+[01:06:27] Y fíjense que ahora, voy a volver hacia atrás, yo no tengo un tita que me devuelva 1 menos 1 y que el valor que yo tengo me lo transformen en clasificación.
+[01:06:39] Sino directamente a mí lo que me interesa va a ser el valor en sí.
+[01:06:44] Ese procesamiento que yo tenía antes dentro de la neurona, que lo comparaba contra el umbral, bueno, ahora lo que a mí me va a interesar es directamente ese valor.
+[01:06:53] Y no necesariamente colapsarlo a una clasificación binaria.
+[01:06:57] ¿OK?
+[01:06:58] Entonces, aparecen estos 2 investigadores,
+[01:07:02] Wittrow y Hoff, que lo que proponen es este Adaline
+[01:07:05] Adaptive Linear Element, donde lo único que vamos a cambiar es
+[01:07:09] que la función de activación, en lugar de ser la función de
+[01:07:12] activación escalón, va a pasar a ser la función de activación
+[01:07:16] identidad.
+[01:07:17] Y aclaro, porque estaba en la diapositiva,
+[01:07:19] pero nunca lo mencioné, función de activación escalón es la
+[01:07:22] que me devuelve 1 o 0 o 1 o menos 1, ¿sí?
+[01:07:27] Entonces, ahora voy a tener que la función de activación es la identidad y eso directamente me va a dar el valor de lo que yo estoy evaluando.
+[01:07:36] Entonces, fíjense cómo ahora la salida de esa neurona que yo tenía cambia.
+[01:07:42] Yo ahora puedo dejar de modelar problemas de clasificaci y pasar a modelar cuestiones que se muevan en los valores de los reales
+[01:07:53] Entonces, ¿cómo resolver el problema?
+[01:07:56] El planteo es exactamente el mismo con el cambio de la función de activación.
+[01:08:01] Pero ¿qué es lo que yo tenía que encontrar antes, que ahora también tengo que encontrar,
+[01:08:06] y que la regla de actualización que tenía antes se ajustaba a que yo tenía esta clasificación binaria
+[01:08:12] que comparaba entre la salida esperada
+[01:08:14] versus la salida que yo obtuve.
+[01:08:16] Ahora no vamos a querer hacer eso
+[01:08:17] porque quizás yo no necesito
+[01:08:21] que la salida sea exactamente la misma.
+[01:08:24] ¿Por qué?
+[01:08:25] Porque es imposible encontrar una recta
+[01:08:27] que ajuste a este conjunto de datos
+[01:08:29] si la salida de la neurona
+[01:08:32] tiene que ser exactamente igual a los puntos.
+[01:08:35] Porque los estoy mirando
+[01:08:37] y porque ninguna recta los va a ajustar perfectamente.
+[01:08:40] ¿Eso se entendió?
+[01:08:42] O más o menos, sí.
+[01:08:49] Sí, sí.
+[01:08:49] Ok.
+[01:08:50] Bien.
+[01:08:51] Entonces, tenemos esta cuestión.
+[01:08:53] Necesito encontrar los dobles.
+[01:08:55] Joya, ¿cuál va a ser mi delta W?
+[01:08:58] Porque vamos a seguir usando la misma regla de actualización integrativa.
+[01:09:01] Bueno, lo que yo voy a querer hacer conceptualmente es minimizar la distancia que tienen mis puntos hacia esa recta.
+[01:09:09] Ya sé que perfecto es muy poco probable que lo pueda hacer porque ningún dato se ajusta perfectamente a un hiperplano, pero si yo puedo minimizar esa distancia, entonces me convence lo suficiente para tomar esa como mi herramienta.
+[01:09:23] Entonces lo que vamos a hacer es definir cómo es que el perceptron se equivoca.
+[01:09:30] Antes hacíamos salida esperada menos salida obtenida.
+[01:09:33] Ahora vamos a definir la siguiente función de error,
+[01:09:36] que es la diferencia entre la salida esperada y la obtenida elevada al cuadrado.
+[01:09:40] Fíjense que esto...
+[01:09:42] Acá voy a empezar a dibujar.
+[01:09:45] Esto es sobre todo los datos.
+[01:09:49] Entonces, bueno, va a ser...
+[01:09:51] Esta es mi fórmula del error del perceptron.
+[01:09:53] Y recordemos cómo definíamos nosotros la O. Bueno, la O a su vez depende de los pesos sinápticos. Entonces lo que me está diciendo acá es que el error del perceptrón depende de los pesos sinápticos que yo tengo en ese preciso momento.
+[01:10:07] entonces
+[01:10:09] tenemos como el perceptron se equivoca
+[01:10:12] sabemos que queremos actualizar el perceptron
+[01:10:14] con un delta w
+[01:10:15] esto lo aclaro porque
+[01:10:18] hay algunas diapositivas donde
+[01:10:20] la notación aparece así
+[01:10:21] fíjense que esto
+[01:10:23] esto es el x
+[01:10:25] lo aclaro por las dudas por si quedó alguna
+[01:10:28] por algún mismatch
+[01:10:29] y esta g va a ser la función de activación
+[01:10:32] ¿sí? pero si ven
+[01:10:34] esta fórmula es básicamente lo mismo
+[01:10:36] que esto, solamente que las variables cambian, nada más.
+[01:10:40] Entonces, ¿cómo vamos a terminar definiendo el delta W?
+[01:10:44] Y acá voy a hacer una aclaración de que esto incluye el umbral
+[01:10:47] o bias y que ya no voy a hablar del bias por separado.
+[01:10:50] O sea, con ese truco que les dije la vez, o sea,
+[01:10:54] la parte anterior de que agrego la columna, bueno,
+[01:10:56] básicamente puedo hacer como si esta sumatoria contiene tanto
+[01:11:01] el bias como los pesos.
+[01:11:03] Nada, es solamente para no seguir partiendo la función.
+[01:11:06] Entonces, lo que yo voy a hacer es moverme en la dirección opuesta al gradiente, o sea, en la dirección opuesta al gradiente de la función de error con respecto a los pesos sinápticos.
+[01:11:21] ¿Por qué yo quiero hacer esto? Bueno, porque el gradiente es lo que me da la dirección de máximo crecimiento de la función.
+[01:11:28] Es decir, que el gradiente me va a decir en qué dirección el error crece si yo muevo los pesos sinápticos.
+[01:11:37] Entonces, como yo quiero que el error decrezca, me voy a mover en la dirección contraria.
+[01:11:42] Eso es básicamente lo que nosotros vamos a tomar para hacer el delta W.
+[01:11:48] Y fíjense que acá también lo tenemos multiplicado por un learning rate, que ese learning rate se va a empezar a volver cada vez más importante.
+[01:11:56] ¿Por qué? ¿Alguno se le ocurre por qué?
+[01:12:02] ¿Conectado a la clase de optimización?
+[01:12:08] Está entrando una luz.
+[01:12:13] Y para poder garantizar la convergencia,
+[01:12:18] ajustarlo de manera que no sea tan alto como para pasarte,
+[01:12:22] ni tan chico como para que tardes mil años en llegar.
+[01:12:26] Bien, excelente.
+[01:12:29] Básicamente, bueno, esto después les queda para que lo lean.
+[01:12:32] Básicamente, podemos imaginarnos que la función de costo,
+[01:12:37] voy a usar medio distintivamente función de costo,
+[01:12:40] función de error.
+[01:12:41] En realidad, esto debería ser función de costo.
+[01:12:43] Por más de que diga, eso podría modificarlo.
+[01:12:47] Pero, básicamente, la función de costo es la función que yo
+[01:12:49] estoy buscando minimizar, ¿sí?
+[01:12:52] Lo que decía Facundo recién, que tiene un buen punto,
+[01:12:55] es que yo no sé bien qué forma tiene esta función,
+[01:12:59] al menos con los métodos que nosotros vamos a usar.
+[01:13:02] Entonces, si yo, por ejemplo, arranco acá.
+[01:13:05] Uf, este color es muy terrible para esto.
+[01:13:08] Si yo, por ejemplo, arranco acá.
+[01:13:10] Todo es terrible, el trazo, todo.
+[01:13:12] Bien, arranco acá.
+[01:13:15] Ya, está mejor.
+[01:13:17] La quinta es la vencida, más o menos, para dibujar.
+[01:13:21] A ver.
+[01:13:22] Me está llevando más tiempo del que debería.
+[01:13:29] Qué poco intuitivo que transferes y 100% sea que se ve.
+[01:13:33] Bien, entonces, si el paso es muy grande,
+[01:13:35] ¿qué es lo que va a terminar pasando?
+[01:13:36] Yo actualizo en esta, supongamos que la dirección de máximo
+[01:13:39] decrecimiento es esta, ¿no?
+[01:13:43] O sea, el gradiente me va a apuntar para allá,
+[01:13:44] yo me muevo para el otro lado.
+[01:13:45] Si yo los pasos que tomo son enormes, ¿sí?
+[01:13:48] Así, cuando estoy cerca de algún mínimo,
+[01:13:51] yo lo que voy a querer hacer es llegar acá en realidad.
+[01:13:53] Si yo estoy acá y la dirección de crecimiento es hacia la
+[01:13:58] izquierda, pero yo tengo un learning base que es 10,
+[01:14:01] o sea, enorme, quizás lo que me pasa es que me voy para aquel
+[01:14:04] lado.
+[01:14:06] Entonces, cuando estoy acá, me dice, uy, no, che,
+[01:14:07] la dirección de máximo de crecimiento es para el otro.
+[01:14:10] Ah, bueno, y me voy para el otro lado.
+[01:14:12] Y así sucesivamente.
+[01:14:13] Entonces, yo quiero que este paso me permita terminar
+[01:14:17] encontrando este mínimo.
+[01:14:19] No, caso contrario, como también dijo Facundo,
+[01:14:21] si el paso es muy chiquito, porque yo soy muy conservador y
+[01:14:24] quiero, tipo, ir así, voy a estar hasta el año 50,000
+[01:14:29] tratando de encontrar el mínimo, por ahí, mes.
+[01:14:36] Me puedo asegurar caer en algún mínimo,
+[01:14:39] pero tampoco me estoy asegurando caer en un mínimo local.
+[01:14:41] O por ahí yo vengo acá, tiqui, tiqui, tiqui, tiqui.
+[01:14:43] Y, bueno, y terminé en este.
+[01:14:46] Y nunca más salí de ahí, ¿OK?
+[01:14:47] Entonces, ni muy grande ni muy chico es bueno, sino que este es un hiperparámetro que se ajusta. ¿Alguna pregunta con respecto a esto?
+[01:14:58] Sí, perdón, Maru, una pregunta. El orden de magnitud de estos parámetros no suele depender del problema, ¿no? Vos ahora cuando decís un learning rate de 10, es grande sea cual sea el problema, o cómo suele ser.
+[01:15:15] está como estandarizado.
+[01:15:18] Sí, 10 es grande en general
+[01:15:20] sea cual sea el problema, pero
+[01:15:22] lo más común es que sean en el orden de
+[01:15:25] menos 3, menos 5, etc.
+[01:15:29] Ok.
+[01:15:31] ¿Y eso por qué? ¿Es por la misma estructura
+[01:15:33] del perceptron y de la red?
+[01:15:36] ¿Que los números terminan teniendo
+[01:15:37] órdenes de magnitud similares?
+[01:15:41] ¿Qué números terminan teniendo órdenes de magnitud
+[01:15:44] similares?
+[01:15:44] tanto los pesos entre sí como el
+[01:15:47] learning rate y todo lo que forma parte
+[01:15:49] de la función de la curación
+[01:15:51] pero los pesos
+[01:15:53] no necesariamente tienen ese tipo de
+[01:15:55] magnitud, por ejemplo vos podrías inicializar
+[01:15:57] los pesos entre 0 y 1
+[01:15:58] y tu learning rate que necesites
+[01:16:01] uno más chiquito, no sé, a la menos 2
+[01:16:03] a la menos 3, o sea no necesariamente
+[01:16:05] los pesos están
+[01:16:07] en el mismo orden de magnitud que
+[01:16:09] el learning rate
+[01:16:10] pero en todos los problemas los pesos suelen
+[01:16:13] estar entre, no sé, 0, 1, 5 o puede haber algún problema
+[01:16:16] donde un peso sea 5,000.
+[01:16:18] O lo importante es la comparación entre pesos entre sí.
+[01:16:22] Lo importante es, en general, no creo que en algún problema muy
+[01:16:30] complejo donde ya la red sea más grande,
+[01:16:32] va a ser muy raro que quieras tener pesos grandes.
+[01:16:35] Porque vos dejar que los pesos se muevan libremente,
+[01:16:38] lo que te va a terminar pasando es que es probable que se te vaya de cálculo lo que quieras ir acumulando.
+[01:16:46] O sea, en general los pesos se mantienen chiquitos por varias razones.
+[01:16:50] Uno, por el cálculo numérico.
+[01:16:51] Y dos, porque si vos tenés demasiada variabilidad entre los pesos,
+[01:16:55] eso también te va a empezar a ahogar, entre comillas, los otros pesos
+[01:16:59] y va a parecer como si las otras variables fueran menos importantes.
+[01:17:03] O sea, vos tenés que...
+[01:17:05] ¿Cómo?
+[01:17:06] Claro, como que esas neuronas ni se están activando, digamos
+[01:17:09] Sí, pero no necesariamente
+[01:17:11] Quizás es una cuestión de que algunos pesos se quedaron con magnitud más grande
+[01:17:15] Pero no quiere decir que los features que esos pesos representan
+[01:17:19] Son más importantes que los otros
+[01:17:21] Sino que la escala es distinta
+[01:17:23] Entonces, en general lo que se hace es tratar de mantener siempre cierta estabilidad
+[01:17:29] En lo que son las magnitudes de los pesos
+[01:17:31] No necesariamente relacionada con la magnitud del learning rate
+[01:17:35] buenísimo
+[01:17:37] agregó un detalle
+[01:17:40] pero la pregunta es buenísima
+[01:17:41] Facundo Cacesi
+[01:17:42] fíjate que hasta ahora
+[01:17:45] todo lo que está explicando Marina
+[01:17:48] tiene que ver más que nada
+[01:17:50] donde vos de repente si tenés el plano de separación
+[01:17:52] el plano de separación
+[01:17:54] vive a donde viven los datos
+[01:17:55] si vos lo ves como un caso lineal
+[01:17:57] y como una cuestión lineal
+[01:17:59] entonces ahí
+[01:17:59] los pesos vos podrías llegar a darle
+[01:18:03] de los pesos interpretación dentro de
+[01:18:05] el espacio de los datos en sí mismo
+[01:18:07] porque es lineal
+[01:18:09] el tema es que después cuando vos
+[01:18:11] cuando esto lo vamos haciendo cada vez
+[01:18:13] más complejo y jugás con el tema ya no lineal
+[01:18:15] o sea donde después
+[01:18:17] a eso le hacés una
+[01:18:19] los pesos los utilizás
+[01:18:21] para hacer una suma cerrada
+[01:18:23] y después con eso aplicás una función
+[01:18:25] no lineal
+[01:18:26] ahí hay como un cambio de escala
+[01:18:29] porque eso va a depender de la función
+[01:18:31] no lineal que después sucede, y ahí se te rompe un poco
+[01:18:35] la significancia del peso en sí mismo, desde el punto de vista del dato.
+[01:18:40] Eso por un lado, y después lo otro que preguntás en relación al
+[01:18:43] factor del learning rate, el learning rate depende de la geometría
+[01:18:49] de la función de costo, entonces, en general, si vos usás funciones
+[01:18:53] de costo, funciones de error, depende mucho de la geometría
+[01:18:58] de la propia función
+[01:18:59] del costo
+[01:18:59] que vos tenés
+[01:19:00] ¿entendés?
+[01:19:01] entonces
+[01:19:01] después van a ser valores
+[01:19:03] similares
+[01:19:03] del learning rate
+[01:19:04] es como que
+[01:19:05] la propia geometría
+[01:19:06] que vos vas a establecer te va a forzar a que un learning rate espec sea m o menos bueno malo bajo chico etc Fijate que est en unidades de gradiente de alguna manera
+[01:19:18] así que está muy atado a la propia geometría de la función.
+[01:19:25] Claro, claro, buenísimo.
+[01:19:27] Es más, ahí justo con lo que dice Rodri,
+[01:19:30] creo que un ejemplo podría ser, si vos tenés x cuadrado,
+[01:19:33] por ejemplo, por ahí estoy inventando cualquier verdura,
+[01:19:35] Pero si vos tenés esto
+[01:19:37] Y la derivada es 2
+[01:19:39] Y vos te querés mover
+[01:19:41] Ponele que tu learning rate es 1
+[01:19:43] Y vos estás en el x igual a 1
+[01:19:46] O sea, tu mínimo vos te tenés que ir hacia la izquierda
+[01:19:48] Entonces si vos te movés 2 hacia la izquierda
+[01:19:50] En este tipo de forma particular
+[01:19:52] Te vas hacia el otro lado
+[01:19:54] No sé si ahí queda un poco más claro
+[01:19:59] Claro, perfecto
+[01:20:00] Eso es lo que vimos en optimización
+[01:20:02] Como una función convexa perfecta
+[01:20:04] Bien. Bueno, ¿alguna otra pregunta más de esta parte? Que por ahí, si...
+[01:20:22] ¿No estamos?
+[01:20:23] ¿No estamos?
+[01:20:23] Bien. Bueno, sigo. Esto es un poquito para dejarles cuál es el desarrollo de la derivada del error con respecto a los pesos. Fíjense que acá lo estoy haciendo con respecto a uno de los pesos. Por eso es W sub i, pero esto lo pueden hacer al mismo tiempo para todos los pesos.
+[01:20:47] y básicamente lo que voy a hacer es reemplazar, acá debería estar esto,
+[01:20:53] parecen muchos números, pero en realidad esto era lo que antes era la O de la neurona.
+[01:20:59] Básicamente lo que voy a hacer es calcular la derivada de esta expresión.
+[01:21:05] Fíjense, acá les resalté algunos términos, si quieren después lo pueden seguir,
+[01:21:08] pero bueno, básicamente esto es agarrar la fórmula y derivarla.
+[01:21:11] Pero lo que me interesa es que acá, a lo último,
+[01:21:14] fíjense que nosotros habíamos charlado que la función de activación que estamos usando es la identidad.
+[01:21:22] Y esta expresión particular, que después la vamos a usar acá,
+[01:21:25] está en función de cualquier función de activación.
+[01:21:29] En ningún momento de este cálculo es que especifico que tita es efectivamente la identidad.
+[01:21:36] Entonces esto yo lo puedo usar para cualquier función de activación que sea derivable.
+[01:21:41] Va a ser exactamente el mismo cálculo, solamente que en donde dice tinta derivada, nada, derivo la función de activación y uso eso para evaluar el estado de excitación.
+[01:21:53] ¿Ok?
+[01:21:56] Nada, esto es para que les quede, pero también es algo que pueden probar de hacer a mano.
+[01:22:03] ¿Cómo va a ser el algoritmo para el perceptrón lineal?
+[01:22:06] es igual que la anterior.
+[01:22:09] O sea, no hay mucho que cambia,
+[01:22:11] excepto las partes que puse en rojo,
+[01:22:13] donde antes no estábamos multiplicando
+[01:22:17] por la derivada de la función de activación.
+[01:22:18] Y ahora sí, en la parte de actualizar los pesos.
+[01:22:21] Y por otro lado, lo que charlábamos con Nicolás,
+[01:22:24] esta cuestión de qué es lo que yo tomo como convergencia.
+[01:22:28] Porque antes teníamos un problema de clasificación
+[01:22:30] y ahora tenemos un problema de regresión.
+[01:22:33] Entonces, lo que yo puedo hacer acá es tomar el error en lugar de usar accuracy o directamente usar la diferencia en valor absoluto. Lo que yo podría hacer es agarrar, por ejemplo, el MSE, que es el promedio de las diferencias al cuadrado.
+[01:22:57] esto sería
+[01:22:58] la salida esperada menos la salida
+[01:23:02] neuronal cuadrado, puedo usar eso
+[01:23:04] como mi métrica de decir si el perceptron
+[01:23:06] está yendo bien o no
+[01:23:07] y fijarme si eso es menor
+[01:23:10] que un epsilon
+[01:23:10] ahí pueden elegir alguna métrica
+[01:23:14] que les sirva y quiero volver
+[01:23:16] a recalcar porque creo que acá es donde
+[01:23:18] se arma la confusión
+[01:23:19] y por eso debería cambiarle el nombre
+[01:23:21] cuando yo decía función de error o función de costo
+[01:23:24] que es la que uno tiene que
+[01:23:25] navegar a medida que van modificando los pesos,
+[01:23:29] no es lo mismo que calcular este error.
+[01:23:32] Esto en realidad vendría a ser más una cuestión de calcular la
+[01:23:37] performance o el rendimiento del perceptron, ¿sí?
+[01:23:41] Medio malo que se solapen los nombres,
+[01:23:46] lo cambiaré después.
+[01:23:47] Pero básicamente este error es una especie de rendimiento y el
+[01:23:50] otro es la función de costo, ¿sí?
+[01:23:51] Que me dice hacia dónde yo me tengo que ir moviendo.
+[01:23:55] Tip de implementación es armar un conjunto de datos que este
+[01:24:00] perceptrón sí o sí tiene que resolver.
+[01:24:02] O sea, si yo genero un conjunto de datos que son parte de una
+[01:24:06] recta, este perceptrón lo tiene que aproximar perfecto, ¿sí?
+[01:24:11] Porque precisamente lo que termina modelando es una recta.
+[01:24:14] Entonces, si quieren chequear que les está andando bien,
+[01:24:16] ármense un conjunto de datos igual a X y fíjense cómo es que va
+[01:24:20] ajustando, ¿OK?
+[01:24:23] Bien.
+[01:24:24] último
+[01:24:25] el tipo de entrenamiento que vimos
+[01:24:28] tanto en el algoritmo anterior como en este
+[01:24:30] algoritmo es entrenamiento que se
+[01:24:32] denomina online y esto
+[01:24:34] lo vamos a retomar en la clase que viene pero para
+[01:24:36] que ya se vayan haciendo una idea de
+[01:24:38] a qué me refiero con online
+[01:24:39] es que cuando yo
+[01:24:42] hago esta actualización
+[01:24:43] fíjense que la estoy haciendo cada vez que
+[01:24:46] veo un dato nuevo, o sea yo arranco
+[01:24:48] una época, veo un dato
+[01:24:50] me fijo si al
+[01:24:52] perceptron lo hizo bien y si no lo hizo bien, actualizo los pesos.
+[01:24:56] Y así con el siguiente dato.
+[01:24:58] Y así con el siguiente dato.
+[01:24:59] No es que estoy acumulando datos.
+[01:25:01] Fíjense que el dato número 2 que yo veo ya está basándose o
+[01:25:05] agarrando el perceptron original.
+[01:25:07] Entonces, hay este tipo de esquema donde yo voy
+[01:25:09] actualizando a cada dato que veo, lo vamos a llamar online.
+[01:25:12] Y en la clase que viene vemos el otro esquema.
+[01:25:16] Bien.
+[01:25:19] Última aclaración.
+[01:25:20] nosotros hablamos de la cuestión de la regresión lineal
+[01:25:23] pero qué pasa si yo el conjunto de datos que tengo
+[01:25:25] en lugar de ser aproximadamente lineal
+[01:25:28] en realidad tiene otra forma
+[01:25:30] no necesariamente una recta
+[01:25:34] sino que puede ser algún otro tipo de función
+[01:25:36] bueno, como ya estuvimos charlando
+[01:25:38] y vimos como ejemplo con el perceptrón simple escalón
+[01:25:42] y ahora con el perceptrón simple lineal
+[01:25:44] la función de activación que me termina determinando
+[01:25:47] la salida de la neurona
+[01:25:48] es lo que me permite ir variando, al menos en principio,
+[01:25:52] me permite ir variando qué tipo de problemas o qué tipo de conjuntos de datos
+[01:25:56] yo puedo modelar o aproximar con el perceptrón simple.
+[01:26:00] Entonces, lo que planteamos acá es que uno podría decir, bueno,
+[01:26:03] puedo usar un perceptrón simple no lineal, donde la función de activación
+[01:26:07] puede ser una tangente hiperbólica o una logística,
+[01:26:10] y todo el resto se mantiene igual, porque la fórmula de error
+[01:26:13] la puedo seguir usando tranquilamente.
+[01:26:15] Por otro lado, la fórmula de actualización, como la dejamos en función de la derivada de tita, la puedo seguir usando igual que antes. Sigo usando el método de navegar el gradiente. Todo eso se mantiene exactamente igual.
+[01:26:29] Bueno, acá les dejamos la información de las derivadas.
+[01:26:34] Y fíjense, muy importante, la imagen de estas funciones.
+[01:26:38] Porque antes, cuando nosotros usamos la identidad,
+[01:26:41] yo me podía mover en todos los reales.
+[01:26:43] Pero ahora, si yo uso la tangente hiperbólica,
+[01:26:46] me puedo mover entre menos 1 y 1.
+[01:26:47] Y si yo uso la logística, me puedo mover entre 0 y 1.
+[01:26:51] Entonces, eso va a ser algo que le tienen que prestar atención
+[01:26:53] cuando estén trabajando en el trabajo práctico.
+[01:26:56] Si surgen dudas nos preguntan, pero traten de ver cómo se ajustarían a los distintos problemas que tienen que resolver,
+[01:27:04] dado los intervalos en los que se mueve la salida del perceptrón que están tratando de aprender.
+[01:27:13] Bien, esto no sé por qué nunca me carga. Ah, ahí está.
+[01:27:17] básicamente
+[01:27:20] estas funciones tienen un parámetro beta
+[01:27:22] que me cambian
+[01:27:24] la forma
+[01:27:26] en que se ve esta función no lineal
+[01:27:28] fíjense que puede parecerse
+[01:27:30] más a una lineal, puede parecerse
+[01:27:32] más a un escalón, entonces
+[01:27:33] eso también a tenerlo en cuenta
+[01:27:35] porque si ustedes miran acá, esta parte
+[01:27:38] puede terminar pasando
+[01:27:41] por ejemplo, acá creo que se ve bastante más claro
+[01:27:44] en la logística, fíjense que ustedes tienen
+[01:27:45] menos 2 beta H.
+[01:27:48] Si beta
+[01:27:49] toma valores muy extremos, entonces
+[01:27:52] la función
+[01:27:53] deja de tener
+[01:27:56] una forma
+[01:27:56] sigmoidea y pasa a tener alguna de estas formas
+[01:28:00] un poco más extrema. Y lo mismo
+[01:28:01] puede pasarme si el H
+[01:28:03] se me va también a los extremos.
+[01:28:06] Que el H se calcula en base a los pesos.
+[01:28:08] Entonces si los pesos se me van a los
+[01:28:10] extremos, quizás yo termino teniendo
+[01:28:12] como salida de esta
+[01:28:13] función de activación, algo que no se parece a una sigmoide,
+[01:28:16] que quizás se parece más a otra cosa, ¿sí?
+[01:28:19] No sé si se van a encontrar con esto.
+[01:28:20] Hay grupos que se encuentran y otros que no.
+[01:28:22] Pero para que estén atentos de que cuando usen las funciones
+[01:28:26] no lineales, fíjense cuánto les está dando este producto si ven
+[01:28:31] que empiezan a tener problemas, ¿sí?
+[01:28:33] Como detalle.
+[01:28:36] Bien.
+[01:28:38] Con respecto a la inicialización de pesos,
+[01:28:40] acá les dejo esto para que lo lean.
+[01:28:41] no es obligatorio y
+[01:28:43] probablemente lo repasemos un poco
+[01:28:45] más la clase que viene, pero yo
+[01:28:48] la inicialización de pesos la podría hacer
+[01:28:50] de distintas formas
+[01:28:50] muchas tienen que ver con
+[01:28:53] o sea, en estos tipos de perceptores
+[01:28:56] no, pero cuando pasamos a reanudes neuronales
+[01:28:58] mucho tiene que ver con la convergencia
+[01:29:00] del algoritmo
+[01:29:01] y lograr llegar más rápido y lograr llegar
+[01:29:04] de manera más estable, y acá les queda
+[01:29:05] como ejercicio pensar
+[01:29:07] en esta clase y la que viene
+[01:29:10] también por qué sería más ventajoso inicializar los pesos
+[01:29:16] con valores aleatorios o chiquitos o randoms o lo que
+[01:29:21] fuera versus inicializarlos todos en cero.
+[01:29:25] Eso queda como a modo de ejercicio para que lo piensen.
+[01:29:30] Acá les queda bibliografía.
+[01:29:32] Y para la próxima clase les recomiendo muy fuertemente que
+[01:29:37] miren si pueden esta serie de videos.
+[01:29:39] justo queda entre jueves y martes, así que hay varios días.
+[01:29:42] Nada, esto a gusto de cada uno, pero es una clase que tiene
+[01:29:46] bastante de fórmulas y de índices.
+[01:29:49] Entonces, creo que si ven estos videos para el que no tiene,
+[01:29:53] para el que nunca vio nada de redes neuronales y eso,
+[01:29:57] me parece que les va a servir.
+[01:29:58] Así que nada.
+[01:30:00] Eso es un poco todo.
+[01:30:01] Ah, esto es muy real.
+[01:30:04] No solo online courses, sino también el TP3.
+[01:30:07] como que uno arranca y se oye redes neuronales
+[01:30:09] y bueno, lo que estamos viendo por ahora
+[01:30:11] es regresión lineal
+[01:30:13] así que nada
+[01:30:15] después esperemos
+[01:30:17] que se ponga un poco más interesante
+[01:30:19] ¿preguntas sobre esto?
+[01:30:22] estoy mirando su material
+[01:30:22] bueno, preno acá

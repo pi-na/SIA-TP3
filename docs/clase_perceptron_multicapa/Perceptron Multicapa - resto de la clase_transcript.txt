@@ -1,0 +1,661 @@
+[00:00:00] Perfecto.
+[00:00:03] Bien.
+[00:00:04] Bueno, hasta acá se entendió más o menos.
+[00:00:07] Fue muy accidentado, pero básicamente no hicimos mucho
+[00:00:09] más que decir, bueno, si yo combino las perceptrones,
+[00:00:12] puedo hacer algo un poquito más interesante y puedo empezar a
+[00:00:14] armarme algunas funciones un poco más copadas que las 3 que
+[00:00:20] vimos la clase anterior.
+[00:00:23] ¿Estamos con eso?
+[00:00:30] perfecto bien entonces qué clase de problemas por representar bueno parte de esta flexibilidad
+[00:00:37] de poder combinar los perceptrones como a mí me pinta si viene con esta pregunta no que pueda
+[00:00:45] ser yo con una red neuronal qué tipo de capacidad es qué tipo de restricciones tengo bueno y una de
+[00:00:51] las razones por la cual este campo es muy interesante y tiene como mucha promesa y
+[00:00:56] y hoy por hoy todo el mundo dice, ¿cómo resolver este problema?
+[00:00:58] Y te dicen, tirale una red neuronal.
+[00:01:00] Bueno, es porque existe un teorema que se llama el teorema de aproximación universal
+[00:01:04] que tiene ya sus años y tuvo una expansión hace, no hace poco, pero un poquito después de eso,
+[00:01:11] donde el teorema de aproximación universal nos dice, bueno, en principio,
+[00:01:15] vos con un perceptrón multicapa que tenga al menos una capa oculta
+[00:01:20] y que tenga una cantidad suficiente de neuronas,
+[00:01:23] yo puedo aproximar cualquier función continua, ¿sí?
+[00:01:26] Entonces, eso es sumamente interesante, ¿no?
+[00:01:29] Porque yo estoy pudiendo aproximar cualquier cosa, ¿sí?
+[00:01:37] Con cualquier forma.
+[00:01:38] O sea, quizás yo no sé la forma que tienen las funciones que
+[00:01:41] estoy buscando cuando quiero resolver un problema,
+[00:01:43] pero sí esta herramienta me dice, che, o sea,
+[00:01:48] no importa la forma que tenga esa función bajo ciertas
+[00:01:51] restricciones, pero este perceptrón podría llegar a
+[00:01:55] representarla. Entonces eso es algo importantísimo para el área. ¿Cuál es la intuición detrás de lo
+[00:02:02] que viene a ser este teorema? Bueno, viene un poco de la mano del ejemplito chiquito que vimos,
+[00:02:07] de que yo puedo ir aproximando al combinar los distintos perceptrones. O sea, yo podría ir
+[00:02:13] dibujándome, por ejemplo, los rectángulitos que me van aproximando esa función, controlando con
+[00:02:18] los pesos, el ancho de esos rectángulos, la altura de esos rectángulos. El ir modificando los pesos
+[00:02:24] me va, para la que vimos, el escalón que vimos, me va cambiando esas cosas, ¿sí?
+[00:02:31] El ancho que tiene, la altura que tiene.
+[00:02:32] Entonces, eso es un poco la intuición de cómo yo, en principio,
+[00:02:36] podría ir armándome toda esta superficie que estoy buscando.
+[00:02:40] En la realidad, eso pasa así.
+[00:02:42] No hay todo un área de investigación que se encarga de tratar de explicar
+[00:02:48] cuáles son estas funciones que se van formando y cómo es que se van formando.
+[00:02:52] Pero básicamente este teorema es súper potente porque me dice, con esto podrías en principio resolverlo.
+[00:03:01] ¿Eso quedó claro? De la motivación de por qué el área de redes neuronales está tan buena para resolver problemas bastante dispares en principio.
+[00:03:22] Bien.
+[00:03:24] Perfecto.
+[00:03:26] Este es un screenshot de los artículos de este tema están al
+[00:03:30] final, pero algo que les quería dejar es este screenshot que
+[00:03:35] nos dice un par de cosas importantes que son como los
+[00:03:39] asteriscos de términos y condiciones que uno tiene que
+[00:03:42] leer un poco más.
+[00:03:43] Bueno, lo que ellos plantean en el paper es que si bien ellos
+[00:03:47] muestran qué podría llegar a hacer con la herramienta,
+[00:03:52] Hay algunas preguntas que quedan abiertas sobre el cómo, ¿sí?
+[00:03:55] Por ejemplo, lo primero que está resaltado dice que important
+[00:03:58] questions remain to be answered, deal with visibility.
+[00:04:01] Es decir, ¿cuántos términos vos requerís para llegar a una
+[00:04:05] aproximación de cierta calidad para el problema que estás
+[00:04:09] buscando?
+[00:04:10] ¿Cuántos nodos pongo yo en esa capa oculta o cuántas capas uso
+[00:04:14] si voy a usar más de una capa?
+[00:04:16] Eso son cosas que esto no contesta,
+[00:04:19] sino que son cosas abiertas.
+[00:04:23] Y por otro lado, abajo dice, bueno,
+[00:04:25] que sospechan que la mayoría de los problemas interesantes van
+[00:04:30] a requerir muchísimos términos.
+[00:04:33] Y fíjense que esto está escrito en 1989 y es lo que pasa hoy
+[00:04:38] por hoy, ¿sí?
+[00:04:39] Para problemas bastante más potentes como CHPT o las
+[00:04:45] herramientas de generación de imágenes o los sistemas de reconocimiento facial. Bueno, todas
+[00:04:50] esas redes neuronales que se encuentran por detrás, el día de hoy tienen muchísimas neuronas. Ya
+[00:04:56] entramos en los billones de neuronas, ¿sí? Y si bien esto ahora se solventa esa escala por mejoras
+[00:05:07] en el hardware, en el software y otras áreas de informática, en el momento era una restricción
+[00:05:14] bastante grande, ¿sí?
+[00:05:16] Cómo yo logro hacer algo interesante y que lo pueda
+[00:05:19] entrenar y que pueda usarlo como herramienta para que me corra
+[00:05:24] en una computadora, ¿sí?
+[00:05:27] Entonces, hasta acá venimos bien.
+[00:05:30] Esto es solamente medio preámbulo de por qué nos
+[00:05:34] importa, por qué es relevante el área.
+[00:05:38] Así que vamos a pasar un cachito a lo que es el perceptor
+[00:05:41] multicapa y a la notación.
+[00:05:44] el cursor se ve, ¿no? Sí.
+[00:05:49] Eso me da duda cuando paso de una a la otra.
+[00:05:51] Porque voy y vengo porque no veo el chat en la otra.
+[00:06:01] ¿Se ve? ¿No se ve? Sí, se ve.
+[00:06:03] Ok, perfecto. Bueno.
+[00:06:04] Entonces, tenemos el perceptor multicapa, ¿sí?
+[00:06:07] Que arbitrariamente puede tener N cantidad de capas en el medio.
+[00:06:10] también puede tener n cantidad de neuronas en cualquiera de las capas ocultas,
+[00:06:17] nunca necesariamente es la misma, mismo la capa de salida.
+[00:06:20] Fíjense que M grande va a ser la letra que nosotros indiquemos como la cantidad de capas,
+[00:06:25] incluyendo la capa de salida, que le dejamos la O,
+[00:06:29] que era la salida de la neurona de la clase anterior, ¿sí?
+[00:06:32] Pero fíjense que ahora yo puedo tener más de una salida de neurona.
+[00:06:36] Y después, bueno, tenemos capa menos 1.
+[00:06:38] la D grande va a ser la letra que indique la salida de las neuronas en las capas ocultas.
+[00:06:44] Después los X vuelven a ser los inputs.
+[00:06:47] Y tenemos las mismas letras que antes, P es la cantidad de datos, N cantidad de variables.
+[00:06:53] Ahora, les pregunto, ¿se les ocurre por qué yo querría tener más de una neurona en la capa de salida?
+[00:07:02] No sé si alguno que ya está más familiarizado con esto vio algún ejemplo o se les ocurre por qué podría ser.
+[00:07:23] Y eso si tenés, digamos, las salidas son varias categorías, no solamente sea una cosa u otra.
+[00:07:29] Entonces, si tenés, no sé, 3 opciones de salida, tendrías unas capas de salida que sean 3 y cada una si llega hasta 1 o llega hasta algún valor más elevado, tomás esa como la elección.
+[00:07:43] Bien, perfecto. Fíjense, tipo el video de categorizar los números. Bárbaro.
+[00:07:48] Hay un mini detalle que dice para poder resolver problemas con más variables.
+[00:07:55] Nosotros le vamos a llamar variables o features a los distintos X sub i,
+[00:08:02] que vendrían a ser la información que yo tengo del conjunto de datos,
+[00:08:08] vendrían a ser mi X grande, que la quiero mapear a una salida.
+[00:08:12] Igual lo que dijiste abajo está bien, como el video de categorizar los números.
+[00:08:15] Sí, cuando yo digo problemas de clasificación múltiple, ahí quizás querría tener una neurona por cada clase.
+[00:08:23] Pero, ¿por qué querría hacer eso?
+[00:08:25] Porque yo podría tener una única neurona que me diga un número del, no sé, 0 al 9, ponele, si fuera un problema de clasificación.
+[00:08:35] Bueno, a mí ese esquema es bastante ineficiente y no sirve para modelar algo más interesante que es 10 neuronas que cada una te dé la probabilidad de que sea el número.
+[00:08:50] que es algo un poquito más real, ¿sí?
+[00:08:52] Porque la red no aprende tan bien o no sabemos bien qué está
+[00:08:58] aprendiendo.
+[00:08:58] Entonces, es mejor tener una especie de array que me
+[00:09:03] devuelva las probabilidades de las distintas clases que algo
+[00:09:06] muy categórico que yo no tengo información suficiente sobre si
+[00:09:10] esa clasificación categórica es con confianza o sin confianza,
+[00:09:15] ¿sí?
+[00:09:15] Así que, bueno, esto está buenísimo porque podemos ir
+[00:09:18] resolviendo distintos problemas.
+[00:09:20] Ahora, si se acuerdan la clase anterior habíamos hablado
+[00:09:25] bastante de lo que era el bias, de cómo lo agregamos al conjunto
+[00:09:30] de datos para que las cuentas nos queden más fáciles.
+[00:09:33] Nos vamos a olvidar esta clase de lo que es el bias.
+[00:09:36] No lo vamos a incluir, pero al final de las diapositivas hay
+[00:09:41] una sección que habla precisamente de cómo
+[00:09:44] incorporamos el bias en el participo multicapa, ¿sí?
+[00:09:47] Es para que las cuentas no nos queden más quilombo de lo que
+[00:09:49] Bien, ahora, ¿cómo calculamos la salida de la red?
+[00:09:55] Es decir, este proceso se va a llamar un feedforward pass, ¿sí?
+[00:10:00] Sobre la red neuronal.
+[00:10:02] Fíjense que uno podría decir, bueno, se complejizó el sistema, ¿no?
+[00:10:08] Yo ahora tengo que hacer el cálculo de todo esto y decidir cuál es la salida de la neurona.
+[00:10:14] Pero si nosotros nos fijamos, en realidad cada una de estas neuronas, si yo la miro individualmente, sé cómo calcular la salida. Porque básicamente yo sé que acá hago el producto interno de todos estos pesos y le aplico la función de activación de esa neurona y eso es la salida.
+[00:10:37] Entonces, un feedforward pass lo que implica es desde la base, o sea, desde esta base hacia arriba, yo voy a ir calculando las salidas de todas las neuronas.
+[00:10:50] Quiero ver si voy a hacer algo un poco más inteligente. Voy a abrir esto porque esta clase no contaba con la falta de habilidad de dibujar.
+[00:11:05] Vamos a poner así y voy a poner, ya fue, la pantalla completa. Bien, fíjense que yo acá, ¿no? Cuando estamos mirando esto, cuando estamos mirando esto, si yo agarro una neurona cualquiera, ¿sí? La de 4, pongamos B4 en la capa 1, esta nosotros sabemos.
+[00:11:33] Creo que dejaste de compartir.
+[00:12:03] 1 sub 4. Entonces, esto básicamente,
+[00:12:06] como yo calculo esa neurona, es,
+[00:12:07] ok, esto era la sumatoria
+[00:12:10] de los pesos de esa neurona
+[00:12:12] por lo que alimenta esa neurona y a todo esto le calculo la funci de activaci Esto vendr a ser unos simil par Entonces b los doble B son todos los pesos que est conectando a la neurona con el input
+[00:12:28] que vendrían a ser estos pesos de acá.
+[00:12:34] Entonces, esto no es más que ir neurona por neurona haciendo ese cálculo y alimentándolo a la capa siguiente.
+[00:12:41] Y así sucesivamente a la capa siguiente.
+[00:12:43] Entonces, lo que se llama feedforward pass,
+[00:12:46] después de haber visto cómo funciona extensivamente la
+[00:12:49] neurona individual, no tiene mucho misterio, la verdad.
+[00:12:55] ¿Esto quedó claro cómo es que se calcula?
+[00:12:58] Después igual vemos la fórmula bien.
+[00:13:03] Ahí me van a tener que contestar porque, sí, perfecto.
+[00:13:08] Entonces, acá quedan las fórmulas.
+[00:13:11] Si se acuerdan, nosotros la que conocíamos era la de acá abajo,
+[00:13:14] ¿no?
+[00:13:14] La que era el producto interno de los inputs por los pesos y
+[00:13:20] aplicamos la función de activación.
+[00:13:22] Pero esto se sigue respetando únicamente para la primer capa
+[00:13:26] inmediatamente después de los inputs, ¿sí?
+[00:13:31] En cambio, para las capas internas,
+[00:13:33] yo lo que voy a estar usando como los X van a ser las
+[00:13:36] activaciones de las capas anteriores.
+[00:13:38] Y después la capa de salida, que en realidad la puse en una fórmula distinta como para mantener esto de la O grande,
+[00:13:46] que es la salida del perceptron completo, pero la fórmula es exactamente igual que la de abajo.
+[00:13:54] Dependo de las salidas de las neuronas anteriores, la multiplico por los pesos y aplico la función de activación.
+[00:14:01] O sea, estos 3 procesos son iguales.
+[00:14:03] Es más, si yo los inputs los llamo como la capa 0, ¿sí?
+[00:14:10] Entonces, estas 3 fórmulas las puedo simplificar directamente
+[00:14:14] en una sola fórmula, ¿OK?
+[00:14:18] Y último detalle, fíjense que acá tengo W chiquitas y acá
+[00:14:21] tengo una W grande.
+[00:14:23] Eso no es accidental, es para marcar que los W estos son los
+[00:14:27] de la capa de salida, ¿sí?
+[00:14:29] los que conectan a las neuronas de la capa de salida.
+[00:14:33] Pero esencialmente es el mismo esquema de neurona para todos.
+[00:14:37] ¿OK?
+[00:14:41] Acá está la fórmula como les quedaría simplificada si
+[00:14:44] llamamos al lado grande como la B con la M grande y al XY con
+[00:14:48] la capa 0.
+[00:14:53] ¿Alguna pregunta?
+[00:14:59] No llego a ver si...
+[00:15:03] De última, Joaco, bueno, avísame si alguien hace alguna pregunta.
+[00:15:07] Bueno, ¿cómo va cambiando el algoritmo?
+[00:15:10] El algoritmo para entrenar al paracetamol multicapa va a ser muy parecido
+[00:15:14] de lo que es el algoritmo que usábamos para entrenar al paracetamol simple.
+[00:15:20] ¿Qué vamos a tener distinto ahora?
+[00:15:22] Bueno, en lugar de inicializar los pesos de una neurona,
+[00:15:26] tenemos que inicializar los pesos de toda la arquitectura.
+[00:15:30] Ahí va a haber que definir cómo es esa arquitectura.
+[00:15:33] Vamos a setear el learning, esto era igual que antes.
+[00:15:36] Y fíjense que la primer parte, ¿sí?
+[00:15:39] De cómo yo calculo la salida de la neurona,
+[00:15:42] ahora está dada por este feedforward path.
+[00:15:44] ¿Dónde tenemos?
+[00:15:45] La fórmula que acabamos de ver, punto.
+[00:15:47] No hay mucho más misterio.
+[00:15:49] Entonces, ¿dónde está el cuid de la cuestión con lo que es las
+[00:15:53] redes neuronales?
+[00:15:54] ¿Sí?
+[00:15:56] ¿Qué pasa con tener que actualizar los pesos y el Vaya?
+[00:16:00] ¿Cómo lo vamos a hacer?
+[00:16:02] O sea, ¿cómo entrenamos esta red neuronal?
+[00:16:07] Fíjense que, si esto no me falla la memoria, bien.
+[00:16:11] Fíjense que, ¿qué pasa con el error en la capa de salida?
+[00:16:17] ¿Sí?
+[00:16:18] Que supongamos que nosotros tenemos un problema de,
+[00:16:24] como los anteriores, ¿no?
+[00:16:25] Queremos aproximar un valor que nosotros tenemos la salida esperada y tenemos este perceptrón multicapa.
+[00:16:33] ¿Qué pasa con el error para esta neurona verde?
+[00:16:43] Voy a hacerlo de solamente compartir la pestaña porque si no es como que no puedo, les tengo que estar cortando.
+[00:16:55] ¿Se les ocurre que puedo yo, o sea, con qué fórmula quizás yo podría ver el error en esta neurona?
+[00:17:16] Cri, cri. Exacto.
+[00:17:19] Bueno, lo que podríamos usar es la misma fórmula que antes.
+[00:17:23] podríamos usar, recordando que nosotros teníamos esta forma
+[00:17:29] de actualizar del W anterior más el delta W,
+[00:17:33] que el delta W lo hacíamos por gradiente descendente,
+[00:17:36] podríamos decir, bueno, en la capa de salida yo sigo teniendo
+[00:17:39] salida esperada y sigo teniendo la salida de la neurona y sigo
+[00:17:43] pudiendo usar el error al cuadrado entre lo que yo espero
+[00:17:49] y lo que me devolvió.
+[00:17:51] ¿Sí? Esa fórmula tranquilamente la puedo seguir usando para ver cuál es el error del perceptron multicapa en la capa de salida. ¿Eso quedó claro? La única distinción ahora es que por cada neurona yo voy a tener que calcular esa diferencia al cuadrado. Después ponemos la fórmula, pero básicamente es eso.
+[00:18:16] O acá ya se perdieron.
+[00:18:21] Va bien, bien, perfecto. Entonces, ojo ya, en la capa de salida tengo la forma de calcular el error. Ahora, ¿qué pasa cuando yo estoy en una neurona del medio? ¿Cuál es el error de la neurona del medio?
+[00:18:36] ¿Se les ocurre algo? ¿No?
+[00:18:50] Bueno, ni idea. Gracias.
+[00:18:58] Bien, perfecto.
+[00:18:59] Entonces, claro, exactamente ese es el sentimiento.
+[00:19:02] La neurona del medio, ni idea.
+[00:19:04] O sea, ¿cuál es la salida esperada de un nodo 5 capas hacia atrás
+[00:19:10] cuando yo lo que quiero es clasificar un número entre el 0 y el 9, por ejemplo?
+[00:19:15] Bueno, tenemos que nosotros encontrar una forma de indicarle a esa neurona, che, la estás pifiando, hay que ajustar los pesos como para que la salida de la capa sea lo que yo estoy esperando, ¿sí? La salida de la neurona y del perceptron al completo.
+[00:19:33] Entonces, vamos a usar lo mismo en realidad.
+[00:19:37] Uno dice, che, bueno, ¿te vas a tener una magia nueva?
+[00:19:40] No.
+[00:19:41] O sea, vamos a terminar usando el mismo algoritmo que estábamos
+[00:19:44] usando antes, que era el agrediente descendente.
+[00:19:46] Y vamos a ver cómo yo logro decirle a esa neurona que está
+[00:19:51] en el centro que hay que ajustar los pesos en alguna dirección
+[00:19:56] distinta.
+[00:19:58] Entonces, ¿qué va a pasar acá?
+[00:20:00] Ya vamos haciendo el algoritmo agrediente descendente.
+[00:20:02] Bueno, la cantidad de parámetros que empezamos a tener es mucho mayor y empieza a ser bastante difícil encontrar la solución. A medida que uno tiene más y más y más parámetros, no es tan sencillo navegar el espacio de la función de error en función de los pesos para encontrar una solución óptima.
+[00:20:24] O sea, todos los problemas que vieron en la clase de
+[00:20:27] optimización y que llamamos ayer en la parte del parcentrón
+[00:20:30] lineal, empiezan a tomar más cuerpo y a notarse más.
+[00:20:35] Fíjense que, yo todavía no lo mencioné,
+[00:20:38] pero lo que vamos a usar es esencialmente, es más,
+[00:20:44] colegio para algunos y análisis uno para otros o ingreso.
+[00:20:49] Pero básicamente, ¿cómo yo hago para tener una métrica o una dirección de cómo los pesos en las capas ocultas afectan a la capa de salida?
+[00:21:03] Bueno, uso la regla de la cadena.
+[00:21:05] O sea, si yo necesito entender cómo cambia el error respecto de los pesos en la capa interna, bueno, nosotros sabemos cómo cambia el error respecto de una neurona en la capa de salida.
+[00:21:17] Y sabemos respecto de los pesos que conectan a esa neurona. Pero esos pesos están multiplicando con la activación de la anterior y así sucesivamente. Entonces, vamos a combinar el mecanismo que ya habíamos visto con la old regla de la cadena de la derivada. Nada muy espectacular.
+[00:21:37] Bueno, alguna aclaración sobre los índices.
+[00:21:43] Lo menciono rápido, pero para que no se pierdan.
+[00:21:47] O, ya dijimos, es la salida de la neurona, las Ds,
+[00:21:49] activación de la capa oculta, los X son los inputs.
+[00:21:54] El I lo voy a usar para referirme a la neurona de la
+[00:21:57] capa de salida.
+[00:21:57] O sea, este sería O sub I, donde 1 es el I.
+[00:22:01] Y si no, cuando aparece el I, quiere decir que me estoy
+[00:22:04] refiriendo a la capa de arriba de la que estoy parado.
+[00:22:07] Después J es un índice de la neurona de la capa intermedia y el K es como el contrapuesto del I. O es el índice de la neurona de entrada, o sea, de estos inputs de entrada, o cuando yo estoy parado acá, el K se va a referir a neuronas de la capa de abajo.
+[00:22:25] Entonces, cuando yo estoy parado en un J, I me dice arriba, K me dice abajo.
+[00:22:32] Después, por otro lado, el M es un índice de la capa intermedia, P cantidad de datos, mu el dato en particular.
+[00:22:38] Fíjense acá, bueno, hay un mini resumencito de cómo se dice el peso sináptico, neurona,
+[00:22:44] peso sináptico es de la última capa, neurona es de la capa de salida.
+[00:22:48] ¿Acá alguna duda de la anotación? ¿Algo que los confundió?
+[00:22:51] No.
+[00:22:55] Hay una mini duda
+[00:23:00] Sí
+[00:23:01] O sea, siempre es como algo secuencial
+[00:23:04] Que tenemos que calcular desde
+[00:23:05] Las neuronas de salida hasta la capa 0
+[00:23:08] Como que hay que ir en ese orden
+[00:23:09] La parte de las derivadas
+[00:23:11] Claro, para encontrar tipo
+[00:23:13] Los errores de cada capa o cada neurona
+[00:23:16] Sí, sí, sí
+[00:23:17] Uno arranca la capa de salida
+[00:23:19] Que es donde vos sabés
+[00:23:20] Cuál es el error
+[00:23:23] Con respecto a las neuronas de la capa de salida
+[00:23:25] y eso lo vas, ahora lo vamos a ver, pero lo vas como retropropagando,
+[00:23:30] ya dije el nombre del algoritmo, hacia abajo.
+[00:23:32] Entonces, feed forward pass es de abajo hacia arriba,
+[00:23:35] porque vas a arrancar con los datos y querés llegar a la salida de la neurona.
+[00:23:39] Calcular el error y actualizarlo en los pesos es de arriba hacia abajo.
+[00:23:44] Perfecto, gracias.
+[00:23:47] De nada.
+[00:23:48] Bien, entonces, ¿cuál es la explicación conceptual de lo que viene a ser esto
+[00:23:54] de la regla de la cadena para que lo vean un poquito más
+[00:23:57] gráfico.
+[00:23:57] Y justo hoy que no tengo lápiz, no puedo dibujar gracias a esta
+[00:24:02] diapositiva.
+[00:24:03] Bueno, básicamente, supongamos que yo tengo este perceptrón
+[00:24:06] súper básico, súper simple.
+[00:24:10] Uy, esperen que.
+[00:24:11] Súper básico, súper simple.
+[00:24:13] Entonces, ¿cómo yo actualizo el peso W11?
+[00:24:18] Que es el que me conecta.
+[00:24:19] Capa de salida con, che, denme un segundo,
+[00:24:22] voy a apagar el Slack porque me está matando.
+[00:24:24] no s una bien entonces Un segundo Un segundo Esto Bien entonces yo actualizo el peso que conecta
+[00:24:43] la capa O con la anterior?
+[00:24:46] Bueno, fíjense que acá tenemos el camino que recorre la
+[00:24:52] derivada para saber cómo se modifica con respecto al peso en
+[00:24:57] cuestión que yo quiero cambiar.
+[00:24:59] Entonces, ¿el error de qué depende?
+[00:25:00] Bueno, de la diferencia entre la salida esperada y la neurona.
+[00:25:04] ¿La salida de la neurona y quién depende?
+[00:25:06] Bueno, de la excitación de la neurona.
+[00:25:08] ¿Y la excitación de la neurona y quién dependía?
+[00:25:10] Bueno, era el producto interno entre los pesos,
+[00:25:12] que ahora es un peso, y la activación de la salida anterior.
+[00:25:17] Entonces, aplico la regla de la cadena y voy a obtener la
+[00:25:20] fórmula.
+[00:25:21] No es mucho más magia que eso.
+[00:25:23] Recorro el camino que me indica la regla de la cadena.
+[00:25:26] Ahora, ¿qué pasa cuando estoy en un peso interno?
+[00:25:29] Uno más hacia atrás.
+[00:25:31] ¿Cómo calculo la derivada del error con respecto a ese peso
+[00:25:35] para saber cómo moverme?
+[00:25:37] Bueno, nada, el error dependía de todo lo que dependía antes.
+[00:25:40] Y ahora, en lugar de quedarme con el camino de la izquierda,
+[00:25:45] sigo por el camino de la derecha porque a mí me interesa cómo
+[00:25:48] cambia este error con respecto a este peso.
+[00:25:52] ¿Sí? Y acá no hice más magia que, nada, seguir aplicando toda la regla de la cadena. Y lo mismo va a pasar a medida que yo me voy un paso hacia atrás. ¿Sí? ¿Cómo se ve la derivada del error con respecto de ese peso que ya está dos capas hacia adentro? Bueno, es cada vez más largo.
+[00:26:11] Entonces, fíjense que yo cada vez tengo más términos que ir calculando para encontrar cómo modificar ese W1,1,1 para que el error se acerque a lo que yo estoy buscando. ¿Sí? ¿Esto más o menos quedó claro? Me agrego el Dory para hacer checkpoint y no matarlos.
+[00:26:37] Bien, entonces, joya.
+[00:27:07] Hacerlo que así hule ya sea para la época, inclusive hoy para la escala. Entonces aparecen estos 3 investigadores, Rumenhardt, Hinton y Williams, que trabajan en un algoritmo que se llama retro propagación o back propagation.
+[00:27:19] Y la idea es que este algoritmo es el que nos da una forma de actualizar los pesos y de calcular estos gradientes para cada uno de los pesos de una forma un poquito más óptima que si yo hiciera la cuenta para cada peso en particular.
+[00:27:36] No es que backpropagation es la idea esta de hacer la derivada, sino que es el algoritmo para calcular lo que acabamos de ver, que es un entrenamiento basado en gradiente descendente clásico, o sea, normal.
+[00:27:54] Entonces, ¿qué es lo que ellos introducen?
+[00:27:59] Bueno, lo muestro acá.
+[00:28:01] Lo que ellos introducen es una magnitud que vamos a llamar
+[00:28:05] delta, que es la letra delta así.
+[00:28:09] Espero que me estén viendo.
+[00:28:10] Y no el delta W que veíamos antes,
+[00:28:14] sino que este delta es una forma de expresar el error o de traer
+[00:28:19] la información del error.
+[00:28:21] Y de luego, ese, esa expresión del error, reutilizarla y retropropagarla hacia capas cada vez más profundas.
+[00:28:30] Entonces, ¿qué va a ser el delta?
+[00:28:33] Bueno, fíjense que algo que pasaba, yo no sé si lo notaron en los dibujitos que vimos antes,
+[00:28:40] es que empieza a aparecer esta idea del camino ya recorrido.
+[00:28:43] Hay un montón de cálculos, que si ustedes ven acá, ¿no?
+[00:28:47] Por ejemplo, para este camino rojo hay varias de estas multiplicaciones que yo ya hice en este camino.
+[00:28:55] Y lo mismo si me voy al camino más largo.
+[00:28:57] Hay varias de estas multiplicaciones que yo ya hice en este camino y que a su vez las hice en este camino.
+[00:29:04] Entonces, eso va a ser un poco la idea de lo que yo quiero retropropagar hacia atrás.
+[00:29:09] Y volvemos hacia acá.
+[00:29:10] fíjense que estos primeros dos términos que son los que contienen cómo cambia el error con respecto a la excitación de esa neurona a la que yo estoy queriendo cambiarle los pesos.
+[00:29:24] Esa expresión es con algún mini detalle lo que yo voy a terminar llamando el delta.
+[00:29:30] Y que, por ejemplo, esta neurona me va a quedar con un delta asociado.
+[00:29:34] Por otro lado, acá, esta parte del camino es la que después voy a reutilizar en la otra capa que le sigue. Entonces, esto entero es lo que yo me voy a guardar como delta de la neurona que está acá.
+[00:29:49] Pero fíjense que esto, a su vez, usa parte del delta que acabamos de ver acá.
+[00:29:59] Esto rojo es estos primeros dos términos.
+[00:30:02] Entonces, el delta de esta otra neurona usa el delta primero que vimos.
+[00:30:09] Y lo mismo va a pasar a medida que yo voy avanzando.
+[00:30:14] Entonces, ¿cuál es la idea de este delta?
+[00:30:19] optimizar los cálculos que yo estoy haciendo cuando calculo
+[00:30:23] cómo actualizar los pesos, ¿sí?
+[00:30:26] Y generar una especie de expresión del error en las capas
+[00:30:31] más ocultas de la red neuronal.
+[00:30:34] ¿Esto quedó más o menos claro?
+[00:30:41] Mini aclaración.
+[00:30:42] Si ustedes me dicen, che, si esto lo tengo que programar hoy,
+[00:30:46] ni idea la fórmula que tengo que usar.
+[00:30:48] O sea, ¿cómo pasamos de la explicación conceptual a la
+[00:30:51] fórmula?
+[00:30:51] Todavía está bien que eso les haga ruido porque no, o sea,
+[00:30:56] todavía no lo hicimos.
+[00:30:57] Mi pregunta es si por ahora vienen bien con la idea
+[00:31:00] conceptual de esto de la retropropagación y de por qué
+[00:31:04] necesito el delta más hacia adentro.
+[00:31:10] La idea se sigue.
+[00:31:12] Bien, perfecto.
+[00:31:13] ¿Cómo va cambiando solo la idea?
+[00:31:15] De ahí al hecho hay otra cuestión.
+[00:31:19] Bien, ¿cómo va cambiando el algoritmo?
+[00:31:20] Bueno, fíjense que en el ítem 2 decimos, OK,
+[00:31:24] uso el optimizer con la regla de la cadena.
+[00:31:28] ¿Y qué algoritmo uso para todo eso?
+[00:31:30] Pack propagation.
+[00:31:31] Joya.
+[00:31:32] ¿Por qué es tan importante?
+[00:31:33] Ya lo fuimos charlando, pero es esta cuestión de que podemos
+[00:31:37] determinar el error en capas ocultas de una manera más
+[00:31:40] eficiente.
+[00:31:41] Algo importante es que es una herramienta práctica que aporta
+[00:31:44] evidencia empírica.
+[00:31:45] al teorema que vimos, que en realidad es un teorema teórico.
+[00:31:48] Entonces, esto revive un poco el interés, bueno, un poco no,
+[00:31:52] revive el interés en lo que es el área de inteligencia artificial.
+[00:31:55] ¿Y por qué lo seguimos viendo?
+[00:31:56] Bueno, porque se usa todavía hoy este algoritmo.
+[00:32:02] Y acá dice, ¿el concepto de entrenar RISD se hace posible con back-propagation?
+[00:32:05] Sí, asterisco, hay otras cuestiones que también ayudan al área B
+[00:32:11] y que Rodri las va a presentar más adelante en las clases de Deep Learning.
+[00:32:17] Pero bueno, súper importante el algoritmo.
+[00:32:22] No sé si están para hacer un break o si quieren seguir un poco más.
+[00:32:27] En realidad me parece que en general acá ha tomado un break
+[00:32:30] porque ahora viene todo un chorro de fórmulas.
+[00:32:33] Así que, ¿quieren hacer 5 o 10?
+[00:32:39] Dale.
+[00:32:39] Bien, vamos a hacer hasta 10.
+[00:32:45] Y 10 o el cuarto, lo que prefieran.
+[00:32:49] No queda mucho.
+[00:32:54] Bueno, ¿qué es lo que queda del resto de la clase de hoy?
+[00:33:01] Vimos todo lo conceptual, así que ahora la idea es pasar un poquito por las fórmulas
+[00:33:06] para que ya les queden, para lo que es el algoritmo.
+[00:33:09] y después hablar un poquito de las cuestiones del algoritmo de entrenamiento.
+[00:33:13] Así que, bueno, arranquemos con eso.
+[00:33:17] Lo que me gustaría hacer ahora es armar estas equivalencias entre lo que es las fórmulas del perceptrón simple,
+[00:33:23] cómo calculamos las tres cosas que nos interesan y cómo se traduce en el perceptrón multicapa.
+[00:33:30] Fíjense que lo que es el proceso para obtener la salida de la neurona, ahora de la red neuronal,
+[00:33:35] Ya lo vimos, era esto que llamamos el feedforward pass.
+[00:33:40] Y que podíamos comprimir para las distintas capas que por ahí
+[00:33:44] dependían de cosas diferentes, ya fuera el input o la salida de
+[00:33:50] neuronas en la capa oculta, etcétera.
+[00:33:53] Bueno, podíamos comprimirlo todo en una sola fórmula que se
+[00:33:56] expresaba de esta manera.
+[00:33:58] Aclaración, los índices no están completos.
+[00:34:01] Fíjense, por ejemplo, acá que dice que cada va de 1 hasta,
+[00:34:03] mi idea es para no sobrecargar demasiado, ¿sí?
+[00:34:10] Pero fíjense que yo debería, en realidad, antes iba de hasta N.
+[00:34:15] Yo acá lo que debería hacer es fijarme, bueno,
+[00:34:17] todas las neuronas o todos los inputs de la capa anterior, ¿sí?
+[00:34:21] Cuántos son y usar eso hasta donde voy, ¿sí?
+[00:34:24] Con el K.
+[00:34:26] Después, te hablamos de, OK, ¿qué función de costo voy a usar yo?
+[00:34:29] Y dijimos que en principio podríamos usar la misma función, pero que tenía una cuestión extra, que es esto de que yo ahora tengo varias neuronas en la capa de salida. Puedo tener una, pero puedo tener 10, un millón, las que quiera. Entonces, el costo, el error no depende de una sola neurona, sino que tengo que agregar la sumatoria sobre todos los nodos que tengo en la capa de salida.
+[00:34:56] Y qué es lo que nos queda por hacer.
+[00:35:00] ¿Qué es lo más tedioso?
+[00:35:01] Bueno, el proceso de aprendizaje y cómo quedan las fórmulas para
+[00:35:05] actualizar los distintos W.
+[00:35:08] Esto no lo voy a volver a rebasar,
+[00:35:09] pero les queda ahí como un reminder de la anotación.
+[00:35:12] Es más, creo que la tengo duplicada.
+[00:35:15] Vamos a empezar.
+[00:35:16] El ejemplo que vamos a mostrar ahora está hecho para un dato
+[00:35:20] de entrada y la idea es que ustedes lo extiendan al conjunto.
+[00:35:23] ¿Sí?
+[00:35:24] ¿Sí?
+[00:35:25] Vamos a hacer, como el nombre del algoritmo lo indica,
+[00:35:29] la retropropagación arrancando desde arriba.
+[00:35:33] Me va a interesar saber cuál es este delta W para lo que es la
+[00:35:37] capa de salida.
+[00:35:38] O sea, que J va a ser igual a M.
+[00:35:40] Y acá es algo que en realidad, o sea,
+[00:35:42] uno ve fórmula, fórmula, fórmula,
+[00:35:44] pero no hay nada mucho más misterioso que acá tengo la
+[00:35:49] fórmula que yo ya sé cómo es el error,
+[00:35:53] cómo es la salida de la neurona, cómo es la excitación de la neurona.
+[00:35:58] Y lo único que tengo que hacer es agarrar cada uno de los términos de la regla de la cadena y reemplazarlo.
+[00:36:02] O sea, agarro la derivada de E con respecto a O, es esto, derivo con respecto a O.
+[00:36:11] Fíjense que yo acá estoy haciendo para un peso específico.
+[00:36:17] Supongamos que es este W grande 2, 2.
+[00:36:21] Entonces, cuando yo uso la expresión del error que tiene la sumatoria sobre i, el único término que me sobrevive es el O2, ¿sí?
+[00:36:32] Porque es el que está conectado con este W22.
+[00:36:35] Los otros términos de la sumatoria se me van.
+[00:36:38] Por eso acá es que la sumatoria desapareció.
+[00:36:41] Entonces, ¿cuál va a ser el delta?
+[00:36:44] Uy, se me fue.
+[00:36:46] va a ser el delta que nosotros estuvimos charlando Dijimos OK no solo quiero actualizar este peso sino todos los dem Y dijimos que la forma en que yo iba a expresar cierta noci
+[00:36:57] de error y después trasladarla hacia las capas ocultas era a
+[00:37:00] través de esta magnitud delta.
+[00:37:02] Que fíjense cómo se define para la capa de salida.
+[00:37:05] Se va a definir como la diferencia entre la salida
+[00:37:08] esperada, la neurona, por la derivada de la función de
+[00:37:12] activación evaluada en la excitación de esa neurona, ¿sí?
+[00:37:15] Que vendría a ser esta de acá.
+[00:37:18] Esto quiero ver si tenía.
+[00:37:19] No.
+[00:37:20] Qué lástima.
+[00:37:21] Bueno.
+[00:37:23] Así es como vamos a definir el delta para cada una de las neuronas de la capa de salida.
+[00:37:28] Y algo importante es que nosotros, a medida que vamos recorriendo el algoritmo,
+[00:37:33] la neurona, ¿sí?
+[00:37:36] Tiene distintas magnitudes que me interesan.
+[00:37:39] Una es la excitación, H.
+[00:37:41] Otra es la salida, O grande, O B grande.
+[00:37:44] Otra cosa va a ser este delta.
+[00:37:46] El delta es algo que yo puedo calcular y que me queda asociado a cada una de las neuronas.
+[00:37:51] Eso yo me lo puedo ir guardando y sé que para la neurona O2, el delta es delta sub 2.
+[00:38:00] Entonces, ¿cómo me queda la expresión del delta W en función de el delta, valga la redundancia?
+[00:38:07] es el dendrate por delta por b grande j supra m menos 1.
+[00:38:16] Fíjense que ya no está el menos.
+[00:38:20] Si ustedes se acuerdan, el delta W va en la dirección acá
+[00:38:23] opuesta al gradiente.
+[00:38:25] Bueno, este menos se me cancela con este menos.
+[00:38:27] Entonces, esta es la expresión para actualizar los pesos en
+[00:38:30] esa capa.
+[00:38:32] ¿Qué pasa ahora cuando yo me quiero ir a una capa interna?
+[00:38:36] ¿Sí?
+[00:38:36] si supongamos que yo estoy parada acá sí y quiero actualizar este peso que viene
+[00:38:42] acá que en principio tengo como se ve la
+[00:38:47] regla de la cadena pero no tengo la fórmula hasta acá vamos bien o sea esto
+[00:38:53] se entendió
+[00:38:56] Sí.
+[00:39:03] Bien.
+[00:39:05] Bueno, entonces, ¿cómo?
+[00:39:07] Bueno, voy a hacer básicamente lo mismo, en realidad.
+[00:39:09] O sea, yo tengo las fórmulas, ¿sí?
+[00:39:11] Y las expreso acá.
+[00:39:13] Agarro los primeros 3 términos, ¿sí?
+[00:39:16] Antes de pasar a los últimos 2.
+[00:39:18] Entonces, esta regla de la cadena, si nosotros nos fijamos,
+[00:39:21] empieza a parecer algo interesante,
+[00:39:23] que es la expresión del delta de la capa de arriba.
+[00:39:28] Era lo que ya habíamos charlado,
+[00:39:29] esta cuestión del camino recorrido.
+[00:39:32] Y fíjense que yo acá sí tengo la sumatoria.
+[00:39:37] ¿Por qué?
+[00:39:38] Porque cuando yo estoy parada en este peso y quiero saber cómo
+[00:39:43] actualizarlo, a mí me interesa el error que yo como peso
+[00:39:49] ocasiono en todas las neuronas de salida.
+[00:39:52] Porque este peso no impacta solamente, no sé, el O2.
+[00:39:58] Impacta el O1, el O2 y cualquier otro O, o sea, neurona de salida que hubiera en esa última capa.
+[00:40:06] Entonces, yo necesito la retropropagación de los errores de todas las neuronas que yo tengo en la capa superior.
+[00:40:16] Eso lo voy a expresar.
+[00:40:18] Fíjense, esta es la misma expresión del delta sub i que habíamos visto antes.
+[00:40:21] Entonces, ¿cómo lo voy a expresar?
+[00:40:23] OK, sumo todas las expresiones de esos errores multiplicadas por
+[00:40:29] los pesos que me llegan a mí, ¿sí?
+[00:40:32] A mí como esta neurona.
+[00:40:34] Bueno, termino de desarrollar estos últimos 2 términos,
+[00:40:37] que son los términos de la derivada,
+[00:40:39] que básicamente lo que hago es fijarme, OK,
+[00:40:42] ¿cuál es la fórmula de B?
+[00:40:44] Esta.
+[00:40:45] ¿Cuál es la derivada con respecto de H?
+[00:40:47] Bueno, la calculo.
+[00:40:48] Lo mismo que cuál es la derivada de H respecto del peso.
+[00:40:51] Esta es la fórmula, calculo cómo me queda la derivada.
+[00:40:57] Entonces, ¿cuál va a ser el delta?
+[00:40:59] O sea, para esa neurona, ¿cómo yo voy a expresar el error en
+[00:41:05] esa capa interna?
+[00:41:08] Bueno, fíjense que el delta va a ser la dependencia de todos los
+[00:41:13] otros deltas multiplicado por los pesos que me conectan con la
+[00:41:18] neurona por la derivada de la función de activación evaluada
+[00:41:25] en la excitación de la neurona.
+[00:41:26] Parece un choclo lo que estoy diciendo.
+[00:41:28] Me escucho a mí misma decirlo y es como un trabalenguas de
+[00:41:32] partes de las distintas neuronas.
+[00:41:35] Pero esencialmente el delta es como que resume los errores de
+[00:41:40] las capas superiores, ¿sí?
+[00:41:42] Más cómo va a cambiar con respecto a la neurona en la que
+[00:41:47] yo estoy parada.
+[00:41:48] Entonces, el delta W, fíjense que es muy similar a el que vimos acá.
+[00:41:54] Lo que sí está cambiando ahora es cómo se calcula el delta.
+[00:41:57] La capa de salida tiene esta forma, la capa interna tiene esta otra fórmula, pero el delta W es muy similar.
+[00:42:10] Hasta acá, bien, no hice más que pasar por todas las fórmulas.
+[00:42:16] Y fíjense que acá ocurre lo mismo. Una vez que yo pasé por esta capa, tengo cada delta asociado a cada una de las neuronas.
+[00:42:30] Vamos más o menos para arriba, para abajo.
+[00:42:32] Ok
+[00:42:38] Es que a mí me determinamos en realidad
+[00:42:40] O sea, porque
+[00:42:41] Ahora cada vez que alguien me dice
+[00:42:45] O sea, me desacuerda mi ley
+[00:42:46] Pero digo, ya terminamos
+[00:42:49] Porque en realidad tenemos
+[00:42:51] Cómo hacerlo para la capa de salida
+[00:42:53] Y para una de las capas ocultas
+[00:42:55] Y eso va a ser esencialmente lo mismo
+[00:42:57] Pero en lugar de depender
+[00:43:00] De los deltas de la capa de salida
+[00:43:02] dependo, por ejemplo, si yo tengo 3 capas ocultas y una capa
+[00:43:07] de salida.
+[00:43:07] En la capa oculta número 2 voy a depender de todos los deltas de
+[00:43:13] la capa oculta número 3, que a su vez dependen de la capa de
+[00:43:17] salida.
+[00:43:17] Y así sucesivamente.
+[00:43:19] Entonces, ¿cómo me va a quedar el delta W para una capa
+[00:43:22] oculta arbitraria?
+[00:43:24] ¿Sí?
+[00:43:25] Me va a quedar como learning rate por el delta de esa neurona que
+[00:43:30] queriendo actuar, actualizar, fíjese, para este peso es esta neurona, por la activación de la capa anterior.
+[00:43:40] Y el delta va a ser el resumen de los deltas de las capas superiores multiplicado por esto de la derivada de la activación evaluada en la excitación.
+[00:43:52] Y así es como nos quedan las fórmulas del proceso de aprendizaje para ajustar los pesos.
+[00:43:56] Que no es más que hacer una regla de la derivada, una regla de la cadena de las derivadas normal con esta idea del delta para transformar la complejidad del algoritmo.
+[00:44:11] Sobre esto vamos a volver de nuevo en dos clases como para que asiente la idea, pero es esencialmente eso en cuanto a la parte conceptual.
+[00:44:22] Vale.
+[00:44:24] Bien.
+[00:44:25] Entonces, ¿cómo nos termina quedando el algoritmo?
+[00:44:28] Bueno, igual que antes, no cambió nada.
+[00:44:32] Lo que sí, acá donde sea update the weights and bias,
+[00:44:35] van a tener que usar estas fórmulas,
+[00:44:38] dependiendo de si es la capa de salida y después las capas
+[00:44:42] ocultas.
+[00:44:44] Y un tip importante es que nosotros vimos todo para un
+[00:44:52] dato de entrada, ¿sí?
+[00:44:54] Y lo vimos para un peso particular,
+[00:44:57] como para que se entienda quiénes son que influyen en ese
+[00:45:00] peso.
+[00:45:02] La idea es que ustedes estos se sienten y lo expresen de manera
+[00:45:05] matricial lo mejor que puedan, ¿sí?
+[00:45:07] Particularmente para lo que es la arquitectura de la red
+[00:45:10] neuronal y cómo van calculando las cosas capa a capa, ¿sí?
+[00:45:14] Porque eso va a hacer que todo sea mucho más rápido y que el
+[00:45:21] código les sea mucho más limpio y más sencillo de deboovear
+[00:45:24] también.
+[00:45:25] O sea, van a tener que tener mucho cuidado con la forma de
+[00:45:28] las matrices, de qué están hablando,
+[00:45:30] cuál deberían ser las filas, cuál deberían ser las columnas.
+[00:45:33] Pero es un consejo que los va a ayudar para implementar el
+[00:45:38] algoritmo y que no les quede un choclo de cosas que después
+[00:45:41] quizás no saben dónde se equivocaron.
+[00:45:44] Así que, bueno, no va a haber break porque ya hubo.
+[00:45:48] Por acá alguna pregunta.
+[00:45:51] Acá medio que terminamos lo que es back propagation.
+[00:46:02] ¿Cómo se elige el M?
+[00:46:04] ¿El M grande?
+[00:46:08] O sea, la cantidad de capas.
+[00:46:14] Prueba y error.
+[00:46:16] Acá van a tener que experimentar bastante y la idea es que hagan su propia exploración para ver qué tamaño va a reduzar, cuántas capas va a tener, es suficiente con una, pasa algo, se agregó más, etc.
+[00:46:31] Esto va a ser parte de la experimentación del trabajo práctico.
+[00:46:42] Bien.
+[00:46:44] Bueno, mini detalle de las distintas formas que hay de
+[00:46:47] entrenamiento.
+[00:46:48] Nosotros mostramos un algoritmo donde, si se fijan,
+[00:46:52] lo que yo hago es, tengo una cantidad de épocas y por cada
+[00:46:56] época paso los ejemplos de entrenamientos de a uno.
+[00:47:02] Y por cada uno, ¿qué es lo que hago?
+[00:47:04] Calculo el feedforward, actualizo los pesos y el bias
+[00:47:07] y calculo el error del perceptron para saber si
+[00:47:10] convergió y si, chau, esos pesos me sirven y me los
+[00:47:14] llevo.
+[00:47:15] Ahora, eso es un esquema que se llama incremental u online,
+[00:47:21] que es un caso particular de lo que se denomina SGD,
+[00:47:26] Stochastic Gradient Descent, o gradiente descendiente
+[00:47:28] estocástico, que es una de las estrategias que mostró Rodri.
+[00:47:32] Y fíjense la definición dice, OK,
+[00:47:34] la actualización de los pesos de la red lo hago después de
+[00:47:36] calcular para un elemento del conjunto datos.
+[00:47:40] Hay otras 2 variantes que en realidad se usan más,
+[00:47:44] particularmente la del medio, donde son, por ejemplo,
+[00:47:49] Lotte o Batch vienen a ser el extremo opuesto de incrementar
+[00:47:53] Wall-Line.
+[00:47:53] Es decir, ¿cuándo actualizo yo los pesos de la red neuronal?
+[00:47:57] Bueno, cuando calcule los delta W,
+[00:48:02] la fórmula de actualizar los pesos para todos los elementos
+[00:48:04] del conjunto de datos y los unifico y hago una
+[00:48:09] actualización, ¿sí?
+[00:48:11] De los pesos de la red.
+[00:48:13] En lugar de constantemente estar actualizando todos los pesos,
+[00:48:18] que eso es una operación que tiene su costo a medida que la
+[00:48:22] red se vuelve más grande.
+[00:48:24] No lo van a notar en este trabajo, pero tiene su costo.
+[00:48:26] Y por otro lado, lo que se suele hacer se llama mini lote o mini
+[00:48:31] batch, donde yo tengo de todo mi conjunto de datos,
+[00:48:35] supongo que tengo 10,000, digo, bueno,
+[00:48:38] voy a separar estos 10,000 en chunks de 1,000 datos.
+[00:48:44] Y para cada uno de esos 1,000 datos es que hago la
+[00:48:48] actualización de los pesos y el bias.
+[00:48:50] O sea, calculo el gradiente para esos 1,000,
+[00:48:54] actualizo y después paso al siguiente batch.
+[00:48:57] ¿Eso quedó claro?
+[00:48:58] ¿O la distinción entre los 3?
+[00:49:05] Gracias.
