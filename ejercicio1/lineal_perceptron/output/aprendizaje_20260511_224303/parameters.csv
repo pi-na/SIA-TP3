@@ -1,0 +1,13 @@
+lr,seed,epochs,epsilon,training_mode,activation,normalization,target_col,n_features,n_samples,split
+0.1,42,250,0.0,online,identity,zscore_full_dataset,big_model_fraud_probability,6,full_dataset,none
+0.1,43,250,0.0,online,identity,zscore_full_dataset,big_model_fraud_probability,6,full_dataset,none
+0.1,44,250,0.0,online,identity,zscore_full_dataset,big_model_fraud_probability,6,full_dataset,none
+0.01,42,250,0.0,online,identity,zscore_full_dataset,big_model_fraud_probability,6,full_dataset,none
+0.01,43,250,0.0,online,identity,zscore_full_dataset,big_model_fraud_probability,6,full_dataset,none
+0.01,44,250,0.0,online,identity,zscore_full_dataset,big_model_fraud_probability,6,full_dataset,none
+0.001,42,250,0.0,online,identity,zscore_full_dataset,big_model_fraud_probability,6,full_dataset,none
+0.001,43,250,0.0,online,identity,zscore_full_dataset,big_model_fraud_probability,6,full_dataset,none
+0.001,44,250,0.0,online,identity,zscore_full_dataset,big_model_fraud_probability,6,full_dataset,none
+0.0001,42,250,0.0,online,identity,zscore_full_dataset,big_model_fraud_probability,6,full_dataset,none
+0.0001,43,250,0.0,online,identity,zscore_full_dataset,big_model_fraud_probability,6,full_dataset,none
+0.0001,44,250,0.0,online,identity,zscore_full_dataset,big_model_fraud_probability,6,full_dataset,none

@@ -1,4 +1,9 @@
-# Comparación de aprendizaje — lineal vs no-lineal (Ej1)
+> [!warning] Nota de re-etiquetado
+> Este documento estaba originalmente en `Notas/ejercicio 1/` con el nombre `"analisis aprendizaje lineal vs no lineal.md"`. El contenido es en realidad un **análisis de generalización**, no de aprendizaje: usa K-fold (5 seeds × 5 folds = 25 corridas), reporta `MSE_test`, y evalúa A/P/R/F1 al **threshold óptimo** `thr*` — todo eso pertenece a la sección de generalización (siguiendo la clase de perceptrón simple: *"no es lo mismo aprendizaje que generalización"*, transcript 01:01:02).
+>
+> El análisis de aprendizaje **sin split y sin threshold** (sólo MSE sobre el dataset completo) vive en `Notas/ejercicio 1/Aprendizaje/aprendizaje_lineal.md` y `aprendizaje_no_lineal.md`. Esos archivos responden las preguntas a/b/c del enunciado en su sección de aprendizaje; éste responde el comparativo posterior (con K-fold) que justifica la elección de modelo para el estudio de generalización.
+
+# Comparativo lineal vs no-lineal — K-fold + threshold óptimo (Ej1, generalización)
 
 ## Fuentes utilizadas
 

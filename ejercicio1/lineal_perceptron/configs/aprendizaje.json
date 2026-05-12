@@ -1,0 +1,16 @@
+{
+  "sweep_name": "aprendizaje_lineal",
+  "target_col": "big_model_fraud_probability",
+  "eval_col": "flagged_fraud",
+  "exclude_features": [
+    "timestamp",
+    "device_screen_resolution",
+    "time_since_last_login_s"
+  ],
+  "normalization": "zscore_full_dataset",
+  "training_mode": "online",
+  "epochs": 250,
+  "epsilon": 0.0,
+  "learning_rates": [0.1, 0.01, 0.001, 0.0001],
+  "seeds": [42, 43, 44]
+}
