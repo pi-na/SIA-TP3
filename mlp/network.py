@@ -163,6 +163,11 @@ class MLP:
                     sigma = float(aug.get("sigma", 0.0))
                     if sigma > 0:
                         xb = xb + np.random.normal(0.0, sigma, size=xb.shape)
+                elif aug is not None and aug.get("type") == "rotation":
+                    max_angle = float(aug.get("max_angle", 0.0))
+                    if max_angle > 0:
+                        from mlp.augmentation import apply_random_rotation
+                        xb = apply_random_rotation(xb, max_angle)
                 _, cache = self.forward(xb, training=True)
                 grads = self.backward(xb, yb, cache)
                 # L2 regularization (Pack C, opcional)

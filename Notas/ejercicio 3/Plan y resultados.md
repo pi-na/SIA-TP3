@@ -31,23 +31,23 @@ Aislar el efecto de **más datos sin tocar regularización**. Comparar 1-a-1 con
 
 ### Configuración (todo lo que queda fijo)
 
-| Hiperparam | Valor | Heredado de |
-|---|---|---|
-| `arch.layer_sizes` | `[784, 128, 10]` (shallow) | Ej2 decisión Occam |
-| `arch.activations` | `[relu, softmax]` | módulo |
-| `arch.initializer` | `auto` (He) | Ej2 |
-| `optimizer` | Adam, β₁=0.9, β₂=0.999, ε=1e-8 | Ej2 |
-| `lr` | `1e-3` | Ej2 (LR×ARCH: óptimo de Adam en las 4 archs) |
-| `batch_size` | `64` | Ej2 (stage 2b confirmó pico unimodal) |
-| `loss` | `cross_entropy` (combinado con softmax en última capa) | clase cátedra |
-| `preprocessing` | `zscore` + `one_hot_targets=true` | Ej2 |
-| `split` (CV interno) | `k_folds=5`, estratificado | Ej2 |
-| `early_stopping_patience` | 20 sobre val_loss CE | Ej2 |
-| `max_epochs` | **50** (subido desde 40) | con más datos, best_epoch puede subir; margen extra |
-| `regularization` | todo cero / null | es el baseline |
-| **dataset principal** | `digits.csv` | — |
-| **dataset extra** | `more_digits.csv` | **CAMBIO Ej3** |
-| **Seeds** | `[42, 7, 13]` | Ej2 |
+| Hiperparam                | Valor                                                  | Heredado de                                         |
+| ------------------------- | ------------------------------------------------------ | --------------------------------------------------- |
+| `arch.layer_sizes`        | `[784, 128, 10]` (shallow)                             | Ej2 decisión Occam                                  |
+| `arch.activations`        | `[relu, softmax]`                                      | módulo                                              |
+| `arch.initializer`        | `auto` (He)                                            | Ej2                                                 |
+| `optimizer`               | Adam, β₁=0.9, β₂=0.999, ε=1e-8                         | Ej2                                                 |
+| `lr`                      | `1e-3`                                                 | Ej2 (LR×ARCH: óptimo de Adam en las 4 archs)        |
+| `batch_size`              | `64`                                                   | Ej2 (stage 2b confirmó pico unimodal)               |
+| `loss`                    | `cross_entropy` (combinado con softmax en última capa) | clase cátedra                                       |
+| `preprocessing`           | `zscore` + `one_hot_targets=true`                      | Ej2                                                 |
+| `split` (CV interno)      | `k_folds=5`, estratificado                             | Ej2                                                 |
+| `early_stopping_patience` | 20 sobre val_loss CE                                   | Ej2                                                 |
+| `max_epochs`              | **50** (subido desde 40)                               | con más datos, best_epoch puede subir; margen extra |
+| `regularization`          | todo cero / null                                       | es el baseline                                      |
+| **dataset principal**     | `digits.csv`                                           | —                                                   |
+| **dataset extra**         | `more_digits.csv`                                      | **CAMBIO Ej3**                                      |
+| **Seeds**                 | `[42, 7, 13]`                                          | Ej2                                                 |
 
 ### Tamaños
 
@@ -176,24 +176,24 @@ Grid 4×4 = 16 combinaciones × 3 seeds × 5 folds = **240 corridas CV**.
 
 **Tabla agregada (15 corridas/combo, ordenada por val_acc):**
 
-| L2 | σ | val_acc (±std) | macro_F1 (±std) | val_loss CE | train_loss | gap | best_epoch |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| 1e-3 | 0 | 0.9750 ± 0.0018 | 0.9644 ± 0.0035 | 0.0917 | 0.0168 | 0.0750 | 39.3 |
-| 1e-3 | 0.1 | 0.9746 ± 0.0016 | 0.9632 ± 0.0034 | 0.0939 | 0.0180 | 0.0759 | 38.3 |
-| 1e-4 | 0 | 0.9743 ± 0.0032 | 0.9630 ± 0.0042 | 0.1058 | 0.0054 | 0.1004 | 22.7 |
-| 1e-3 | 0.2 | 0.9740 ± 0.0017 | 0.9631 ± 0.0034 | 0.0949 | 0.0189 | 0.0761 | 37.3 |
-| 1e-3 | 0.03 | 0.9740 ± 0.0023 | 0.9622 ± 0.0039 | 0.0944 | 0.0183 | 0.0761 | 34.3 |
-| 1e-4 | 0.03 | 0.9732 ± 0.0032 | 0.9615 ± 0.0047 | 0.1123 | 0.0081 | 0.1042 | 16.5 |
-| 1e-4 | 0.2 | 0.9727 ± 0.0031 | 0.9605 ± 0.0050 | 0.1147 | 0.0085 | 0.1062 | 12.6 |
-| 1e-4 | 0.1 | 0.9725 ± 0.0027 | 0.9605 ± 0.0039 | 0.1152 | 0.0073 | 0.1080 | 11.5 |
-| 1e-5 | 0 | 0.9707 ± 0.0030 | 0.9584 ± 0.0047 | 0.1207 | 0.0092 | 0.1114 | 6.7 |
-| 1e-5 | 0.03 | 0.9705 ± 0.0033 | 0.9577 ± 0.0050 | 0.1244 | 0.0124 | 0.1121 | 7.2 |
-| 1e-5 | 0.2 | 0.9701 ± 0.0028 | 0.9577 ± 0.0046 | 0.1227 | 0.0149 | 0.1078 | 5.9 |
-| 1e-5 | 0.1 | 0.9701 ± 0.0031 | 0.9572 ± 0.0054 | 0.1250 | 0.0145 | 0.1105 | 5.8 |
-| 0 | 0.2 | 0.9700 ± 0.0028 | 0.9574 ± 0.0048 | 0.1210 | 0.0164 | 0.1046 | 5.7 |
-| 0 | 0.03 | 0.9699 ± 0.0029 | 0.9572 ± 0.0046 | 0.1264 | 0.0130 | 0.1134 | 5.7 |
-| 0 | 0 | 0.9699 ± 0.0029 | 0.9572 ± 0.0047 | 0.1238 | 0.0119 | 0.1119 | 5.7 |
-| 0 | 0.1 | 0.9698 ± 0.0030 | 0.9573 ± 0.0047 | 0.1212 | 0.0142 | 0.1070 | 5.7 |
+| L2   | σ    | val_acc (±std)  | macro_F1 (±std) | val_loss CE | train_loss | gap    | best_epoch |
+| ---- | ---- | --------------- | --------------- | ----------- | ---------- | ------ | ---------- |
+| 1e-3 | 0    | 0.9750 ± 0.0018 | 0.9644 ± 0.0035 | 0.0917      | 0.0168     | 0.0750 | 39.3       |
+| 1e-3 | 0.1  | 0.9746 ± 0.0016 | 0.9632 ± 0.0034 | 0.0939      | 0.0180     | 0.0759 | 38.3       |
+| 1e-4 | 0    | 0.9743 ± 0.0032 | 0.9630 ± 0.0042 | 0.1058      | 0.0054     | 0.1004 | 22.7       |
+| 1e-3 | 0.2  | 0.9740 ± 0.0017 | 0.9631 ± 0.0034 | 0.0949      | 0.0189     | 0.0761 | 37.3       |
+| 1e-3 | 0.03 | 0.9740 ± 0.0023 | 0.9622 ± 0.0039 | 0.0944      | 0.0183     | 0.0761 | 34.3       |
+| 1e-4 | 0.03 | 0.9732 ± 0.0032 | 0.9615 ± 0.0047 | 0.1123      | 0.0081     | 0.1042 | 16.5       |
+| 1e-4 | 0.2  | 0.9727 ± 0.0031 | 0.9605 ± 0.0050 | 0.1147      | 0.0085     | 0.1062 | 12.6       |
+| 1e-4 | 0.1  | 0.9725 ± 0.0027 | 0.9605 ± 0.0039 | 0.1152      | 0.0073     | 0.1080 | 11.5       |
+| 1e-5 | 0    | 0.9707 ± 0.0030 | 0.9584 ± 0.0047 | 0.1207      | 0.0092     | 0.1114 | 6.7        |
+| 1e-5 | 0.03 | 0.9705 ± 0.0033 | 0.9577 ± 0.0050 | 0.1244      | 0.0124     | 0.1121 | 7.2        |
+| 1e-5 | 0.2  | 0.9701 ± 0.0028 | 0.9577 ± 0.0046 | 0.1227      | 0.0149     | 0.1078 | 5.9        |
+| 1e-5 | 0.1  | 0.9701 ± 0.0031 | 0.9572 ± 0.0054 | 0.1250      | 0.0145     | 0.1105 | 5.8        |
+| 0    | 0.2  | 0.9700 ± 0.0028 | 0.9574 ± 0.0048 | 0.1210      | 0.0164     | 0.1046 | 5.7        |
+| 0    | 0.03 | 0.9699 ± 0.0029 | 0.9572 ± 0.0046 | 0.1264      | 0.0130     | 0.1134 | 5.7        |
+| 0    | 0    | 0.9699 ± 0.0029 | 0.9572 ± 0.0047 | 0.1238      | 0.0119     | 0.1119 | 5.7        |
+| 0    | 0.1  | 0.9698 ± 0.0030 | 0.9573 ± 0.0047 | 0.1212      | 0.0142     | 0.1070 | 5.7        |
 
 **Heatmaps:**
 

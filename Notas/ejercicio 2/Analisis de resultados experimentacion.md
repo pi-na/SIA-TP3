@@ -241,12 +241,12 @@ Cada celda = val_acc del mejor LR para esa combinación (arch, opt), reportada c
 
 **2. Shallow es robusta entre optimizers; wider es especialista de Adam.**
 
-| arch    | best opt | val_acc                             | comportamiento                                                                                                                            |
-| ------- | -------- | ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| shallow | Adam     | 0.9572 (★ con Mom 0.9543, ★ con SGD 0.9509) | gana en SGD y Momentum; muy cerca de wider con Adam (diff 0.0011, indistinguible — ver tiebreaker)                                       |
-| base    | Adam     | 0.9548                              | sin podio en ningún opt — siempre 3°                                                                                                      |
-| wider   | Adam     | **0.9583** (máx global)             | gana con Adam, **pero queda 2°/3° con SGD y Momentum**. Su rendimiento depende del optimizer                                              |
-| deeper  | Adam     | 0.9535                              | última en las 3 columnas                                                                                                                  |
+| arch    | best opt | val_acc                                     | comportamiento                                                                                     |
+| ------- | -------- | ------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| shallow | Adam     | 0.9572 (★ con Mom 0.9543, ★ con SGD 0.9509) | gana en SGD y Momentum; muy cerca de wider con Adam (diff 0.0011, indistinguible — ver tiebreaker) |
+| base    | Adam     | 0.9548                                      | sin podio en ningún opt — siempre 3°                                                               |
+| wider   | Adam     | **0.9583** (máx global)                     | gana con Adam, **pero queda 2°/3° con SGD y Momentum**. Su rendimiento depende del optimizer       |
+| deeper  | Adam     | 0.9535                                      | última en las 3 columnas                                                                           |
 
 → Shallow se comporta como una **arquitectura "todo terreno"**: ★ en SGD y ★ en Momentum, y segunda por 0.0011 en Adam. Wider tiene el techo absoluto más alto pero **sólo cuando combina con Adam**. Esta es exactamente la lectura de [[IMPORTANTE_CORRELACIONES]] §4, ahora visualizada en una sola figura.
 
