@@ -1,6 +1,6 @@
 ## Experimentacion, variables
 Por ejemplo, en el analisis de LR [[ejercicio1/nonlinear_perceptron/analisis_outputs/sweep_lr/multiseed/analisis|analisis multiseed non linear]]
-V## Decisiones de diseño, hiperparametros
+### Decisiones de diseño, hiperparametros
 #### Normalización de la data
 Antes de hacer K-folding, normalizamos la informacion haciendo z-score.
 Para cada feature:
@@ -15,7 +15,6 @@ La justificacion **probablemente** la consigamos por medio de experimentación, 
   - Usa el seed "raíz" del config: seed = config["random_seed"] (linear:340, nonlinear:403). 
 
 Para el lineal elegimos kfold = 5, ver [[ejercicio1/lineal_perceptron/analisis_outputs/kfold_choice#**Conclusión **|kfold_choice]]
-
 
 #### Estrategia de entrenamiento
 Hacemos entrenamiento **online**, no intentamos implementar batch o mini batch para el lineal.
@@ -54,10 +53,26 @@ Lo que hacemoss para el threshold es medir precision recall accuracy F1 y encont
 --- 
 ## Resultados
 Una vez definidos los hiperparametros, pasamos a analizar los resultados del modelo.
-### Generalizacion
-Tenemos que mostrar los resultados de la generalización.
+### Aprendizaje
+> Evaluar si el modelo **aprende** datos que le mostras; Que tan bien el modelo predice al mostrarle datos con los que fue entrenado.
 
+Para aprendizaje, entrenamos al lineal y al no lineal con todo el dataset, y evaluamos MSE y R^2.
+
+Para el perceptrón simple se puede variar learning rate, epochs, epsilon. Dejamos epsilon = 0 en aprendizaje para ver la curva completa.
+
+**Perceptron lineal**
+Propongo 4 learning rate (10^-1,10^-2, 10^-3, 10^-4), 250 epochs.
+
+**Perceptron no lineal**
+Propongo 4 learning rate (10^-1,10^-2, 10^-3, 10^-4), 250 epochs.
+
+Tanto para perceptron lineal como no lineal, se ejecutan las 4 combinaciones con tres seeds, se  evalua MSE y R^2. Se presentan plots de convergencia para cada combinacion; Para todo se hacen tablas con todos los datos; Se hace una tabla con todos los parametros utilizados en cada experimento.
+
+### Generalizacion
 > Generalización = qué tan bien el modelo predice en datos que no vio durante el entrenamiento.
+
+Evaluar como se comporta el modelo para predecir datos **que nunca vio**
+Para esto dividimos en *training set* y *validation set*; El modelo se entrena con el training set sin nunca ver el validation, y luego se prueban sus predicciones sobre el validation.
 
 Un modelo que memoriza el train set (overfitting) tiene MSE train bajo pero MSE test alto. Un modelo que generaliza tiene MSE similares en ambos.                                            
 
@@ -71,7 +86,7 @@ Hola completame!
 ### Convergencia - subajuste?
 Como medimos si el modelo ajusta correctamente al problema? Tenemos el MSE. En clase dijeron MSE alto en training set -> underfitting. Pero como juzgamos si un MSE es alto? Cual es la referencia?
 
-Lo que hicimos fue analizar el dataset [[INFORME.pdf]]. Encontramos reglas básicas que dividen el dataset a partir de un umbral en 3 features, y calculamos métricas para el sistema que únicamente hace esta división por umbrales. Los resultados fueron precision=100% / recall=80% / acc=97.68%.
+Lo que hicimos fue analizar el dataset [[Informe con fotos leeme.pdf]]. Encontramos reglas básicas que dividen el dataset a partir de un umbral en 3 features, y calculamos métricas para el sistema que únicamente hace esta división por umbrales. Los resultados fueron precision=100% / recall=80% / acc=97.68%.
 
 Definimos que hay **underfitting** si el perceptrón en train no iguala (acc ≥ 97.68%, precision ≥ 100% sobre lo que predice, recall ≥  80%).
 
